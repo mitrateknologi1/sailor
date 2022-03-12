@@ -1,0 +1,1 @@
+<a type="button" href="{{$url ?? ''}} " class="btn {{$class ?? ''}}"><i class="bi bi-journal-text"></i> {{$label ?? ''}}</a>

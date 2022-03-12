@@ -1,0 +1,1 @@
+<a type="button" href="{{$url ?? ''}} " class="btn btn-success {{$class ?? ''}}"><i class="bi bi-plus-circle"></i> Tambah</a>
