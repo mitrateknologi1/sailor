@@ -4,6 +4,12 @@
     Dashboard
 @endsection
 
+@push('style')
+    <style>
+        
+    </style>
+@endpush
+
 @section('breadcrumb')
 <div class="col">
     <ol class="breadcrumb bg-transparent mb-0">
@@ -350,8 +356,8 @@
     </div>
 @endsection
 
-@section('script')
+@push('script')
     <script>
         $('#m-link-dashboard').addClass('active');
     </script>
-@endsection
+@endpush

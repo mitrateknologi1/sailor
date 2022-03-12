@@ -4,6 +4,12 @@
     Deteksi Ibu Melahirkan Stunting
 @endsection
 
+@push('style')
+    <style>
+        
+    </style>
+@endpush
+
 @section('breadcrumb')
 <div class="col">
     <ol class="breadcrumb bg-transparent mb-0">
@@ -20,10 +26,10 @@
     </div>
 @endsection
 
-@section('script')
+@push('script')
     <script>
         $('#m-link-deteksi-stunting').addClass('active');
         $('#menu-deteksi-stunting').addClass('collapse show')
         $('#ms-link-ibu-melahirkan-stunting').addClass('active')     
     </script>
-@endsection
+@endpush
