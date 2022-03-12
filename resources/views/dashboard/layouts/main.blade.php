@@ -14,9 +14,19 @@
     <!-- plugin css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/daterangepicker.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/dataTables.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/select2.min.css">
 
     <!-- project css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/luno.style.min.css">
+
+    <style>
+        .select2 + .select2-container .select2-selection {
+            border-radius: 1.5rem;
+        }
+    </style>
+    
+    @stack('style')
+
 </head>
 
 <body class="layout-1" data-luno="theme-blue">
@@ -28,21 +38,21 @@
         @include('dashboard.layouts.header')
 
         <!-- start: page toolbar -->
-        <div class="page-toolbar px-xl-4 px-sm-2 px-0 py-3">
+        <div class="page-toolbar px-xl-0 px-sm-2 px-0 py-3">
             <div class="container-fluid">
                 <div class="row mb-3 align-items-center">
                     @yield('breadcrumb')
                 </div> 
                 <div class="row align-items-center">
                     <div class="col">
-                        <h1 class="fs-4 color-900 mt-1 mb-0">@yield('title')</h1>
+                        <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>
                     </div>
                 </div> 
             </div>
         </div>
 
         <!-- start: page body -->
-        <div class="page-body px-xl-4 px-sm-2 px-0 py-lg-2 py-1 mt-0">
+        <div class="page-body px-xl-0 px-sm-2 px-0 py-lg-1 py-0 mt-0">
             <div class="container-fluid">
                 @yield('content')
             </div>
@@ -247,6 +257,7 @@
     <script src="{{ asset('assets/dashboard') }}/bundles/apexcharts.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/daterangepicker.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/dataTables.bundle.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/bundles/select2.bundle.js"></script>
 
     <!-- Jquery Page Js -->
     <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script>
@@ -273,9 +284,13 @@
             ordering: true,
             info: false,
         });
+
+        $('.select2').select2({
+            placeholder: "- Pilih Salah Satu -",
+        })
     </script>
 
-    @yield('script')
+    @stack('script')
 </body>
 
 </html>

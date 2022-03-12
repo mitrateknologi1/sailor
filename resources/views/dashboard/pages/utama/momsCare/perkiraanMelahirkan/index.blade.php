@@ -4,6 +4,12 @@
     Perkiraan Melahirkan
 @endsection
 
+@push('style')
+    <style>
+        
+    </style>
+@endpush
+
 @section('breadcrumb')
 <div class="col">
     <ol class="breadcrumb bg-transparent mb-0">
@@ -16,14 +22,13 @@
 
 @section('content')
     <div class="row g-3 row-deck">
-
     </div>
 @endsection
 
-@section('script')
+@push('script')
     <script>
         $('#m-link-moms-care').addClass('active');
         $('#menu-moms-care').addClass('collapse show')
         $('#ms-link-perkiraan-melahirkan').addClass('active')     
     </script>
-@endsection
+@endpush

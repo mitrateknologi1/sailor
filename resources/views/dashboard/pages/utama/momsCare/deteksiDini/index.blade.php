@@ -4,6 +4,12 @@
     Deteksi Dini
 @endsection
 
+@push('style')
+    <style>
+        
+    </style>
+@endpush
+
 @section('breadcrumb')
 <div class="col">
     <ol class="breadcrumb bg-transparent mb-0">
@@ -20,10 +26,10 @@
     </div>
 @endsection
 
-@section('script')
+@push('script')
     <script>
         $('#m-link-moms-care').addClass('active');
         $('#menu-moms-care').addClass('collapse show')
         $('#ms-link-deteksi-dini').addClass('active')     
     </script>
-@endsection
+@endpush
