@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dashboard\masterData\DesaKelurahanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -88,4 +89,7 @@ Route::get('meningkatkan-life-skill', function () {
     return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.index');
 });
 
-
+// ----------------- Start Master -----------------
+Route::resource('desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
+    '{kecamatan}' => 'kelurahan'
+]);

@@ -17,6 +17,11 @@
 
     <!-- project css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/luno.style.min.css">
+
+    {{-- Leaflet --}}
+    <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    @stack('style')
 </head>
 
 <body class="layout-1" data-luno="theme-blue">
@@ -32,12 +37,12 @@
             <div class="container-fluid">
                 <div class="row mb-3 align-items-center">
                     @yield('breadcrumb')
-                </div> 
+                </div>
                 <div class="row align-items-center">
                     <div class="col">
                         <h1 class="fs-4 color-900 mt-1 mb-0">@yield('title')</h1>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
 
@@ -230,7 +235,8 @@
                                 <input type="checkbox" id="theme-rtl" />
                                 <span class="card p-2">
                                     <img class="img-fluid"
-                                        src="{{ asset('assets/dashboard') }}/images/rtl-version.svg" alt="RTL Mode!" />
+                                        src="{{ asset('assets/dashboard') }}/images/rtl-version.svg"
+                                        alt="RTL Mode!" />
                                 </span>
                             </label>
                         </div>
@@ -250,32 +256,37 @@
 
     <!-- Jquery Page Js -->
     <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script>
+
+    {{-- Leaflet --}}
+    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
     <script>
         // date range picker
 
-        
+
         $(function() {
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left'
             }, function(start, end, label) {
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
-                .format('YYYY-MM-DD'));
+                    .format('YYYY-MM-DD'));
             });
         })
-        
+
         // project data table
         $('.myDataTable')
-        .addClass('nowrap')
-        .dataTable({
-            responsive: true,
-            searching: true,
-            paging: true,
-            ordering: true,
-            info: false,
-        });
+            .addClass('nowrap')
+            .dataTable({
+                responsive: true,
+                searching: true,
+                paging: true,
+                ordering: true,
+                info: false,
+            });
     </script>
 
-    @yield('script')
+    @stack('script')
 </body>
 
 </html>

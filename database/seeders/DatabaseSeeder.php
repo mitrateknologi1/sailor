@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(ProvinsiTableSeeder::class);
+        $this->call(KabupatenKotaTableSeeder::class);
+        $this->call(KecamatanTableSeeder::class);
+        $this->call(DesaKelurahanTableSeeder::class);
     }
 }
