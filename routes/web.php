@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\dashboard\masterData\wilayah\DesaKelurahanController;
+use App\Http\Controllers\dashboard\masterData\wilayah\KabupatenKotaController;
+use App\Http\Controllers\dashboard\masterData\wilayah\KecamatanController;
+use App\Http\Controllers\dashboard\masterData\wilayah\ProvinsiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -88,4 +92,24 @@ Route::get('meningkatkan-life-skill', function () {
     return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.index');
 });
 
+// ----------------- Start Master -----------------
+Route::resource('desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
+    '{kecamatan}' => 'kelurahan'
+]);
 
+Route::resource('kabupatenKota/{provinsi}', KabupatenKotaController::class)->parameters([
+    '{provinsi}' => 'kabupatenKota'
+]);
+
+Route::resource('kecamatan/{kabupatenKota}', KecamatanController::class)->parameters([
+    '{kabupatenKota}' => 'kecamatan'
+]);
+
+Route::resource('desaKelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
+    '{kecamatan}' => 'desaKelurahan'
+]);
+
+Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
+Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);
+
+Route::resource('provinsi', ProvinsiController::class);

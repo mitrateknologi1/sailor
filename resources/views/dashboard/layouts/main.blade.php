@@ -19,17 +19,58 @@
     <!-- project css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/luno.style.min.css">
 
+    {{-- Leaflet --}}
+    <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <style>
-        .select2 + .select2-container .select2-selection {
+        .select2+.select2-container .select2-selection {
             border-radius: 1.5rem;
         }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100000;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .cv-spinner {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px #ddd solid;
+            border-top: 4px #2e93e6 solid;
+            border-radius: 50%;
+            animation: sp-anime 0.8s infinite linear;
+        }
+
+        @keyframes sp-anime {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
-    
     @stack('style')
 
 </head>
 
 <body class="layout-1" data-luno="theme-blue">
+    <div id="overlay">
+        <div class="cv-spinner">
+            <span class="spinner"></span>
+        </div>
+    </div>
 
     @include('dashboard.layouts.sidebar')
     <!-- start: body area -->
@@ -42,12 +83,12 @@
             <div class="container-fluid">
                 <div class="row mb-3 align-items-center">
                     @yield('breadcrumb')
-                </div> 
+                </div>
                 <div class="row align-items-center">
                     <div class="col">
                         <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
 
@@ -183,8 +224,7 @@
                                 <label>Works with selects</label>
                             </div>
                             <div class="form-floating mb-4">
-                                <textarea class="form-control" placeholder="Leave a comment here"
-                                    style="height: 100px"></textarea>
+                                <textarea class="form-control" placeholder="Leave a comment here" style="height: 100px"></textarea>
                                 <label>Leave a comment here</label>
                             </div>
                             <button type="button" class="btn btn-primary lift">Save note</button>
@@ -240,7 +280,8 @@
                                 <input type="checkbox" id="theme-rtl" />
                                 <span class="card p-2">
                                     <img class="img-fluid"
-                                        src="{{ asset('assets/dashboard') }}/images/rtl-version.svg" alt="RTL Mode!" />
+                                        src="{{ asset('assets/dashboard') }}/images/rtl-version.svg"
+                                        alt="RTL Mode!" />
                                 </span>
                             </label>
                         </div>
@@ -254,43 +295,65 @@
     <script src="{{ asset('assets/dashboard') }}/bundles/libscripts.bundle.js"></script>
 
     <!-- Plugin Js -->
-    <script src="{{ asset('assets/dashboard') }}/bundles/apexcharts.bundle.js"></script>
+    {{-- <script src="{{ asset('assets/dashboard') }}/bundles/apexcharts.bundle.js"></script> --}}
     <script src="{{ asset('assets/dashboard') }}/bundles/daterangepicker.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/dataTables.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/select2.bundle.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/bundles/sweetalert2.bundle.js"></script>
 
     <!-- Jquery Page Js -->
-    <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script>
+    {{-- <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script> --}}
+
+    {{-- Leaflet --}}
+    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"
+        integrity="sha512-eYE5o0mD7FFys0tVot8r4AnRXzVVXhjVpzNK+AcHkg4zNLvUAaCOJyLFKjmfpJMj6L/tuCzMN7LULBvNDhy5pA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         // date range picker
 
-        
+
         $(function() {
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left'
             }, function(start, end, label) {
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
-                .format('YYYY-MM-DD'));
+                    .format('YYYY-MM-DD'));
             });
         })
-        
+
         // project data table
         $('.myDataTable')
-        .addClass('nowrap')
-        .dataTable({
-            responsive: true,
-            searching: true,
-            paging: true,
-            ordering: true,
-            info: false,
-        });
+            .addClass('nowrap')
+            .dataTable({
+                responsive: true,
+                searching: true,
+                paging: true,
+                ordering: true,
+                info: false,
+            });
 
         $('.select2').select2({
             placeholder: "- Pilih Salah Satu -",
         })
-    </script>
 
+        $('.btn-close').click(function() {
+            $('.modal').modal('hide');
+        })
+
+        var overlay = $('#overlay').hide();
+        $(document)
+            .ajaxStart(function() {
+                overlay.show();
+            })
+            .ajaxStop(function() {
+                overlay.hide();
+            });
+    </script>
     @stack('script')
+
 </body>
 
 </html>

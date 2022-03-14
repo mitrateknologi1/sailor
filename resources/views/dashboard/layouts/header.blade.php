@@ -48,18 +48,17 @@
                                     <span class="badge bg-danger text-light">14</span>
                                 </div>
                                 <ul class="nav nav-tabs tab-card d-flex text-center" role="tablist">
-                                    <li class="nav-item flex-fill"><a class="nav-link active"
-                                            data-bs-toggle="tab" href="#Noti-tab-Message" role="tab">Validasi Keluarga</a>
+                                    <li class="nav-item flex-fill"><a class="nav-link active" data-bs-toggle="tab"
+                                            href="#Noti-tab-Message" role="tab">Validasi Keluarga</a>
                                     </li>
-                                    <li class="nav-item flex-fill"><a class="nav-link"
-                                            data-bs-toggle="tab" href="#Noti-tab-Events" role="tab">Events</a>
+                                    <li class="nav-item flex-fill"><a class="nav-link" data-bs-toggle="tab"
+                                            href="#Noti-tab-Events" role="tab">Events</a>
                                     </li>
-                                    <li class="nav-item flex-fill"><a class="nav-link"
-                                            data-bs-toggle="tab" href="#Noti-tab-Logs" role="tab">Logs</a></li>
+                                    <li class="nav-item flex-fill"><a class="nav-link" data-bs-toggle="tab"
+                                            href="#Noti-tab-Logs" role="tab">Logs</a></li>
                                 </ul>
                                 <div class="tab-content card-body custom_scroll">
-                                    <div class="tab-pane fade show active" id="Noti-tab-Message"
-                                        role="tabpanel">
+                                    <div class="tab-pane fade show active" id="Noti-tab-Message" role="tabpanel">
                                         <ul class="list-unstyled list mb-0">
                                             <li class="py-2 mb-1 border-bottom">
                                                 <a href="javascript:void(0);" class="d-flex">
@@ -68,7 +67,8 @@
                                                         alt="">
                                                     <div class="flex-fill ms-3">
                                                         <p class="d-flex justify-content-between mb-0">
-                                                            <span>Eileen Dover</span> <small>1HR</small></p>
+                                                            <span>Eileen Dover</span> <small>1HR</small>
+                                                        </p>
                                                         <span>There are many variations of passages</span>
                                                     </div>
                                                 </a>
@@ -80,7 +80,8 @@
                                                         alt="">
                                                     <div class="flex-fill ms-3">
                                                         <p class="d-flex justify-content-between mb-0">
-                                                            <span>Carmen Goh</span> <small>1DAY</small></p>
+                                                            <span>Carmen Goh</span> <small>1DAY</small>
+                                                        </p>
                                                         <span>Contrary to popular belief <span
                                                                 class="badge bg-danger">Code</span></span>
                                                     </div>
@@ -93,7 +94,8 @@
                                                         alt="">
                                                     <div class="flex-fill ms-3">
                                                         <p class="d-flex justify-content-between mb-0">
-                                                            <span>Karen Onnabit</span> <small>1DAY</small></p>
+                                                            <span>Karen Onnabit</span> <small>1DAY</small>
+                                                        </p>
                                                         <span>The generated Lorem Ipsum</span>
                                                     </div>
                                                 </a>
@@ -141,8 +143,7 @@
                 <!-- start: My notes toggle modal -->
                 <li class="d-none d-sm-inline-block d-xl-none">
                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#MynotesModal">
-                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path class="fill-secondary"
                                 d="M1.5 0A1.5 1.5 0 0 0 0 1.5V13a1 1 0 0 0 1 1V1.5a.5.5 0 0 1 .5-.5H14a1 1 0 0 0-1-1H1.5z" />
                             <path
@@ -153,8 +154,7 @@
                 <!-- start: Recent Chat toggle modal -->
                 <li class="d-none d-sm-inline-block d-xl-none">
                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#RecentChat">
-                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                             <path class="fill-secondary"
@@ -165,8 +165,7 @@
                 <!-- start: quick light dark -->
                 <li>
                     <a class="nav-link quick-light-dark" href="#">
-                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278zM4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.162c-.337.042-.68.063-1.029.063-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286z" />
                             <path class="fill-secondary"
@@ -177,8 +176,8 @@
                 <!-- start: User dropdown-menu -->
                 <li>
                     <div class="dropdown morphing scale-left user-profile mx-lg-3 mx-2">
-                        <a class="nav-link dropdown-toggle rounded-circle after-none p-0" href="#"
-                            role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle rounded-circle after-none p-0" href="#" role="button"
+                            data-bs-toggle="dropdown">
                             <img class="avatar img-thumbnail rounded-circle shadow"
                                 src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt="">
                         </a>
@@ -209,8 +208,7 @@
                 <li>
                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#SettingsModal"
                         title="Settings">
-                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="0 0 16 16" width="18px" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path class="fill-secondary"
                                 d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z">
                             </path>
