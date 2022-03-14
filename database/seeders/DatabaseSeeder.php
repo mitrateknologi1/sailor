@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(KartuKeluargaSeeder::class);
         $this->call(AnggotaKeluargaSeeder::class);
-
+        $this->call(ProvinsiTableSeeder::class);
+        $this->call(KabupatenKotaTableSeeder::class);
+        $this->call(KecamatanTableSeeder::class);
+        $this->call(DesaKelurahanTableSeeder::class);
     }
 }
