@@ -27,12 +27,50 @@
             border-radius: 1.5rem;
         }
 
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100000;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .cv-spinner {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px #ddd solid;
+            border-top: 4px #2e93e6 solid;
+            border-radius: 50%;
+            animation: sp-anime 0.8s infinite linear;
+        }
+
+        @keyframes sp-anime {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
     @stack('style')
 
 </head>
 
 <body class="layout-1" data-luno="theme-blue">
+    <div id="overlay">
+        <div class="cv-spinner">
+            <span class="spinner"></span>
+        </div>
+    </div>
 
     @include('dashboard.layouts.sidebar')
     <!-- start: body area -->
@@ -257,17 +295,21 @@
     <script src="{{ asset('assets/dashboard') }}/bundles/libscripts.bundle.js"></script>
 
     <!-- Plugin Js -->
-    <script src="{{ asset('assets/dashboard') }}/bundles/apexcharts.bundle.js"></script>
+    {{-- <script src="{{ asset('assets/dashboard') }}/bundles/apexcharts.bundle.js"></script> --}}
     <script src="{{ asset('assets/dashboard') }}/bundles/daterangepicker.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/dataTables.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/select2.bundle.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/bundles/sweetalert2.bundle.js"></script>
 
     <!-- Jquery Page Js -->
-    <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script>
+    {{-- <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script> --}}
 
     {{-- Leaflet --}}
     <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"
+        integrity="sha512-eYE5o0mD7FFys0tVot8r4AnRXzVVXhjVpzNK+AcHkg4zNLvUAaCOJyLFKjmfpJMj6L/tuCzMN7LULBvNDhy5pA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
         // date range picker
@@ -296,9 +338,22 @@
         $('.select2').select2({
             placeholder: "- Pilih Salah Satu -",
         })
-    </script>
 
+        $('.btn-close').click(function() {
+            $('.modal').modal('hide');
+        })
+
+        var overlay = $('#overlay').hide();
+        $(document)
+            .ajaxStart(function() {
+                overlay.show();
+            })
+            .ajaxStop(function() {
+                overlay.hide();
+            });
+    </script>
     @stack('script')
+
 </body>
 
 </html>

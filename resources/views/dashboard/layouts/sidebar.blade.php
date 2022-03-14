@@ -113,9 +113,27 @@
 
             </ul>
             <ul class="menu-list">
-                <li class="divider py-2 lh-sm"><span class="small">MASTER DATA</span><br> </li>
+                <li class="divider py-2 lh-sm"><span class="small">MASTER DATA</span><br></li>
+                <li class="collapsed">
+                    <a class="m-link collapsed" id="m-link-master-data-deteksi-stunting" data-bs-toggle="collapse"
+                        data-bs-target="#menu-master-data-deteksi-stunting" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor" class="bi bi-ui-checks"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708l-2 2zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708l-2 2zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                        <span class="ms-2">Deteksi Stunting</span>
+                        <span class="arrow fa fa-angle-right ms-auto text-end"></span>
+                    </a>
+                    <!-- Menu: Sub menu ul -->
+                    <ul class="sub-menu collapse" id="menu-master-data-deteksi-stunting">
+                        <li><a class="ms-link" id="ms-link-master-data-ibu-melahirkan-stunting"
+                                href="{{ url('ibu-melahirkan-stunting') }}">Soal Ibu Melahirkan Stunting</a>
+                        </li>
+                    </ul>
+                </li>
                 <li>
-                    <a class="m-link" id="m-link-wilayah" href="modals.html">
+                    <a class="m-link" id="m-link-wilayah" href="{{ url('/provinsi') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-map-fill" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
