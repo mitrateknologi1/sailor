@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\ListController;
 use App\Http\Controllers\dashboard\masterData\wilayah\DesaKelurahanController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KabupatenKotaController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KecamatanController;
 use App\Http\Controllers\dashboard\masterData\wilayah\ProvinsiController;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\utama\PertumbuhanAnakController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -64,9 +68,11 @@ Route::get('anc', function () {
 
 // ----------------- Start Tumbuh Kembang -----------------
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('pertumbuhan-anak', function () {
-    return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
-});
+Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
+Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');
+// Route::get('pertumbuhan-anak', function () {
+//     return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
+// });
 
 // URL resource-nya nanti sesuai url yang sekarang
 Route::get('perkembangan-anak', function () {

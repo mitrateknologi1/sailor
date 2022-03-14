@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(KartuKeluargaSeeder::class);
+        $this->call(AnggotaKeluargaSeeder::class);
         $this->call(ProvinsiTableSeeder::class);
         $this->call(KabupatenKotaTableSeeder::class);
         $this->call(KecamatanTableSeeder::class);
