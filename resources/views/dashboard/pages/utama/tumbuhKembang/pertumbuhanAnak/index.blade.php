@@ -60,7 +60,7 @@
                         @component('dashboard.components.buttons.add',[
                             'id' => 'catatan-pertumbuhan-anak',
                             'class' => '',
-                            'url' => '#',
+                            'url' => '/pertumbuhan-anak/create',
                         ])        
                         @endcomponent
                     </div>
@@ -137,6 +137,7 @@
     <script src="{{asset('assets/dashboard')}}/datatables/vfs_fonts.js"></script>
     <script src="{{asset('assets/dashboard')}}/datatables/buttons.html5.min.js"></script>
     <script src="{{asset('assets/dashboard')}}/datatables/buttons.print.min.js"></script>
+    
     <script>
         $('#m-link-tumbuh-kembang').addClass('active');
         $('#menu-tumbuh-kembang').addClass('collapse show')
