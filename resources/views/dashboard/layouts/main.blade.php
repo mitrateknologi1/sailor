@@ -12,6 +12,7 @@
     <link rel="icon" href="#" type="image/x-icon"> <!-- Favicon-->
 
     <!-- plugin css file  -->
+    <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/daterangepicker.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/dataTables.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/select2.min.css">
@@ -296,10 +297,15 @@
 
     <!-- Plugin Js -->
     {{-- <script src="{{ asset('assets/dashboard') }}/bundles/apexcharts.bundle.js"></script> --}}
+    <script src="{{ asset('assets/dashboard')}}/font-awesome/js/all.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/daterangepicker.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/dataTables.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/select2.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/sweetalert2.bundle.js"></script>
+    <script src="{{asset('assets/dashboard')}}/js/jquery.mask.min.js"></script>
+    <script src="{{asset('assets/dashboard')}}/js/moment/moment.min.js"></script>
+    <script src="{{asset('assets/dashboard')}}/js/moment/moment-with-locales.min.js"></script>  
+    <script src="{{asset('assets/dashboard')}}/bundles/sweetalert2.bundle.js"></script>
 
     <!-- Jquery Page Js -->
     {{-- <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script> --}}
@@ -312,10 +318,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        // date range picker
-
-
         $(function() {
+            moment.locale('id'); 
+            $('.tanggal').mask('00-00-0000');
+            $('.rupiah').mask('000.000.000.000.000', {reverse: true})
+            $('.waktu').mask('00:00');
+            $('.angka').mask('00000000000000000000');
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left'
             }, function(start, end, label) {

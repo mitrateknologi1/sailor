@@ -12,9 +12,12 @@ class PertumbuhanAnak extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'pertumbuhan_anak';
+    protected $guarded = ['id'];
 
-    // public function kategoriSoal()
-    // {
-    //     return $this->hasMany(KategoriSoal::class);
-    // }
+
+    public function tumbuhKembangAnak()
+    {
+        return $this->belongsTo(TumbuhKembangAnak::class);
+    }
+    
 }

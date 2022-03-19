@@ -108,16 +108,17 @@
                                         'id' => 'table-pertumbuhan-anak',
                                         'th' => [
                                             'No',
+                                            'Aksi',
+                                            'Dibuat Tanggal',
                                             'Status',
-                                            'Tanggal Catatan',
                                             'Nama Anak',
-                                            'Jenis Kelamin',
+                                            // 'Jenis Kelamin',
                                             'Tanggal Lahir',
-                                            'Usia',
-                                            'BB (Kg)',
-                                            'ZScore',
+                                            // 'Usia',
+                                            // 'BB (Kg)',
+                                            // 'ZScore',
                                             'Kategori Gizi',
-                                            'Aksi'
+                                            'Bidan',
                                         ],
                                     ])
                                     @endcomponent
@@ -145,6 +146,8 @@
     
         $(function() {
             $('#table-pertumbuhan-anak').addClass('nowrap').dataTable({
+                processing: true,
+                serverSide: true,
                 responsive:true,
                 dom: 'lBfrtip',
                 buttons : [
@@ -164,8 +167,73 @@
                 lengthMenu: [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
-                ],         
-            })
+                ],  
+                ajax: {
+                    url: "{{ route('pertumbuhan-anak.index') }}",
+                    // data: function(d){
+                    //     d.role = $('#role-filter').val();                    
+                    //     d.search = $('input[type="search"]').val();
+                    // }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        className: 'text-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        className: 'text-center',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                        className: 'text-center',
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        className: 'text-center',
+                    },
+                    {
+                        data: 'nama_anak',
+                        name: 'nama_anak'
+                    },
+                    {
+                        data: 'tanggal_lahir',
+                        name: 'tanggal_lahir',
+                        className: 'text-center',
+                    },
+                    {
+                        data: 'hasil',
+                        name: 'hasil',
+                        className: 'text-center',
+                    },
+                    {
+                        data: 'nakes',
+                        name: 'nakes'
+                    },
+                    
+                ],  
+                columnDefs: [
+                    {
+                        targets: 2,
+                        render: function(data) {
+                            return moment(data).format('LL');
+                        }
+                    },
+                    {
+                        targets: 5,
+                        render: function(data) {
+                            return moment(data).format('LL');
+                        }
+                    }
+                ],        
+            });
         })
     </script>
 @endpush

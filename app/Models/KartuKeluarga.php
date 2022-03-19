@@ -13,6 +13,8 @@ class KartuKeluarga extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'kartu_keluarga';
+    protected $guarded = ['id'];
+
 
     public function anggotaKeluarga()
     {

@@ -31,7 +31,7 @@ class KartuKeluargaSeeder extends Seeder
                 'dikeluarkan_tanggal' => '2022-03-12',
                 'dikeluarkan_oleh' => 'DIGGIE',
                 'foto_kk' => 'example.pdf',
-                'is_validasi' => 1,
+                'is_valid' => 1,
                 'created_at' => now(),
             ],
             [
@@ -50,7 +50,7 @@ class KartuKeluargaSeeder extends Seeder
                 'dikeluarkan_tanggal' => '2021-01-11',
                 'dikeluarkan_oleh' => 'ROGER',
                 'foto_kk' => 'example.pdf',
-                'is_validasi' => 1,
+                'is_valid' => 1,
                 'created_at' => now(),
             ],
         ];
