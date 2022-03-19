@@ -128,12 +128,13 @@
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-master-data-deteksi-stunting">
                         <li><a class="ms-link" id="ms-link-master-data-ibu-melahirkan-stunting"
-                                href="{{ url('ibu-melahirkan-stunting') }}">Soal Ibu Melahirkan Stunting</a>
+                                href="{{ url('masterData/soal-ibu-melahirkan-stunting') }}">Soal Ibu Melahirkan
+                                Stunting</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a class="m-link" id="m-link-wilayah" href="{{ url('/provinsi') }}">
+                    <a class="m-link" id="m-link-wilayah" href="{{ url('masterData/provinsi') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-map-fill" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"

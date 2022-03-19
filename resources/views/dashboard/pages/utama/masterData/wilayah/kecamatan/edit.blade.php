@@ -35,7 +35,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('/kecamatan' . '/' . $kabupatenKota->id . '/' . $kecamatan->id) }}",
+                url: "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id . '/' . $kecamatan->id) }}",
                 type: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -49,7 +49,8 @@
                         setTimeout(
                             function() {
                                 $(location).attr('href',
-                                    "{{ url('/kecamatan' . '/' . $kabupatenKota->id) }}");
+                                    "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id) }}"
+                                    );
                             }, 2000
                         );
                     } else {

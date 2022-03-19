@@ -24,7 +24,7 @@ class DesaKelurahanController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) use ($request) {
-                    $actionBtn = '<a href="' . url('desaKelurahan/' . $request->kecamatan . '/' . $row->id . '/edit') . '" class="btn btn-warning btn-sm me-1" value="' . $row->id . '" >Ubah</a><button id="btn-delete" class="btn btn-danger btn-sm me-1" value="' . $row->id . '" > Hapus</button>';
+                    $actionBtn = '<a href="' . url('masterData/desaKelurahan/' . $request->kecamatan . '/' . $row->id . '/edit') . '" class="btn btn-warning btn-sm me-1" value="' . $row->id . '" >Ubah</a><button id="btn-delete" class="btn btn-danger btn-sm me-1" value="' . $row->id . '" > Hapus</button>';
                     return $actionBtn;
                 })
                 ->addColumn('statusPolygon', function ($row) {

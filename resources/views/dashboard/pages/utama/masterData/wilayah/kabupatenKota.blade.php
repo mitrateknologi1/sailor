@@ -86,7 +86,8 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('kabupatenKota' . '/' . $provinsi->id) }}" + '/' + id,
+                        url: "{{ url('masterData/kabupatenKota' . '/' . $provinsi->id) }}" + '/' +
+                            id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -117,7 +118,7 @@
             let id = $(this).val();
             idEdit = id;
             $.ajax({
-                url: "{{ url('kabupatenKota' . '/' . $provinsi->id) }}" + '/' + id + '/edit',
+                url: "{{ url('masterData/kabupatenKota' . '/' . $provinsi->id) }}" + '/' + id + '/edit',
                 type: "GET",
                 data: {
                     id: id
@@ -133,7 +134,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('/kabupatenKota' . '/' . $provinsi->id) }}",
+                url: "{{ url('masterData/kabupatenKota' . '/' . $provinsi->id) }}",
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -167,7 +168,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('/kabupatenKota' . '/' . $provinsi->id) }}" + '/' + idEdit,
+                url: "{{ url('masterData/kabupatenKota' . '/' . $provinsi->id) }}" + '/' + idEdit,
                 type: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -202,7 +203,7 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('/kabupatenKota' . '/' . $provinsi->id) }}",
+            ajax: "{{ url('masterData/kabupatenKota' . '/' . $provinsi->id) }}",
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex'

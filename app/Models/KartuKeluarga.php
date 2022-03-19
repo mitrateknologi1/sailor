@@ -19,5 +19,8 @@ class KartuKeluarga extends Model
         return $this->hasMany(AnggotaKeluarga::class);
     }
 
-    
+    public function statusKeluarga($status)
+    {
+        return $this->hasMany(AnggotaKeluarga::class)->where('status_hubungan_dalam_keluarga', 'like', '%' . $status . '%');
+    }
 }

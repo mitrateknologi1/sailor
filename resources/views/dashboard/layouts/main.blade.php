@@ -351,6 +351,10 @@
             .ajaxStop(function() {
                 overlay.hide();
             });
+
+        $('.numerik').on('input', function(e) {
+            this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+        });
     </script>
     @stack('script')
 

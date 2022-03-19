@@ -26,7 +26,7 @@ class KabupatenKotaController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="' . url('kecamatan/' . $row->id) . '" class="btn btn-primary btn-sm me-1">Lihat</a><button id="btn-edit" class="btn btn-warning btn-sm me-1" value="' . $row->id . '" >Ubah</button><button id="btn-delete" class="btn btn-danger btn-sm me-1" value="' . $row->id . '" > Hapus</button>';
+                    $actionBtn = '<a href="' . url('masterData/kecamatan/' . $row->id) . '" class="btn btn-primary btn-sm me-1">Lihat</a><button id="btn-edit" class="btn btn-warning btn-sm me-1" value="' . $row->id . '" >Ubah</button><button id="btn-delete" class="btn btn-danger btn-sm me-1" value="' . $row->id . '" > Hapus</button>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])

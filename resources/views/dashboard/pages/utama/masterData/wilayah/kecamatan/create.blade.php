@@ -33,7 +33,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('/kecamatan' . '/' . $kabupatenKota->id) }}",
+                url: "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id) }}",
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -47,7 +47,8 @@
                         setTimeout(
                             function() {
                                 $(location).attr('href',
-                                    "{{ url('/kecamatan' . '/' . $kabupatenKota->id) }}");
+                                    "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id) }}"
+                                    );
                             }, 2000
                         );
                     } else {
@@ -68,7 +69,7 @@
 
         $(document).ready(function() {
             $.ajax({
-                url: "{{ url('/map/kecamatan') }}",
+                url: "{{ url('masterData/map/kecamatan') }}",
                 type: "GET",
                 data: {
                     kabupatenKota: "{{ $kabupatenKota->id }}"

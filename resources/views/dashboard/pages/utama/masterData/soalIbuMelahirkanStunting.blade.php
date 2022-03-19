@@ -1,14 +1,14 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Provinsi
+    Soal Ibu Melahirkan Stunting
 @endsection
 
 @section('breadcrumb')
     <div class="col">
         <ol class="breadcrumb bg-transparent mb-0">
-            <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Wilayah</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Provinsi</li>
+            <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Deteksi Stunting</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Soal Ibu Melahirkan Stunting</li>
         </ol>
     </div>
 @endsection
@@ -20,7 +20,7 @@
                 <div class="card ">
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
-                        <h5 class="card-title mb-0">Data Wilayah Provinsi</h5>
+                        <h5 class="card-title mb-0">Data Soal Ibu Melahirkan Stunting</h5>
                         @component('dashboard.components.buttons.add', [
                             'id' => 'btn-tambah',
                             'class' => '',
@@ -34,7 +34,7 @@
                                 <div class="card fieldset border border-secondary">
                                     @component('dashboard.components.dataTables.index', [
                                         'id' => 'table-data',
-                                        'th' => ['No', 'Nama', 'Aksi'],
+                                        'th' => ['Urutan', 'Soal', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -46,17 +46,17 @@
         </div>
     </section>
 
-    @component('dashboard.components.modals.masterData.wilayah', [
+    @component('dashboard.components.modals.masterData.soalIbuMelahirkanStunting', [
         'idModal' => 'modal-tambah',
         'idForm' => 'form-tambah',
-        'label' => 'Tambah Provinsi',
+        'label' => 'Tambah Soal Ibu Melahirkan Stunting',
         ])
     @endcomponent
 
-    @component('dashboard.components.modals.masterData.wilayah', [
+    @component('dashboard.components.modals.masterData.soalIbuMelahirkanStunting', [
         'idModal' => 'modal-edit',
         'idForm' => 'form-edit',
-        'label' => 'Edit Provinsi',
+        'label' => 'Edit Soal Ibu Melahirkan Stunting',
         ])
     @endcomponent
 @endsection
@@ -67,6 +67,7 @@
 
         $('#btn-tambah').click(function() {
             resetError();
+            resetModal();
             $('#modal-tambah').modal('show');
         })
 
@@ -75,7 +76,7 @@
 
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: "Anda akan menghapus data provinsi ini ?",
+                text: "Anda akan menghapus data ini ?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -85,7 +86,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('masterData/provinsi/') }}" + '/' + id,
+                        url: "{{ url('masterData/soal-ibu-melahirkan-stunting/') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -94,7 +95,7 @@
                             if (response.status == 'success') {
                                 Swal.fire(
                                     'Terhapus!',
-                                    'Data provinsi telah dihapus.',
+                                    'Data berhasil dihapus',
                                     'success'
                                 ).then(function() {
                                     table.draw();
@@ -102,7 +103,7 @@
                             } else {
                                 Swal.fire(
                                     'Gagal!',
-                                    'Data provinsi gagal dihapus.',
+                                    'Data gagal dihapus',
                                     'error'
                                 )
                             }
@@ -116,14 +117,15 @@
             let id = $(this).val();
             idEdit = id;
             $.ajax({
-                url: "{{ url('masterData/provinsi/') }}" + '/' + id + '/edit',
+                url: "{{ url('masterData/soal-ibu-melahirkan-stunting/') }}" + '/' + id + '/edit',
                 type: "GET",
                 data: {
                     id: id
                 },
                 success: function(response) {
                     $('#modal-edit').modal('show');
-                    $('#modal-edit .nama').val(response.nama);
+                    $('#modal-edit .urutan').val(response.urutan);
+                    $('#modal-edit .soal').html(response.soal);
                 },
             })
         })
@@ -132,7 +134,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('masterData/provinsi/') }}",
+                url: "{{ url('masterData/soal-ibu-melahirkan-stunting/') }}",
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -166,7 +168,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('masterData/provinsi') }}" + '/' + idEdit,
+                url: "{{ url('masterData/soal-ibu-melahirkan-stunting') }}" + '/' + idEdit,
                 type: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -201,14 +203,15 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('/masterData/provinsi') }}",
+            ajax: "{{ url('/masterData/soal-ibu-melahirkan-stunting') }}",
             columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
+                    data: 'urutan',
+                    name: 'urutan',
+                    class: 'text-center'
                 },
                 {
-                    data: 'nama',
-                    name: 'nama'
+                    data: 'soal',
+                    name: 'soal'
                 },
                 {
                     data: 'action',
@@ -222,8 +225,6 @@
     </script>
 
     <script>
-        $('#m-link-wilayah').addClass('active');
-
         function printErrorMsg(msg) {
             $.each(msg, function(key, value) {
                 $('.' + key + '-error').removeClass('d-none');
@@ -232,7 +233,8 @@
         }
 
         function resetError() {
-            resetErrorElement('nama');
+            resetErrorElement('urutan');
+            resetErrorElement('soal');
         }
 
         function resetModal() {
@@ -244,5 +246,11 @@
         function resetErrorElement(key) {
             $('.' + key + '-error').addClass('d-none');
         }
+    </script>
+
+    <script>
+        $('#m-link-master-data-deteksi-stunting').addClass('active');
+        $('#menu-master-data-deteksi-stunting').addClass('collapse show')
+        $('#ms-link-master-data-ibu-melahirkan-stunting').addClass('active')
     </script>
 @endpush

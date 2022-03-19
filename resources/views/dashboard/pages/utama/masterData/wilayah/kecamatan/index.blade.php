@@ -36,7 +36,7 @@
                         @component('dashboard.components.buttons.add', [
                             'id' => 'btn-tambah',
                             'class' => '',
-                            'url' => url('/kecamatan' . '/' . $kabupatenKota->id . '/create'),
+                            'url' => url('masterData/kecamatan' . '/' . $kabupatenKota->id . '/create'),
                             ])
                         @endcomponent
                     </div>
@@ -123,7 +123,8 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('kecamatan' . '/' . $kabupatenKota->id) }}" + '/' + id,
+                        url: "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id) }}" +
+                            '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -155,7 +156,7 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('/kecamatan' . '/' . $kabupatenKota->id) }}",
+            ajax: "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id) }}",
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex'

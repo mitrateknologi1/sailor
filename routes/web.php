@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dashboard\masterData\deteksiStunting\SoalIbuMelahirkanStuntingController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\dashboard\masterData\wilayah\DesaKelurahanController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KabupatenKotaController;
@@ -99,23 +100,23 @@ Route::get('meningkatkan-life-skill', function () {
 });
 
 // ----------------- Start Master -----------------
-Route::resource('desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
+Route::resource('masterData/desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
     '{kecamatan}' => 'kelurahan'
 ]);
 
-Route::resource('kabupatenKota/{provinsi}', KabupatenKotaController::class)->parameters([
+Route::resource('masterData/kabupatenKota/{provinsi}', KabupatenKotaController::class)->parameters([
     '{provinsi}' => 'kabupatenKota'
 ]);
 
-Route::resource('kecamatan/{kabupatenKota}', KecamatanController::class)->parameters([
+Route::resource('masterData/kecamatan/{kabupatenKota}', KecamatanController::class)->parameters([
     '{kabupatenKota}' => 'kecamatan'
 ]);
 
-Route::resource('desaKelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
+Route::resource('masterData/desaKelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
     '{kecamatan}' => 'desaKelurahan'
 ]);
+Route::resource('/masterData/provinsi', ProvinsiController::class);
+Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
 
 Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
 Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);
-
-Route::resource('provinsi', ProvinsiController::class);
