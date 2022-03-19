@@ -69,6 +69,7 @@ Route::get('anc', function () {
 // ----------------- Start Tumbuh Kembang -----------------
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
+Route::post('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');
 // Route::get('pertumbuhan-anak', function () {
 //     return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');

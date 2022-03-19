@@ -29,7 +29,7 @@ class CreateKartuKeluargasTable extends Migration
             $table->date('dikeluarkan_tanggal')->nullable();
             $table->text('dikeluarkan_oleh')->nullable();
             $table->text('foto_kk');
-            $table->integer('is_validasi')->default(0);
+            $table->integer('is_valid')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,5 +1,5 @@
-<label class="form-label">{{$label ?? ''}}</label>
-<select class="form-select {{$class ?? ''}}" id="{{$id ?? ''}}" aria-hidden="true" {{$attribute ?? ''}}>
+<label class="form-label">{{$label ?? ''}} {!!$wajib ?? ''!!}</label>
+<select class="form-select {{$class ?? ''}}" id="{{$id ?? ''}}" aria-hidden="true" {{$attribute ?? ''}} name="{{$name ?? ''}}" }>
     @if ($class == 'filter')
         <option value="">Semua</option>
     @else
@@ -7,3 +7,4 @@
     @endif
     {{$options ?? ''}}
 </select>
+<span class="text-danger error-text {{$name}}-error"></span>

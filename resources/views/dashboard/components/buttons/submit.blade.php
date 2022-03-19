@@ -1,1 +1,1 @@
-<button type="submit" class="btn btn-success"><i class="bi bi-plus-circle"></i> {{ $label }}</button>
+<button type="submit" class="btn btn-success {{$class ?? ''}}"><i class="fa-solid fa-floppy-disk"></i> {{ $label }}</button>
