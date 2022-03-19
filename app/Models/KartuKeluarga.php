@@ -13,10 +13,16 @@ class KartuKeluarga extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'kartu_keluarga';
+    protected $guarded = ['id'];
+
 
     public function anggotaKeluarga()
     {
         return $this->hasMany(AnggotaKeluarga::class);
+    }
+
+    public function statusKeluarga($status){
+        return $this->hasMany(AnggotaKeluarga::class)->where('status_hubungan_dalam_keluarga', 'like', '%'.$status.'%');
     }
 
     

@@ -42,7 +42,7 @@ class CreateAnggotaKeluargasTable extends Migration
             $table->string('foto_ket_domisili')->nullable();
             $table->string('foto_ktp')->nullable();
             $table->string('foto_profil')->nullable();
-            $table->integer('is_validasi')->default(0);
+            $table->integer('is_valid')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
