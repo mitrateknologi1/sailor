@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\utama;
+namespace App\Http\Controllers\dashboard\utama\tumbuhKembang;
 
 use Illuminate\Http\Request;
 use App\Models\KartuKeluarga;
@@ -27,58 +27,57 @@ class PertumbuhanAnakController extends Controller
             $data = PertumbuhanAnak::with('tumbuhKembangAnak')->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('nakes', function ($row) {     
+                ->addColumn('nakes', function ($row) {
                     return 'belum_dibuat';
                 })
-                ->addColumn('status', function ($row) {   
-                    if($row->tumbuhKembangAnak->is_valid == 1){
+                ->addColumn('status', function ($row) {
+                    if ($row->tumbuhKembangAnak->is_valid == 1) {
                         return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
-                    }else{
+                    } else {
                         return '<span class="badge rounded-pill bg-danger">Belum Divalidasi</span>';
                     }
                     // return 'belum_valid';
                 })
-                ->addColumn('tanggal_lahir', function ($row) {   
+                ->addColumn('tanggal_lahir', function ($row) {
                     return $row->tumbuhKembangAnak->anggotaKeluarga->tanggal_lahir;
                 })
-                ->addColumn('nama_anak', function ($row) {     
+                ->addColumn('nama_anak', function ($row) {
                     return $row->tumbuhKembangAnak->anggotaKeluarga->nama_lengkap;
                 })
-                ->addColumn('hasil', function ($row) {  
-                    if($row->hasil == 'Gizi Buruk'){
+                ->addColumn('hasil', function ($row) {
+                    if ($row->hasil == 'Gizi Buruk') {
                         return '<span class="badge rounded-pill bg-danger">Gizi Buruk</span>';
-                    }elseif($row->hasil == 'Gizi Kurang'){
+                    } elseif ($row->hasil == 'Gizi Kurang') {
                         return '<span class="badge rounded-pill bg-warning">Gizi Kurang</span>';
-                    }elseif($row->hasil == 'Gizi Baik'){
+                    } elseif ($row->hasil == 'Gizi Baik') {
                         return '<span class="badge rounded-pill bg-success">Gizi Baik</span>';
-                    }elseif($row->hasil == 'Gizi Lebih'){
+                    } elseif ($row->hasil == 'Gizi Lebih') {
                         return '<span class="badge rounded-pill bg-primary">Gizi Lebih</span>';
                     }
-
                 })
-               
-                ->addColumn('action', function ($row) {     
-                        $actionBtn = '
+
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '
                         <div class="text-center justify-content-center text-white">';
-                        $actionBtn .= '
-                            <a href="'.route('pertumbuhan-anak.show', $row->id).'" class="btn btn-info btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
-                            <a href="'.route('pertumbuhan-anak.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
+                    $actionBtn .= '
+                            <a href="' . route('pertumbuhan-anak.show', $row->id) . '" class="btn btn-info btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
+                            <a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
                             <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
                         </div>';
                     return $actionBtn;
                 })
 
-                // ->filter(function ($query) use ($request) {    
+                // ->filter(function ($query) use ($request) {
                 //     if ($request->search != '') {
                 //         $query->whereHas('user', function ($query) use ($request) {
                 //             $query->where("users.username", "LIKE", "%$request->search%")
-                //                     ->orWhere("profiles.nama_lengkap", "LIKE", "%$request->search%");                                
+                //                     ->orWhere("profiles.nama_lengkap", "LIKE", "%$request->search%");
                 //         });
-                //     }      
-                                    
+                //     }
+
                 //     if (!empty($request->role)) {
                 //         $query->whereHas('user', function ($query) use ($request) {
-                //             $query->where('users.role', $request->role);                       
+                //             $query->where('users.role', $request->role);
                 //         });
                 //     }
                 // })
@@ -107,7 +106,8 @@ class PertumbuhanAnakController extends Controller
         return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.create', $data);
     }
 
-    public function proses(Request $request){
+    public function proses(Request $request)
+    {
         $validator = Validator::make(
             $request->all(),
             [
@@ -131,8 +131,8 @@ class PertumbuhanAnakController extends Controller
         $tanggalSekarang = date('Y-m-d');
 
         // hitung usia dalam bulan
-        $usiaBulan = round(((strtotime($tanggalSekarang) - strtotime($tanggalLahir))/86400)/30);
-        
+        $usiaBulan = round(((strtotime($tanggalSekarang) - strtotime($tanggalLahir)) / 86400) / 30);
+
         $jenisKelamin = $anak->jenis_kelamin; //Laki-laki atau Perempuan
         $beratBadan = $request->berat_badan; //dalam kilogram
 
@@ -142,7 +142,7 @@ class PertumbuhanAnakController extends Controller
 
         $kategoriGizi = '';
 
-        
+
         if ($jenisKelamin == "LAKI-LAKI") {
             if ($usiaBulan == 0) {
                 $median = 3.3;
@@ -691,7 +691,7 @@ class PertumbuhanAnakController extends Controller
             'is_valid' => 1,
             'nakes_id' => 1, // Nanti Ganti sesuai Auth->nakes->id
         ];
-        
+
         TumbuhKembangAnak::create($tumbuhKembangAnak);
 
         $tumbuhKembangAnakLatest = TumbuhKembangAnak::latest()->first();

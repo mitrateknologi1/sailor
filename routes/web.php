@@ -1,15 +1,21 @@
 <?php
 
 use App\Http\Controllers\dashboard\masterData\deteksiStunting\SoalIbuMelahirkanStuntingController;
+use App\Http\Controllers\dashboard\masterData\momsCare\SoalDeteksiDiniController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\dashboard\masterData\wilayah\DesaKelurahanController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KabupatenKotaController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KecamatanController;
 use App\Http\Controllers\dashboard\masterData\wilayah\ProvinsiController;
+use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStuntingController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\utama\PertumbuhanAnakController;
-
+use App\Http\Controllers\dashboard\utama\tumbuhKembang\PertumbuhanAnakController;
+use App\Http\Controllers\dashboard\utama\deteksiStunting\StuntingAnakController;
+use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
+use App\Http\Controllers\dashboard\utama\momsCare\PerkiraanMelahirkanController;
+use App\Models\DeteksiDini;
+use App\Models\DeteksiIbuMelahirkanStunting;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,33 +37,29 @@ Route::get('/', function () {
 Route::get('dashboard', function () {
     return view('dashboard.pages.utama.dashboard.admin');
 });
-
+Route::match(array('PUT', 'POST'), 'proses-stunting-anak', [StuntingAnakController::class, 'proses']);
 
 
 // -------------- Start Deteksi Stunting --------------
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('stunting-anak', function () {
-    return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.index');
-});
+Route::resource('stunting-anak', StuntingAnakController::class);
 
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('ibu-melahirkan-stunting', function () {
-    return view('dashboard.pages.utama.deteksiStunting.ibuMelahirkanStunting.index');
-});
+Route::resource('deteksi-ibu-melahirkan-stunting', DeteksiIbuMelahirkanStuntingController::class);
+Route::match(array('PUT', 'POST'), 'proses-deteksi-ibu-melahirkan-stunting', [DeteksiIbuMelahirkanStuntingController::class, 'proses']);
+Route::get('get-ibu', [ListController::class, 'getIbu']);
 // -------------- End Deteksi Stunting --------------
 
 
 
 // ----------------- Start Moms Care -----------------
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('perkiraan-melahirkan', function () {
-    return view('dashboard.pages.utama.momsCare.perkiraanMelahirkan.index');
-});
+Route::resource('perkiraan-melahirkan', PerkiraanMelahirkanController::class);
+Route::match(array('PUT', 'POST'), 'proses-perkiraan-melahirkan', [PerkiraanMelahirkanController::class, 'proses']);
 
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('deteksi-dini', function () {
-    return view('dashboard.pages.utama.momsCare.deteksiDini.index');
-});
+Route::resource('deteksi-dini', DeteksiDiniController::class);
+Route::match(array('PUT', 'POST'), 'proses-deteksi-dini', [DeteksiDiniController::class, 'proses']);
 
 // URL resource-nya nanti sesuai url yang sekarang
 Route::get('anc', function () {
@@ -118,6 +120,7 @@ Route::resource('masterData/desaKelurahan/{kecamatan}', DesaKelurahanController:
 ]);
 Route::resource('/masterData/provinsi', ProvinsiController::class);
 Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
+Route::resource('/masterData/soal-deteksi-dini', SoalDeteksiDiniController::class);
 
 Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
 Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);

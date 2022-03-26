@@ -46,7 +46,7 @@ class DesaKelurahanController extends Controller
         }
 
         $kecamatan = Kecamatan::find($request->kecamatan);
-        return view('dashboard.pages.utama.masterData.wilayah.desaKelurahan.index', compact('kecamatan'));
+        return view('dashboard.pages.masterData.wilayah.desaKelurahan.index', compact('kecamatan'));
     }
 
     /**
@@ -57,7 +57,7 @@ class DesaKelurahanController extends Controller
     public function create(Request $request)
     {
         $kecamatan = Kecamatan::find($request->kecamatan);
-        return view('dashboard.pages.utama.masterData.wilayah.desaKelurahan.create', compact('kecamatan'));
+        return view('dashboard.pages.masterData.wilayah.desaKelurahan.create', compact('kecamatan'));
     }
 
     /**
@@ -119,7 +119,7 @@ class DesaKelurahanController extends Controller
     {
         $desaKelurahan = DesaKelurahan::find($request->desaKelurahan);
         $kecamatan = Kecamatan::find($desaKelurahan->kecamatan_id);
-        return view('dashboard.pages.utama.masterData.wilayah.desaKelurahan.edit', compact('desaKelurahan', 'kecamatan'));
+        return view('dashboard.pages.masterData.wilayah.desaKelurahan.edit', compact('desaKelurahan', 'kecamatan'));
     }
 
     /**

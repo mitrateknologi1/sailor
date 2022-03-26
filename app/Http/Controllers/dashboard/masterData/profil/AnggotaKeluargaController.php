@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\dashboard\masterData\profil;
 
-use App\Http\Requests\StoreKartuKeluargaRequest;
-use App\Http\Requests\UpdateKartuKeluargaRequest;
-use App\Models\KartuKeluarga;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAnggotaKeluargaRequest;
+use App\Http\Requests\UpdateAnggotaKeluargaRequest;
+use App\Models\AnggotaKeluarga;
 
-class KartuKeluargaController extends Controller
+class AnggotaKeluargaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +32,10 @@ class KartuKeluargaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreKartuKeluargaRequest  $request
+     * @param  \App\Http\Requests\StoreAnggotaKeluargaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreKartuKeluargaRequest $request)
+    public function store(StoreAnggotaKeluargaRequest $request)
     {
         //
     }
@@ -42,10 +43,10 @@ class KartuKeluargaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\KartuKeluarga  $kartuKeluarga
+     * @param  \App\Models\AnggotaKeluarga  $anggotaKeluarga
      * @return \Illuminate\Http\Response
      */
-    public function show(KartuKeluarga $kartuKeluarga)
+    public function show(AnggotaKeluarga $anggotaKeluarga)
     {
         //
     }
@@ -53,10 +54,10 @@ class KartuKeluargaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\KartuKeluarga  $kartuKeluarga
+     * @param  \App\Models\AnggotaKeluarga  $anggotaKeluarga
      * @return \Illuminate\Http\Response
      */
-    public function edit(KartuKeluarga $kartuKeluarga)
+    public function edit(AnggotaKeluarga $anggotaKeluarga)
     {
         //
     }
@@ -64,11 +65,11 @@ class KartuKeluargaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateKartuKeluargaRequest  $request
-     * @param  \App\Models\KartuKeluarga  $kartuKeluarga
+     * @param  \App\Http\Requests\UpdateAnggotaKeluargaRequest  $request
+     * @param  \App\Models\AnggotaKeluarga  $anggotaKeluarga
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateKartuKeluargaRequest $request, KartuKeluarga $kartuKeluarga)
+    public function update(UpdateAnggotaKeluargaRequest $request, AnggotaKeluarga $anggotaKeluarga)
     {
         //
     }
@@ -76,10 +77,10 @@ class KartuKeluargaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\KartuKeluarga  $kartuKeluarga
+     * @param  \App\Models\AnggotaKeluarga  $anggotaKeluarga
      * @return \Illuminate\Http\Response
      */
-    public function destroy(KartuKeluarga $kartuKeluarga)
+    public function destroy(AnggotaKeluarga $anggotaKeluarga)
     {
         //
     }

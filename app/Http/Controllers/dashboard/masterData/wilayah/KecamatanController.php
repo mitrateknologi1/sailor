@@ -46,7 +46,7 @@ class KecamatanController extends Controller
         }
 
         $kabupatenKota = KabupatenKota::find($request->kabupatenKota);
-        return view('dashboard.pages.utama.masterData.wilayah.kecamatan.index', compact('kabupatenKota'));
+        return view('dashboard.pages.masterData.wilayah.kecamatan.index', compact('kabupatenKota'));
     }
 
     /**
@@ -57,7 +57,7 @@ class KecamatanController extends Controller
     public function create(Request $request)
     {
         $kabupatenKota = KabupatenKota::find($request->kabupatenKota);
-        return view('dashboard.pages.utama.masterData.wilayah.kecamatan.create', compact('kabupatenKota'));
+        return view('dashboard.pages.masterData.wilayah.kecamatan.create', compact('kabupatenKota'));
     }
 
     /**
@@ -119,7 +119,7 @@ class KecamatanController extends Controller
     {
         $kecamatan = Kecamatan::find($request->kecamatan);
         $kabupatenKota = KabupatenKota::find($request->kabupatenKota);
-        return view('dashboard.pages.utama.masterData.wilayah.kecamatan.edit', compact('kecamatan', 'kabupatenKota'));
+        return view('dashboard.pages.masterData.wilayah.kecamatan.edit', compact('kecamatan', 'kabupatenKota'));
     }
 
     /**

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\dashboard\masterData\deteksiStunting;
+namespace App\Http\Controllers\dashboard\masterData\momsCare;
 
 use App\Http\Controllers\Controller;
-use App\Models\KartuKeluarga;
-use App\Models\SoalIbuMelahirkanStunting;
+use App\Models\SoalDeteksiDini;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class SoalIbuMelahirkanStuntingController extends Controller
+class SoalDeteksiDiniController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +19,7 @@ class SoalIbuMelahirkanStuntingController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = SoalIbuMelahirkanStunting::orderBy('urutan', 'asc')->get();
+            $data = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
             return DataTables::of($data)
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<button id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></button><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
@@ -29,7 +28,7 @@ class SoalIbuMelahirkanStuntingController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('dashboard.pages.masterData.deteksiStunting.soalIbuMelahirkanStunting');
+        return view('dashboard.pages.masterData.momsCare.soalDeteksiDini');
     }
 
     /**
@@ -52,14 +51,20 @@ class SoalIbuMelahirkanStuntingController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'urutan' => ['required', Rule::unique('soal_ibu_melahirkan_stunting')->withoutTrashed(), 'numeric'],
+                'urutan' => ['required', Rule::unique('soal_deteksi_dini')->withoutTrashed(), 'numeric'],
                 'soal' => ['required'],
+                'skor_ya' => ['required', 'numeric'],
+                'skor_tidak' => ['required', 'numeric'],
             ],
             [
                 'urutan.required' => 'Urutan harus diisi',
                 'urutan.unique' => 'Urutan sudah ada',
                 'urutan.numeric' => 'Urutan harus berupa angka',
                 'soal.required' => 'Soal harus diisi',
+                'skor_ya.required' => 'Skor Ya harus diisi',
+                'skor_tidak.required' => 'Skor Tidak harus diisi',
+                'skor_ya.numeric' => 'Skor Ya harus berupa angka',
+                'skor_tidak.numeric' => 'Skor Tidak harus berupa angka',
             ]
         );
 
@@ -67,10 +72,12 @@ class SoalIbuMelahirkanStuntingController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        $soalIbuMelahirkanStunting = new SoalIbuMelahirkanStunting();
-        $soalIbuMelahirkanStunting->urutan = $request->urutan;
-        $soalIbuMelahirkanStunting->soal = $request->soal;
-        $soalIbuMelahirkanStunting->save();
+        $soalDeteksiDini = new SoalDeteksiDini();
+        $soalDeteksiDini->urutan = $request->urutan;
+        $soalDeteksiDini->soal = $request->soal;
+        $soalDeteksiDini->skor_ya = $request->skor_ya;
+        $soalDeteksiDini->skor_tidak = $request->skor_tidak;
+        $soalDeteksiDini->save();
 
         return response()->json(['status' => 'success']);
     }
@@ -78,10 +85,10 @@ class SoalIbuMelahirkanStuntingController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\SoalIbuMelahirkanStunting  $soalIbuMelahirkanStunting
+     * @param  \App\Models\SoalDeteksiDini  $soalDeteksiDini
      * @return \Illuminate\Http\Response
      */
-    public function show(SoalIbuMelahirkanStunting $soalIbuMelahirkanStunting)
+    public function show(SoalDeteksiDini $soalDeteksiDini)
     {
         //
     }
@@ -89,34 +96,40 @@ class SoalIbuMelahirkanStuntingController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\SoalIbuMelahirkanStunting  $soalIbuMelahirkanStunting
+     * @param  \App\Models\SoalDeteksiDini  $soalDeteksiDini
      * @return \Illuminate\Http\Response
      */
-    public function edit(SoalIbuMelahirkanStunting $soalIbuMelahirkanStunting)
+    public function edit(SoalDeteksiDini $soalDeteksiDini)
     {
-        return response()->json($soalIbuMelahirkanStunting);
+        return response()->json($soalDeteksiDini);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SoalIbuMelahirkanStunting  $soalIbuMelahirkanStunting
+     * @param  \App\Models\SoalDeteksiDini  $soalDeteksiDini
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SoalIbuMelahirkanStunting $soalIbuMelahirkanStunting)
+    public function update(Request $request, SoalDeteksiDini $soalDeteksiDini)
     {
         $validator = Validator::make(
             $request->all(),
             [
-                'urutan' => ['required', Rule::unique('soal_ibu_melahirkan_stunting')->ignore($soalIbuMelahirkanStunting->id)->withoutTrashed(), 'numeric'],
+                'urutan' => ['required', Rule::unique('soal_deteksi_dini')->ignore($soalDeteksiDini->id)->withoutTrashed(), 'numeric'],
                 'soal' => ['required'],
+                'skor_ya' => ['required', 'numeric'],
+                'skor_tidak' => ['required', 'numeric'],
             ],
             [
                 'urutan.required' => 'Urutan harus diisi',
                 'urutan.unique' => 'Urutan sudah ada',
                 'urutan.numeric' => 'Urutan harus berupa angka',
                 'soal.required' => 'Soal harus diisi',
+                'skor_ya.required' => 'Skor Ya harus diisi',
+                'skor_tidak.required' => 'Skor Tidak harus diisi',
+                'skor_ya.numeric' => 'Skor Ya harus berupa angka',
+                'skor_tidak.numeric' => 'Skor Tidak harus berupa angka',
             ]
         );
 
@@ -124,9 +137,11 @@ class SoalIbuMelahirkanStuntingController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        $soalIbuMelahirkanStunting->urutan = $request->urutan;
-        $soalIbuMelahirkanStunting->soal = $request->soal;
-        $soalIbuMelahirkanStunting->save();
+        $soalDeteksiDini->urutan = $request->urutan;
+        $soalDeteksiDini->soal = $request->soal;
+        $soalDeteksiDini->skor_ya = $request->skor_ya;
+        $soalDeteksiDini->skor_tidak = $request->skor_tidak;
+        $soalDeteksiDini->save();
 
         return response()->json(['status' => 'success']);
     }
@@ -134,12 +149,12 @@ class SoalIbuMelahirkanStuntingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\SoalIbuMelahirkanStunting  $soalIbuMelahirkanStunting
+     * @param  \App\Models\SoalDeteksiDini  $soalDeteksiDini
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SoalIbuMelahirkanStunting $soalIbuMelahirkanStunting)
+    public function destroy(SoalDeteksiDini $soalDeteksiDini)
     {
-        $soalIbuMelahirkanStunting->delete();
+        $soalDeteksiDini->delete();
         return response()->json(['status' => 'success']);
     }
 }
