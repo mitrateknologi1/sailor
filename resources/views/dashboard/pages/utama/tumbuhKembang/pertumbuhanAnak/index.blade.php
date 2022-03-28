@@ -9,14 +9,14 @@
         @media screen and (max-width:600px) {
             .dataTables_filter {
                 margin-top: 10px;
-            }   
+            }
         }
 
         .dataTables_filter {
             display: inline !important;
             float: right;
         }
-        
+
         .dataTables_filter.col-sm {
             margin-top: 10px;
         }
@@ -25,9 +25,9 @@
             display: inline !important;
             margin-left: 10px !important
         }
-        
+
         .dataTables_length {
-            display: inline !important;        
+            display: inline !important;
         }
 
         .paginate_button {
@@ -37,31 +37,33 @@
         .dataTables_paginate {
             margin-top: 10px !important;
         }
-    </style>  
+
+    </style>
 @endpush
 
 @section('breadcrumb')
-<div class="col">
-    <ol class="breadcrumb bg-transparent mb-0">
-        <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Tumbuh Kembang</li>
-        <li class="breadcrumb-item active" aria-current="page">Pertumbuhan Anak</li>
-    </ol>
-</div>
+    <div class="col">
+        <ol class="breadcrumb bg-transparent mb-0">
+            <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Tumbuh Kembang</li>
+            <li class="breadcrumb-item active" aria-current="page">Pertumbuhan Anak</li>
+        </ol>
+    </div>
 @endsection
 
 @section('content')
-    <section>      
+    <section>
         <div class="row mb-4">
             <div class="col">
                 <div class="card ">
-                    <div class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
+                    <div
+                        class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Pertumbuhan Anak</h5>
-                        @component('dashboard.components.buttons.add',[
+                        @component('dashboard.components.buttons.add', [
                             'id' => 'catatan-pertumbuhan-anak',
                             'class' => '',
                             'url' => '/pertumbuhan-anak/create',
-                        ])        
+                            ])
                         @endcomponent
                     </div>
                     <div class="card-body pt-2">
@@ -76,7 +78,7 @@
                                                 'id' => 'status',
                                                 'name' => 'status',
                                                 'class' => 'filter',
-                                                ])         
+                                                ])
                                                 @slot('options')
                                                     <option value="1">Aktif</option>
                                                     <option value="0">Tidak Aktif</option>
@@ -89,7 +91,7 @@
                                                 'id' => 'kategori-gizi',
                                                 'name' => 'kategori_gizi',
                                                 'class' => 'filter',
-                                                ])         
+                                                ])
                                                 @slot('options')
                                                     <option>Mustard</option>
                                                     <option>Ketchup</option>
@@ -107,20 +109,20 @@
                                     @component('dashboard.components.dataTables.index', [
                                         'id' => 'table-pertumbuhan-anak',
                                         'th' => [
-                                            'No',
-                                            'Aksi',
-                                            'Dibuat Tanggal',
-                                            'Status',
-                                            'Nama Anak',
-                                            // 'Jenis Kelamin',
-                                            'Tanggal Lahir',
-                                            // 'Usia',
-                                            // 'BB (Kg)',
-                                            // 'ZScore',
-                                            'Kategori Gizi',
-                                            'Bidan',
+                                        'No',
+                                        'Aksi',
+                                        'Dibuat Tanggal',
+                                        'Status',
+                                        'Nama Anak',
+                                        // 'Jenis Kelamin',
+                                        'Tanggal Lahir',
+                                        // 'Usia',
+                                        // 'BB (Kg)',
+                                        // 'ZScore',
+                                        'Kategori Gizi',
+                                        'Bidan',
                                         ],
-                                    ])
+                                        ])
                                     @endcomponent
                                 </div>
                             </div>
@@ -133,45 +135,37 @@
 @endsection
 
 @push('script')
-    <script src="{{asset('assets/dashboard')}}/datatables/dataTables.buttons.min.js"></script>
-    <script src="{{asset('assets/dashboard')}}/datatables/jszip.min.js"></script>
-    <script src="{{asset('assets/dashboard')}}/datatables/vfs_fonts.js"></script>
-    <script src="{{asset('assets/dashboard')}}/datatables/buttons.html5.min.js"></script>
-    <script src="{{asset('assets/dashboard')}}/datatables/buttons.print.min.js"></script>
-    
     <script>
         $('#m-link-tumbuh-kembang').addClass('active');
         $('#menu-tumbuh-kembang').addClass('collapse show')
-        $('#ms-link-pertumbuhan-anak').addClass('active')    
-    
+        $('#ms-link-pertumbuhan-anak').addClass('active')
+
         $(function() {
             $('#table-pertumbuhan-anak').addClass('nowrap').dataTable({
                 processing: true,
                 serverSide: true,
-                responsive:true,
+                responsive: true,
                 dom: 'lBfrtip',
-                buttons : [
-                        {
-                        extend: 'excel',
-                        className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',                        
-                        text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
-                        exportOptions: {
-                            modifier: {
-                                order: 'index', // 'current', 'applied', 'index',  'original'
-                                page: 'all', // 'all',     'current'
-                                search: 'none' // 'none',    'applied', 'removed'
-                            }
+                buttons: [{
+                    extend: 'excel',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
+                    text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
+                    exportOptions: {
+                        modifier: {
+                            order: 'index', // 'current', 'applied', 'index',  'original'
+                            page: 'all', // 'all',     'current'
+                            search: 'none' // 'none',    'applied', 'removed'
                         }
                     }
-                ],  
+                }],
                 lengthMenu: [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
-                ],  
+                ],
                 ajax: {
                     url: "{{ route('pertumbuhan-anak.index') }}",
                     // data: function(d){
-                    //     d.role = $('#role-filter').val();                    
+                    //     d.role = $('#role-filter').val();
                     //     d.search = $('input[type="search"]').val();
                     // }
                 },
@@ -217,10 +211,9 @@
                         data: 'nakes',
                         name: 'nakes'
                     },
-                    
-                ],  
-                columnDefs: [
-                    {
+
+                ],
+                columnDefs: [{
                         targets: 2,
                         render: function(data) {
                             return moment(data).format('LL');
@@ -232,7 +225,7 @@
                             return moment(data).format('LL');
                         }
                     }
-                ],        
+                ],
             });
         })
     </script>

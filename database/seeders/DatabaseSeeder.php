@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(KabupatenKotaTableSeeder::class);
         $this->call(KecamatanTableSeeder::class);
         $this->call(DesaKelurahanTableSeeder::class);
+        $this->call(SoalIbuMelahirkanStuntingSeeder::class);
+        $this->call(SoalDeteksiDiniTableSeeder::class);
     }
 }

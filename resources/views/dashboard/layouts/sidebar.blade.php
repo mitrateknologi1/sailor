@@ -40,7 +40,7 @@
                         <li><a class="ms-link" id="ms-link-stunting-anak"
                                 href="{{ url('stunting-anak') }}">Stunting Anak</a></li>
                         <li><a class="ms-link" id="ms-link-ibu-melahirkan-stunting"
-                                href="{{ url('ibu-melahirkan-stunting') }}">Ibu Melahirkan Stunting</a>
+                                href="{{ url('deteksi-ibu-melahirkan-stunting') }}">Ibu Melahirkan Stunting</a>
                         </li>
                     </ul>
                 </li>
@@ -128,12 +128,30 @@
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-master-data-deteksi-stunting">
                         <li><a class="ms-link" id="ms-link-master-data-ibu-melahirkan-stunting"
-                                href="{{ url('ibu-melahirkan-stunting') }}">Soal Ibu Melahirkan Stunting</a>
+                                href="{{ url('masterData/soal-ibu-melahirkan-stunting') }}">Soal Ibu Melahirkan
+                                Stunting</a>
                         </li>
                     </ul>
                 </li>
+                <li class="collapsed">
+                    <a class="m-link" id="m-link-master-data-moms-care" data-bs-toggle="collapse"
+                        data-bs-target="#menu-master-data-moms-care" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor"
+                            class="bi bi-person-hearts" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M11.5 1.246c.832-.855 2.913.642 0 2.566-2.913-1.924-.832-3.421 0-2.566ZM9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4Zm13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276ZM15 2.165c.555-.57 1.942.428 0 1.711-1.942-1.283-.555-2.281 0-1.71Z" />
+                        </svg>
+                        <span class="ms-2">Moms Care</span>
+                        <span class="arrow fa fa-angle-right ms-auto text-end"></span>
+                    </a>
+                    <!-- Menu: Sub menu ul -->
+                    <ul class="sub-menu collapse" id="menu-master-data-moms-care">
+                        <li><a class="ms-link" id="ms-link-master-data-deteksi-dini"
+                                href="{{ url('masterData/soal-deteksi-dini') }}">Soal Deteksi Dini</a></li>
+                    </ul>
+                </li>
                 <li>
-                    <a class="m-link" id="m-link-wilayah" href="{{ url('/provinsi') }}">
+                    <a class="m-link" id="m-link-wilayah" href="{{ url('masterData/provinsi') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-map-fill" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"

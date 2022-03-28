@@ -24,7 +24,7 @@ class DesaKelurahanController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) use ($request) {
-                    $actionBtn = '<a href="' . url('desaKelurahan/' . $request->kecamatan . '/' . $row->id . '/edit') . '" class="btn btn-warning btn-sm me-1" value="' . $row->id . '" >Ubah</a><button id="btn-delete" class="btn btn-danger btn-sm me-1" value="' . $row->id . '" > Hapus</button>';
+                    $actionBtn = '<a href="' . url('masterData/desaKelurahan/' . $request->kecamatan . '/' . $row->id . '/edit') . '" class="btn btn-warning btn-sm me-1" value="' . $row->id . '" >Ubah</a><button id="btn-delete" class="btn btn-danger btn-sm me-1" value="' . $row->id . '" > Hapus</button>';
                     return $actionBtn;
                 })
                 ->addColumn('statusPolygon', function ($row) {
@@ -46,7 +46,7 @@ class DesaKelurahanController extends Controller
         }
 
         $kecamatan = Kecamatan::find($request->kecamatan);
-        return view('dashboard.pages.utama.masterData.wilayah.desaKelurahan.index', compact('kecamatan'));
+        return view('dashboard.pages.masterData.wilayah.desaKelurahan.index', compact('kecamatan'));
     }
 
     /**
@@ -57,7 +57,7 @@ class DesaKelurahanController extends Controller
     public function create(Request $request)
     {
         $kecamatan = Kecamatan::find($request->kecamatan);
-        return view('dashboard.pages.utama.masterData.wilayah.desaKelurahan.create', compact('kecamatan'));
+        return view('dashboard.pages.masterData.wilayah.desaKelurahan.create', compact('kecamatan'));
     }
 
     /**
@@ -119,7 +119,7 @@ class DesaKelurahanController extends Controller
     {
         $desaKelurahan = DesaKelurahan::find($request->desaKelurahan);
         $kecamatan = Kecamatan::find($desaKelurahan->kecamatan_id);
-        return view('dashboard.pages.utama.masterData.wilayah.desaKelurahan.edit', compact('desaKelurahan', 'kecamatan'));
+        return view('dashboard.pages.masterData.wilayah.desaKelurahan.edit', compact('desaKelurahan', 'kecamatan'));
     }
 
     /**

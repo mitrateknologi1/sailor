@@ -17,7 +17,7 @@ class AnggotaKeluargaSeeder extends Seeder
         $data = [
             [
                 'kartu_keluarga_id' => 1,
-                'akun_id' => '',
+                'akun_id' => '1',
                 'nama_lengkap' => 'NATALIA',
                 'nik' => 1234567890123456,
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -48,7 +48,7 @@ class AnggotaKeluargaSeeder extends Seeder
             ],
             [
                 'kartu_keluarga_id' => 1,
-                'akun_id' => '',
+                'akun_id' => '1',
                 'nama_lengkap' => 'LYLIA',
                 'nik' => 9876554321123456,
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -81,7 +81,7 @@ class AnggotaKeluargaSeeder extends Seeder
             // Kartu Keluarga 2
             [
                 'kartu_keluarga_id' => 2,
-                'akun_id' => '',
+                'akun_id' => '1',
                 'nama_lengkap' => 'KARINA',
                 'nik' => 1234567890123456,
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -112,7 +112,7 @@ class AnggotaKeluargaSeeder extends Seeder
             ],
             [
                 'kartu_keluarga_id' => 2,
-                'akun_id' => '',
+                'akun_id' => '1',
                 'nama_lengkap' => 'NANA',
                 'nik' => 9876554321123456,
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -143,7 +143,7 @@ class AnggotaKeluargaSeeder extends Seeder
             ],
             [
                 'kartu_keluarga_id' => 2,
-                'akun_id' => '',
+                'akun_id' => '1',
                 'nama_lengkap' => 'HARITH',
                 'nik' => 9876554321123456,
                 'jenis_kelamin' => 'LAKI-LAKI',
@@ -175,8 +175,5 @@ class AnggotaKeluargaSeeder extends Seeder
 
         ];
         DB::table('anggota_keluarga')->insert($data);
-
-
-        
     }
 }

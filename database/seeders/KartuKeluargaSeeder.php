@@ -17,7 +17,7 @@ class KartuKeluargaSeeder extends Seeder
         $data = [
             [
                 'id' => 1,
-                'akun_id' => '',
+                'akun_id' => '1',
                 'nomor_kk' => 7206091803080165,
                 'nama_kepala_keluarga' => 'GUSION',
                 'alamat' => 'JL. RAYA CIKAMPEK NO. 1',
@@ -36,7 +36,7 @@ class KartuKeluargaSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'akun_id' => '',
+                'akun_id' => '1',
                 'nomor_kk' => 8902983209900001,
                 'nama_kepala_keluarga' => 'ALUCARD',
                 'alamat' => 'JL. SETAPAK NO. 1',
