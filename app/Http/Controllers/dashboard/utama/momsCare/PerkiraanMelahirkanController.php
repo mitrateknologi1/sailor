@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
-use PDO;
 
 class PerkiraanMelahirkanController extends Controller
 {

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\dashboard\utama\tumbuhKembang\PertumbuhanAnakController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\StuntingAnakController;
+use App\Http\Controllers\dashboard\utama\momsCare\AncController;
 use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
 use App\Http\Controllers\dashboard\utama\momsCare\PerkiraanMelahirkanController;
 use App\Models\DeteksiDini;
@@ -62,9 +63,7 @@ Route::resource('deteksi-dini', DeteksiDiniController::class);
 Route::match(array('PUT', 'POST'), 'proses-deteksi-dini', [DeteksiDiniController::class, 'proses']);
 
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('anc', function () {
-    return view('dashboard.pages.utama.momsCare.anc.index');
-});
+Route::resource('anc', AncController::class);
 // ----------------- End Moms Care -----------------
 
 
