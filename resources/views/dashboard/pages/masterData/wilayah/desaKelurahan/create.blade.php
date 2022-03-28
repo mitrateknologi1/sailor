@@ -34,7 +34,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('/desaKelurahan' . '/' . $kecamatan->id) }}",
+                url: "{{ url('masterData/desaKelurahan' . '/' . $kecamatan->id) }}",
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -48,7 +48,8 @@
                         setTimeout(
                             function() {
                                 $(location).attr('href',
-                                    "{{ url('/desaKelurahan' . '/' . $kecamatan->id) }}");
+                                    "{{ url('masterData/desaKelurahan' . '/' . $kecamatan->id) }}"
+                                );
                             }, 2000
                         );
                     } else {

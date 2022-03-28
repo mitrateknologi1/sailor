@@ -7,30 +7,27 @@ use Illuminate\Http\Request;
 use App\Models\KartuKeluarga;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\AnggotaKeluarga;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class ListController extends Controller
 {
-    public function getAnak(Request $request){
-        if($request->fungsi == 'pertumbuhan_anak'){ 
+    public function getAnak(Request $request)
+    {
+        if ($request->fungsi == 'pertumbuhan_anak') {
             $tanggalSekarang = date('Y-m-d');
             $tanggalPembanding = date('Y-m-d', strtotime('-5 year', strtotime($tanggalSekarang)));
             $profil_id = Auth::user()->profil->id; //bidan/penyuluh
             $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
 
             $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
-            ->where('id', $request->id)->first();
+                ->where('id', $request->id)->first();
             $anak = $kartuKeluarga->statusKeluarga('ANAK')
             ->where(function ($query) use($tanggalPembanding, $tanggalSekarang, $lokasiTugas) {    
                 if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
-                    // $query->whereHas('anggotaKeluarga', function (Builder $query) use($lokasiTugas) {
                     $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
-                    // });
                 }    
-                // if(Auth::user()->role != 'admin'){
-                //     $query->whereIn('desa_kelurahan_id', $lokasiTugas); // menyamakan lokasi anak dengan bidan di lokasi tersebut
-                // }
                 $query->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang]);
             })
             ->get();
@@ -71,7 +68,18 @@ class ListController extends Controller
         return $json;
     }
 
-    public function test(){
+  
+    public function getIbu(Request $request)
+    {
+        $ibu = AnggotaKeluarga::where('kartu_keluarga_id', $request->id)
+            ->where('status_hubungan_dalam_keluarga', 'ISTRI')
+            ->get();
+        return $ibu;
+    }
 
+
+
+    public function test()
+    {
     }
 }

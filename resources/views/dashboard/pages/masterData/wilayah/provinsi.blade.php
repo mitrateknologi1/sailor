@@ -85,7 +85,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('provinsi/') }}" + '/' + id,
+                        url: "{{ url('masterData/provinsi/') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -116,7 +116,7 @@
             let id = $(this).val();
             idEdit = id;
             $.ajax({
-                url: "{{ url('provinsi/') }}" + '/' + id + '/edit',
+                url: "{{ url('masterData/provinsi/') }}" + '/' + id + '/edit',
                 type: "GET",
                 data: {
                     id: id
@@ -132,7 +132,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('/provinsi') }}",
+                url: "{{ url('masterData/provinsi/') }}",
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -166,7 +166,7 @@
             e.preventDefault();
             resetError();
             $.ajax({
-                url: "{{ url('/provinsi') }}" + '/' + idEdit,
+                url: "{{ url('masterData/provinsi') }}" + '/' + idEdit,
                 type: 'PUT',
                 data: $(this).serialize(),
                 success: function(response) {
@@ -201,7 +201,7 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('/provinsi') }}",
+            ajax: "{{ url('/masterData/provinsi') }}",
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex'

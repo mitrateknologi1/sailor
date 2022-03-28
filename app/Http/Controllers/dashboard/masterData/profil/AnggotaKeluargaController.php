@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\dashboard\masterData\profil;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAnggotaKeluargaRequest;
 use App\Http\Requests\UpdateAnggotaKeluargaRequest;
 use App\Models\AnggotaKeluarga;

@@ -5,23 +5,22 @@
 @endsection
 
 @push('style')
-    <style>
-       
-    </style>  
+  
+
 @endpush
 
 @section('breadcrumb')
-<div class="col">
-    <ol class="breadcrumb bg-transparent mb-0">
-        <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Tumbuh Kembang</li>
-        <li class="breadcrumb-item active" aria-current="page">Pertumbuhan Anak</li>
-    </ol>
-</div>
+    <div class="col">
+        <ol class="breadcrumb bg-transparent mb-0">
+            <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Tumbuh Kembang</li>
+            <li class="breadcrumb-item active" aria-current="page">Pertumbuhan Anak</li>
+        </ol>
+    </div>
 @endsection
 
 @section('content')
-    <section>      
+    <section>
         <div class="row mb-4">
             <div class="col">
                 <div class="card ">
@@ -48,7 +47,7 @@
                                                 'id' => 'status-filter',
                                                 'name' => 'status',
                                                 'class' => 'filter',
-                                                ])         
+                                                ])
                                                 @slot('options')
                                                     <option value="1">Tervalidasi</option>
                                                     <option value="0">Belum Divalidasi</option>
@@ -61,7 +60,7 @@
                                                 'id' => 'kategori-gizi-filter',
                                                 'name' => 'kategori_gizi',
                                                 'class' => 'filter',
-                                                ])         
+                                                ])
                                                 @slot('options')
                                                     <option value="Gizi Buruk">Gizi Buruk</option>
                                                     <option value="Gizi Kurang">Gizi Kurang</option>
@@ -95,8 +94,8 @@
                                             'Bidan',
                                             'Tanggal Divalidasi',
                                             'Aksi',
-                                        ],
-                                    ])
+                                          ],
+                                        ])
                                     @endcomponent
                                 </div>
                             </div>
@@ -196,8 +195,8 @@
     <script>
         $('#m-link-tumbuh-kembang').addClass('active');
         $('#menu-tumbuh-kembang').addClass('collapse show')
-        $('#ms-link-pertumbuhan-anak').addClass('active')    
-    
+        $('#ms-link-pertumbuhan-anak').addClass('active')
+
         $(function() {
             var table = $('#table-pertumbuhan-anak').DataTable({
                 processing: true,
@@ -226,7 +225,7 @@
                 lengthMenu: [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
-                ],  
+                ],
                 ajax: {
                     url: "{{ route('pertumbuhan-anak.index') }}",
                     data: function(d){

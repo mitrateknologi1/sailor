@@ -6,6 +6,7 @@ use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use App\Models\KartuKeluarga;
 use Illuminate\Support\Carbon;
+
 use App\Models\AnggotaKeluarga;
 use App\Models\PertumbuhanAnak;
 use App\Models\TumbuhKembangAnak;
@@ -167,7 +168,9 @@ class PertumbuhanAnakController extends Controller
         } // else keluarga
     }
 
-    public function proses(Request $request){
+   
+    public function proses(Request $request)
+    {
         $validator = Validator::make(
             $request->all(),
             [
@@ -188,6 +191,7 @@ class PertumbuhanAnakController extends Controller
 
         $anak = AnggotaKeluarga::find($request->nama_anak);
         $tanggalLahir = $anak->tanggal_lahir;
+
         $tanggalProses = $request->tanggal_proses;
         $jenisKelamin = $anak->jenis_kelamin; //Laki-laki atau Perempuan
         $beratBadan = $request->berat_badan; //dalam kilogram
@@ -195,13 +199,13 @@ class PertumbuhanAnakController extends Controller
         // hitung usia dalam bulan
         $usiaBulan = round(((strtotime($tanggalProses) - strtotime($tanggalLahir))/86400)/30);
 
+
         $median = 0;
         $sd = 0;
         $sd1 = 0;
 
         $kategoriGizi = '';
 
-        
         if ($jenisKelamin == "LAKI-LAKI") {
             if ($usiaBulan == 0) {
                 $median = 3.3;
@@ -715,6 +719,7 @@ class PertumbuhanAnakController extends Controller
             $kategoriGizi = "Gizi Lebih";
         }
 
+
         $datetime1 = date_create($tanggalProses);
         $datetime2 = date_create($tanggalLahir);
         $interval = date_diff($datetime1, $datetime2);
@@ -763,6 +768,7 @@ class PertumbuhanAnakController extends Controller
         return response()->json([
             'res' => 'success'
         ]);
+
     }
 
     /**
@@ -807,7 +813,6 @@ class PertumbuhanAnakController extends Controller
      */
     public function edit(PertumbuhanAnak $pertumbuhanAnak)
     {
-
         if((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')){
             $data = [
                 'anak' => PertumbuhanAnak::where('id', $pertumbuhanAnak->id)->first(),

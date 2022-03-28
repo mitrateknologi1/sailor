@@ -388,7 +388,7 @@
 
     <!-- Plugin Js -->
     {{-- <script src="{{ asset('assets/dashboard') }}/bundles/apexcharts.bundle.js"></script> --}}
-    <script src="{{ asset('assets/dashboard')}}/font-awesome/js/all.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/font-awesome/js/all.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/daterangepicker.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/dataTables.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/select2.bundle.js"></script>
@@ -403,7 +403,7 @@
     <script src="{{asset('assets/dashboard')}}/datatables/buttons.html5.min.js"></script>
     <script src="{{asset('assets/dashboard')}}/datatables/buttons.print.min.js"></script>
     <script src="{{asset('assets/dashboard')}}/datatables/buttons.colVis.min.js"></script>
-    
+   
 
     <!-- Jquery Page Js -->
     {{-- <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script> --}}
@@ -420,7 +420,9 @@
             $('.modal').modal({backdrop: 'static', keyboard: false})  
             moment.locale('id'); 
             $('.tanggal').mask('00-00-0000');
-            $('.rupiah').mask('000.000.000.000.000', {reverse: true})
+            $('.rupiah').mask('000.000.000.000.000', {
+                reverse: true
+            })
             $('.waktu').mask('00:00');
             $('.angka').mask('00000000000000000000');
             $('input[name="daterange"]').daterangepicker({
@@ -458,6 +460,10 @@
             .ajaxStop(function() {
                 overlay.hide();
             });
+
+        $('.numerik').on('input', function(e) {
+            this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+        });
     </script>
     @stack('script')
 

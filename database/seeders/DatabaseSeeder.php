@@ -40,5 +40,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LokasiTugasSeeder::class);
         $this->call(WilayahDomisiliSeeder::class);
         $this->call(PertumbuhanAnakSeeder::class);
+        $this->call(SoalIbuMelahirkanStuntingSeeder::class);
+        $this->call(SoalDeteksiDiniTableSeeder::class);
     }
 }

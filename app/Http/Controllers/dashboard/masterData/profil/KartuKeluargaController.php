@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\dashboard\masterData\profil;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreKartuKeluargaRequest;
 use App\Http\Requests\UpdateKartuKeluargaRequest;
 use App\Models\KartuKeluarga;
