@@ -22,10 +22,7 @@
     <section>
         <div class="row justify-content-center">
             <div class="col-lg-12 col-md-12">
-                <div class="card fieldset border border-secondary bg-white p-0">
-                    {{-- <div class="card-header py-3 bg-transparent border-bottom-0">
-                        <h6 class="card-title mb-0">Basic example</h6>
-                    </div> --}}
+                <div class="card p-0">
                     <div class="card-body">
                         @component('dashboard.components.forms.utama.pertumbuhan_anak')
                             @slot('kartuKeluarga', $kartuKeluarga)
@@ -47,6 +44,8 @@
     <script>
         $('#m-link-tumbuh-kembang').addClass('active');
         $('#menu-tumbuh-kembang').addClass('collapse show')
-        $('#ms-link-pertumbuhan-anak').addClass('active')    
+        $('#ms-link-pertumbuhan-anak').addClass('active') 
+        
+        
     </script>
 @endpush

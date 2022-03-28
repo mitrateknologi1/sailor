@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\utama;
+namespace App\Http\Controllers\dashboard\utama\tumbuhKembang;
 
+use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use App\Models\KartuKeluarga;
+use Illuminate\Support\Carbon;
 use App\Models\AnggotaKeluarga;
 use App\Models\PertumbuhanAnak;
 use App\Models\TumbuhKembangAnak;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Facade\FlareClient\Http\Response;
 use App\Http\Controllers\ListController;
 use Yajra\DataTables\Facades\DataTables;
@@ -23,75 +26,130 @@ class PertumbuhanAnakController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = PertumbuhanAnak::with('tumbuhKembangAnak')->orderBy('created_at', 'DESC');
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('nakes', function ($row) {     
-                    return 'belum_dibuat';
-                })
-                ->addColumn('status', function ($row) {   
-                    if($row->tumbuhKembangAnak->is_valid == 1){
-                        return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
-                    }else{
-                        return '<span class="badge rounded-pill bg-danger">Belum Divalidasi</span>';
-                    }
-                    // return 'belum_valid';
-                })
-                ->addColumn('tanggal_lahir', function ($row) {   
-                    return $row->tumbuhKembangAnak->anggotaKeluarga->tanggal_lahir;
-                })
-                ->addColumn('nama_anak', function ($row) {     
-                    return $row->tumbuhKembangAnak->anggotaKeluarga->nama_lengkap;
-                })
-                ->addColumn('hasil', function ($row) {  
-                    if($row->hasil == 'Gizi Buruk'){
-                        return '<span class="badge rounded-pill bg-danger">Gizi Buruk</span>';
-                    }elseif($row->hasil == 'Gizi Kurang'){
-                        return '<span class="badge rounded-pill bg-warning">Gizi Kurang</span>';
-                    }elseif($row->hasil == 'Gizi Baik'){
-                        return '<span class="badge rounded-pill bg-success">Gizi Baik</span>';
-                    }elseif($row->hasil == 'Gizi Lebih'){
-                        return '<span class="badge rounded-pill bg-primary">Gizi Lebih</span>';
-                    }
-
-                })
-               
-                ->addColumn('action', function ($row) {     
+        if(in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])){
+            if ($request->ajax()) {
+                $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+                
+                $data = PertumbuhanAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC');
+                if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
+                    $data->whereHas('anggotaKeluarga', function (Builder $query) use($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    });
+                }
+                if(Auth::user()->role == 'bidan'){ // bidan
+                    $data->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                }
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('nakes', function ($row) {     
+                        return 'belum_dibuat';
+                    })
+                    ->addColumn('status', function ($row) {   
+                        if($row->is_valid == 1){
+                            return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
+                        }else{
+                            return '<span class="badge rounded-pill bg-danger">Belum Divalidasi</span>';
+                        }
+                    })
+    
+                    ->addColumn('jenis_kelamin', function ($row) {   
+                        return $row->anggotaKeluarga->jenis_kelamin;
+                    })
+    
+                    ->addColumn('tanggal_lahir', function ($row) {   
+                        return $row->anggotaKeluarga->tanggal_lahir;
+                    })
+    
+                    ->addColumn('usia', function ($row) {   
+                        $datetime1 = date_create($row->created_at);
+                        $datetime2 = date_create($row->anggotaKeluarga->tanggal_lahir);
+                        $interval = date_diff($datetime1, $datetime2);
+                        $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
+                        return $usia;
+                    })
+    
+                    ->addColumn('nama_anak', function ($row) {     
+                        return $row->anggotaKeluarga->nama_lengkap;
+                    })
+    
+                    ->addColumn('nama_ayah', function ($row) {     
+                        return $row->anggotaKeluarga->nama_ayah;
+                    })
+    
+                    ->addColumn('nama_ibu', function ($row) {     
+                        return $row->anggotaKeluarga->nama_ibu;
+                    })
+    
+                    ->addColumn('bidan', function ($row) {   
+                        if($row->bidan_id == -1){
+                            return '<span class="badge rounded-pill bg-danger">ADMIN</span>';  
+                        } else{
+                        return $row->bidan->nama_lengkap;
+                        }
+                    })
+    
+                    ->addColumn('desa_kelurahan', function ($row) {     
+                        return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
+                    })
+                    
+                    ->addColumn('hasil', function ($row) {  
+                        if($row->hasil == 'Gizi Buruk'){
+                            return '<span class="badge rounded-pill bg-danger">Gizi Buruk</span>';
+                        }elseif($row->hasil == 'Gizi Kurang'){
+                            return '<span class="badge rounded-pill bg-warning">Gizi Kurang</span>';
+                        }elseif($row->hasil == 'Gizi Baik'){
+                            return '<span class="badge rounded-pill bg-success">Gizi Baik</span>';
+                        }elseif($row->hasil == 'Gizi Lebih'){
+                            return '<span class="badge rounded-pill bg-primary">Gizi Lebih</span>';
+                        }
+                    })
+                   
+                    ->addColumn('action', function ($row) {     
                         $actionBtn = '
-                        <div class="text-center justify-content-center text-white">';
+                            <div class="text-center justify-content-center text-white">';
+                        // if($row->)
                         $actionBtn .= '
-                            <a href="'.route('pertumbuhan-anak.show', $row->id).'" class="btn btn-info btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
-                            <a href="'.route('pertumbuhan-anak.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
-                            <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-info btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.') ><i class="fas fa-eye"></i></button>';
+                        if((Auth::user()->role != 'penyuluh')){
+                            if(($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')){
+                                $actionBtn .= '
+                                    <a href="'.route('pertumbuhan-anak.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                $actionBtn .= '
+                                    <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                            }
+                        }
+                        $actionBtn .= '
                         </div>';
-                    return $actionBtn;
-                })
-
-                // ->filter(function ($query) use ($request) {    
-                //     if ($request->search != '') {
-                //         $query->whereHas('user', function ($query) use ($request) {
-                //             $query->where("users.username", "LIKE", "%$request->search%")
-                //                     ->orWhere("profiles.nama_lengkap", "LIKE", "%$request->search%");                                
-                //         });
-                //     }      
-                                    
-                //     if (!empty($request->role)) {
-                //         $query->whereHas('user', function ($query) use ($request) {
-                //             $query->where('users.role', $request->role);                       
-                //         });
-                //     }
-                // })
-                ->rawColumns([
-                    'action',
-                    'status',
-                    'hasil',
-                    'nakes_id',
-                    'nama_anak'
-                ])
-                ->make(true);
-        }
-        return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
+                        return $actionBtn;
+                    })
+    
+                    ->filter(function ($query) use ($request) {    
+                        // if ($request->search != '') {
+                        //     $query->whereHas('anggotaKeluarga', function ($query) use ($request) {
+                        //         $query->where("nama_lengkap", "LIKE", "%$request->search%");
+                        //     });
+                        // }    
+                                        
+                        // if (!empty($request->status)) {
+                        //     $query->where("is_valid", $request->status);
+                        // }
+    
+                        // if (!empty($request->kategori)) {
+                        //     $query->where("hasil", $request->kategori);
+                        // }
+                    })
+                    ->rawColumns([
+                        'action',
+                        'status',
+                        'hasil',
+                        'bidan',
+                        'nakes_id',
+                        'nama_anak'
+                    ])
+                    ->make(true);
+            }
+            return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
+        } // else keluarga
     }
 
     /**
@@ -101,10 +159,12 @@ class PertumbuhanAnakController extends Controller
      */
     public function create()
     {
-        $data = [
-            'kartuKeluarga' => KartuKeluarga::latest()->get(),
-        ];
-        return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.create', $data);
+        if(in_array(Auth::user()->role, ['bidan', 'admin'])){
+            $data = [
+                'kartuKeluarga' => KartuKeluarga::latest()->get(),
+            ];
+            return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.create', $data);
+        } // else keluarga
     }
 
     public function proses(Request $request){
@@ -128,13 +188,12 @@ class PertumbuhanAnakController extends Controller
 
         $anak = AnggotaKeluarga::find($request->nama_anak);
         $tanggalLahir = $anak->tanggal_lahir;
-        $tanggalSekarang = date('Y-m-d');
-
-        // hitung usia dalam bulan
-        $usiaBulan = round(((strtotime($tanggalSekarang) - strtotime($tanggalLahir))/86400)/30);
-        
+        $tanggalProses = $request->tanggal_proses;
         $jenisKelamin = $anak->jenis_kelamin; //Laki-laki atau Perempuan
         $beratBadan = $request->berat_badan; //dalam kilogram
+
+        // hitung usia dalam bulan
+        $usiaBulan = round(((strtotime($tanggalProses) - strtotime($tanggalLahir))/86400)/30);
 
         $median = 0;
         $sd = 0;
@@ -656,12 +715,13 @@ class PertumbuhanAnakController extends Controller
             $kategoriGizi = "Gizi Lebih";
         }
 
-        $datetime1 = date_create(date('Y-m-d'));
+        $datetime1 = date_create($tanggalProses);
         $datetime2 = date_create($tanggalLahir);
         $interval = date_diff($datetime1, $datetime2);
         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
 
         $data = [
+            'tanggal_proses' => $tanggalProses,
             'anggota_keluarga_id' => $request->nama_anak,
             'nama_anak' => $anak->nama_lengkap,
             'tanggal_lahir' => $tanggalLahir,
@@ -684,27 +744,25 @@ class PertumbuhanAnakController extends Controller
     public function store(Request $request)
     {
         $dataAnak = $this->proses($request);
-
-        $tumbuhKembangAnak = [
-            'jenis' => 'Pertumbuhan Anak',
-            'anggota_keluarga_id' => $dataAnak['anggota_keluarga_id'],
-            'is_valid' => 1,
-            'nakes_id' => 1, // Nanti Ganti sesuai Auth->nakes->id
-        ];
-        
-        TumbuhKembangAnak::create($tumbuhKembangAnak);
-
-        $tumbuhKembangAnakLatest = TumbuhKembangAnak::latest()->first();
-
+        if(Auth::user()->role == 'admin'){
+            $bidan_id = -1;
+        } else if (Auth::user()->role == 'bidan') {
+            $bidan_id = Auth::user()->profil->id;  
+        }
         $pertumbuhanAnak = [
-            'tumbuh_kembang_anak_id' => $tumbuhKembangAnakLatest->id,
+            'anggota_keluarga_id' => $dataAnak['anggota_keluarga_id'],
+            'bidan_id' => $bidan_id,
             'berat_badan' => $dataAnak['berat_badan'],
             'zscore' => $dataAnak['zscore'],
             'hasil' => $dataAnak['kategori'],
+            'is_valid' => 1,
+            'tanggal_validasi' => Carbon::now()
         ];
 
         PertumbuhanAnak::create($pertumbuhanAnak);
-        return 'Berhasil';
+        return response()->json([
+            'res' => 'success'
+        ]);
     }
 
     /**
@@ -715,7 +773,30 @@ class PertumbuhanAnakController extends Controller
      */
     public function show(PertumbuhanAnak $pertumbuhanAnak)
     {
-        //
+        $datetime1 = date_create($pertumbuhanAnak->created_at);
+        $datetime2 = date_create($pertumbuhanAnak->anggotaKeluarga->tanggal_lahir);
+        $interval = date_diff($datetime1, $datetime2);
+        $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
+
+        $data = [
+            'tanggal_proses' => $pertumbuhanAnak->created_at,
+            'nama_anak' => $pertumbuhanAnak->anggotaKeluarga->nama_lengkap,
+            'nama_ayah' => $pertumbuhanAnak->anggotaKeluarga->nama_ayah,
+            'nama_ibu' => $pertumbuhanAnak->anggotaKeluarga->nama_ibu,
+            'tanggal_lahir' => $pertumbuhanAnak->anggotaKeluarga->tanggal_lahir,
+            'usia_tahun' => $usia,
+            'berat_badan' => $pertumbuhanAnak->berat_badan,
+            'jenis_kelamin' => $pertumbuhanAnak->anggotaKeluarga->jenis_kelamin,
+            'zscore' =>  $pertumbuhanAnak->zscore,
+            'kategori' => $pertumbuhanAnak->hasil,
+            'desa_kelurahan' => $pertumbuhanAnak->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
+            'tanggal_validasi' => $pertumbuhanAnak->tanggal_validasi,
+            'bidan' => $pertumbuhanAnak->bidan->nama_lengkap
+
+            // 'usia_bulan' => $pertumbuhanAnak->anggotaKeluarga->usia_bulan,
+
+        ];
+        return $data;
     }
 
     /**
@@ -726,7 +807,17 @@ class PertumbuhanAnakController extends Controller
      */
     public function edit(PertumbuhanAnak $pertumbuhanAnak)
     {
-        //
+
+        if((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')){
+            $data = [
+                'anak' => PertumbuhanAnak::where('id', $pertumbuhanAnak->id)->first(),
+                'kartuKeluarga' => KartuKeluarga::latest()->get(),
+            ];
+            return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.edit', $data);
+        } else{
+            // 404
+            return abort(404);
+        }
     }
 
     /**
@@ -738,7 +829,24 @@ class PertumbuhanAnakController extends Controller
      */
     public function update(Request $request, PertumbuhanAnak $pertumbuhanAnak)
     {
-        //
+        $dataAnakBaru = $this->proses($request);
+        
+        $pertumbuhanAnakUpdate = [
+            'anggota_keluarga_id' => $dataAnakBaru['anggota_keluarga_id'],
+            'bidan_id' => $pertumbuhanAnak->bidan_id,
+            'berat_badan' => $dataAnakBaru['berat_badan'],
+            'zscore' => $dataAnakBaru['zscore'],
+            'hasil' => $dataAnakBaru['kategori'],
+            'is_valid' => 1,
+            'tanggal_validasi' => Carbon::now()
+        ];
+
+        PertumbuhanAnak::where('id', $pertumbuhanAnak->id)
+            ->update($pertumbuhanAnakUpdate);
+
+        return response()->json([
+            'res' => 'success'
+        ]);
     }
 
     /**
@@ -749,6 +857,14 @@ class PertumbuhanAnakController extends Controller
      */
     public function destroy(PertumbuhanAnak $pertumbuhanAnak)
     {
-        //
+        if((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')){
+            $pertumbuhanAnak->delete();
+            return response()->json([
+                'res' => 'success'
+            ]);
+        } else{
+            // 404
+            return abort(404);
+        }
     }
 }

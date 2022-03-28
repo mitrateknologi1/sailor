@@ -34,7 +34,7 @@ class KabupatenKotaController extends Controller
         }
 
         $provinsi = Provinsi::find($request->provinsi);
-        return view('dashboard.pages.utama.masterData.wilayah.kabupatenKota', compact('provinsi'));
+        return view('dashboard.pages.masterData.wilayah.kabupatenKota', compact('provinsi'));
     }
 
     /**

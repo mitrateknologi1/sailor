@@ -13,11 +13,10 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])         
                 @slot('options')
-                    @foreach ($kartuKeluarga as $item)
-                        <option value="{{ $item->id }}">{{$item->nama_kepala_keluarga}} / {{$item->nomor_kk}}</option>
+                    @foreach ($kartuKeluarga as $kk)
+                        <option value="{{ $kk->id }}" {{ (isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id) ? 'selected' : '' }}>{{$kk->nama_kepala_keluarga}} / {{$kk->nomor_kk}}</option>
                     @endforeach
-                @endslot
-                
+                @endslot               
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-4">
@@ -38,7 +37,8 @@
                 'id' => 'berat-badan',
                 'name' => 'berat_badan',
                 'class' => '',
-                'wajib' => '<sup class="text-danger">*</sup>'
+                'value' => $anak->berat_badan ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
             ])
             @endcomponent
         </div>
@@ -92,7 +92,7 @@
                                 </li>
                                 <li class="justify-content-between">
                                     <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin">Laki-laki</span>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin"> - </span>
                                 </li>
                             </ul>
                         </div>
@@ -102,12 +102,11 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i>  Batal</button>
                         </div>
                         <div class="col-sm-6 col-lg-8">
-                            {{-- <a href="#" class="btn btn-info text-white text-uppercase w-100" id="simpan-pertumbuhan-anak"><i class="fa-solid fa-floppy-disk"></i> Simpan</a> --}}
                             @component('dashboard.components.buttons.submit', [
                                 'id' => 'proses-pertumbuhan-anak',
                                 'type' => 'submit',
                                 'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan'
+                                'label' => 'Simpan',
                             ])      
                             @endcomponent
                         </div>
@@ -122,8 +121,16 @@
 
 @push('script')
     <script>       
+
+        if ('{{$method}}' == 'PUT') {
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Apabila mengubah data, maka jumlah usia anak tidak lagi berpatokan dari tanggal sekarang dengan tanggal lahir anak. Tetapi jumlah usia anak terhitung dari tanggal data ini dibuat dengan tanggal lahir anak.',
+                icon: 'warning',
+            })               
+        }
+
         $(function() {
-            $('.modal').modal({backdrop: 'static', keyboard: false})  
             if ($('#nama-kepala-keluarga').val() != '') {
                 changeKepalaKeluarga()
             }
@@ -135,6 +142,13 @@
             $('#{{$form_id}}').submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
+                const formatYmd = date => date.toISOString().slice(0, 10);
+                if('{{$method}}' == 'POST') {
+                    formData.append('tanggal_proses', formatYmd(new Date()));
+                } else{
+                    formData.append('tanggal_proses', '{{ isset($anak) ? $anak->created_at->format("Y-m-d") : null }}');
+                }
+                 
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
                         icon: 'warning',
@@ -146,7 +160,7 @@
                         }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                type: "{{$method}}",
+                                type: "POST",
                                 url: "{{$action}}",
                                 headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                                 data: formData,
@@ -154,7 +168,7 @@
                                 processData: false,
                                 contentType: false,
                                 success: function (response) {
-                                    if(response == 'Berhasil'){
+                                    if(response.res == 'success'){
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Data berhasil disimpan',
@@ -162,7 +176,6 @@
                                             showConfirmButton: false,
                                             timer: 2000,
                                         }).then((result) => {
-                                            // set location
                                             window.location.href = "{{$back_url}}";
                                         })
                                     } else{
@@ -170,8 +183,8 @@
                                             icon: 'error',
                                             title: 'Terjadi kesalahan',
                                             text: 'Data gagal disimpan',
-                                            showConfirmButton: false,
-                                            timer: 1500
+                                            // showConfirmButton: false,
+                                            // timer: 1500
                                         })
                                     }
                                     
@@ -184,11 +197,11 @@
                         } 
                     })
                    
-                } else{
+                } else{     
                     $("#overlay").fadeIn(100);
                     $('.error-text').text('');
                     $.ajax({
-                        type: "{{$method}}",
+                        type: "POST",
                         url: "{{$proses}}",
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                         data: formData,
@@ -199,7 +212,11 @@
                             $("#overlay").fadeOut(100);
                             if ($.isEmptyObject(data.error)) {
                                 $('#modal-hasil').modal('show');
-                                $('#tanggal-proses').text('Tanggal : ' + moment().format('LL'))
+                                if('{{$method}}' == 'POST'){
+                                    $('#tanggal-proses').text('Tanggal: ' + moment(data.tanggal_proses).format('LL'))
+                                } else{
+                                    $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data.tanggal_proses).format('LL'))
+                                }
                                 $('#modal-nama-anak').text(data.nama_anak);
                                 $('#modal-tanggal-lahir').text(moment(data.tanggal_lahir).format('LL'));
                                 $('#modal-usia').text(data.usia_tahun);
@@ -241,7 +258,7 @@
                             else{
                                 Swal.fire(
                                     'Terjadi Kesalahan!',
-                                    'Periksa Kembali Inputan Anda!',
+                                    'Periksa kembali data yang anda masukkan',
                                     'error'
                                 )
                                 printErrorMsg(data.error);
@@ -268,7 +285,16 @@
             $.get("{{ route('getAnak') }}", {id: id, fungsi: fungsi}, function(result) {
                 $.each(result, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
-                    $('#nama-anak').append(`<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);                    
+                    if("{{$method}}" == 'PUT'){
+                        if (val.id == "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}"){
+                            $('#nama-anak').append(`<option value="${val.id}" selected>${val.nama_lengkap} (${tanggal_lahir})</option>`);                    
+                        } else {
+                            $('#nama-anak').append(`<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);                    
+                        }
+
+                    } else{
+                        $('#nama-anak').append(`<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);                    
+                    }
                 })
                 $('#nama-anak').removeAttr('disabled');
             });

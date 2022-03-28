@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/font-awesome/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/daterangepicker.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/dataTables.min.css">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/datatables/buttons.dataTables.min.css"> --}}
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/select2.min.css">
 
     <!-- project css file  -->
@@ -61,6 +62,95 @@
             }
         }
 
+        @media screen and (max-width:600px) {
+            .dataTables_filter {
+                margin-top: 10px;
+            }   
+        }
+
+        .dataTables_filter {
+            display: inline !important;
+            float: right !important;
+        }
+        
+        .dataTables_filter.col-sm {
+            margin-top: 10px;
+        }
+
+        .dt-buttons {
+            display: inline !important;
+            
+            margin-left: 10px !important;
+            float: left !important;;   
+
+        }
+
+        .dt-button-collection{
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .buttons-columnVisibility{
+            margin-bottom: 5px;
+            background-color: rgba(var(--danger-rgb), 0.15);
+            color: var(--danger-color);
+            border-color: transparent;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            ont-size: 14px;
+            border-radius: 2rem;
+            padding: .25rem .5rem;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            user-select: none;
+            border: 0.1px solid grey;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        
+        .buttons-columnVisibility:hover{
+            background-color: rgba(var(--primary-rgb), 0.15);
+            color: var(--primary-color);
+            border: 0.1px solid transparent;
+        }
+
+        .dt-button-collection .active{
+            margin-bottom: 5px;
+            background-color: rgba(var(--primary-rgb), 0.15);
+            color: var(--primary-color);
+            border-color: transparent;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            ont-size: 14px;
+            border-radius: 2rem;
+            padding: .25rem .5rem;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .dataTables_length {
+            display: inline !important;     
+            margin-bottom: 5px !important;
+            float: left;   
+        }
+
+        .paginate_button {
+            font-size: 12px !important;
+        }
+
+        .dataTables_paginate {
+            margin-top: 10px !important;
+        }
     </style>
     @stack('style')
 
@@ -88,6 +178,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>
+                        {{-- text-muted --}}
                     </div>
                 </div>
             </div>
@@ -305,7 +396,14 @@
     <script src="{{asset('assets/dashboard')}}/js/jquery.mask.min.js"></script>
     <script src="{{asset('assets/dashboard')}}/js/moment/moment.min.js"></script>
     <script src="{{asset('assets/dashboard')}}/js/moment/moment-with-locales.min.js"></script>  
-    <script src="{{asset('assets/dashboard')}}/bundles/sweetalert2.bundle.js"></script>
+
+    <script src="{{asset('assets/dashboard')}}/datatables/dataTables.buttons.min.js"></script>
+    <script src="{{asset('assets/dashboard')}}/datatables/jszip.min.js"></script>
+    <script src="{{asset('assets/dashboard')}}/datatables/vfs_fonts.js"></script>
+    <script src="{{asset('assets/dashboard')}}/datatables/buttons.html5.min.js"></script>
+    <script src="{{asset('assets/dashboard')}}/datatables/buttons.print.min.js"></script>
+    <script src="{{asset('assets/dashboard')}}/datatables/buttons.colVis.min.js"></script>
+    
 
     <!-- Jquery Page Js -->
     {{-- <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script> --}}
@@ -319,6 +417,7 @@
 
     <script>
         $(function() {
+            $('.modal').modal({backdrop: 'static', keyboard: false})  
             moment.locale('id'); 
             $('.tanggal').mask('00-00-0000');
             $('.rupiah').mask('000.000.000.000.000', {reverse: true})

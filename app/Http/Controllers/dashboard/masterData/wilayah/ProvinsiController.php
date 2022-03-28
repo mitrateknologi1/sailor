@@ -32,7 +32,7 @@ class ProvinsiController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('dashboard.pages.utama.masterData.wilayah.provinsi');
+        return view('dashboard.pages.masterData.wilayah.provinsi');
     }
 
     /**

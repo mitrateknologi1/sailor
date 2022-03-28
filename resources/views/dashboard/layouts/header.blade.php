@@ -187,8 +187,9 @@
                                     <img class="avatar rounded-circle"
                                         src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt="">
                                     <div class="flex-fill ms-3">
-                                        <h6 class="card-title mb-0">Allie Grater</h6>
-                                        <span class="text-muted">alliegrater@luno.com</span>
+                                        <h6 class="card-title mb-0">{{ Auth::user()->profil->nama_lengkap }}</h6>
+                                        <span class="text-muted">{{ Auth::user()->role != 'admin' ? Auth::user()->profil->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') : '' }}</span>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="list-group m-2 mb-3">
@@ -198,7 +199,7 @@
                                     <a class="list-group-item list-group-item-action border-0"
                                         href="account-settings.html"><i class="w30 fa fa-gear"></i>Settings</a>
                                 </div>
-                                <a href="auth-signin.html"
+                                <a href="{{ url('logout') }}"
                                     class="btn bg-secondary text-light text-uppercase rounded-0">Sign out</a>
                             </div>
                         </div>
