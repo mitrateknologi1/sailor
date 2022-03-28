@@ -175,9 +175,9 @@
 
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-profil">
-                        <li><a class="ms-link" href="account-settings.html">Keluarga</a></li>
-                        <li><a class="ms-link" href="account-invoices.html">Nakes</a></li>
-                        <li><a class="ms-link" href="account-create-invoices.html">Penyuluh BKKBN</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-keluarga" href="account-settings.html">Keluarga</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-bidan" href="{{ url('/bidan') }}">Bidan</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-penyuluh" href="account-create-invoices.html">Penyuluh BKKBN</a></li>
                     </ul>
                 </li>
 

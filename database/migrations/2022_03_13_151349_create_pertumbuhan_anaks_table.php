@@ -15,10 +15,13 @@ class CreatePertumbuhanAnaksTable extends Migration
     {
         Schema::create('pertumbuhan_anak', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('tumbuh_kembang_anak_id');
+            $table->bigInteger('anggota_keluarga_id');
+            $table->bigInteger('bidan_id');
             $table->integer('berat_badan');
             $table->float('zscore');
             $table->string('hasil');
+            $table->integer('is_valid')->default(0);
+            $table->date('tanggal_validasi')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

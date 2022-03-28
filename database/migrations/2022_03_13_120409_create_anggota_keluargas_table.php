@@ -34,13 +34,11 @@ class CreateAnggotaKeluargasTable extends Migration
             $table->string('no_kitap')->default('-');
             $table->string('nama_ayah');
             $table->string('nama_ibu');
-            $table->text('alamat_domisili');
+            $table->text('alamat');
             $table->bigInteger('desa_kelurahan_id');
             $table->bigInteger('kecamatan_id');
             $table->bigInteger('kabupaten_kota_id');
             $table->bigInteger('provinsi_id');
-            $table->string('foto_ket_domisili')->nullable();
-            $table->string('foto_ktp')->nullable();
             $table->string('foto_profil')->nullable();
             $table->integer('is_valid')->default(0);
             $table->timestamps();

@@ -2,26 +2,57 @@
 
 namespace App\Models;
 
+use App\Models\Admin;
+use App\Models\Bidan;
+use App\Models\Penyuluh;
+use App\Models\LokasiTugas;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+    protected $guarded = ['id', 'password'];
+    
+    public function profil(){
+        if(Auth::user()->role == 'bidan'){
+            return $this->hasOne(Bidan::class, 'user_id', 'id');
+        } else if(Auth::user()->role == 'penyuluh'){
+            return $this->hasOne(Penyuluh::class, 'user_id', 'id');
+        } else if(Auth::user()->role == 'admin'){
+            return $this->hasOne(Admin::class, 'user_id', 'id');
+        }
+    }
+
+    // lokasi tugas if role != admin
+    public function lokasiTugas(){
+        $profil = $this->profil;
+        
+    }
+
+    // public function lokasiTugas(){
+    //     if(Auth::user()->role == 'bidan'){
+    //         return $this->hasMany(LokasiTugas::class, 'profil_id', 'id');
+    //     }
+    // }
+
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'password',
+    // ];
 
     /**
      * The attributes that should be hidden for serialization.
