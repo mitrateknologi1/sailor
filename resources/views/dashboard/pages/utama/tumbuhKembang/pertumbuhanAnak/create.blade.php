@@ -26,6 +26,7 @@
                     <div class="card-body">
                         @component('dashboard.components.forms.utama.pertumbuhan_anak')
                             @slot('kartuKeluarga', $kartuKeluarga)
+                            @slot('bidan', $bidan)
                             @slot('form_id', 'form_add_pertumbuhan_anak')
                             @slot('proses', route('proses-pertumbuhan-anak'))'))                                
                             @slot('action', route('pertumbuhan-anak.store'))

@@ -8,6 +8,8 @@ use App\Models\KartuKeluarga;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
+use App\Models\Bidan;
+use App\Models\WilayahDomisili;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +35,19 @@ class ListController extends Controller
             ->get();
             return $anak;
         }
+    }
+
+    public function getBidan(Request $request){
+        $anak = AnggotaKeluarga::with('wilayahDomisili')
+                ->where('id', $request->id)
+                ->first();
+        $lokasiAnak = $anak->wilayahDomisili->desa_kelurahan_id;
+        // return $lokasiAnak;
+        $bidan = Bidan::with('lokasiTugas')
+        ->whereHas('lokasiTugas', function ($query) use ($lokasiAnak) {
+            return $query->where('desa_kelurahan_id', $lokasiAnak);
+        })->get();
+        return $bidan;
     }
 
     public function getLokasiTugas(Request $request){

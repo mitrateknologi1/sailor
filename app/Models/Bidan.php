@@ -49,13 +49,20 @@ class Bidan extends Model
         return $this->hasMany(LokasiTugas::class, 'profil_id', 'id')->where('jenis_profil', 'bidan');
     }
 
+    // public function scopeListLokasiTugas($query){
+    //     // get nama desa kelurahan to pluck
+    //     $lokasiTugas = $query->lokasiTugas;
 
-    public function scopeListLokasiTugas($query){
-        // get nama desa kelurahan to pluck
-        $lokasiTugas = $query->lokasiTugas;
+    //     return $lokasiTugas;
 
-        return $lokasiTugas;
+    // }
 
+    public function scopeActive($query)
+    {
+        $query->whereHas('user', function ($query) {
+            $query->where('status', 1);
+        });
     }
+
 
 }

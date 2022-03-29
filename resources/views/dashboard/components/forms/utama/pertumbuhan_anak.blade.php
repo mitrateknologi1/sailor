@@ -4,7 +4,7 @@
         @method('PUT')
     @endif
     <div class="row g-4">
-        <div class="col-sm-12 col-lg-4">
+        <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Kepala Keluarga / Nomor KK',
                 'id' => 'nama-kepala-keluarga',
@@ -19,7 +19,7 @@
                 @endslot               
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-4">
+        <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Anak (Tanggal Lahir)',
                 'id' => 'nama-anak',
@@ -30,7 +30,7 @@
             ])
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-4">
+        <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.input', [
                 'label' => 'Berat Badan (Kg)',
                 'type' => 'number',
@@ -42,6 +42,20 @@
             ])
             @endcomponent
         </div>
+        @if ((Auth::user()->role == 'admin') && ($method == 'POST'))
+            <div class="col-sm-12 col-md-6 col-lg">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Bidan sesuai lokasi anak',
+                    'id' => 'nama-bidan',
+                    'name' => 'nama_bidan',
+                    'class' => 'select2',
+                    'attribute' => 'disabled',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+                @endcomponent
+            </div>
+        @endif
+       
         <div class="col-12 text-end">
             @component('dashboard.components.buttons.process', [
                 'id' => 'proses-pertumbuhan-anak',
@@ -121,7 +135,6 @@
 
 @push('script')
     <script>       
-
         if ('{{$method}}' == 'PUT') {
             Swal.fire({
                 title: 'Perhatian!',
@@ -137,6 +150,10 @@
 
             $('#nama-kepala-keluarga').change(function() {
                 changeKepalaKeluarga()
+            })
+
+            $('#nama-anak').change(function() {
+                changeAnak()
             })
 
             $('#{{$form_id}}').submit(function(e) {
@@ -298,6 +315,25 @@
                 })
                 $('#nama-anak').removeAttr('disabled');
             });
+        }
+
+        function changeAnak(){
+            if('{{ Auth::user()->role }}' == 'admin'){
+                var id = $('#nama-anak').val();
+                var fungsi = 'pertumbuhan_anak';
+                $('#nama-bidan').html('');
+                $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+                $.get("{{ route('getBidan') }}", {id: id, fungsi: fungsi}, function(result) {
+                    $.each(result, function(key, val) {
+                        $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`); 
+                    })
+                    $('#nama-bidan').removeAttr('disabled');
+                });
+            } 
+            // else{
+            //     console.log('bukan admin')
+            // }
+          
         }
     </script>
 

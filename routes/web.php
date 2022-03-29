@@ -17,7 +17,6 @@ use App\Http\Controllers\dashboard\masterData\profil\BidanController;
 use App\Http\Controllers\dashboard\masterData\profil\AdminController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStuntingController;
 
-use App\Http\Controllers\dashboard\utama\tumbuhKembang\PertumbuhanAnakController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\StuntingAnakController;
 use App\Http\Controllers\dashboard\utama\momsCare\AncController;
 use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
@@ -85,6 +84,7 @@ Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
 Route::post('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::put('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');
+Route::get('get-bidan', [ListController::class, 'getBidan'])->name('getBidan');
 // Route::get('pertumbuhan-anak', function () {
 //     return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
 // });
