@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\dashboard\utama\tumbuhKembang;
 
+use App\Models\Bidan;
 use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use App\Models\KartuKeluarga;
-use Illuminate\Support\Carbon;
 
+use Illuminate\Support\Carbon;
 use App\Models\AnggotaKeluarga;
 use App\Models\PertumbuhanAnak;
 use App\Models\TumbuhKembangAnak;
@@ -82,11 +83,7 @@ class PertumbuhanAnakController extends Controller
                     })
     
                     ->addColumn('bidan', function ($row) {   
-                        if($row->bidan_id == -1){
-                            return '<span class="badge rounded-pill bg-danger">ADMIN</span>';  
-                        } else{
                         return $row->bidan->nama_lengkap;
-                        }
                     })
     
                     ->addColumn('desa_kelurahan', function ($row) {     
@@ -160,9 +157,20 @@ class PertumbuhanAnakController extends Controller
      */
     public function create()
     {
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+        if(Auth::user()->role != 'bidan'){
+            $kartuKeluarga = KartuKeluarga::latest()->get();
+        } else{
+            $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
+                            ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                            })->latest()->get();
+        }
+            
         if(in_array(Auth::user()->role, ['bidan', 'admin'])){
             $data = [
-                'kartuKeluarga' => KartuKeluarga::latest()->get(),
+                'kartuKeluarga' => $kartuKeluarga,
+                'bidan' => Bidan::with('user')->active()->get(),
             ];
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.create', $data);
         } // else keluarga
@@ -750,7 +758,7 @@ class PertumbuhanAnakController extends Controller
     {
         $dataAnak = $this->proses($request);
         if(Auth::user()->role == 'admin'){
-            $bidan_id = -1;
+            $bidan_id = $request->nama_bidan;
         } else if (Auth::user()->role == 'bidan') {
             $bidan_id = Auth::user()->profil->id;  
         }
@@ -798,9 +806,7 @@ class PertumbuhanAnakController extends Controller
             'desa_kelurahan' => $pertumbuhanAnak->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
             'tanggal_validasi' => $pertumbuhanAnak->tanggal_validasi,
             'bidan' => $pertumbuhanAnak->bidan->nama_lengkap
-
             // 'usia_bulan' => $pertumbuhanAnak->anggotaKeluarga->usia_bulan,
-
         ];
         return $data;
     }

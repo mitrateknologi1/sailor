@@ -85,6 +85,7 @@ Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
 Route::post('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::put('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');
+Route::get('get-bidan', [ListController::class, 'getBidan'])->name('getBidan');
 // Route::get('pertumbuhan-anak', function () {
 //     return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
 // });
