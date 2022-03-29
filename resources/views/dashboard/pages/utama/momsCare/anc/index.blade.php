@@ -184,7 +184,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('perkiraan-melahirkan') }}" + '/' + id,
+                        url: "{{ url('anc') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'

@@ -36,16 +36,16 @@
             @component('dashboard.components.formElements.input', [
                 'label' => 'Pemeriksaan Ke',
                 'type' => 'text',
-                'id' => 'tanggal_haid_terakhir',
-                'name' => 'tanggal_haid_terakhir',
-                'class' => 'tanggal',
+                'id' => 'pemeriksaan_ke',
+                'name' => 'pemeriksaan_ke',
+                'class' => 'numerik',
                 'wajib' => '<sup class="text-danger">*</sup>',
                 'attribute' => 'readonly',
                 'placeholder' => 'Pemeriksaan Ke',
                 ])
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-12">
+        <div class="col-sm-12 col-lg-6">
             @component('dashboard.components.formElements.input', [
                 'label' => 'Tanggal Haid Terakhir (31-12-2022)',
                 'type' => 'text',
@@ -57,9 +57,187 @@
                 ])
             @endcomponent
         </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Kehamilan Ke',
+                'type' => 'text',
+                'id' => 'kehamilan_ke',
+                'name' => 'kehamilan_ke',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Kehamilan Ke',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Tinggi Badan (Cm)',
+                'type' => 'text',
+                'id' => 'tinggi_badan',
+                'name' => 'tinggi_badan',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Tinggi Badan',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Berat Badan (Kg)',
+                'type' => 'text',
+                'id' => 'berat_badan',
+                'name' => 'berat_badan',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Berat Badan',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Tekanan Darah Sistolik',
+                'type' => 'text',
+                'id' => 'tekanan_darah_sistolik',
+                'name' => 'tekanan_darah_sistolik',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Tekanan Darah Sistolik',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Tekanan Darah Diastolik',
+                'type' => 'text',
+                'id' => 'tekanan_darah_diastolik',
+                'name' => 'tekanan_darah_diastolik',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Tekanan Darah Diastolik',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Lengan Atas',
+                'type' => 'text',
+                'id' => 'lengan_atas',
+                'name' => 'lengan_atas',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Lengan Atas',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Tinggi Fundus (Dalam Cm)',
+                'type' => 'text',
+                'id' => 'tinggi_fundus',
+                'name' => 'tinggi_fundus',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Tinggi Fundus (Dalam Cm)',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Hemoglobin Darah',
+                'type' => 'text',
+                'id' => 'hemoglobin_darah',
+                'name' => 'hemoglobin_darah',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Hemoglobin Darah',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Denyut Jantung Janin (Dalam Menit)',
+                'type' => 'text',
+                'id' => 'denyut_jantung',
+                'name' => 'denyut_jantung',
+                'class' => 'numerik',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                'placeholder' => 'Masukkan Denyut Jantung Janin (Dalam Menit)',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.select', [
+                'label' => 'Vaksin Tetanus (Sebelum Hamil)',
+                'id' => 'vaksin_tetanus_sebelum_hamil',
+                'name' => 'vaksin_tetanus_sebelum_hamil',
+                'class' => 'select2',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+                @slot('options')
+                    <option value="Sudah">Sudah</option>
+                    <option value="Belum">Belum</option>
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.select', [
+                'label' => 'Vaksin Tetanus (Sesudah Hamil)',
+                'id' => 'vaksin_tetanus_sesudah_hamil',
+                'name' => 'vaksin_tetanus_sesudah_hamil',
+                'class' => 'select2',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+                @slot('options')
+                    <option value="Sudah">Sudah</option>
+                    <option value="Belum">Belum</option>
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            @component('dashboard.components.formElements.select', [
+                'label' => 'Posisi Janin',
+                'id' => 'posisi_janin',
+                'name' => 'posisi_janin',
+                'class' => 'select2',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+                @slot('options')
+                    <option value="Normal">Normal</option>
+                    <option value="Sungsang">Sungsang</option>
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            @component('dashboard.components.formElements.select', [
+                'label' => 'Minum 90 Tablet Tambah Darah',
+                'id' => 'minum_tablet',
+                'name' => 'minum_tablet',
+                'class' => 'select2',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+                @slot('options')
+                    <option value="Sudah">Sudah</option>
+                    <option value="Belum">Belum</option>
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            @component('dashboard.components.formElements.select', [
+                'label' => 'Konseling',
+                'id' => 'konseling',
+                'name' => 'konseling',
+                'class' => 'select2',
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+                @slot('options')
+                    <option value="Sudah">Sudah</option>
+                    <option value="Belum">Belum</option>
+                @endslot
+            @endcomponent
+        </div>
         <div class="col-12 text-end">
             @component('dashboard.components.buttons.process', [
-                'id' => 'proses-stunting-anak',
+                'id' => 'proses-anc',
                 'type' => 'submit',
                 ])
             @endcomponent
@@ -69,26 +247,13 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-body custom_scroll p-lg-4 pb-3">
-                    <div class="d-flex w-100 justify-content-between mb-1">
+                    <div class="d-flex w-100 justify-content-between">
                         <div>
-                            <h5>Hasil Perkiraan Melahirkan</h5>
-                            <p class="text-muted" id="tanggal-proses"> - </p>
+                            <h5>Hasil Antenatal Care</h5>
+                            <p class="text-muted mb-0" id="tanggal-proses"> - </p>
                         </div>
                         <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
                             aria-label="Close"></button>
-                    </div>
-                    <div class="alert kategori-alert rounded-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar rounded no-thumbnail kategori-bg text-light"><i id="kategori-emot"
-                                    class=""></i></div>
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-status" style="margin-left: 5px"> - </div>
-                                <div class="float-end" id="modal-tanggal-perkiraan-lahir"><span
-                                        class="badge kategori-bg"> -
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="card fieldset border border-dark my-4">
                         <span class="fieldset-tile text-dark ml-5 bg-white">Info Ibu:</span>
@@ -97,6 +262,16 @@
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-child"></i> Nama Ibu:</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-nama-ibu"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Pemeriksaan Ke:</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-pemeriksaan-ke"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Kehamilan Ke:</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-kehamilan-ke"> -
+                                    </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
@@ -110,8 +285,115 @@
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="bi bi-calendar2-event-fill"></i> Selisih Hari Lahir</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-selisih-hari"> -
+                                    <label><i class="bi bi-calendar2-event-fill"></i> Usia Kehamilan :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-usia-kehamilan"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Perkiraan Lahir :</label>
+                                    <span class="badge bg-info float-end text-uppercase"
+                                        id="modal-tanggal-perkiraan-lahir"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-ruler-combined"></i> Tinggi / Berat Badan :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tinggi-berat-badan">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pump-medical"></i> Sistolik / Diastolik :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-sistolik-diastolik">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-hand-paper"></i> Lengan Atas :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-lengan-atas">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-ruler-vertical"></i> Tinggi Fundus (Cm) :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tinggi-fundus">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-heart"></i> Hemoglobin Darah :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-hemoglobin-darah">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-heartbeat"></i> Denyut Jantung Janin :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-denyut-jantung">
+                                        -
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card fieldset border border-dark my-4">
+                        <span class="fieldset-tile text-dark ml-5 bg-white">Hasil :</span>
+                        <div class="card-body p-0 py-1 px-1">
+                            <ul class="list-unstyled mb-0">
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Badan:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-tinggi-badan"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Tekanan Darah:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-tekanan-darah"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Lengan Atas:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-lengan-atas"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Denyut Jantung:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-denyut-jantung"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Hemoglobin Darah:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-hemoglobin-darah">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sebelum Hamil:</label>
+                                    <span class="badge float-end text-uppercase"
+                                        id="modal-vaksin-tetanus-sebelum-hamil">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sesudah Hamil:</label>
+                                    <span class="badge float-end text-uppercase"
+                                        id="modal-vaksin-tetanus-sesudah-hamil">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Posisi Janin:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-posisi-janin">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Minum 90 Tablet Tambah darah:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-minum-tablet">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Konseling:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-konseling">
+                                        -
                                     </span>
                                 </li>
                             </ul>
@@ -170,6 +452,10 @@
 
             $('#nama-kepala-keluarga').change(function() {
                 changeKepalaKeluarga()
+            })
+
+            $('#nama-ibu').change(function() {
+                changeIbu()
             })
 
             $('#{{ $form_id }}').submit(function(e) {
@@ -241,6 +527,7 @@
                         processData: false,
                         contentType: false,
                         success: function(data) {
+                            console.log(data);
                             $("#overlay").fadeOut(100);
                             if ($.isEmptyObject(data.error)) {
                                 $('#modal-hasil').modal('show');
@@ -251,12 +538,50 @@
                                 $('#modal-usia').text(data.usia_tahun);
                                 $('#modal-status').text(data.status);
                                 $('#modal-tanggal-haid-terakhir').text(data
-                                    .tanggal_haid_terakhir);
-                                $('#modal-selisih-hari').text(data
-                                    .selisih_hari);
-                                $('#modal-tanggal-perkiraan-lahir').text("Tanggal Lahir : " +
-                                    data
-                                    .tanggal_perkiraan_lahir);
+                                    .tanggal_haid_terakhir_sebut);
+                                $('#modal-pemeriksaan-ke').text(data
+                                    .pemeriksaan_ke);
+                                $('#modal-kehamilan-ke').text(data
+                                    .kehamilan_ke);
+                                $('#modal-tanggal-perkiraan-lahir').text(data
+                                    .tanggal_perkiraan_lahir_sebut);
+                                $('#modal-kategori-tinggi-badan').text(data
+                                    .kategori_tinggi_badan);
+                                $('#modal-kategori-tekanan-darah').text(data
+                                    .kategori_tekanan_darah);
+                                $('#modal-kategori-lengan-atas').text(data
+                                    .kategori_lengan_atas);
+                                $('#modal-kategori-denyut-jantung').text(data
+                                    .kategori_denyut_jantung);
+                                $('#modal-kategori-hemoglobin-darah').text(data
+                                    .kategori_hemoglobin_darah);
+                                $('#modal-tinggi-berat-badan').text(data
+                                    .tinggi_badan + " Cm / " + data
+                                    .berat_badan + " Kg");
+                                $('#modal-sistolik-diastolik').text(data
+                                    .tekanan_darah_sistolik + " / " + data
+                                    .tekanan_darah_diastolik);
+                                $('#modal-usia-kehamilan').text(data
+                                    .usia_kehamilan + ' Minggu Lagi');
+                                $('#modal-lengan-atas').text(data
+                                    .lengan_atas);
+                                $('#modal-tinggi-fundus').text(data
+                                    .tinggi_fundus);
+                                $('#modal-hemoglobin-darah').text(data
+                                    .hemoglobin_darah);
+                                $('#modal-denyut-jantung').text(data
+                                    .denyut_jantung);
+                                $('#modal-vaksin-tetanus-sebelum-hamil').text(data
+                                    .vaksin_tetanus_sebelum_hamil);
+                                $('#modal-vaksin-tetanus-sesudah-hamil').text(data
+                                    .vaksin_tetanus_sesudah_hamil);
+                                $('#modal-posisi-janin').text(data
+                                    .posisi_janin);
+                                $('#modal-minum-tablet').text(data
+                                    .minum_tablet);
+                                $('#modal-konseling').text(data
+                                    .konseling);
+
                                 var kategoriBg = ['bg-danger', 'bg-warning', 'bg-info',
                                     'bg-success', 'bg-primary'
                                 ];
@@ -277,16 +602,73 @@
                                     $('.kategori-emot').removeClass(v);
                                 });
 
-                                if (data.status == 'Belum Lahir') {
-                                    $('.kategori-bg').addClass('bg-primary');
-                                    $('.kategori-alert').addClass('alert-primary');
-                                    $('#kategori-emot').addClass('fas fa-baby-carriage');
-                                    $('.simpan').removeClass('d-none');
+                                if (data.kategori_tinggi_badan == 'Resiko Tinggi') {
+                                    $('#modal-kategori-tinggi-badan').addClass('bg-danger');
                                 } else {
-                                    $('.simpan').addClass('d-none');
-                                    $('.kategori-bg').addClass('bg-success');
-                                    $('.kategori-alert').addClass('alert-success');
-                                    $('#kategori-emot').addClass('fas fa-baby-carriage');
+                                    $('#modal-kategori-tinggi-badan').addClass('bg-success');
+                                }
+
+                                if (data.kategori_tekanan_darah == 'Hipotensi') {
+                                    $('#modal-kategori-tekanan-darah').addClass('bg-primary');
+                                } else if (data.kategori_tekanan_darah == 'Normal') {
+                                    $('#modal-kategori-tekanan-darah').addClass('bg-success');
+                                } else if (data.kategori_tekanan_darah == 'Prahipertensi') {
+                                    $('#modal-kategori-tekanan-darah').addClass('bg-warning');
+                                } else {
+                                    $('#modal-kategori-tekanan-darah').addClass('bg-danger');
+                                }
+
+                                if (data.kategori_lengan_atas == 'Kurang Gizi (BBLR)') {
+                                    $('#modal-kategori-lengan-atas').addClass('bg-danger');
+                                } else {
+                                    $('#modal-kategori-lengan-atas').addClass('bg-success');
+                                }
+
+                                if (data.kategori_denyut_jantung == 'Normal') {
+                                    $('#modal-kategori-denyut-jantung').addClass('bg-success');
+                                } else {
+                                    $('#modal-kategori-denyut-jantung').addClass('bg-danger');
+                                }
+
+                                if (data.kategori_hemoglobin_darah == 'Normal') {
+                                    $('#modal-kategori-hemoglobin-darah').addClass(
+                                        'bg-success');
+                                } else {
+                                    $('#modal-kategori-hemoglobin-darah').addClass('bg-danger');
+                                }
+
+                                if (data.vaksin_tetanus_sebelum_hamil == 'Sudah') {
+                                    $('#modal-vaksin-tetanus-sebelum-hamil').addClass(
+                                        'bg-success');
+                                } else {
+                                    $('#modal-vaksin-tetanus-sebelum-hamil').addClass(
+                                        'bg-danger');
+                                }
+
+                                if (data.vaksin_tetanus_sesudah_hamil == 'Sudah') {
+                                    $('#modal-vaksin-tetanus-sesudah-hamil').addClass(
+                                        'bg-success');
+                                } else {
+                                    $('#modal-vaksin-tetanus-sesudah-hamil').addClass(
+                                        'bg-danger');
+                                }
+
+                                if (data.posisi_janin == 'Normal') {
+                                    $('#modal-posisi-janin').addClass('bg-success');
+                                } else {
+                                    $('#modal-posisi-janin').addClass('bg-danger');
+                                }
+
+                                if (data.minum_tablet == 'Sudah') {
+                                    $('#modal-minum-tablet').addClass('bg-success');
+                                } else {
+                                    $('#modal-minum-tablet').addClass('bg-danger');
+                                }
+
+                                if (data.konseling == 'Sudah') {
+                                    $('#modal-konseling').addClass('bg-success');
+                                } else {
+                                    $('#modal-konseling').addClass('bg-danger');
                                 }
                             } else {
                                 Swal.fire(
@@ -323,6 +705,15 @@
                         `<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);
                 })
                 $('#nama-ibu').removeAttr('disabled');
+            });
+        }
+
+        function changeIbu() {
+            var id = $('#nama-ibu').val();
+            $.get("{{ url('anc-cek-pemeriksaan') }}", {
+                id: id,
+            }, function(result) {
+                $('#pemeriksaan_ke').val(result);
             });
         }
     </script>
