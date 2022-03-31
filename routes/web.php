@@ -16,7 +16,6 @@ use App\Http\Controllers\dashboard\masterData\wilayah\WilayahDomisiliController;
 use App\Http\Controllers\dashboard\masterData\profil\BidanController;
 use App\Http\Controllers\dashboard\masterData\profil\AdminController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStuntingController;
-
 use App\Http\Controllers\dashboard\utama\deteksiStunting\StuntingAnakController;
 use App\Http\Controllers\dashboard\utama\momsCare\AncController;
 use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
@@ -74,6 +73,8 @@ Route::match(array('PUT', 'POST'), 'proses-deteksi-dini', [DeteksiDiniController
 
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('anc', AncController::class);
+Route::match(array('PUT', 'POST'), 'proses-anc', [AncController::class, 'proses']);
+Route::get('anc-cek-pemeriksaan', [AncController::class, 'cekPemeriksaan']);
 // ----------------- End Moms Care -----------------
 
 

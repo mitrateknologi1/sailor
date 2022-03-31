@@ -77,8 +77,43 @@
                                 <div class="card fieldset border-secondary border">
                                     @component('dashboard.components.dataTables.index', [
                                         'id' => 'table-data',
-                                        'th' => ['No', 'Nama Ibu', 'Dibuat Tanggal', 'Tanggal Haid Terakhir', 'Selisih Hari',
-                                        'Status', 'Tanggal Validasi', 'Bidan', 'Aksi'],
+                                        'th' => [
+                                        'No',
+                                        'Dibuat Tanggal',
+                                        'Status',
+                                        'Nama Ibu',
+                                        'Pemeriksaan Ke',
+                                        'Tanggal Haid
+                                        Terakhir',
+                                        'Kehamilan Ke',
+                                        'Usia Kehamilan',
+                                        'Tanggal Perkiraan Lahir',
+                                        'Tinggi/Berat
+                                        Badan',
+                                        'Tekanan Darah',
+                                        'Lengan Atas',
+                                        'Tinggi Fundus',
+                                        'Hemoglobin Darah',
+                                        'Denyut
+                                        Jantung',
+                                        'Kategori Badan',
+                                        'Kategori Tekanan Darah',
+                                        'Kategori Lengan Atas',
+                                        'Kategori
+                                        Denyut Jantung',
+                                        'Kategori
+                                        Hemoglobin Darah',
+                                        'Vaksin Tetanus Sebelum Hamil',
+                                        'Vaksin Tetanus Sesudah Hamil',
+                                        'Posisi
+                                        Janin',
+                                        'Minum 90 Tablet Tambah Darah',
+                                        'Konseling',
+                                        'Desa / Kelurahan',
+                                        'Bidan',
+                                        'Tanggal Validasi',
+                                        'Aksi',
+                                        ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -94,28 +129,15 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-body custom_scroll p-lg-4 pb-3">
-                    <div class="d-flex w-100 justify-content-between mb-1">
+                    <div class="d-flex w-100 justify-content-between">
                         <div>
-                            <h5>Detail Perkiraan Melahirkan</h5>
-                            <p class="text-muted" id="tanggal-proses"> - </p>
+                            <h5>Hasil Antenatal Care</h5>
+                            <p class="text-muted mb-0" id="tanggal-proses"> - </p>
                         </div>
                         <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="alert kategori-alert rounded-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar no-thumbnail kategori-bg text-light rounded"><i id="kategori-emot"
-                                    class=""></i></div>
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-status" style="margin-left: 5px"> - </div>
-                                <div class="float-end" id="modal-tanggal-perkiraan-lahir"><span
-                                        class="badge kategori-bg"> -
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card fieldset border-dark my-4 border">
+                    <div class="card fieldset border border-dark my-4">
                         <span class="fieldset-tile text-dark ml-5 bg-white">Info Ibu:</span>
                         <div class="card-body p-0 py-1 px-1">
                             <ul class="list-unstyled mb-0">
@@ -124,19 +146,133 @@
                                     <span class="badge bg-info float-end text-uppercase" id="modal-nama-ibu"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Pemeriksaan Ke:</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-pemeriksaan-ke"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Kehamilan Ke:</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-kehamilan-ke"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
                                     <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Haid Terakhir</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-haid-terakhir">
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-haid-terakhir"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="bi bi-calendar2-event-fill"></i> Usia Kehamilan :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-usia-kehamilan"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Perkiraan Lahir :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-perkiraan-lahir">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="bi bi-calendar2-event-fill"></i> Selisih Hari Lahir</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-selisih-hari"> -
+                                    <label><i class="fas fa-ruler-combined"></i> Tinggi / Berat Badan :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tinggi-berat-badan">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pump-medical"></i> Sistolik / Diastolik :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-sistolik-diastolik">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-hand-paper"></i> Lengan Atas :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-lengan-atas">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-ruler-vertical"></i> Tinggi Fundus (Cm) :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tinggi-fundus">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-heart"></i> Hemoglobin Darah :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-hemoglobin-darah">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-heartbeat"></i> Denyut Jantung Janin :</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-denyut-jantung">
+                                        -
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card fieldset border border-dark my-4">
+                        <span class="fieldset-tile text-dark ml-5 bg-white">Hasil :</span>
+                        <div class="card-body p-0 py-1 px-1">
+                            <ul class="list-unstyled mb-0">
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Badan:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-tinggi-badan"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Tekanan Darah:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-tekanan-darah"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Lengan Atas:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-lengan-atas"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Denyut Jantung:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-denyut-jantung"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Hemoglobin Darah:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-kategori-hemoglobin-darah">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sebelum Hamil:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-vaksin-tetanus-sebelum-hamil">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sesudah Hamil:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-vaksin-tetanus-sesudah-hamil">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Posisi Janin:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-posisi-janin">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Minum 90 Tablet Tambah darah:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-minum-tablet">
+                                        -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fas fa-pencil-alt"></i> Konseling:</label>
+                                    <span class="badge float-end text-uppercase" id="modal-konseling">
+                                        -
                                     </span>
                                 </li>
                             </ul>
@@ -184,7 +320,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('perkiraan-melahirkan') }}" + '/' + id,
+                        url: "{{ url('anc') }}" + '/' + id,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -215,7 +351,7 @@
             let id = $(this).val();
             $.ajax({
                 type: "GET",
-                url: "{{ url('perkiraan-melahirkan') }}" + '/' + id,
+                url: "{{ url('anc') }}" + '/' + id,
                 success: function(data) {
                     $('#modal-lihat').modal('show');
                     $('#tanggal-proses').text('Tanggal : ' + moment().format('LL'))
@@ -225,14 +361,50 @@
                     $('#modal-usia').text(data.usia_tahun);
                     $('#modal-status').text(data.status);
                     $('#modal-tanggal-haid-terakhir').text(data
-                        .tanggal_haid_terakhir);
-                    $('#modal-selisih-hari').text(data
-                        .selisih_hari);
-                    $('#modal-tanggal-perkiraan-lahir').text("Tanggal Lahir : " +
-                        data
-                        .tanggal_perkiraan_lahir);
-                    $('#modal-btn-ubah').attr('href', "{{ url('perkiraan-melahirkan') }}" + '/' +
-                        id + '/edit');
+                        .tanggal_haid_terakhir_sebut);
+                    $('#modal-pemeriksaan-ke').text(data
+                        .pemeriksaan_ke);
+                    $('#modal-kehamilan-ke').text(data
+                        .kehamilan_ke);
+                    $('#modal-tanggal-perkiraan-lahir').text(data
+                        .tanggal_perkiraan_lahir_sebut);
+                    $('#modal-kategori-tinggi-badan').text(data
+                        .kategori_tinggi_badan);
+                    $('#modal-kategori-tekanan-darah').text(data
+                        .kategori_tekanan_darah);
+                    $('#modal-kategori-lengan-atas').text(data
+                        .kategori_lengan_atas);
+                    $('#modal-kategori-denyut-jantung').text(data
+                        .kategori_denyut_jantung);
+                    $('#modal-kategori-hemoglobin-darah').text(data
+                        .kategori_hemoglobin_darah);
+                    $('#modal-tinggi-berat-badan').text(data
+                        .tinggi_badan + " Cm / " + data
+                        .berat_badan + " Kg");
+                    $('#modal-sistolik-diastolik').text(data
+                        .tekanan_darah_sistolik + " / " + data
+                        .tekanan_darah_diastolik);
+                    $('#modal-usia-kehamilan').text(data
+                        .usia_kehamilan + ' Minggu Lagi');
+                    $('#modal-lengan-atas').text(data
+                        .lengan_atas);
+                    $('#modal-tinggi-fundus').text(data
+                        .tinggi_fundus);
+                    $('#modal-hemoglobin-darah').text(data
+                        .hemoglobin_darah);
+                    $('#modal-denyut-jantung').text(data
+                        .denyut_jantung);
+                    $('#modal-vaksin-tetanus-sebelum-hamil').text(data
+                        .vaksin_tetanus_sebelum_hamil);
+                    $('#modal-vaksin-tetanus-sesudah-hamil').text(data
+                        .vaksin_tetanus_sesudah_hamil);
+                    $('#modal-posisi-janin').text(data
+                        .posisi_janin);
+                    $('#modal-minum-tablet').text(data
+                        .minum_tablet);
+                    $('#modal-konseling').text(data
+                        .konseling);
+
                     var kategoriBg = ['bg-danger', 'bg-warning', 'bg-info',
                         'bg-success', 'bg-primary'
                     ];
@@ -253,16 +425,83 @@
                         $('.kategori-emot').removeClass(v);
                     });
 
-                    if (data.status == 'Belum Lahir') {
-                        $('.kategori-bg').addClass('bg-primary');
-                        $('.kategori-alert').addClass('alert-primary');
-                        $('#kategori-emot').addClass('fas fa-baby-carriage');
-                        $('.simpan').removeClass('d-none');
+                    if (data.kategori_tinggi_badan == 'Resiko Tinggi') {
+                        $('#modal-kategori-tinggi-badan').addClass('bg-danger');
                     } else {
-                        $('.simpan').addClass('d-none');
-                        $('.kategori-bg').addClass('bg-success');
-                        $('.kategori-alert').addClass('alert-success');
-                        $('#kategori-emot').addClass('fas fa-baby-carriage');
+                        $('#modal-kategori-tinggi-badan').addClass('bg-success');
+                    }
+
+                    if (data.kategori_tekanan_darah == 'Hipotensi') {
+                        $('#modal-kategori-tekanan-darah').addClass('bg-primary');
+                    } else if (data.kategori_tekanan_darah == 'Normal') {
+                        $('#modal-kategori-tekanan-darah').addClass('bg-success');
+                    } else if (data.kategori_tekanan_darah == 'Prahipertensi') {
+                        $('#modal-kategori-tekanan-darah').addClass('bg-warning');
+                    } else {
+                        $('#modal-kategori-tekanan-darah').addClass('bg-danger');
+                    }
+
+                    if (data.kategori_lengan_atas == 'Kurang Gizi (BBLR)') {
+                        $('#modal-kategori-lengan-atas').addClass('bg-danger');
+                    } else {
+                        $('#modal-kategori-lengan-atas').addClass('bg-success');
+                    }
+
+                    if (data.kategori_denyut_jantung == 'Normal') {
+                        $('#modal-kategori-denyut-jantung').addClass('bg-success');
+                    } else {
+                        $('#modal-kategori-denyut-jantung').addClass('bg-danger');
+                    }
+
+                    if (data.kategori_hemoglobin_darah == 'Normal') {
+                        $('#modal-kategori-hemoglobin-darah').addClass(
+                            'bg-success');
+                    } else {
+                        $('#modal-kategori-hemoglobin-darah').addClass('bg-danger');
+                    }
+
+                    if (data.vaksin_tetanus_sebelum_hamil == 'Sudah') {
+                        $('#modal-vaksin-tetanus-sebelum-hamil').addClass(
+                            'bg-success');
+                    } else {
+                        $('#modal-vaksin-tetanus-sebelum-hamil').addClass(
+                            'bg-danger');
+                    }
+
+                    if (data.vaksin_tetanus_sesudah_hamil == 'Sudah') {
+                        $('#modal-vaksin-tetanus-sesudah-hamil').addClass(
+                            'bg-success');
+                    } else {
+                        $('#modal-vaksin-tetanus-sesudah-hamil').addClass(
+                            'bg-danger');
+                    }
+
+                    if (data.posisi_janin == 'Normal') {
+                        $('#modal-posisi-janin').addClass('bg-success');
+                    } else {
+                        $('#modal-posisi-janin').addClass('bg-danger');
+                    }
+
+                    if (data.minum_tablet == 'Sudah') {
+                        $('#modal-minum-tablet').addClass('bg-success');
+                    } else {
+                        $('#modal-minum-tablet').addClass('bg-danger');
+                    }
+
+                    if (data.konseling == 'Sudah') {
+                        $('#modal-konseling').addClass('bg-success');
+                    } else {
+                        $('#modal-konseling').addClass('bg-danger');
+                    }
+
+                    if (("{{ Auth::user()->profil->id }}" == data.bidan_id) || (
+                            "{{ Auth::user()->role }}" ==
+                            "admin")) {
+                        $('#modal-btn-ubah').attr('href', "{{ url('anc') }}" + '/' +
+                            id + '/edit');
+                        $('#modal-btn-ubah').show();
+                    } else {
+                        $('#modal-btn-ubah').hide();
                     }
 
                 },
@@ -274,7 +513,38 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('anc') }}",
+            dom: 'lBfrtip',
+            buttons: [{
+                    extend: 'excel',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
+                    text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
+                    exportOptions: {
+                        modifier: {
+                            order: 'index', // 'current', 'applied', 'index',  'original'
+                            page: 'all', // 'all',     'current'
+                            search: 'applied' // 'none',    'applied', 'removed'
+                        },
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
+                    text: '<i class="bi bi-eye-fill"></i> Tampil/Sembunyi Kolom',
+                }
+            ],
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            ajax: {
+                url: "{{ url('anc') }}",
+                data: function(d) {
+                    d.status = $('#status-filter').val();
+                    d.kategori = $('#kategori-gizi-filter').val();
+                    d.search = $('input[type="search"]').val();
+                }
+            },
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
@@ -283,12 +553,22 @@
                     searchable: false
                 },
                 {
+                    data: 'tanggal_dibuat',
+                    name: 'tanggal_dibuat',
+                    className: 'text-center',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    className: 'text-center',
+                },
+                {
                     data: 'nama_ibu',
                     name: 'nama_ibu'
                 },
                 {
-                    data: 'tanggal_dibuat',
-                    name: 'tanggal_dibuat',
+                    data: 'pemeriksaan_ke',
+                    name: 'pemeriksaan_ke',
                     className: 'text-center',
                 },
                 {
@@ -297,23 +577,114 @@
                     className: 'text-center',
                 },
                 {
-                    data: 'selisih_hari',
-                    name: 'selisih_hari',
+                    data: 'kehamilan_ke',
+                    name: 'kehamilan_ke',
                     className: 'text-center',
                 },
                 {
-                    data: 'status',
-                    name: 'status',
-                    class: 'text-center'
+                    data: 'usia_kehamilan',
+                    name: 'usia_kehamilan',
+                    className: 'text-center',
+                },
+                {
+                    data: 'tanggal_perkiraan_lahir',
+                    name: 'tanggal_perkiraan_lahir',
+                    className: 'text-center',
+                },
+                {
+                    data: 'tinggi_berat_badan',
+                    name: 'tinggi_berat_badan',
+                    className: 'text-center',
+                },
+                {
+                    data: 'tekanan_darah',
+                    name: 'tekanan_darah',
+                    className: 'text-center',
+                },
+                {
+                    data: 'lengan_atas',
+                    name: 'lengan_atas',
+                    className: 'text-center',
+                },
+                {
+                    data: 'tinggi_fundus',
+                    name: 'tinggi_fundus',
+                    className: 'text-center',
+                },
+                {
+                    data: 'hemoglobin_darah',
+                    name: 'hemoglobin_darah',
+                    className: 'text-center',
+                },
+                {
+                    data: 'denyut_jantung_janin',
+                    name: 'denyut_jantung_janin',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_badan',
+                    name: 'kategori_badan',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_tekanan_darah',
+                    name: 'kategori_tekanan_darah',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_lengan_atas',
+                    name: 'kategori_lengan_atas',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_denyut_jantung',
+                    name: 'kategori_denyut_jantung',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_hemoglobin_darah',
+                    name: 'kategori_hemoglobin_darah',
+                    className: 'text-center',
+                },
+                {
+                    data: 'vaksin_tetanus_sebelum_hamil',
+                    name: 'vaksin_tetanus_sebelum_hamil',
+                    className: 'text-center',
+                },
+                {
+                    data: 'vaksin_tetanus_sesudah_hamil',
+                    name: 'vaksin_tetanus_sesudah_hamil',
+                    className: 'text-center',
+                },
+                {
+                    data: 'posisi_janin',
+                    name: 'posisi_janin',
+                    className: 'text-center',
+                },
+                {
+                    data: 'minum_tablet',
+                    name: 'minum_tablet',
+                    className: 'text-center',
+                },
+                {
+                    data: 'konseling',
+                    name: 'konseling',
+                    className: 'text-center',
+                },
+                {
+                    data: 'desa_kelurahan',
+                    name: 'desa_kelurahan',
+                    className: 'text-center',
+                },
+                {
+                    data: 'bidan',
+                    name: 'bidan',
+                    className: 'text-center',
                 },
                 {
                     data: 'tanggal_validasi',
                     name: 'tanggal_validasi',
                     className: 'text-center',
-                },
-                {
-                    data: 'bidan',
-                    name: 'bidan'
                 },
                 {
                     data: 'action',
@@ -322,7 +693,43 @@
                     orderable: true,
                     searchable: true
                 },
+
+            ],
+            columnDefs: [{
+                    targets: 9,
+                    visible: false,
+                },
+                {
+                    targets: 10,
+                    visible: false,
+                },
+                {
+                    targets: 11,
+                    visible: false,
+                },
+                {
+                    targets: 12,
+                    visible: false,
+                },
+                {
+                    targets: 13,
+                    visible: false,
+                },
+                {
+                    targets: 14,
+                    visible: false,
+                },
             ],
         });
+
+        $('#status-filter').change(function() {
+            table.draw();
+            console.log($('#status-filter').val())
+        })
+
+        $('#kategori-gizi-filter').change(function() {
+            table.draw();
+            console.log($('#kategori-gizi-filter').val())
+        })
     </script>
 @endpush

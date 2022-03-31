@@ -79,16 +79,16 @@
                                         'id' => 'table-data',
                                         'th' => [
                                         'No',
-                                        'Nama Ibu',
-                                        'Dibuat Tanggal',
-                                        'Tanggal Haid Terakhir',
-                                        'Tanggal Perkiraan
-                                        Lahir',
-                                        'Selisih Hari',
-                                        'Kategori',
+                                        'Tanggal Dibuat',
                                         'Status',
-                                        'Tanggal Validasi',
+                                        'Nama Ibu',
+                                        'Tanggal Haid Terakhir',
+                                        'Tanggal
+                                        Perkiraan Lahir',
+                                        'Usia Kehamilan',
+                                        'Desa / Kelurahan',
                                         'Bidan',
+                                        'Tanggal Validasi',
                                         'Aksi',
                                         ],
                                         ])
@@ -114,16 +114,13 @@
                         <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="alert kategori-alert rounded-4">
+                    <div class="alert kategori-alert alert-primary rounded-4">
                         <div class="d-flex align-items-center">
-                            <div class="avatar rounded no-thumbnail kategori-bg text-light"><i id="kategori-emot"
-                                    class=""></i></div>
+                            <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light"><i
+                                    class="fas fa-baby-carriage"></i></div>
                             <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-status" style="margin-left: 5px"> - </div>
-                                <div class="float-end" id="modal-tanggal-perkiraan-lahir"><span
-                                        class="badge kategori-bg"> -
-                                    </span>
-                                </div>
+                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan"
+                                    style="margin-left: 5px"> - </div>
                             </div>
                         </div>
                     </div>
@@ -235,48 +232,21 @@
                     $('#modal-tanggal-lahir').text(moment(data.tanggal_lahir)
                         .format('LL'));
                     $('#modal-usia').text(data.usia_tahun);
-                    $('#modal-status').text(data.status);
+                    $('#modal-tanggal-perkiraan-melahirkan').text("Perkiraan Melahirkan : " +
+                        data.tanggal_perkiraan_lahir);
                     $('#modal-tanggal-haid-terakhir').text(data
                         .tanggal_haid_terakhir);
                     $('#modal-selisih-hari').text(data
                         .selisih_hari);
-                    $('#modal-tanggal-perkiraan-lahir').text("Tanggal Lahir : " +
-                        data
-                        .tanggal_perkiraan_lahir);
-                    $('#modal-btn-ubah').attr('href', "{{ url('perkiraan-melahirkan') }}" + '/' +
-                        id + '/edit');
-                    var kategoriBg = ['bg-danger', 'bg-warning', 'bg-info',
-                        'bg-success', 'bg-primary'
-                    ];
-                    var kategoriAlert = ['alert-danger', 'alert-warning',
-                        'alert-info', 'alert-success', 'alert-primary'
-                    ];
-                    var kategoriEmot = ['fa-solid fa-face-frown',
-                        'fa-solid fa-face-meh', 'fa-solid fa-face-smile',
-                        'fa-solid fa-face-surprise'
-                    ];
-                    $.each(kategoriBg, function(i, v) {
-                        $('.kategori-bg').removeClass(v);
-                    });
-                    $.each(kategoriAlert, function(i, v) {
-                        $('.kategori-alert').removeClass(v);
-                    });
-                    $.each(kategoriEmot, function(i, v) {
-                        $('.kategori-emot').removeClass(v);
-                    });
-
-                    if (data.status == 'Belum Lahir') {
-                        $('.kategori-bg').addClass('bg-primary');
-                        $('.kategori-alert').addClass('alert-primary');
-                        $('#kategori-emot').addClass('fas fa-baby-carriage');
-                        $('.simpan').removeClass('d-none');
+                    if (("{{ Auth::user()->profil->id }}" == data.bidan_id) || (
+                            "{{ Auth::user()->role }}" ==
+                            "admin")) {
+                        $('#modal-btn-ubah').attr('href', "{{ url('perkiraan-melahirkan') }}" + '/' +
+                            id + '/edit');
+                        $('#modal-btn-ubah').show();
                     } else {
-                        $('.simpan').addClass('d-none');
-                        $('.kategori-bg').addClass('bg-success');
-                        $('.kategori-alert').addClass('alert-success');
-                        $('#kategori-emot').addClass('fas fa-baby-carriage');
+                        $('#modal-btn-ubah').hide();
                     }
-
                 },
             })
         })
@@ -286,7 +256,38 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('perkiraan-melahirkan') }}",
+            dom: 'lBfrtip',
+            buttons: [{
+                    extend: 'excel',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
+                    text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
+                    exportOptions: {
+                        modifier: {
+                            order: 'index', // 'current', 'applied', 'index',  'original'
+                            page: 'all', // 'all',     'current'
+                            search: 'applied' // 'none',    'applied', 'removed'
+                        },
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
+                    text: '<i class="bi bi-eye-fill"></i> Tampil/Sembunyi Kolom',
+                }
+            ],
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            ajax: {
+                url: "{{ url('perkiraan-melahirkan') }}",
+                data: function(d) {
+                    d.status = $('#status-filter').val();
+                    d.kategori = $('#kategori-gizi-filter').val();
+                    d.search = $('input[type="search"]').val();
+                }
+            },
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
@@ -295,12 +296,18 @@
                     searchable: false
                 },
                 {
-                    data: 'nama_ibu',
-                    name: 'nama_ibu'
-                },
-                {
                     data: 'tanggal_dibuat',
                     name: 'tanggal_dibuat',
+                    className: 'text-center',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nama_ibu',
+                    name: 'nama_ibu',
                     className: 'text-center',
                 },
                 {
@@ -314,28 +321,24 @@
                     className: 'text-center',
                 },
                 {
-                    data: 'selisih_hari',
-                    name: 'selisih_hari',
+                    data: 'usia_kehamilan',
+                    name: 'usia_kehamilan',
                     className: 'text-center',
                 },
                 {
-                    data: 'kategori',
-                    name: 'kategori',
-                    class: 'text-center'
+                    data: 'desa_kelurahan',
+                    name: 'desa_kelurahan',
+                    className: 'text-center',
                 },
                 {
-                    data: 'status',
-                    name: 'status',
-                    class: 'text-center'
+                    data: 'bidan',
+                    name: 'bidan',
+                    className: 'text-center',
                 },
                 {
                     data: 'tanggal_validasi',
                     name: 'tanggal_validasi',
                     className: 'text-center',
-                },
-                {
-                    data: 'bidan',
-                    name: 'bidan'
                 },
                 {
                     data: 'action',
@@ -344,7 +347,19 @@
                     orderable: true,
                     searchable: true
                 },
+
             ],
+            columnDefs: [],
         });
+
+        $('#status-filter').change(function() {
+            table.draw();
+            console.log($('#status-filter').val())
+        })
+
+        $('#kategori-gizi-filter').change(function() {
+            table.draw();
+            console.log($('#kategori-gizi-filter').val())
+        })
     </script>
 @endpush

@@ -150,20 +150,22 @@
                                     </div>
                                 @endforeach
                                 <div class="row g-2 mt-2">
-                                    <div class="col-sm-6 col-lg-4">
+                                    <div class="col-sm-6 col-lg">
                                         @component('dashboard.components.buttons.back', [
                                             'url' => url('deteksi-ibu-melahirkan-stunting'),
                                             ])
                                         @endcomponent
                                     </div>
-                                    <div class="col-sm-6 col-lg-8">
-                                        @component('dashboard.components.buttons.edit', [
-                                            'id' => 'modal-btn-ubah',
-                                            'url' => url('deteksi-ibu-melahirkan-stunting' . '/' .
-                                            $deteksiIbuMelahirkanStunting->id . '/edit'),
-                                            ])
-                                        @endcomponent
-                                    </div>
+                                    @if (Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id || Auth::user()->role == 'admin')
+                                        <div class="col-sm-6 col-lg">
+                                            @component('dashboard.components.buttons.edit', [
+                                                'id' => 'modal-btn-ubah',
+                                                'url' => url('deteksi-ibu-melahirkan-stunting' . '/' .
+                                                $deteksiIbuMelahirkanStunting->id . '/edit'),
+                                                ])
+                                            @endcomponent
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

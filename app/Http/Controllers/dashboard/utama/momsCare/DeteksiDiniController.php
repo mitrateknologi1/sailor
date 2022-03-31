@@ -7,9 +7,11 @@ use App\Models\AnggotaKeluarga;
 use App\Models\DeteksiDini;
 use App\Models\JawabanDeteksiDini;
 use App\Models\KartuKeluarga;
+use App\Models\LokasiTugas;
 use App\Models\SoalDeteksiDini;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,13 +25,27 @@ class DeteksiDiniController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = DeteksiDini::with(['anggotaKeluarga'])
-                // ->where('bidan_id', auth()->user()->id)
-                ->get();
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            $data = DeteksiDini::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                    if (Auth::user()->role != 'admin') {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    }
+                })
+                ->orWhere(function ($query) {
+                    if (Auth::user()->role == 'bidan') { // bidan
+                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                    }
+                })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href=" ' . url('deteksi-dini' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a><a href="' . url('deteksi-dini/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
+                    $actionBtn = '<a href=" ' . url('deteksi-dini' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a>';
+
+                    if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
+                        $actionBtn .= '<a href="' . url('anc/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
+                    }
+
                     return $actionBtn;
                 })
                 ->addColumn('status', function ($row) {
@@ -42,8 +58,11 @@ class DeteksiDiniController extends Controller
                 ->addColumn('nama_ibu', function ($row) {
                     return $row->anggotaKeluarga->nama_lengkap;
                 })
-                ->addColumn('nakes', function ($row) {
-                    return "Belum Ada";
+                ->addColumn('desa_kelurahan', function ($row) {
+                    return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
+                })
+                ->addColumn('bidan', function ($row) {
+                    return $row->bidan->nama_lengkap;
                 })
                 ->addColumn('tanggal_dibuat', function ($row) {
                     return Carbon::parse($row->created_at)->translatedFormat('d F Y');
@@ -92,10 +111,12 @@ class DeteksiDiniController extends Controller
             [
                 'nama_kepala_keluarga' => 'required',
                 'nama_ibu' => 'required',
+                'nama_bidan' => Auth::user()->role == "admin" && $request->isMethod('post') ? 'required' : '',
             ],
             [
                 'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
                 'nama_ibu.required' => 'Nama Ibu Tidak Boleh Kosong',
+                'nama_bidan.required' => 'Nama Bidan Tidak Boleh Kosong',
             ]
         );
 
@@ -162,7 +183,7 @@ class DeteksiDiniController extends Controller
 
     public function store(Request $request)
     {
-        $role = 'Nakes';
+        $role = Auth::user()->role;
         $data = $this->proses($request);
 
         $deteksiDini = new DeteksiDini();
@@ -170,9 +191,14 @@ class DeteksiDiniController extends Controller
         $deteksiDini->bidan_id = 1;
         $deteksiDini->kategori = $data['kategori'];
         $deteksiDini->skor = $data['total_skor'];
-        if ($role == 'Nakes') {
-            $deteksiDini->is_valid = 1;
+        if ($role == 'bidan') {
+            $deteksiDini->bidan_id = Auth::user()->profil->id;
             $deteksiDini->tanggal_validasi = Carbon::now();
+            $deteksiDini->is_valid = 1;
+        } else if ($role == 'admin') {
+            $deteksiDini->bidan_id = $request->nama_bidan;
+            $deteksiDini->tanggal_validasi = Carbon::now();
+            $deteksiDini->is_valid = 1;
         }
         $deteksiDini->save();
 
@@ -216,9 +242,9 @@ class DeteksiDiniController extends Controller
             'nama_ibu' => $deteksiDini->anggotaKeluarga->nama_lengkap ?? '-',
             'tanggal_lahir' => $tanggalLahir,
             'usia' => $usia,
-            'desa_kelurahan' => '-',
+            'desa_kelurahan' => $deteksiDini->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
+            'bidan' => $deteksiDini->bidan->nama_lengkap,
             'tanggal_validasi' => $tanggalValidasi ?? '-',
-            'bidan' => '-',
             'kategori' => $deteksiDini->kategori,
             'total_skor' => $deteksiDini->skor,
             'tanggal_proses' => $tanggalProses

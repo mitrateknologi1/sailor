@@ -14,21 +14,24 @@ class PertumbuhanAnak extends Model
     protected $table = 'pertumbuhan_anak';
     protected $guarded = ['id'];
 
-    public function anggotaKeluarga(){
-        return $this->belongsTo(AnggotaKeluarga::class);
+    public function anggotaKeluarga()
+    {
+        return $this->belongsTo(AnggotaKeluarga::class)->withTrashed();
     }
 
-    public function bidan(){
+    public function bidan()
+    {
         return $this->belongsTo(Bidan::class);
     }
 
-    public function sesuaiLokasiTugas($lokasiTugas){
-        return $this->hasMany(AnggotaKeluarga::class)->whereIn('desa_kelurahan_id', $lokasiTugas); 
+    public function sesuaiLokasiTugas($lokasiTugas)
+    {
+        return $this->hasMany(AnggotaKeluarga::class)->whereIn('desa_kelurahan_id', $lokasiTugas);
     }
 
     // active
-    public function scopeOfValid($query, $status){
+    public function scopeOfValid($query, $status)
+    {
         return $query->where('is_valid', $status);
     }
-    
 }

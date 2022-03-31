@@ -5,9 +5,11 @@ namespace App\Http\Controllers\dashboard\utama\momsCare;
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
 use App\Models\KartuKeluarga;
+use App\Models\LokasiTugas;
 use App\Models\PerkiraanMelahirkan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,15 +22,25 @@ class PerkiraanMelahirkanController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
-            $data = PerkiraanMelahirkan::with(['anggotaKeluarga'])
-                // ->where('bidan_id', auth()->user()->id)
-                ->get();
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            $data = PerkiraanMelahirkan::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                    if (Auth::user()->role != 'admin') {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    }
+                })
+                ->orWhere(function ($query) {
+                    if (Auth::user()->role == 'bidan') { // bidan
+                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                    }
+                })->get();
+
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-eye"></i></button><a href="' . url('perkiraan-melahirkan/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
-                    return $actionBtn;
+                ->addColumn('tanggal_dibuat', function ($row) {
+                    return Carbon::parse($row->created_at)->format('d M Y');
                 })
                 ->addColumn('status', function ($row) {
                     if ($row->is_valid == 0) {
@@ -46,16 +58,16 @@ class PerkiraanMelahirkanController extends Controller
                 ->addColumn('tanggal_perkiraan_lahir', function ($row) {
                     return Carbon::parse($row->tanggal_perkiraan_lahir)->translatedFormat('d F Y');
                 })
-                ->addColumn('selisih_hari', function ($row) {
-                    $selisihHari = date_diff(Carbon::now(), Carbon::parse($row->tanggal_perkiraan_lahir));
+                ->addColumn('usia_kehamilan', function ($row) {
+                    $selisihHari = date_diff(Carbon::parse($row->created_at), Carbon::parse($row->tanggal_perkiraan_lahir));
                     $selisihHariSebut = $selisihHari->y . ' Tahun ' . $selisihHari->m . ' Bulan ' . $selisihHari->d . ' Hari';
                     return $selisihHariSebut;
                 })
-                ->addColumn('bidan', function ($row) {
-                    return "Belum Ada";
+                ->addColumn('desa_kelurahan', function ($row) {
+                    return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
                 })
-                ->addColumn('tanggal_dibuat', function ($row) {
-                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
+                ->addColumn('bidan', function ($row) {
+                    return $row->bidan->nama_lengkap;
                 })
                 ->addColumn('tanggal_validasi', function ($row) {
                     if ($row->tanggal_validasi) {
@@ -64,14 +76,16 @@ class PerkiraanMelahirkanController extends Controller
                         return '-';
                     }
                 })
-                ->addColumn('kategori', function ($row) {
-                    if (Carbon::parse($row->tanggal_perkiraan_lahir) > Carbon::now()) {
-                        return '<span class="badge badge-primary bg-primary">Belum Lahir</span>';
-                    } else {
-                        return '<span class="badge badge-success bg-success">Sudah Lahir</span>';
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>';
+
+                    if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
+                        $actionBtn .= '<a href="' . url('perkiraan-melahirkan/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
                     }
+
+                    return $actionBtn;
                 })
-                ->rawColumns(['action', 'nama_ibu', 'bidan', 'status', 'tanggal_dibuat', 'tanggal_validasi', 'tanggal_haid_terakhir', 'tanggal_perkiraan_lahir', 'selisih_hari', 'kategori'])
+                ->rawColumns(['tanggal_dibuat', 'status', 'nama_ibu', 'tanggal_haid_terakhir', 'tanggal_perkiraan_lahir', 'usia_kehamilan', 'desa_kelurahan', 'bidan', 'tanggal_validasi', 'action'])
                 ->make(true);
         }
         return view('dashboard.pages.utama.momsCare.perkiraanMelahirkan.index');
@@ -103,11 +117,13 @@ class PerkiraanMelahirkanController extends Controller
                 'nama_kepala_keluarga' => 'required',
                 'nama_ibu' => 'required',
                 'tanggal_haid_terakhir' => 'required',
+                'nama_bidan' => Auth::user()->role == "admin" && $request->isMethod('post') ? 'required' : '',
             ],
             [
                 'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
                 'nama_ibu.required' => 'Nama Ibu tidak boleh kosong',
                 'tanggal_haid_terakhir.required' => 'Tanggal haid terakhir tidak boleh kosong',
+                'nama_bidan.required' => 'Nama Bidan tidak boleh kosong',
             ]
         );
 
@@ -153,18 +169,21 @@ class PerkiraanMelahirkanController extends Controller
 
     public function store(Request $request)
     {
-        $role = 'Bidan';
+        $role = Auth::user()->role;
         $data = $this->proses($request);
-        $bidan_id = 1;
 
         $perkiraanMelahirkan = new PerkiraanMelahirkan();
         $perkiraanMelahirkan->anggota_keluarga_id = $request->nama_ibu;
-        $perkiraanMelahirkan->bidan_id = $bidan_id;
         $perkiraanMelahirkan->tanggal_haid_terakhir = $data['simpan_tanggal_haid_terakhir'];
         $perkiraanMelahirkan->tanggal_perkiraan_lahir = $data['simpan_tanggal_perkiraan_lahir'];
-        if ($role == 'Bidan') {
-            $perkiraanMelahirkan->is_valid = 1;
+        if ($role == 'bidan') {
+            $perkiraanMelahirkan->bidan_id = Auth::user()->profil->id;
             $perkiraanMelahirkan->tanggal_validasi = Carbon::now();
+            $perkiraanMelahirkan->is_valid = 1;
+        } else if ($role == 'admin') {
+            $perkiraanMelahirkan->bidan_id = $request->nama_bidan;
+            $perkiraanMelahirkan->tanggal_validasi = Carbon::now();
+            $perkiraanMelahirkan->is_valid = 1;
         }
         $perkiraanMelahirkan->save();
 
@@ -182,15 +201,9 @@ class PerkiraanMelahirkanController extends Controller
         $tanggal_haid_terakhir = Carbon::parse($perkiraanMelahirkan->tanggal_haid_terakhir)->translatedFormat('d F Y');
         $tanggal_perkiraan_lahir = Carbon::parse($perkiraanMelahirkan->tanggal_perkiraan_lahir)->translatedFormat('d F Y');
 
-        $selisihHari = date_diff(Carbon::now(), Carbon::parse($perkiraanMelahirkan->tanggal_perkiraan_lahir));
+        $selisihHari = date_diff(Carbon::parse($perkiraanMelahirkan->created_at), Carbon::parse($perkiraanMelahirkan->tanggal_perkiraan_lahir));
         $selisihHariSebut = $selisihHari->y . ' Tahun ' . $selisihHari->m . ' Bulan ' . $selisihHari->d . ' Hari';
         $ibu = AnggotaKeluarga::find($perkiraanMelahirkan->id);
-
-        if (Carbon::parse($perkiraanMelahirkan->tanggal_perkiraan_lahir) > Carbon::now()) {
-            $status = 'Belum Lahir';
-        } else {
-            $status = 'Sudah Lahir';
-        }
 
         $data = [
             'nama_ibu' => $ibu->nama_lengkap,
@@ -200,7 +213,6 @@ class PerkiraanMelahirkanController extends Controller
             'simpan_tanggal_haid_terakhir' => Carbon::parse($perkiraanMelahirkan->tanggal_haid_terakhir),
             'simpan_tanggal_perkiraan_lahir' => Carbon::parse($perkiraanMelahirkan->tanggal_perkiraan_lahir),
             'selisih_hari' => $selisihHariSebut,
-            'status' => $status
         ];
 
         return response()->json($data);

@@ -33,6 +33,8 @@ class CreateAncTable extends Migration
             $table->string('vaksin_tetanus_sesudah_hamil');
             $table->string('minum_tablet');
             $table->string('konseling');
+            $table->date('tanggal_perkiraan_lahir');
+            $table->integer('usia_kehamilan');
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
             $table->timestamps();
