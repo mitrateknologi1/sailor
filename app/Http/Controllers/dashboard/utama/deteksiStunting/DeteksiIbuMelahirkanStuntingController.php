@@ -10,6 +10,7 @@ use App\Models\KartuKeluarga;
 use App\Models\SoalIbuMelahirkanStunting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,9 +29,8 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
                 ->get();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href=" ' . url('deteksi-ibu-melahirkan-stunting' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a><a href="' . url('deteksi-ibu-melahirkan-stunting/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
-                    return $actionBtn;
+                ->addColumn('tanggal_dibuat', function ($row) {
+                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
                 })
                 ->addColumn('status', function ($row) {
                     if ($row->is_valid == 0) {
@@ -42,21 +42,33 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
                 ->addColumn('nama_ibu', function ($row) {
                     return $row->anggotaKeluarga->nama_lengkap;
                 })
-                ->addColumn('nakes', function ($row) {
-                    return "Belum Ada";
-                })
-                ->addColumn('tanggal_dibuat', function ($row) {
-                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
-                })
-                ->addColumn('tanggal_validasi', function ($row) {
-                    return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
-                })
                 ->addColumn('kategori', function ($row) {
                     if ($row->kategori == 'Tidak Beresiko Melahirkan Stunting') {
                         return '<span class="badge badge-success bg-success">' . $row->kategori . '</span>';
                     } else {
                         return '<span class="badge badge-danger bg-danger">' . $row->kategori . '</span>';
                     }
+                })
+                ->addColumn('desa_kelurahan', function ($row) {
+                    return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
+                })
+                ->addColumn('bidan', function ($row) {
+                    return $row->bidan->nama_lengkap;
+                })
+                ->addColumn('tanggal_validasi', function ($row) {
+                    return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
+                })
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href=" ' . url('deteksi-ibu-melahirkan-stunting' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a>';
+
+                    if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
+                        $actionBtn .= '<a href="' . url('deteksi-ibu-melahirkan-stunting/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
+                    }
+
+                    return $actionBtn;
+
+                    $actionBtn = '<a href=" ' . url('deteksi-ibu-melahirkan-stunting' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a><a href="' . url('deteksi-ibu-melahirkan-stunting/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
+                    return $actionBtn;
                 })
                 ->rawColumns(['action', 'nama_ibu', 'nakes', 'status', 'kategori', 'tanggal_dibuat', 'tanggal_validasi'])
                 ->make(true);
@@ -152,16 +164,20 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
      */
     public function store(Request $request)
     {
-        $role = 'Nakes';
+        $role = Auth::user()->role;
         $data = $this->proses($request);
 
         $deteksiIbuMelahirkanStunting = new DeteksiIbuMelahirkanStunting();
         $deteksiIbuMelahirkanStunting->anggota_keluarga_id = $request->nama_ibu;
-        $deteksiIbuMelahirkanStunting->bidan_id = 1;
         $deteksiIbuMelahirkanStunting->kategori = $data['kategori'];
-        if ($role == 'Nakes') {
-            $deteksiIbuMelahirkanStunting->is_valid = 1;
+        if ($role == 'bidan') {
+            $deteksiIbuMelahirkanStunting->bidan_id = Auth::user()->profil->id;
             $deteksiIbuMelahirkanStunting->tanggal_validasi = Carbon::now();
+            $deteksiIbuMelahirkanStunting->is_valid = 1;
+        } else if ($role == 'admin') {
+            $deteksiIbuMelahirkanStunting->bidan_id = $request->nama_bidan;
+            $deteksiIbuMelahirkanStunting->tanggal_validasi = Carbon::now();
+            $deteksiIbuMelahirkanStunting->is_valid = 1;
         }
         $deteksiIbuMelahirkanStunting->save();
 
@@ -203,9 +219,9 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
             'nama_ibu' => $deteksiIbuMelahirkanStunting->anggotaKeluarga->nama_lengkap ?? '-',
             'tanggal_lahir' => $tanggalLahir,
             'usia' => $usia,
-            'desa_kelurahan' => '-',
             'tanggal_validasi' => $tanggalValidasi ?? '-',
-            'bidan' => '-',
+            'desa_kelurahan' => $deteksiIbuMelahirkanStunting->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
+            'bidan' => $deteksiIbuMelahirkanStunting->bidan->nama_lengkap,
             'kategori' => $deteksiIbuMelahirkanStunting->kategori,
             'tanggal_proses' => $tanggalProses
         ];
@@ -236,16 +252,10 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
      */
     public function update(Request $request, DeteksiIbuMelahirkanStunting $deteksiIbuMelahirkanStunting)
     {
-        $role = 'Nakes';
         $data = $this->proses($request);
 
         $deteksiIbuMelahirkanStunting->anggota_keluarga_id = $request->nama_ibu;
-        $deteksiIbuMelahirkanStunting->bidan_id = 1;
         $deteksiIbuMelahirkanStunting->kategori = $data['kategori'];
-        if ($role == 'Nakes') {
-            $deteksiIbuMelahirkanStunting->is_valid = 1;
-            $deteksiIbuMelahirkanStunting->tanggal_validasi = Carbon::now();
-        }
         $deteksiIbuMelahirkanStunting->save();
 
         $jawabanDeteksiIbuMelahirkanStunting = JawabanDeteksiIbuMelahirkanStunting::where('deteksi_ibu_melahirkan_stunting_id', $deteksiIbuMelahirkanStunting->id)->delete();

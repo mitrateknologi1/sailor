@@ -4,7 +4,7 @@
         @method('PUT')
     @endif
     <div class="row g-4">
-        <div class="col-sm-12 col-lg-6">
+        <div class="col-sm-12 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Kepala Keluarga / Nomor KK',
                 'id' => 'nama-kepala-keluarga',
@@ -21,9 +21,9 @@
 
             @endcomponent
         </div>
-        <div class="col-sm-12 col-lg-6">
+        <div class="col-sm-12 col-lg">
             @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Anak (Tanggal Lahir)',
+                'label' => 'Nama Ibu (Tanggal Lahir)',
                 'id' => 'nama-ibu',
                 'name' => 'nama_ibu',
                 'class' => 'select2',
@@ -32,6 +32,19 @@
                 ])
             @endcomponent
         </div>
+        @if (Auth::user()->role == 'admin' && $method == 'POST')
+            <div class="col-sm-12 col-lg">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Bidan sesuai lokasi anak',
+                    'id' => 'nama-bidan',
+                    'name' => 'nama_bidan',
+                    'class' => 'select2',
+                    'attribute' => 'disabled',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                @endcomponent
+            </div>
+        @endif
         <div class="col-sm-12 col-lg-12">
             <h6 class="card-title mb-0">Pertanyaan</h6>
             @foreach ($daftarSoal as $soal)
@@ -172,6 +185,10 @@
 
             $('#nama-kepala-keluarga').change(function() {
                 changeKepalaKeluarga()
+            })
+
+            $('#nama-ibu').change(function() {
+                changeIbu()
             })
 
             $('#{{ $form_id }}').submit(function(e) {
@@ -317,6 +334,21 @@
                         `<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);
                 })
                 $('#nama-ibu').removeAttr('disabled');
+            });
+        }
+
+        function changeIbu() {
+            var id = $('#nama-ibu').val();
+
+            $('#nama-bidan').html('');
+            $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+            $.get("{{ route('getBidan') }}", {
+                id: id,
+            }, function(result) {
+                $.each(result, function(key, val) {
+                    $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
+                })
+                $('#nama-bidan').removeAttr('disabled');
             });
         }
     </script>

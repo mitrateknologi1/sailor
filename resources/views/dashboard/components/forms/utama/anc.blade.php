@@ -235,6 +235,19 @@
                 @endslot
             @endcomponent
         </div>
+        @if (Auth::user()->role == 'admin' && $method == 'POST')
+            <div class="col-sm-12 col-md-12">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Bidan sesuai lokasi anak',
+                    'id' => 'nama-bidan',
+                    'name' => 'nama_bidan',
+                    'class' => 'select2',
+                    'attribute' => 'disabled',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                @endcomponent
+            </div>
+        @endif
         <div class="col-12 text-end">
             @component('dashboard.components.buttons.process', [
                 'id' => 'proses-anc',
@@ -434,6 +447,26 @@
                         '{{ $dataEdit->anggotaKeluarga->id }}').change();
                     $('#tanggal_haid_terakhir').val(
                             "{{ date('d-m-Y', strtotime($dataEdit->tanggal_haid_terakhir)) }}")
+                        .change();
+                    $('#pemeriksaan_ke').val("{{ $dataEdit->pemeriksaan_ke }}");
+                    $('#kehamilan_ke').val("{{ $dataEdit->kehamilan_ke }}");
+                    $('#tinggi_badan').val("{{ $dataEdit->tinggi_badan }}");
+                    $('#berat_badan').val("{{ $dataEdit->berat_badan }}");
+                    $('#tekanan_darah_sistolik').val("{{ $dataEdit->tekanan_darah_sistolik }}");
+                    $('#tekanan_darah_diastolik').val("{{ $dataEdit->tekanan_darah_diastolik }}");
+                    $('#lengan_atas').val("{{ $dataEdit->lengan_atas }}");
+                    $('#tinggi_fundus').val("{{ $dataEdit->tinggi_fundus }}");
+                    $('#hemoglobin_darah').val("{{ $dataEdit->hemoglobin_darah }}");
+                    $('#denyut_jantung').val("{{ $dataEdit->denyut_jantung_janin }}");
+                    $('#vaksin_tetanus_sebelum_hamil').val(
+                        '{{ $dataEdit->vaksin_tetanus_sebelum_hamil }}').change();
+                    $('#vaksin_tetanus_sesudah_hamil').val('{{ $dataEdit->vaksin_tetanus_sesudah_hamil }}')
+                        .change();
+                    $('#posisi_janin').val('{{ $dataEdit->posisi_janin }}')
+                        .change();
+                    $('#minum_tablet').val('{{ $dataEdit->minum_tablet }}')
+                        .change();
+                    $('#konseling').val('{{ $dataEdit->konseling }}')
                         .change();
                 }, 500);
             });
@@ -711,9 +744,22 @@
         function changeIbu() {
             var id = $('#nama-ibu').val();
             $.get("{{ url('anc-cek-pemeriksaan') }}", {
-                id: id,
+                method: "{{ $method }}",
+                idIbu: id,
+                idEdit: "{{ $dataEdit->id ?? '' }}"
             }, function(result) {
                 $('#pemeriksaan_ke').val(result);
+            });
+
+            $('#nama-bidan').html('');
+            $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+            $.get("{{ route('getBidan') }}", {
+                id: id,
+            }, function(result) {
+                $.each(result, function(key, val) {
+                    $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
+                })
+                $('#nama-bidan').removeAttr('disabled');
             });
         }
     </script>

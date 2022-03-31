@@ -75,8 +75,8 @@
                                 <div class="card fieldset border border-secondary">
                                     @component('dashboard.components.dataTables.index', [
                                         'id' => 'table-data',
-                                        'th' => ['No', 'Nama Ibu', 'Dibuat Tanggal', 'Status', 'Tanggal Validasi', 'Skor',
-                                        'Kategori', 'Bidan', 'Aksi'],
+                                        'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Skor', 'Kategori',
+                                        'Desa/Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -144,17 +144,44 @@
         var table = $('#table-data').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('deteksi-dini') }}",
+            dom: 'lBfrtip',
+            buttons: [{
+                    extend: 'excel',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
+                    text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
+                    exportOptions: {
+                        modifier: {
+                            order: 'index', // 'current', 'applied', 'index',  'original'
+                            page: 'all', // 'all',     'current'
+                            search: 'applied' // 'none',    'applied', 'removed'
+                        },
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
+                    text: '<i class="bi bi-eye-fill"></i> Tampil/Sembunyi Kolom',
+                }
+            ],
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            ajax: {
+                url: "{{ url('deteksi-dini') }}",
+                data: function(d) {
+                    d.status = $('#status-filter').val();
+                    d.kategori = $('#kategori-gizi-filter').val();
+                    d.search = $('input[type="search"]').val();
+                }
+            },
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
                     className: 'text-center',
                     orderable: false,
                     searchable: false
-                },
-                {
-                    data: 'nama_ibu',
-                    name: 'nama_ibu'
                 },
                 {
                     data: 'tanggal_dibuat',
@@ -167,8 +194,8 @@
                     className: 'text-center',
                 },
                 {
-                    data: 'tanggal_validasi',
-                    name: 'tanggal_validasi',
+                    data: 'nama_ibu',
+                    name: 'nama_ibu',
                     className: 'text-center',
                 },
                 {
@@ -182,8 +209,19 @@
                     className: 'text-center',
                 },
                 {
-                    data: 'nakes',
-                    name: 'nakes'
+                    data: 'desa_kelurahan',
+                    name: 'desa_kelurahan',
+                    className: 'text-center',
+                },
+                {
+                    data: 'bidan',
+                    name: 'bidan',
+                    className: 'text-center',
+                },
+                {
+                    data: 'tanggal_validasi',
+                    name: 'tanggal_validasi',
+                    className: 'text-center',
                 },
                 {
                     data: 'action',
@@ -192,7 +230,24 @@
                     orderable: true,
                     searchable: true
                 },
+
+            ],
+            columnDefs: [{
+                    targets: 4,
+                    visible: false,
+                },
+
             ],
         });
+
+        $('#status-filter').change(function() {
+            table.draw();
+            console.log($('#status-filter').val())
+        })
+
+        $('#kategori-gizi-filter').change(function() {
+            table.draw();
+            console.log($('#kategori-gizi-filter').val())
+        })
     </script>
 @endpush
