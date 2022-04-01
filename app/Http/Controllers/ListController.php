@@ -69,7 +69,6 @@ class ListController extends Controller
             $id = $request->id;
             $profil_id = Auth::user()->profil->id; //bidan/penyuluh
             $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
-
             $lokasiAnak = '';
             if($request->method == "PUT"){
                 $anak = AnggotaKeluarga::with('wilayahDomisili')->withTrashed()->where('id', $request->id_anak)->first();
@@ -90,7 +89,6 @@ class ListController extends Controller
                 ->get();
 
             $anggotaKeluargaHapus = '';
-
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
                 $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)

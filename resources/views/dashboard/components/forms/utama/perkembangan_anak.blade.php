@@ -307,10 +307,6 @@
                     $('#nama-bidan').removeAttr('disabled');
                 });
             } 
-            // else{
-            //     console.log('bukan admin')
-            // }
-          
         }
     </script>
 
