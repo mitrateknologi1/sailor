@@ -5,9 +5,11 @@ namespace App\Http\Controllers\dashboard\utama\deteksiStunting;
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
 use App\Models\KartuKeluarga;
+use App\Models\LokasiTugas;
 use App\Models\StuntingAnak;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,14 +23,22 @@ class StuntingAnakController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = StuntingAnak::with(['anggotaKeluarga'])
-                // ->where('bidan_id', auth()->user()->id)
-                ->get();
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            $data = StuntingAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                    if (Auth::user()->role != 'admin') {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    }
+                })
+                ->orWhere(function ($query) {
+                    if (Auth::user()->role == 'bidan') { // bidan
+                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                    }
+                })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-eye"></i></button><a href="' . url('stunting-anak/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
-                    return $actionBtn;
+                ->addColumn('tanggal_dibuat', function ($row) {
+                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
                 })
                 ->addColumn('status', function ($row) {
                     if ($row->is_valid == 0) {
@@ -39,19 +49,6 @@ class StuntingAnakController extends Controller
                 })
                 ->addColumn('nama_anak', function ($row) {
                     return $row->anggotaKeluarga->nama_lengkap;
-                })
-                ->addColumn('bidan', function ($row) {
-                    return "Belum Ada";
-                })
-                ->addColumn('tanggal_dibuat', function ($row) {
-                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
-                })
-                ->addColumn('tanggal_validasi', function ($row) {
-                    if ($row->tanggal_validasi) {
-                        return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
-                    } else {
-                        return '-';
-                    }
                 })
                 ->addColumn('kategori', function ($row) {
                     if ($row->kategori == 'Sangat Pendek (Resiko Stunting Tinggi)') {
@@ -64,7 +61,29 @@ class StuntingAnakController extends Controller
                         return '<span class="badge rounded-pill bg-primary">' . $row->kategori . '</span>';
                     }
                 })
-                ->rawColumns(['action', 'nama_anak', 'bidan', 'status', 'kategori', 'tanggal_dibuat', 'tanggal_validasi'])
+                ->addColumn('desa_kelurahan', function ($row) {
+                    return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
+                })
+                ->addColumn('bidan', function ($row) {
+                    return $row->bidan->nama_lengkap;
+                })
+                ->addColumn('tanggal_validasi', function ($row) {
+                    if ($row->tanggal_validasi) {
+                        return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>';
+
+                    if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
+                        $actionBtn .= '<a href="' . url('stunting-anak/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
+                    }
+
+                    return $actionBtn;
+                })
+                ->rawColumns(['tanggal_dibuat', 'status', 'nama_anak', 'kategori', 'desa_kelurahan', 'bidan', 'tanggal_validasi', 'action'])
                 ->make(true);
         }
         return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.index');
@@ -96,11 +115,13 @@ class StuntingAnakController extends Controller
                 'nama_kepala_keluarga' => 'required',
                 'nama_anak' => 'required',
                 'tinggi_badan' => 'required',
+                'nama_bidan' => Auth::user()->role == "admin" && $request->isMethod('post') ? 'required' : '',
             ],
             [
                 'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
                 'nama_anak.required' => 'Nama Anak tidak boleh kosong',
                 'tinggi_badan.required' => 'Tinggi Badan tidak boleh kosong',
+                'nama_bidan.required' => 'Nama Bidan Tidak Boleh Kosong',
             ]
         );
 
@@ -660,36 +681,21 @@ class StuntingAnakController extends Controller
     {
         $kategori = $this->proses($request);
 
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'nama_kepala_keluarga' => 'required',
-                'nama_anak' => 'required',
-                'tinggi_badan' => 'required',
-            ],
-            [
-                'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
-                'nama_anak.required' => 'Nama Anak tidak boleh kosong',
-                'tinggi_badan.required' => 'Tinggi Badan tidak boleh kosong',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()]);
-        }
-
-        $role = "Bidan";
-        $bidan = 1;
+        $role = Auth::user()->role;
 
         $stuntingAnak = new StuntingAnak();
         $stuntingAnak->anggota_keluarga_id = $request->nama_anak;
-        $stuntingAnak->bidan_id = $bidan;
         $stuntingAnak->tinggi_badan = $request->tinggi_badan;
         $stuntingAnak->zscore = $kategori['zscore'];
         $stuntingAnak->kategori = $kategori['kategori'];
-        if ($role == "Bidan") {
-            $stuntingAnak->is_valid = 1;
+        if ($role == 'bidan') {
+            $stuntingAnak->bidan_id = Auth::user()->profil->id;
             $stuntingAnak->tanggal_validasi = Carbon::now();
+            $stuntingAnak->is_valid = 1;
+        } else if ($role == 'admin') {
+            $stuntingAnak->bidan_id = $request->nama_bidan;
+            $stuntingAnak->tanggal_validasi = Carbon::now();
+            $stuntingAnak->is_valid = 1;
         }
         $stuntingAnak->save();
 
@@ -716,18 +722,17 @@ class StuntingAnakController extends Controller
         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
 
         $namaIbu = AnggotaKeluarga::where('kartu_keluarga_id', $stuntingAnak->AnggotaKeluarga->kartu_keluarga_id)->where('status_hubungan_dalam_keluarga', 'ISTRI')->first();
-        $namaAyah = AnggotaKeluarga::where('kartu_keluarga_id', $stuntingAnak->AnggotaKeluarga->kartu_keluarga_id)->where('status_hubungan_dalam_keluarga', 'SUAMI')->first();
         $data = [
             'nama_anak' => $stuntingAnak->AnggotaKeluarga->nama_lengkap,
-            'nama_ayah' => $namaAyah->nama_lengkap ?? '-',
+            'nama_ayah' => $namaIbu->nama_ayah ?? '-',
             'nama_ibu' => $namaIbu->nama_lengkap ?? '-',
             'jenis_kelamin' => $stuntingAnak->AnggotaKeluarga->jenis_kelamin,
             'tanggal_lahir' => $tanggalLahir,
             'usia' => $usia,
             'tinggi_badan' => $stuntingAnak->tinggi_badan,
-            'desa_keluarahan' => '-',
             'tanggal_validasi' => $tanggalValidasi ?? '-',
-            'bidan' => '-',
+            'desa_kelurahan' => $stuntingAnak->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
+            'bidan' => $stuntingAnak->bidan->nama_lengkap,
             'kategori' => $stuntingAnak->kategori,
             'zscore' => $stuntingAnak->zscore,
             'tanggal_proses' => $tanggalProses
@@ -759,36 +764,10 @@ class StuntingAnakController extends Controller
     {
         $kategori = $this->proses($request);
 
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'nama_kepala_keluarga' => 'required',
-                'nama_anak' => 'required',
-                'tinggi_badan' => 'required',
-            ],
-            [
-                'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
-                'nama_anak.required' => 'Nama Anak tidak boleh kosong',
-                'tinggi_badan.required' => 'Tinggi Badan tidak boleh kosong',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()]);
-        }
-
-        $role = "Bidan";
-        $bidan = 1;
-
         $stuntingAnak->anggota_keluarga_id = $request->nama_anak;
-        $stuntingAnak->bidan_id = $bidan;
         $stuntingAnak->tinggi_badan = $request->tinggi_badan;
         $stuntingAnak->zscore = $kategori['zscore'];
         $stuntingAnak->kategori = $kategori['kategori'];
-        if ($role == "Bidan") {
-            $stuntingAnak->is_valid = 1;
-            $stuntingAnak->tanggal_validasi = Carbon::now();
-        }
         $stuntingAnak->save();
 
         return response()->json(['status' => 'success']);

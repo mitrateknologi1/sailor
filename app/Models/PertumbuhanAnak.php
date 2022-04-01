@@ -26,13 +26,14 @@ class PertumbuhanAnak extends Model
         ;
     }
 
-    public function sesuaiLokasiTugas($lokasiTugas){
-        return $this->hasMany(AnggotaKeluarga::class)->whereIn('desa_kelurahan_id', $lokasiTugas); 
+    public function sesuaiLokasiTugas($lokasiTugas)
+    {
+        return $this->hasMany(AnggotaKeluarga::class)->whereIn('desa_kelurahan_id', $lokasiTugas);
     }
 
     // active
-    public function scopeOfValid($query, $status){
+    public function scopeOfValid($query, $status)
+    {
         return $query->where('is_valid', $status);
     }
-    
 }

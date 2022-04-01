@@ -28,90 +28,91 @@ class PertumbuhanAnakController extends Controller
      */
     public function index(Request $request)
     {
-        if(in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])){
+        if (in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])) {
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-                
+
                 $data = PertumbuhanAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC');
-                if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
-                    $data->whereHas('anggotaKeluarga', function (Builder $query) use($lokasiTugas) {
+                if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                    $data->whereHas('anggotaKeluarga', function (Builder $query) use ($lokasiTugas) {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                     });
                 }
-                if(Auth::user()->role == 'bidan'){ // bidan
+                if (Auth::user()->role == 'bidan') { // bidan
                     $data->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
                 return DataTables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('nakes', function ($row) {     
+                    ->addColumn('nakes', function ($row) {
                         return 'belum_dibuat';
                     })
-                    ->addColumn('status', function ($row) {   
-                        if($row->is_valid == 1){
+                    ->addColumn('status', function ($row) {
+                        if ($row->is_valid == 1) {
                             return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
-                        }else{
+                        } else {
                             return '<span class="badge rounded-pill bg-danger">Belum Divalidasi</span>';
                         }
                     })
-    
-                    ->addColumn('jenis_kelamin', function ($row) {   
+
+                    ->addColumn('jenis_kelamin', function ($row) {
                         return $row->anggotaKeluarga->jenis_kelamin;
                     })
-    
-                    ->addColumn('tanggal_lahir', function ($row) {   
+
+                    ->addColumn('tanggal_lahir', function ($row) {
                         return $row->anggotaKeluarga->tanggal_lahir;
                     })
-    
-                    ->addColumn('usia', function ($row) {   
+
+                    ->addColumn('usia', function ($row) {
                         $datetime1 = date_create($row->created_at);
                         $datetime2 = date_create($row->anggotaKeluarga->tanggal_lahir);
                         $interval = date_diff($datetime1, $datetime2);
                         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
                         return $usia;
                     })
-    
-                    ->addColumn('nama_anak', function ($row) {     
+
+                    ->addColumn('nama_anak', function ($row) {
                         return $row->anggotaKeluarga->nama_lengkap;
                     })
-    
-                    ->addColumn('nama_ayah', function ($row) {     
+
+                    ->addColumn('nama_ayah', function ($row) {
                         return $row->anggotaKeluarga->nama_ayah;
                     })
-    
-                    ->addColumn('nama_ibu', function ($row) {     
+
+                    ->addColumn('nama_ibu', function ($row) {
                         return $row->anggotaKeluarga->nama_ibu;
                     })
-    
-                    ->addColumn('bidan', function ($row) {   
-                        return $row->bidan->nama_lengkap;
+
+                    ->addColumn('bidan', function ($row) {
+                        return $row->bidan_id < 1 ? '-' : $row->bidan->nama_lengkap;
                     })
-    
-                    ->addColumn('desa_kelurahan', function ($row) {     
+
+                    ->addColumn('desa_kelurahan', function ($row) {
                         return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
                     })
 
-                    ->addColumn('hasil', function ($row) {  
-                        if($row->hasil == 'Gizi Buruk'){
+
+                    ->addColumn('hasil', function ($row) {
+                        if ($row->hasil == 'Gizi Buruk') {
                             return '<span class="badge rounded-pill bg-danger">Gizi Buruk</span>';
-                        }elseif($row->hasil == 'Gizi Kurang'){
+                        } elseif ($row->hasil == 'Gizi Kurang') {
                             return '<span class="badge rounded-pill bg-warning">Gizi Kurang</span>';
-                        }elseif($row->hasil == 'Gizi Baik'){
+                        } elseif ($row->hasil == 'Gizi Baik') {
                             return '<span class="badge rounded-pill bg-success">Gizi Baik</span>';
-                        }elseif($row->hasil == 'Gizi Lebih'){
+                        } elseif ($row->hasil == 'Gizi Lebih') {
                             return '<span class="badge rounded-pill bg-primary">Gizi Lebih</span>';
                         }
                     })
-                   
-                    ->addColumn('action', function ($row) {     
+
+                    ->addColumn('action', function ($row) {
                         $actionBtn = '
                             <div class="text-center justify-content-center text-white">';
                         // if($row->)
                         $actionBtn .= '
-                            <button class="btn btn-info btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.') ><i class="fas fa-eye"></i></button>';
-                        if((Auth::user()->role != 'penyuluh')){
-                            if(($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')){
+                            <button class="btn btn-info btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat(' . $row->id . ') ><i class="fas fa-eye"></i></button>';
+                        if ((Auth::user()->role != 'penyuluh')) {
+                            if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
                                 $actionBtn .= '
-                                    <a href="'.route('pertumbuhan-anak.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                    <a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
                                 $actionBtn .= '
                                     <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
                             }
@@ -120,18 +121,18 @@ class PertumbuhanAnakController extends Controller
                         </div>';
                         return $actionBtn;
                     })
-    
-                    ->filter(function ($query) use ($request) {    
+
+                    ->filter(function ($query) use ($request) {
                         // if ($request->search != '') {
                         //     $query->whereHas('anggotaKeluarga', function ($query) use ($request) {
                         //         $query->where("nama_lengkap", "LIKE", "%$request->search%");
                         //     });
-                        // }    
-                                        
+                        // }
+
                         // if (!empty($request->status)) {
                         //     $query->where("is_valid", $request->status);
                         // }
-    
+
                         // if (!empty($request->kategori)) {
                         //     $query->where("hasil", $request->kategori);
                         // }
@@ -158,16 +159,16 @@ class PertumbuhanAnakController extends Controller
     public function create()
     {
         $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-        if(Auth::user()->role != 'bidan'){
+        if (Auth::user()->role != 'bidan') {
             $kartuKeluarga = KartuKeluarga::latest()->get();
-        } else{
+        } else {
             $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
-                            ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                                $query->ofDataSesuaiLokasiTugas($lokasiTugas);
-                            })->latest()->get();
+                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                    $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                })->latest()->get();
         }
-            
-        if(in_array(Auth::user()->role, ['bidan', 'admin'])){
+
+        if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
             $data = [
                 'kartuKeluarga' => $kartuKeluarga,
                 'bidan' => Bidan::with('user')->active()->get(),
@@ -176,7 +177,7 @@ class PertumbuhanAnakController extends Controller
         } // else keluarga
     }
 
-   
+
     public function proses(Request $request)
     {
         if((Auth::user()->role == 'admin') && ($request->method == 'POST')){
@@ -212,7 +213,7 @@ class PertumbuhanAnakController extends Controller
         $beratBadan = $request->berat_badan; //dalam kilogram
 
         // hitung usia dalam bulan
-        $usiaBulan = round(((strtotime($tanggalProses) - strtotime($tanggalLahir))/86400)/30);
+        $usiaBulan = round(((strtotime($tanggalProses) - strtotime($tanggalLahir)) / 86400) / 30);
 
 
         $median = 0;
@@ -764,10 +765,10 @@ class PertumbuhanAnakController extends Controller
     public function store(Request $request)
     {
         $dataAnak = $this->proses($request);
-        if(Auth::user()->role == 'admin'){
+        if (Auth::user()->role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if (Auth::user()->role == 'bidan') {
-            $bidan_id = Auth::user()->profil->id;  
+            $bidan_id = Auth::user()->profil->id;
         }
         $pertumbuhanAnak = [
             'anggota_keluarga_id' => $dataAnak['anggota_keluarga_id'],
@@ -783,7 +784,6 @@ class PertumbuhanAnakController extends Controller
         return response()->json([
             'res' => 'success'
         ]);
-
     }
 
     /**
@@ -826,13 +826,13 @@ class PertumbuhanAnakController extends Controller
      */
     public function edit(PertumbuhanAnak $pertumbuhanAnak)
     {
-        if((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')){
+        if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')) {
             $data = [
                 'anak' => PertumbuhanAnak::where('id', $pertumbuhanAnak->id)->first(),
                 'kartuKeluarga' => KartuKeluarga::latest()->get(),
             ];
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.edit', $data);
-        } else{
+        } else {
             // 404
             return abort(404);
         }
@@ -848,7 +848,7 @@ class PertumbuhanAnakController extends Controller
     public function update(Request $request, PertumbuhanAnak $pertumbuhanAnak)
     {
         $dataAnakBaru = $this->proses($request);
-        
+
         $pertumbuhanAnakUpdate = [
             'anggota_keluarga_id' => $dataAnakBaru['anggota_keluarga_id'],
             'bidan_id' => $pertumbuhanAnak->bidan_id,
@@ -875,12 +875,12 @@ class PertumbuhanAnakController extends Controller
      */
     public function destroy(PertumbuhanAnak $pertumbuhanAnak)
     {
-        if((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')){
+        if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')) {
             $pertumbuhanAnak->delete();
             return response()->json([
                 'res' => 'success'
             ]);
-        } else{
+        } else {
             // 404
             return abort(404);
         }

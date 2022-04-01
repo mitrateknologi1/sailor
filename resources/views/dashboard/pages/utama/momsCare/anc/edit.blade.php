@@ -27,14 +27,14 @@
                         <h6 class="card-title mb-0">Basic example</h6>
                     </div> --}}
                     <div class="card-body">
-                        @component('dashboard.components.forms.utama.perkiraan_melahirkan')
+                        @component('dashboard.components.forms.utama.anc')
                             @slot('kartuKeluarga', $kartuKeluarga)
-                            @slot('form_id', 'form_perkiraan_melahirkan')
-                            @slot('proses', url('proses-perkiraan-melahirkan'))
-                            @slot('dataEdit', $perkiraanMelahirkan)
-                            @slot('action', url('perkiraan-melahirkan/' . $perkiraanMelahirkan->id))
+                            @slot('form_id', 'form_anc')
+                            @slot('proses', url('proses-anc'))
+                            @slot('dataEdit', $anc)
+                            @slot('action', url('anc/' . $anc->id))
                             @slot('method', 'PUT')
-                            @slot('back_url', url('perkiraan-melahirkan'))
+                            @slot('back_url', url('anc'))
                         @endcomponent
 
                     </div>
@@ -46,8 +46,8 @@
 
 @push('script')
     <script>
-        $('#m-link-deteksi-stunting').addClass('active');
-        $('#menu-deteksi-stunting').addClass('collapse show')
-        $('#ms-link-stunting-anak').addClass('active')
+        $('#m-link-moms-care').addClass('active');
+        $('#menu-moms-care').addClass('collapse show')
+        $('#ms-link-anc').addClass('active')
     </script>
 @endpush

@@ -14,4 +14,14 @@ class DeteksiDini extends Model
     {
         return $this->belongsTo(AnggotaKeluarga::class);
     }
+
+    public function bidan()
+    {
+        return $this->belongsTo(Bidan::class);
+    }
+
+    public function sesuaiLokasiTugas($lokasiTugas)
+    {
+        return $this->hasMany(AnggotaKeluarga::class)->whereIn('desa_kelurahan_id', $lokasiTugas);
+    }
 }
