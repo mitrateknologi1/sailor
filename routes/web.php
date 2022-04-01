@@ -6,6 +6,7 @@ use App\Http\Controllers\dashboard\masterData\deteksiStunting\SoalIbuMelahirkanS
 use App\Http\Controllers\dashboard\masterData\momsCare\SoalDeteksiDiniController;
 use App\Http\Controllers\ListController;
 use App\Http\Controllers\dashboard\utama\tumbuhKembang\PertumbuhanAnakController;
+use App\Http\Controllers\dashboard\utama\tumbuhKembang\PerkembanganAnakController;
 use App\Http\Controllers\dashboard\masterData\wilayah\ProvinsiController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KecamatanController;
 
@@ -90,9 +91,11 @@ Route::get('get-bidan', [ListController::class, 'getBidan'])->name('getBidan');
 // });
 
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('perkembangan-anak', function () {
-    return view('dashboard.pages.utama.tumbuhKembang.perkembanganAnak.index');
-});
+Route::resource('perkembangan-anak', PerkembanganAnakController::class);
+Route::post('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
+Route::put('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
+
+
 // ----------------- End Tumbuh Kembang -----------------
 
 

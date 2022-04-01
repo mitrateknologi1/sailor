@@ -20,17 +20,47 @@ class ListController extends Controller
         if ($request->fungsi == 'pertumbuhan_anak') {
             $tanggalSekarang = date('Y-m-d');
             $tanggalPembanding = date('Y-m-d', strtotime('-5 year', strtotime($tanggalSekarang)));
-            $profil_id = Auth::user()->profil->id; //bidan/penyuluh
-            $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
+            $method = $request->method;
+            $anak_id = $request->anak;
+            
+            if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
+                $profil_id = Auth::user()->profil->id; //bidan/penyuluh
+                $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
+            } else{
+                $lokasiTugas ='';
+            }
 
-            $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
-                ->where('id', $request->id)->first();
+            $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', $request->id)->first();
             $anak = $kartuKeluarga->statusKeluarga('ANAK')
-            ->where(function ($query) use($tanggalPembanding, $tanggalSekarang, $lokasiTugas) {    
+            ->where(function ($query) use($tanggalPembanding, $tanggalSekarang, $lokasiTugas, $anak_id, $method){    
                 if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
                     $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                 }    
                 $query->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang]);
+
+                // if($method != 'POST'){
+                // }
+            })
+            ->orWhere('id', $anak_id)->withTrashed()
+
+            ->get();
+            return $anak;
+
+        } else if ($request->fungsi == 'perkembangan_anak') {
+            if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
+                $profil_id = Auth::user()->profil->id; //bidan/penyuluh
+                $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
+            } else{
+                $lokasiTugas ='';
+            }
+
+            $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
+                ->where('id', $request->id)->first();
+            $anak = $kartuKeluarga->statusKeluarga('ANAK')
+            ->where(function ($query) use($lokasiTugas) {    
+                if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
+                    $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                }    
             })
             ->get();
             return $anak;

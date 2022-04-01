@@ -30,18 +30,6 @@
             ])
             @endcomponent
         </div>
-        <div class="col-sm-12 col-md-6 col-lg">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Berat Badan (Kg)',
-                'type' => 'number',
-                'id' => 'berat-badan',
-                'name' => 'berat_badan',
-                'class' => '',
-                'value' => $anak->berat_badan ?? null,
-                'wajib' => '<sup class="text-danger">*</sup>',
-            ])
-            @endcomponent
-        </div>
         @if ((Auth::user()->role == 'admin') && ($method == 'POST'))
             <div class="col-sm-12 col-md-6 col-lg">
                 @component('dashboard.components.formElements.select', [
@@ -56,20 +44,12 @@
             </div>
         @endif
        
-        <div class="col-12">
-            <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <small class="text-muted" style="font-style: italic">* Nama Anak yang tampil hanya yang berumur dibawah 5 tahun (BALITA)</small>
-    
-                </div>
-                <div class="col-lg-6 col-md-6 text-end align-self-center">
-                    @component('dashboard.components.buttons.process', [
-                        'id' => 'proses-pertumbuhan-anak',
-                        'type' => 'submit',
-                    ])      
-                    @endcomponent
-                </div>
-            </div>
+        <div class="col-12 text-end">
+            @component('dashboard.components.buttons.process', [
+                'id' => 'proses-pertumbuhan-anak',
+                'type' => 'submit',
+            ])      
+            @endcomponent
         </div>
     </div>
     <div class="modal fade" id="modal-hasil" tabindex="-1" aria-hidden="true">
@@ -78,19 +58,18 @@
                 <div class="modal-body custom_scroll p-lg-4 pb-3">
                     <div class="d-flex w-100 justify-content-between mb-1">
                         <div>
-                            <h5>Hasil Pertumbuhan Anak</h5>
+                            <h5>Hasil Perkembangan Anak</h5>
                             <p class="text-muted" id="tanggal-proses"> - </p>
                         </div>
                         <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="alert kategori-alert rounded-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar rounded no-thumbnail kategori-bg text-light"><i id="kategori-emot" class=""></i></div>
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-kategori" style="margin-left: 5px"> - </div>
-                                <div class="float-end" id="modal-zscore"><span class="badge kategori-bg"> - </span></div>
-                            </div>
-                        </div>
+                    <div class="card fieldset border border-primary mb-4">
+                        <span class="fieldset-tile text-primary bg-white">Motorik Kasar:</span>
+                        <p class="text-primary mb-0" id="modal-motorik-kasar" style="text-align: justify">-</p>
+                    </div>
+                    <div class="card fieldset border border-secondary">
+                        <span class="fieldset-tile text-secondary bg-white">Motorik Halus:</span>
+                        <p class="text-secondary mb-0 " id="modal-motorik-halus" style="text-align: justify">-</p>
                     </div>
                     <div class="card fieldset border border-dark my-4">
                         <span class="fieldset-tile text-dark ml-5 bg-white">Info Anak:</span>
@@ -107,10 +86,6 @@
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-cake-candles"></i> Usia</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-usia"> - </span>
-                                </li>
-                                <li class="justify-content-between mb-2">
-                                    <label><i class="fa-solid fa-weight-scale"></i> Berat Badan</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-berat-badan"> - </span>
                                 </li>
                                 <li class="justify-content-between">
                                     <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
@@ -235,7 +210,6 @@
                         processData: false,
                         contentType: false,
                         success: function (data) {
-                            $("#overlay").fadeOut(100);
                             if ($.isEmptyObject(data.error)) {
                                 $('#modal-hasil').modal('show');
                                 if('{{$method}}' == 'POST'){
@@ -243,43 +217,13 @@
                                 } else{
                                     $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data.tanggal_proses).format('LL'))
                                 }
+                                $('#modal-motorik-kasar').text(data.motorik_kasar);
+                                $('#modal-motorik-halus').text(data.motorik_halus);
                                 $('#modal-nama-anak').text(data.nama_anak);
                                 $('#modal-tanggal-lahir').text(moment(data.tanggal_lahir).format('LL'));
                                 $('#modal-usia').text(data.usia_tahun);
                                 $('#modal-jenis-kelamin').text(data.jenis_kelamin);
-                                $('#modal-berat-badan').text(data.berat_badan + ' Kg');
-                                $('#modal-kategori').text(data.kategori);
-                                $('#modal-zscore').text('ZScore : '+ data.zscore);
-                                var kategoriBg = ['bg-danger', 'bg-warning', 'bg-info', 'bg-success', 'bg-primary'];
-                                var kategoriAlert = ['alert-danger', 'alert-warning', 'alert-info', 'alert-success', 'alert-primary'];
-                                var kategoriEmot = ['fa-solid fa-face-frown', 'fa-solid fa-face-meh', 'fa-solid fa-face-smile', 'fa-solid fa-face-surprise'];
-                                $.each(kategoriBg, function(i, v){
-                                    $('.kategori-bg').removeClass(v);
-                                });
-                                $.each(kategoriAlert, function(i, v){
-                                    $('.kategori-alert').removeClass(v);
-                                });
-                                $.each(kategoriEmot, function(i, v){
-                                    $('.kategori-emot').removeClass(v);
-                                });
-    
-                                if(data.kategori == 'Gizi Buruk'){
-                                    $('.kategori-bg').addClass('bg-danger');
-                                    $('.kategori-alert').addClass('alert-danger');
-                                    $('#kategori-emot').addClass('fa-solid fa-face-frown');
-                                } else if(data.kategori == 'Gizi Kurang'){
-                                    $('.kategori-bg').addClass('bg-warning');
-                                    $('.kategori-alert').addClass('alert-warning');
-                                    $('#kategori-emot').addClass('fa-solid fa-face-meh');
-                                } else if(data.kategori == 'Gizi Baik'){
-                                    $('.kategori-bg').addClass('bg-success');
-                                    $('.kategori-alert').addClass('alert-success');
-                                    $('#kategori-emot').addClass('fa-solid fa-face-smile');
-                                } else if(data.kategori == 'Gizi Lebih'){
-                                    $('.kategori-bg').addClass('bg-primary');
-                                    $('.kategori-alert').addClass('alert-primary');
-                                    $('#kategori-emot').addClass('fa-solid fa-face-surprise');
-                                }
+                                console.log(data)
                             }
                             else{
                                 Swal.fire(
@@ -305,17 +249,12 @@
 
         function changeKepalaKeluarga(){
             var id = $('#nama-kepala-keluarga').val();
-            var fungsi = 'pertumbuhan_anak';
-            var method = '{{$method}}';
-            if("{{$method}}" == 'PUT'){
-                var anak = "{{isset($anak) ? $anak->anggotaKeluarga->id : ''}}";
-            }
+            var fungsi = 'perkembangan_anak';
             $('#nama-anak').html('');
             $('#nama-anak').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
             changeAnak()
             $('#nama-bidan').attr('disabled', true);
-            $.get("{{ route('getAnak') }}", {id: id, fungsi: fungsi, method, anak}, function(result) {
-                console.log(result)
+            $.get("{{ route('getAnak') }}", {id: id, fungsi: fungsi}, function(result) {
                 $.each(result, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
                     if("{{$method}}" == 'PUT'){
@@ -334,7 +273,7 @@
         }
 
         function changeAnak(){
-            if(('{{ Auth::user()->role }}' == 'admin') && ('{{$method}}' == 'POST')){
+            if('{{ Auth::user()->role }}' == 'admin'){
                 var id = $('#nama-anak').val();
                 var fungsi = 'pertumbuhan_anak';
                 $('#nama-bidan').html('');

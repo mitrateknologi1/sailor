@@ -6,24 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class PertumbuhanAnak extends Model
+class PerkembanganAnak extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'pertumbuhan_anak';
+    protected $table = 'perkembangan_anak';
     protected $guarded = ['id'];
 
     public function anggotaKeluarga(){
-        return $this->belongsTo(AnggotaKeluarga::class)
-        ->withTrashed()
-        ;
+        return $this->belongsTo(AnggotaKeluarga::class);
     }
 
     public function bidan(){
-        return $this->belongsTo(Bidan::class)
-        ->withTrashed()
-        ;
+        return $this->belongsTo(Bidan::class);
     }
 
     public function sesuaiLokasiTugas($lokasiTugas){
@@ -34,5 +29,4 @@ class PertumbuhanAnak extends Model
     public function scopeOfValid($query, $status){
         return $query->where('is_valid', $status);
     }
-    
 }
