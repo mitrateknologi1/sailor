@@ -3,18 +3,22 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class PertumbuhanAnakSeeder extends Seeder
+class PertumbuhanAnakTableSeeder extends Seeder
 {
+
     /**
-     * Run the database seeds.
+     * Auto generated seed file
      *
      * @return void
      */
     public function run()
     {
-        DB::table('pertumbuhan_anak')->insert(array (
+        
+
+        \DB::table('pertumbuhan_anak')->delete();
+        
+        \DB::table('pertumbuhan_anak')->insert(array (
             0 => 
             array (
                 'id' => 1,
@@ -240,5 +244,7 @@ class PertumbuhanAnakSeeder extends Seeder
                 'deleted_at' => NULL,
             ),
         ));
+        
+        
     }
 }

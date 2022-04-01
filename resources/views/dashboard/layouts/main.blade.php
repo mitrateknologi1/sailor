@@ -177,7 +177,7 @@
                 </div>
                 <div class="row align-items-center">
                     <div class="col">
-                        <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>
+                        <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>                        
                         {{-- text-muted --}}
                     </div>
                 </div>

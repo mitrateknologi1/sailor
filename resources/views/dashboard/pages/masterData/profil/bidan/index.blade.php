@@ -24,7 +24,7 @@
                     @component('dashboard.components.buttons.add',[
                         'id' => 'catatan-pertumbuhan-anak',
                         'class' => '',
-                        'url' => '/pertumbuhan-anak/create',
+                        'url' => '/bidan/create',
                     ])        
                     @endcomponent
                 </div>

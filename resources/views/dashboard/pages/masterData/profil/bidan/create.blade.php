@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Perkembangan Anak
+    Tambah Bidan
 @endsection
 
 @push('style')
@@ -11,27 +11,27 @@
 <div class="col">
     <ol class="breadcrumb bg-transparent mb-0">
         <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Tumbuh Kembang</li>
-        <li class="breadcrumb-item active" aria-current="page">Perkembangan Anak</li>
-        <li class="breadcrumb-item active" aria-current="page">Tambah Perkembangan Anak</li>
+        <li class="breadcrumb-item active" aria-current="page">Profil</li>
+        <li class="breadcrumb-item active" aria-current="page">Bidan</li>
+        <li class="breadcrumb-item active" aria-current="page">Tambah Bidan</li>
     </ol>
 </div>
 @endsection
 
-@section('content')
+@section('content')    
     <section>
         <div class="row justify-content-center">
             <div class="col-lg-12 col-md-12">
                 <div class="card p-0">
                     <div class="card-body">
-                        @component('dashboard.components.forms.utama.perkembangan_anak')
-                            @slot('kartuKeluarga', $kartuKeluarga)
-                            @slot('bidan', $bidan)
-                            @slot('form_id', 'form_add_perkembangan_anak')
-                            @slot('proses', route('proses-perkembangan-anak'))'))                                
-                            @slot('action', route('perkembangan-anak.store'))
+                        @component('dashboard.components.forms.masterData.bidan')
+                            {{-- @slot('kartuKeluarga', $kartuKeluarga)
+                            @slot('bidan', $bidan) --}}
+                            @slot('form_id', 'form_add_pertumbuhan_anak')
+                            @slot('proses', route('proses-pertumbuhan-anak'))'))                                
+                            @slot('action', route('pertumbuhan-anak.store'))
                             @slot('method', 'POST')
-                            @slot('back_url', route('perkembangan-anak.index'))
+                            @slot('back_url', route('pertumbuhan-anak.index'))
                         @endcomponent
                         
                     </div>
@@ -45,7 +45,7 @@
     <script>
         $('#m-link-tumbuh-kembang').addClass('active');
         $('#menu-tumbuh-kembang').addClass('collapse show')
-        $('#ms-link-perkembangan-anak').addClass('active') 
+        $('#ms-link-pertumbuhan-anak').addClass('active') 
         
         
     </script>

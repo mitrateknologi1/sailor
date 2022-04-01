@@ -14,14 +14,16 @@ class PertumbuhanAnak extends Model
     protected $table = 'pertumbuhan_anak';
     protected $guarded = ['id'];
 
-    public function anggotaKeluarga()
-    {
-        return $this->belongsTo(AnggotaKeluarga::class)->withTrashed();
+    public function anggotaKeluarga(){
+        return $this->belongsTo(AnggotaKeluarga::class)
+        ->withTrashed()
+        ;
     }
 
-    public function bidan()
-    {
-        return $this->belongsTo(Bidan::class);
+    public function bidan(){
+        return $this->belongsTo(Bidan::class)
+        ->withTrashed()
+        ;
     }
 
     public function sesuaiLokasiTugas($lokasiTugas)

@@ -90,6 +90,7 @@ class PertumbuhanAnakController extends Controller
                         return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
                     })
 
+
                     ->addColumn('hasil', function ($row) {
                         if ($row->hasil == 'Gizi Buruk') {
                             return '<span class="badge rounded-pill bg-danger">Gizi Buruk</span>';
@@ -179,17 +180,24 @@ class PertumbuhanAnakController extends Controller
 
     public function proses(Request $request)
     {
+        if((Auth::user()->role == 'admin') && ($request->method == 'POST')){
+            $namaBidan = 'required';
+        } else{
+            $namaBidan = '';
+        }
         $validator = Validator::make(
             $request->all(),
             [
                 'nama_kepala_keluarga' => 'required',
                 'nama_anak' => 'required',
                 'berat_badan' => 'required',
+                'nama_bidan' => $namaBidan,
             ],
             [
                 'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
                 'nama_anak.required' => 'Nama Anak tidak boleh kosong',
                 'berat_badan.required' => 'Berat Badan tidak boleh kosong',
+                'nama_bidan.required' => 'Nama Bidan tidak boleh kosong',
             ]
         );
 
@@ -197,7 +205,7 @@ class PertumbuhanAnakController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        $anak = AnggotaKeluarga::find($request->nama_anak);
+        $anak = AnggotaKeluarga::where('id', $request->nama_anak)->withTrashed()->first();
         $tanggalLahir = $anak->tanggal_lahir;
 
         $tanggalProses = $request->tanggal_proses;
