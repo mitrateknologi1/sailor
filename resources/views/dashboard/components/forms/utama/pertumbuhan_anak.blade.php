@@ -333,13 +333,14 @@
             var selected = '';
             $('#nama-anak').html('');
             $('#nama-anak').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+            changeAnak()
+            $('#nama-bidan').attr('disabled', true);
             $.get("{{ route('getAnak') }}", {
                 id: id,
                 rentang_umur: rentang_umur,
                 method: "{{ $method }}",
                 id_anak: id_anak
             }, function(result) {
-                console.log(result);
                 $.each(result.anggota_keluarga, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
                     selected = '';
@@ -370,17 +371,15 @@
             });
         }
 
-        function changeAnak(){
-            if(('{{ Auth::user()->role }}' == 'admin') && ('{{$method}}' == 'POST')){
-        // function changeAnak() {
-            // if ('{{ Auth::user()->role }}' == 'admin') {
+        // function changeAnak(){
+        //     if(('{{ Auth::user()->role }}' == 'admin') && ('{{$method}}' == 'POST')){
+        function changeAnak() {
+            if ('{{ Auth::user()->role }}' == 'admin') {
                 var id = $('#nama-anak').val();
-                var fungsi = 'pertumbuhan_anak';
                 $('#nama-bidan').html('');
                 $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
                 $.get("{{ route('getBidan') }}", {
                     id: id,
-                    fungsi: fungsi
                 }, function(result) {
                     $.each(result, function(key, val) {
                         $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
@@ -388,10 +387,6 @@
                     $('#nama-bidan').removeAttr('disabled');
                 });
             }
-            // else{
-            //     console.log('bukan admin')
-            // }
-
         }
     </script>
 @endpush

@@ -148,7 +148,7 @@
                 } else{
                     formData.append('tanggal_proses', '{{ isset($anak) ? $anak->created_at->format("Y-m-d") : null }}');
                 }
-                formData.append('method', '{{$method}}');
+                // formData.append('method', '{{$method}}');
                  
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
@@ -249,25 +249,46 @@
 
         function changeKepalaKeluarga(){
             var id = $('#nama-kepala-keluarga').val();
-            var fungsi = 'perkembangan_anak';
+            var rentang_umur = 'semua_umur';
+            var id_anak = "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}";
+            var selected = '';
             $('#nama-anak').html('');
             $('#nama-anak').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+            $('#nama-bidan').html('');
             changeAnak()
             $('#nama-bidan').attr('disabled', true);
-            $.get("{{ route('getAnak') }}", {id: id, fungsi: fungsi}, function(result) {
-                $.each(result, function(key, val) {
+            $.get("{{ route('getAnak') }}", {
+                id: id, 
+                rentang_umur: rentang_umur,
+                method: "{{ $method }}",
+                id_anak: id_anak
+            }, function(result) {
+                $.each(result.anggota_keluarga, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
-                    if("{{$method}}" == 'PUT'){
-                        if (val.id == "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}"){
-                            $('#nama-anak').append(`<option value="${val.id}" selected>${val.nama_lengkap} (${tanggal_lahir})</option>`);                    
-                        } else {
-                            $('#nama-anak').append(`<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);                    
+                    selected = '';
+                    if (val.id == "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}") {
+                        selected = 'selected';
+                    }
+                    $('#nama-anak').append(
+                        `<option value="${val.id}" ${selected}>${val.nama_lengkap} (${tanggal_lahir})</option>`
+                    );
+                })
+
+                if ("{{ $method }}" == 'PUT') {
+                    selected = '';
+
+                    if (result.anggota_keluarga_hapus) {
+                        if (result.anggota_keluarga_hapus.id ==
+                            "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}") {
+                            selected = 'selected';
                         }
 
-                    } else{
-                        $('#nama-anak').append(`<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);                    
+                        $('#nama-anak').append(
+                            `<option value="${result.anggota_keluarga_hapus.id}" ${selected}>${result.anggota_keluarga_hapus.nama_lengkap} (${result.anggota_keluarga_hapus.tanggal_lahir})</option>`
+                        );
+
                     }
-                })
+                }
                 $('#nama-anak').removeAttr('disabled');
             });
         }
@@ -275,10 +296,11 @@
         function changeAnak(){
             if('{{ Auth::user()->role }}' == 'admin'){
                 var id = $('#nama-anak').val();
-                var fungsi = 'pertumbuhan_anak';
                 $('#nama-bidan').html('');
                 $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
-                $.get("{{ route('getBidan') }}", {id: id, fungsi: fungsi}, function(result) {
+                $.get("{{ route('getBidan') }}", {
+                    id: id,
+                }, function(result) {
                     $.each(result, function(key, val) {
                         $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`); 
                     })
