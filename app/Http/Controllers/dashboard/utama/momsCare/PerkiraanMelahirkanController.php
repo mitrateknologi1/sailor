@@ -145,7 +145,7 @@ class PerkiraanMelahirkanController extends Controller
 
         $selisihHari = date_diff(Carbon::now(), Carbon::parse($hpl));
         $selisihHariSebut = $selisihHari->y . ' Tahun ' . $selisihHari->m . ' Bulan ' . $selisihHari->d . ' Hari';
-        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+        $ibu = AnggotaKeluarga::where('id', $request->nama_ibu)->withTrashed()->first();
 
         if (Carbon::parse($hpl) > Carbon::now()) {
             $status = 'Belum Lahir';

@@ -15,11 +15,15 @@ use App\Http\Controllers\dashboard\masterData\wilayah\WilayahDomisiliController;
 
 use App\Http\Controllers\dashboard\masterData\profil\BidanController;
 use App\Http\Controllers\dashboard\masterData\profil\AdminController;
+use App\Http\Controllers\dashboard\masterData\randaKabilasa\SoalAssessment1Controller;
+use App\Http\Controllers\dashboard\masterData\randaKabilasa\SoalMencegahMalnutrisiController;
+use App\Http\Controllers\dashboard\masterData\randaKabilasa\SoalMeningkatkanLifeSkillController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStuntingController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\StuntingAnakController;
 use App\Http\Controllers\dashboard\utama\momsCare\AncController;
 use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
 use App\Http\Controllers\dashboard\utama\momsCare\PerkiraanMelahirkanController;
+use App\Http\Controllers\dashboard\utama\randaKabilasa\RandaKabilasaController;
 use App\Models\DeteksiDini;
 use App\Models\DeteksiIbuMelahirkanStunting;
 
@@ -100,19 +104,7 @@ Route::get('perkembangan-anak', function () {
 
 // ----------------- Start Randa Kabilasa -----------------
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('mencegah-malnutrisi', function () {
-    return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.index');
-});
-
-// URL resource-nya nanti sesuai url yang sekarang
-Route::get('mencegah-pernikahan-dini', function () {
-    return view('dashboard.pages.utama.randaKabilasa.mencegahPernikahanDini.index');
-});
-
-// URL resource-nya nanti sesuai url yang sekarang
-Route::get('meningkatkan-life-skill', function () {
-    return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.index');
-});
+Route::resource('randa-kabilasa', RandaKabilasaController::class);
 
 // ----------------- Start Master -----------------
 Route::resource('masterData/desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
@@ -133,6 +125,9 @@ Route::resource('masterData/desaKelurahan/{kecamatan}', DesaKelurahanController:
 Route::resource('/masterData/provinsi', ProvinsiController::class);
 Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
 Route::resource('/masterData/soal-deteksi-dini', SoalDeteksiDiniController::class);
+
+Route::resource('/masterData/soal-mencegah-malnutrisi', SoalMencegahMalnutrisiController::class);
+Route::resource('/masterData/soal-meningkatkan-life-skill', SoalMeningkatkanLifeSkillController::class);
 
 Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
 Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);

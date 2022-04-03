@@ -12,7 +12,7 @@ class DeteksiIbuMelahirkanStunting extends Model
 
     public function anggotaKeluarga()
     {
-        return $this->belongsTo(AnggotaKeluarga::class);
+        return $this->belongsTo(AnggotaKeluarga::class)->withTrashed();
     }
 
     public function bidan()

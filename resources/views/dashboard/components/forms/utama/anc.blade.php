@@ -442,33 +442,30 @@
             $(document).ready(function() {
                 $('#nama-kepala-keluarga').val(
                     '{{ $dataEdit->anggotaKeluarga->kartuKeluarga->id }}').change();
-                setTimeout(function() {
-                    $('#nama-ibu').val(
-                        '{{ $dataEdit->anggotaKeluarga->id }}').change();
-                    $('#tanggal_haid_terakhir').val(
-                            "{{ date('d-m-Y', strtotime($dataEdit->tanggal_haid_terakhir)) }}")
-                        .change();
-                    $('#pemeriksaan_ke').val("{{ $dataEdit->pemeriksaan_ke }}");
-                    $('#kehamilan_ke').val("{{ $dataEdit->kehamilan_ke }}");
-                    $('#tinggi_badan').val("{{ $dataEdit->tinggi_badan }}");
-                    $('#berat_badan').val("{{ $dataEdit->berat_badan }}");
-                    $('#tekanan_darah_sistolik').val("{{ $dataEdit->tekanan_darah_sistolik }}");
-                    $('#tekanan_darah_diastolik').val("{{ $dataEdit->tekanan_darah_diastolik }}");
-                    $('#lengan_atas').val("{{ $dataEdit->lengan_atas }}");
-                    $('#tinggi_fundus').val("{{ $dataEdit->tinggi_fundus }}");
-                    $('#hemoglobin_darah').val("{{ $dataEdit->hemoglobin_darah }}");
-                    $('#denyut_jantung').val("{{ $dataEdit->denyut_jantung_janin }}");
-                    $('#vaksin_tetanus_sebelum_hamil').val(
-                        '{{ $dataEdit->vaksin_tetanus_sebelum_hamil }}').change();
-                    $('#vaksin_tetanus_sesudah_hamil').val('{{ $dataEdit->vaksin_tetanus_sesudah_hamil }}')
-                        .change();
-                    $('#posisi_janin').val('{{ $dataEdit->posisi_janin }}')
-                        .change();
-                    $('#minum_tablet').val('{{ $dataEdit->minum_tablet }}')
-                        .change();
-                    $('#konseling').val('{{ $dataEdit->konseling }}')
-                        .change();
-                }, 500);
+
+                $('#tanggal_haid_terakhir').val(
+                        "{{ date('d-m-Y', strtotime($dataEdit->tanggal_haid_terakhir)) }}")
+                    .change();
+                $('#pemeriksaan_ke').val("{{ $dataEdit->pemeriksaan_ke }}");
+                $('#kehamilan_ke').val("{{ $dataEdit->kehamilan_ke }}");
+                $('#tinggi_badan').val("{{ $dataEdit->tinggi_badan }}");
+                $('#berat_badan').val("{{ $dataEdit->berat_badan }}");
+                $('#tekanan_darah_sistolik').val("{{ $dataEdit->tekanan_darah_sistolik }}");
+                $('#tekanan_darah_diastolik').val("{{ $dataEdit->tekanan_darah_diastolik }}");
+                $('#lengan_atas').val("{{ $dataEdit->lengan_atas }}");
+                $('#tinggi_fundus').val("{{ $dataEdit->tinggi_fundus }}");
+                $('#hemoglobin_darah').val("{{ $dataEdit->hemoglobin_darah }}");
+                $('#denyut_jantung').val("{{ $dataEdit->denyut_jantung_janin }}");
+                $('#vaksin_tetanus_sebelum_hamil').val(
+                    '{{ $dataEdit->vaksin_tetanus_sebelum_hamil }}').change();
+                $('#vaksin_tetanus_sesudah_hamil').val('{{ $dataEdit->vaksin_tetanus_sesudah_hamil }}')
+                    .change();
+                $('#posisi_janin').val('{{ $dataEdit->posisi_janin }}')
+                    .change();
+                $('#minum_tablet').val('{{ $dataEdit->minum_tablet }}')
+                    .change();
+                $('#konseling').val('{{ $dataEdit->konseling }}')
+                    .change();
             });
         </script>
     @endif
@@ -727,16 +724,41 @@
 
         function changeKepalaKeluarga() {
             var id = $('#nama-kepala-keluarga').val();
+            var id_edit = "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}";
+            var selected = '';
             $('#nama-ibu').html('');
             $('#nama-ibu').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
             $.get("{{ url('get-ibu') }}", {
                 id: id,
+                method: "{{ $method }}",
+                id_edit: id_edit
             }, function(result) {
-                $.each(result, function(key, val) {
+                $.each(result.anggota_keluarga, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
+                    selected = '';
+                    if (val.id == "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}") {
+                        selected = 'selected';
+                    }
                     $('#nama-ibu').append(
-                        `<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);
+                        `<option value="${val.id}" ${selected}>${val.nama_lengkap} (${tanggal_lahir})</option>`
+                    );
                 })
+
+                if ("{{ $method }}" == 'PUT') {
+                    selected = '';
+
+                    if (result.anggota_keluarga_hapus) {
+                        if (result.anggota_keluarga_hapus.id ==
+                            "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}") {
+                            selected = 'selected';
+                        }
+
+                        $('#nama-ibu').append(
+                            `<option value="${result.anggota_keluarga_hapus.id}" ${selected}>${result.anggota_keluarga_hapus.nama_lengkap} (${result.anggota_keluarga_hapus.tanggal_lahir})</option>`
+                        );
+
+                    }
+                }
                 $('#nama-ibu').removeAttr('disabled');
             });
         }

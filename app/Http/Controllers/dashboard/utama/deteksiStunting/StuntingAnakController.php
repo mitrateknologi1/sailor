@@ -129,7 +129,7 @@ class StuntingAnakController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        $anak = AnggotaKeluarga::find($request->nama_anak);
+        $anak = AnggotaKeluarga::where('id', $request->nama_anak)->withTrashed()->first();
         $tanggalLahir = $anak->tanggal_lahir;
         $tanggalSekarang = date('Y-m-d');
 

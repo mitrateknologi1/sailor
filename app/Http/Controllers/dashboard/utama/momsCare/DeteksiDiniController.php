@@ -43,7 +43,7 @@ class DeteksiDiniController extends Controller
                     $actionBtn = '<a href=" ' . url('deteksi-dini' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a>';
 
                     if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
-                        $actionBtn .= '<a href="' . url('anc/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
+                        $actionBtn .= '<a href="' . url('deteksi-dini/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
                     }
 
                     return $actionBtn;
@@ -163,7 +163,7 @@ class DeteksiDiniController extends Controller
             $kategori = 'Kehamilan : KRST (Beresiko SANGAT TINGGI)';
         }
 
-        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+        $ibu = AnggotaKeluarga::where('id', $request->nama_ibu)->withTrashed()->first();
 
         $datetime1 = date_create(date('Y-m-d'));
         $datetime2 = date_create($ibu->tanggal_lahir);

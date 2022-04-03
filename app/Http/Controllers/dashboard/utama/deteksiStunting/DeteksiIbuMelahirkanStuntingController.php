@@ -123,23 +123,23 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
         }
 
         // Cek Jawaban
-        $jawabanTidak = 0;
+        $jawabanYa = 0;
         for ($i = 0; $i < $totalSoal; $i++) {
             $jawaban = "jawaban-" . ($i + 1);
-            if ($request->$jawaban[0] == "Tidak") {
-                $jawabanTidak++;
+            if ($request->$jawaban[0] == "Ya") {
+                $jawabanYa++;
             }
         }
 
         $kategori = '';
-        if ($jawabanTidak > 0) {
+        if ($jawabanYa > 0) {
             $kategori = 'Beresiko Melahirkan Stunting';
         } else {
             $kategori = 'Tidak Beresiko Melahirkan Stunting';
         }
 
 
-        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+        $ibu = AnggotaKeluarga::where('id', $request->nama_ibu)->withTrashed()->first();
 
         $datetime1 = date_create(date('Y-m-d'));
         $datetime2 = date_create($ibu->tanggal_lahir);

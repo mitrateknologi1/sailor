@@ -255,7 +255,7 @@ class AncController extends Controller
         }
 
         $namaKepalaKeluarga = $request->nama_kepala_keluarga;
-        $namaIbu = AnggotaKeluarga::where('id', $request->nama_ibu)->first()->nama_lengkap;
+        $namaIbu = AnggotaKeluarga::where('id', $request->nama_ibu)->withTrashed()->first()->nama_lengkap;
         $pemeriksaanKe = $request->pemeriksaan_ke;
         $tanggalHaidTerakhir = $request->tanggal_haid_terakhir;
         $kehamilanKe = $request->kehamilan_ke;
