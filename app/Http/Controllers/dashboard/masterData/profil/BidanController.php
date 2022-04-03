@@ -102,7 +102,7 @@ class BidanController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.pages.masterData.profil.bidan.create');
     }
 
     /**

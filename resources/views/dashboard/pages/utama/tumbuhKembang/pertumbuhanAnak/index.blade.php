@@ -197,173 +197,171 @@
         $('#menu-tumbuh-kembang').addClass('collapse show')
         $('#ms-link-pertumbuhan-anak').addClass('active')
 
-        $(function() {
-            var table = $('#table-pertumbuhan-anak').DataTable({
-                processing: true,
-                serverSide: true,
-                dom: 'lBfrtip',
-                buttons : [
-                    {
-                        extend: 'excel',
-                        className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',                        
-                        text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
-                        exportOptions: {
-                            modifier: {
-                                order: 'index', // 'current', 'applied', 'index',  'original'
-                                page: 'all', // 'all',     'current'
-                                search: 'applied' // 'none',    'applied', 'removed'
-                            },
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'colvis',
-                        className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',                        
-                        text: '<i class="bi bi-eye-fill"></i> Tampil/Sembunyi Kolom',
-                    }                   
-                ],  
-                lengthMenu: [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
-                ],
-                ajax: {
-                    url: "{{ route('pertumbuhan-anak.index') }}",
-                    data: function(d){
-                        d.status = $('#status-filter').val();       
-                        d.kategori = $('#kategori-gizi-filter').val();             
-                        d.search = $('input[type="search"]').val();
+        var table = $('#table-pertumbuhan-anak').DataTable({
+            processing: true,
+            serverSide: true,
+            dom: 'lBfrtip',
+            buttons : [
+                {
+                    extend: 'excel',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',                        
+                    text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
+                    exportOptions: {
+                        modifier: {
+                            order: 'index', // 'current', 'applied', 'index',  'original'
+                            page: 'all', // 'all',     'current'
+                            search: 'applied' // 'none',    'applied', 'removed'
+                        },
+                        columns: ':visible'
                     }
                 },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        className: 'text-center',
-                        orderable: false,
-                        searchable: false
+                {
+                    extend: 'colvis',
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',                        
+                    text: '<i class="bi bi-eye-fill"></i> Tampil/Sembunyi Kolom',
+                }                   
+            ],  
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            ajax: {
+                url: "{{ route('pertumbuhan-anak.index') }}",
+                data: function(d){
+                    d.status = $('#status-filter').val();       
+                    d.kategori = $('#kategori-gizi-filter').val();             
+                    d.search = $('input[type="search"]').val();
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    className: 'text-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                    className: 'text-center',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nama_anak',
+                    name: 'nama_anak'
+                },
+                {
+                    data: 'nama_ayah',
+                    name: 'nama_ayah'
+                },
+                {
+                    data: 'nama_ibu',
+                    name: 'nama_ibu'
+                },
+                {
+                    data: 'jenis_kelamin',
+                    name: 'jenis_kelamin'
+                },
+                {
+                    data: 'tanggal_lahir',
+                    name: 'tanggal_lahir',
+                    className: 'text-center',
+                },
+                {
+                    data: 'usia',
+                    name: 'usia',
+                    className: 'text-center',
+                },
+                {
+                    data: 'berat_badan',
+                    name: 'berat_badan',
+                    className: 'text-center',
+                },
+                {
+                    data: 'hasil',
+                    name: 'hasil',
+                    className: 'text-center',
+                },
+                {
+                    data: 'desa_kelurahan',
+                    name: 'desa_kelurahan'
+                },
+                {
+                    data: 'bidan',
+                    name: 'bidan'
+                },
+                {
+                    data: 'tanggal_validasi',
+                    name: 'tanggal_validasi'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    className: 'text-center',
+                    orderable: true,
+                    searchable: true
+                },
+                
+            ],  
+            columnDefs: [
+                {
+                    targets: 1,
+                    render: function(data) {
+                        return moment(data).format('LL');
+                    }
+                },
+                {
+                    targets: 4,
+                    visible: false,
+                },
+                {
+                    targets: 5,
+                    visible: false,
+                },
+                {
+                    targets: 6,
+                    visible: false,
+                },
+                {
+                    targets: 7,
+                    render: function(data) {
+                        return moment(data).format('LL');
                     },
-                    {
-                        data: 'created_at',
-                        name: 'created_at',
-                        className: 'text-center',
-                    },
-                    {
-                        data: 'status',
-                        name: 'status',
-                        className: 'text-center',
-                    },
-                    {
-                        data: 'nama_anak',
-                        name: 'nama_anak'
-                    },
-                    {
-                        data: 'nama_ayah',
-                        name: 'nama_ayah'
-                    },
-                    {
-                        data: 'nama_ibu',
-                        name: 'nama_ibu'
-                    },
-                    {
-                        data: 'jenis_kelamin',
-                        name: 'jenis_kelamin'
-                    },
-                    {
-                        data: 'tanggal_lahir',
-                        name: 'tanggal_lahir',
-                        className: 'text-center',
-                    },
-                    {
-                        data: 'usia',
-                        name: 'usia',
-                        className: 'text-center',
-                    },
-                    {
-                        data: 'berat_badan',
-                        name: 'berat_badan',
-                        className: 'text-center',
-                    },
-                    {
-                        data: 'hasil',
-                        name: 'hasil',
-                        className: 'text-center',
-                    },
-                    {
-                        data: 'desa_kelurahan',
-                        name: 'desa_kelurahan'
-                    },
-                    {
-                        data: 'bidan',
-                        name: 'bidan'
-                    },
-                    {
-                        data: 'tanggal_validasi',
-                        name: 'tanggal_validasi'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        className: 'text-center',
-                        orderable: true,
-                        searchable: true
-                    },
-                    
-                ],  
-                columnDefs: [
-                    {
-                        targets: 1,
-                        render: function(data) {
-                            return moment(data).format('LL');
-                        }
-                    },
-                    {
-                        targets: 4,
-                        visible: false,
-                    },
-                    {
-                        targets: 5,
-                        visible: false,
-                    },
-                    {
-                        targets: 6,
-                        visible: false,
-                    },
-                    {
-                        targets: 7,
-                        render: function(data) {
-                            return moment(data).format('LL');
-                        },
-                        visible: false,
+                    visible: false,
 
+                },
+                {
+                    targets: 8,
+                    visible: false,
+                },
+                {
+                    targets: 9,
+                    visible: false,
+                },
+                {
+                    targets: 13,
+                    render: function(data) {
+                        return moment(data).format('LL');
                     },
-                    {
-                        targets: 8,
-                        visible: false,
-                    },
-                    {
-                        targets: 9,
-                        visible: false,
-                    },
-                    {
-                        targets: 13,
-                        render: function(data) {
-                            return moment(data).format('LL');
-                        },
-                        visible: false,
-                    },
-                ],        
-            });
-            
-            $('#status-filter').change(function () {
-                table.draw();     
-                console.log($('#status-filter').val())       
-            })
-
-            $('#kategori-gizi-filter').change(function () {
-                table.draw();     
-                console.log($('#kategori-gizi-filter').val())       
-            })
-
+                    visible: false,
+                },
+            ],        
+        });
+        
+        $('#status-filter').change(function () {
+            table.draw();     
+            console.log($('#status-filter').val())       
         })
+
+        $('#kategori-gizi-filter').change(function () {
+            table.draw();     
+            console.log($('#kategori-gizi-filter').val())       
+        })
+
         
         function modalLihat(id){
             var pertumbuhan_anak = id;
@@ -418,7 +416,7 @@
                         $('#kategori-emot').addClass('fa-solid fa-face-surprise');
                     }
 
-                    if('{{Auth::user()->profil->nama_lengkap}}' == data.bidan){
+                    if(('{{Auth::user()->profil->nama_lengkap}}' == data.bidan) || ('{{Auth::user()->role}}' == 'admin')){
                         $('#col-modal-btn-ubah').show();
                     } else {
                         $('#col-modal-btn-ubah').hide();
@@ -436,32 +434,37 @@
                 text : "Data pertumbuhan anak yang dipilih akan dihapus!",
                 icon : 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Hapus',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
                 cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, hapus!'
             }).then((result) => {
-                if (result) {
+                if (result.value) {
                     $.ajax({
                         type: "DELETE",
                         url: "{{url('pertumbuhan-anak')}}" + '/' + id,
                         data: {
                             _token: _token
                         },
-                        success: function (data) {
-                            Swal.fire({
-                                title : 'Berhasil!',
-                                text : 'Data pertumbuhan anak berhasil dihapus!',
-                                icon : 'success',
-                                showConfirmButton: false,
-                            })        
-                            setTimeout(
-                            function () {
-                                location.reload();
-                            }, 2000);   
-                        },
+                        success: function(response) {
+                            if (response.res == 'success') {
+                                Swal.fire(
+                                    'Terhapus!',
+                                    'Data berhasil dihapus.',
+                                    'success'
+                                ).then(function() {
+                                    table.draw();
+                                })
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    'Data gagal dihapus.',
+                                    'error'
+                                )
+                            }
+                        }
                     })
-                } else {
-                    swal.close();
-                }
+                } 
             })
         }
     </script>

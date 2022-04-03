@@ -57,13 +57,20 @@
                 @endcomponent
             </div>
         @endif
-
-        <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-pertumbuhan-anak',
-                'type' => 'submit',
-                ])
-            @endcomponent
+        <div class="col-12">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <small class="text-muted" style="font-style: italic">* Nama Anak yang tampil hanya yang berumur dibawah 5 tahun (BALITA)</small>
+    
+                </div>
+                <div class="col-lg-6 col-md-6 text-end align-self-center">
+                    @component('dashboard.components.buttons.process', [
+                        'id' => 'proses-pertumbuhan-anak',
+                        'type' => 'submit',
+                    ])      
+                    @endcomponent
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="modal-hasil" tabindex="-1" aria-hidden="true">
@@ -175,6 +182,7 @@
                     formData.append('tanggal_proses',
                         '{{ isset($anak) ? $anak->created_at->format('Y-m-d') : null }}');
                 }
+                // formData.append('method', '{{$method}}');
 
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
@@ -361,8 +369,10 @@
             });
         }
 
-        function changeAnak() {
-            if ('{{ Auth::user()->role }}' == 'admin') {
+        function changeAnak(){
+            if(('{{ Auth::user()->role }}' == 'admin') && ('{{$method}}' == 'POST')){
+        // function changeAnak() {
+            // if ('{{ Auth::user()->role }}' == 'admin') {
                 var id = $('#nama-anak').val();
                 var fungsi = 'pertumbuhan_anak';
                 $('#nama-bidan').html('');

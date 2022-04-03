@@ -23,6 +23,12 @@ class KartuKeluarga extends Model
 
     public function statusKeluarga($status)
     {
-        return $this->hasMany(AnggotaKeluarga::class)->where('status_hubungan_dalam_keluarga', 'like', '%' . $status . '%');
+        // if($method == 'POST'){
+            return $this->hasMany(AnggotaKeluarga::class)->where('status_hubungan_dalam_keluarga', 'like', '%' . $status . '%');
+        // } 
+        // else{
+        //     return $this->hasMany(AnggotaKeluarga::class)->where('status_hubungan_dalam_keluarga', 'like', '%' . $status . '%')->withTrashed();
+
+        // }
     }
 }
