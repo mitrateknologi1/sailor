@@ -2,26 +2,23 @@
 
 namespace App\Http\Controllers\dashboard\masterData\profil;
 
-use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Bidan;
+use App\Models\Penyuluh;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
 use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use App\Models\DesaKelurahan;
 use App\Models\KabupatenKota;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\StoreBidanRequest;
 use Yajra\DataTables\Facades\DataTables;
-use App\Http\Requests\UpdateBidanRequest;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\StorePenyuluhRequest;
+use App\Http\Requests\UpdatePenyuluhRequest;
 
-class BidanController extends Controller
+class PenyuluhController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,7 +28,7 @@ class BidanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas')->orderBy('created_at', 'DESC');
+            $data = Penyuluh::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas')->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -53,7 +50,7 @@ class BidanController extends Controller
 
                 ->addColumn('lokasi_tugas', function ($row) { 
                     if($row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') == null){ 
-                        return '<a href="'.route('lokasiTugasBidan', $row->id).'" class="btn btn-sm btn-primary text-white shadow"><i class="fa-solid fa-map-location-dot"></i> Tentukan Lokasi Tugas</a>';
+                        return '<a href="'.route('lokasiTugasPenyuluh', $row->id).'" class="btn btn-sm btn-primary text-white shadow"><i class="fa-solid fa-map-location-dot"></i> Tentukan Lokasi Tugas</a>';
                     } else {
                         return $row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
                     }
@@ -64,8 +61,8 @@ class BidanController extends Controller
                         <div class="text-center justify-content-center text-white">';
                         $actionBtn .= '
                             <button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.')><i class="fas fa-eye"></i></button>
-                            <a href="'.route('lokasiTugasBidan', $row->id).'" id="btn-edit" class="btn btn-primary btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lokasi Tugas"><i class="fa-solid fa-map-location-dot"></i></a>
-                            <a href="'.route('bidan.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
+                            <a href="'.route('lokasiTugasPenyuluh', $row->id).'" id="btn-edit" class="btn btn-primary btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lokasi Tugas"><i class="fa-solid fa-map-location-dot"></i></a>
+                            <a href="'.route('penyuluh.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
                             <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
                         </div>';
                     return $actionBtn;
@@ -96,7 +93,7 @@ class BidanController extends Controller
                 ])
                 ->make(true);
         }
-        return view('dashboard.pages.masterData.profil.bidan.index');
+        return view('dashboard.pages.masterData.profil.penyuluh.index');
     }
 
     /**
@@ -107,19 +104,19 @@ class BidanController extends Controller
     public function create()
     {
         $data = [
-            'users' => User::with('bidan')->where('role', 'bidan')
-            ->whereDoesntHave('bidan')
-            ->get(),
-            'new_bidan_id' => Bidan::max('id') + 1,
+            'users' => User::with('penyuluh', 'penyuluh')->where('role', 'penyuluh')
+                    ->whereDoesntHave('penyuluh')
+                    ->get(),
+            'new_penyuluh_id' => Penyuluh::max('id') + 1,
             'provinsi' => Provinsi::all(),
         ];
-        return view('dashboard.pages.masterData.profil.bidan.create', $data);
+        return view('dashboard.pages.masterData.profil.penyuluh.create', $data);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreBidanRequest  $request
+     * @param  \App\Http\Requests\StorePenyuluhRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -128,7 +125,7 @@ class BidanController extends Controller
             $request->all(),
             [
                 'user_id' => 'required',
-                'nik' => 'required|unique:bidan,nik,NULL,id,deleted_at,NULL|digits:16',
+                'nik' => 'required|unique:penyuluh,nik,NULL,id,deleted_at,NULL|digits:16',
                 'nama_lengkap' => 'required',
                 'jenis_kelamin' => 'required',
                 'tempat_lahir' => 'required',
@@ -174,7 +171,6 @@ class BidanController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        
         $data = [
             'user_id' => $request->user_id,
             'nik' => $request->nik,
@@ -196,7 +192,7 @@ class BidanController extends Controller
 
         if($request->file('foto_profil')){
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/bidan',
+                'upload/foto_profil/penyuluh',
                 $request->nik .
                     '.' . $request->file('foto_profil')->extension()
             );
@@ -204,71 +200,28 @@ class BidanController extends Controller
                 '.' . $request->file('foto_profil')->extension();
         }
 
-        Bidan::create($data);
+        Penyuluh::create($data);
 
-        $new_bidan_id = Bidan::max('id');
-        return response()->json(['success' => 'Berhasil', 'new_bidan_id' => $new_bidan_id]);
-        // dd($request);
+        $new_penyuluh_id = Penyuluh::max('id');
+        return response()->json(['success' => 'Berhasil', 'new_penyuluh_id' => $new_penyuluh_id]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Bidan  $bidan
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Bidan $bidan)
+    public function getLokasiTugasPenyuluh(Penyuluh $penyuluh)
     {
-        $bidan = $bidan;
-        $bidan['lokasiTugas'] = $bidan->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
-        $bidan['provinsi_nama'] = $bidan->provinsi->nama;
-        $bidan['kabupaten_kota_nama'] = $bidan->kabupatenKota->nama;
-        $bidan['kecamatan_nama'] = $bidan->kecamatan->nama;
-        $bidan['desa_kelurahan_nama'] = $bidan->desaKelurahan->nama;
-        return $bidan;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Bidan  $bidan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Bidan $bidan)
-    {
+        $listProvinsi = $penyuluh->lokasiTugas()->get()->pluck('provinsi_id');
+        $listKecamatan = $penyuluh->lokasiTugas()->get()->pluck('kabupaten_kota_id');
+        $listDesaKelurahan = $penyuluh->lokasiTugas()->get()->pluck('kecamatan_id');
         $data = [
-            'bidan' => Bidan::select('*', DB::raw('DATE_FORMAT(tanggal_lahir, "%d/%m/%Y") AS tanggal_lahir'))
-                ->where('id', $bidan->id)
-                ->first(),
-            'users' => User::with('bidan')->where('role', 'bidan')
-            ->whereDoesntHave('bidan')
-            ->get(),
-            'new_bidan_id' => Bidan::max('id') + 1,
-            'provinsi' => Provinsi::all(),
-            'kabupatenKota' => KabupatenKota::where('provinsi_id', $bidan->provinsi_id)->get(),
-            'kecamatan' => Kecamatan::where('kabupaten_kota_id', $bidan->kabupaten_kota_id)->get(),
-            'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $bidan->kecamatan_id)->get(),
-        ];
-        return view('dashboard.pages.masterData.profil.bidan.edit', $data);
-    }
-    
-
-    public function getLokasiTugasBidan(Bidan $bidan)
-    {
-        $listProvinsi = $bidan->lokasiTugas()->get()->pluck('provinsi_id');
-        $listKecamatan = $bidan->lokasiTugas()->get()->pluck('kabupaten_kota_id');
-        $listDesaKelurahan = $bidan->lokasiTugas()->get()->pluck('kecamatan_id');
-        $data = [
-            'bidan' => $bidan,
+            'penyuluh' => $penyuluh,
             'provinsi' => Provinsi::all(),
             'kabupatenKota' => KabupatenKota::whereIn('provinsi_id', $listProvinsi)->get(),
             'kecamatan' => Kecamatan::whereIn('kabupaten_kota_id', $listKecamatan)->get(),
             'desaKelurahan' => DesaKelurahan::whereIn('kecamatan_id', $listDesaKelurahan)->get(),
         ];
-        return view('dashboard.pages.masterData.profil.bidan.lokasiTugas', $data);
+        return view('dashboard.pages.masterData.profil.penyuluh.lokasiTugas', $data);
     }
 
-    public function updateLokasiTugasBidan(Request $request, Bidan $bidan)
+    public function updateLokasiTugasPenyuluh(Request $request, Penyuluh $penyuluh)
     {
         if($request->provinsi){
             if(in_array(null, $request->provinsi) || in_array(null, $request->kabupaten_kota) || in_array(null, $request->kecamatan) || in_array(null, $request->desa_kelurahan)){
@@ -277,11 +230,11 @@ class BidanController extends Controller
                     'msg' => 'Terdapat lokasi tugas yang tidak terisi lengkap. Silahkan lengkapi terlebih dahulu atau hapus lokasi tugas tersebut.'
                 ]);
             } else{
-                $bidan->lokasiTugas()->delete();
+                $penyuluh->lokasiTugas()->delete();
                 foreach ($request->provinsi as $key => $value) {
                     $data = [
-                        'jenis_profil' => 'bidan',
-                        'profil_id' => $bidan->id,
+                        'jenis_profil' => 'penyuluh',
+                        'profil_id' => $penyuluh->id,
                         'provinsi_id' => $request->provinsi[$key],
                         'kabupaten_kota_id' => $request->kabupaten_kota[$key],
                         'kecamatan_id' => $request->kecamatan[$key],
@@ -298,29 +251,70 @@ class BidanController extends Controller
             }
         } 
         else{
-            $bidan->lokasiTugas()->delete();
+            $penyuluh->lokasiTugas()->delete();
 
             return response()->json([
                 'res' => 'Lokasi Tugas Kosong',
-                'msg' => 'Lokasi tugas bidan dikosongkan',
+                'msg' => 'Lokasi tugas penyuluh dikosongkan',
                 'data' => $request,
             ]);
         }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Display the specified resource.
      *
-     * @param  \App\Http\Requests\UpdateBidanRequest  $request
-     * @param  \App\Models\Bidan  $bidan
+     * @param  \App\Models\Penyuluh  $penyuluh
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Bidan $bidan)
+    public function show(Penyuluh $penyuluh)
+    {
+        $penyuluh = $penyuluh;
+        $penyuluh['lokasiTugas'] = $penyuluh->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
+        $penyuluh['provinsi_nama'] = $penyuluh->provinsi->nama;
+        $penyuluh['kabupaten_kota_nama'] = $penyuluh->kabupatenKota->nama;
+        $penyuluh['kecamatan_nama'] = $penyuluh->kecamatan->nama;
+        $penyuluh['desa_kelurahan_nama'] = $penyuluh->desaKelurahan->nama;
+        return $penyuluh;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Penyuluh  $penyuluh
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Penyuluh $penyuluh)
+    {
+        $data = [
+            'penyuluh' => Penyuluh::select('*', DB::raw('DATE_FORMAT(tanggal_lahir, "%d/%m/%Y") AS tanggal_lahir'))
+                ->where('id', $penyuluh->id)
+                ->first(),
+            'users' => User::with('penyuluh')->where('role', 'penyuluh')
+            ->whereDoesntHave('penyuluh')
+            ->get(),
+            'new_penyuluh_id' => Penyuluh::max('id') + 1,
+            'provinsi' => Provinsi::all(),
+            'kabupatenKota' => KabupatenKota::where('provinsi_id', $penyuluh->provinsi_id)->get(),
+            'kecamatan' => Kecamatan::where('kabupaten_kota_id', $penyuluh->kabupaten_kota_id)->get(),
+            'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $penyuluh->kecamatan_id)->get(),
+        ];
+        return view('dashboard.pages.masterData.profil.penyuluh.edit', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdatePenyuluhRequest  $request
+     * @param  \App\Models\Penyuluh  $penyuluh
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Penyuluh $penyuluh)
     {
         $validateFotoProfil = '';
         if($request->file('foto_profil')){
             $fileName = $request->file('foto_profil');
-            if($fileName != $bidan->foto_profil){
+            if($fileName != $penyuluh->foto_profil){
                 $validateFotoProfil = 'required|image|file|max:3072';
             } 
         } 
@@ -329,7 +323,7 @@ class BidanController extends Controller
             $request->all(),
             [
                 // 'user_id' => 'required',
-                'nik' => 'required|unique:bidan,nik,' . $bidan->nik . ',nik,deleted_at,NULL|digits:16',
+                'nik' => 'required|unique:penyuluh,nik,' . $penyuluh->nik . ',nik,deleted_at,NULL|digits:16',
                 'nama_lengkap' => 'required',
                 'jenis_kelamin' => 'required',
                 'tempat_lahir' => 'required',
@@ -395,38 +389,36 @@ class BidanController extends Controller
         ];
 
         if($request->file('foto_profil')){
-            if (Storage::exists('upload/foto_profil/bidan/' . $bidan->foto_profil)) {
-                Storage::delete('upload/foto_profil/bidan/' . $bidan->foto_profil);
+            if (Storage::exists('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil)) {
+                Storage::delete('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil);
             }
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/bidan',
+                'upload/foto_profil/penyuluh',
                 $request->nik .
                     '.' . $request->file('foto_profil')->extension()
             );
             $data['foto_profil'] = $request->nik . '.' . $request->file('foto_profil')->extension();
         }
 
-        $bidan->update($data);
-        $new_bidan_id = Bidan::max('id');
-        return response()->json(['success' => 'Berhasil', 'new_bidan_id' => $new_bidan_id]);
+        $penyuluh->update($data);
+        $new_penyuluh_id = penyuluh::max('id');
+        return response()->json(['success' => 'Berhasil', 'new_penyuluh_id' => $new_penyuluh_id]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Bidan  $bidan
+     * @param  \App\Models\Penyuluh  $penyuluh
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bidan $bidan)
+    public function destroy(Penyuluh $penyuluh)
     {
-        if (Storage::exists('upload/foto_profil/bidan/' . $bidan->foto_profil)) {
-            Storage::delete('upload/foto_profil/bidan/' . $bidan->foto_profil);
+        if (Storage::exists('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil)) {
+            Storage::delete('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil);
         }
-
-        $bidan->lokasiTugas()->delete();
-        $bidan->delete();
+        $penyuluh->lokasiTugas()->delete();
+        $penyuluh->delete();
 
         return response()->json(['res' => 'success']);
-        
     }
 }

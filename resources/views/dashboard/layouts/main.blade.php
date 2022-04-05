@@ -151,6 +151,11 @@
         .dataTables_paginate {
             margin-top: 10px !important;
         }
+
+        /* untuk input foto */
+        .file-input input {
+            height: 25px !important;
+        }
     </style>
     @stack('style')
 

@@ -1,28 +1,31 @@
 <?php
 
+use App\Models\DeteksiDini;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\dashboard\masterData\deteksiStunting\SoalIbuMelahirkanStuntingController;
-use App\Http\Controllers\dashboard\masterData\momsCare\SoalDeteksiDiniController;
 use App\Http\Controllers\ListController;
-use App\Http\Controllers\dashboard\utama\tumbuhKembang\PertumbuhanAnakController;
-use App\Http\Controllers\dashboard\utama\tumbuhKembang\PerkembanganAnakController;
+use App\Models\DeteksiIbuMelahirkanStunting;
+use App\Http\Controllers\dashboard\utama\momsCare\AncController;
+use App\Http\Controllers\dashboard\masterData\akun\UserController;
+use App\Http\Controllers\dashboard\masterData\profil\AdminController;
+use App\Http\Controllers\dashboard\masterData\profil\BidanController;
+
+use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
 use App\Http\Controllers\dashboard\masterData\wilayah\ProvinsiController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KecamatanController;
 
 use App\Http\Controllers\dashboard\masterData\wilayah\DesaKelurahanController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KabupatenKotaController;
 use App\Http\Controllers\dashboard\masterData\wilayah\WilayahDomisiliController;
-
-use App\Http\Controllers\dashboard\masterData\profil\BidanController;
-use App\Http\Controllers\dashboard\masterData\profil\AdminController;
-use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStuntingController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\StuntingAnakController;
-use App\Http\Controllers\dashboard\utama\momsCare\AncController;
-use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
 use App\Http\Controllers\dashboard\utama\momsCare\PerkiraanMelahirkanController;
-use App\Models\DeteksiDini;
-use App\Models\DeteksiIbuMelahirkanStunting;
+use App\Http\Controllers\dashboard\masterData\momsCare\SoalDeteksiDiniController;
+use App\Http\Controllers\dashboard\utama\tumbuhKembang\PertumbuhanAnakController;
+use App\Http\Controllers\dashboard\utama\tumbuhKembang\PerkembanganAnakController;
+use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStuntingController;
+use App\Http\Controllers\dashboard\masterData\deteksiStunting\SoalIbuMelahirkanStuntingController;
+use App\Http\Controllers\dashboard\masterData\profil\PenyuluhController;
+use App\Models\Penyuluh;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,9 +145,15 @@ Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);
 Route::resource('provinsi', ProvinsiController::class);
 
 Route::get('lokasi-tugas-bidan/{bidan}', [BidanController::class, 'getLokasiTugasBidan'])->name('lokasiTugasBidan');
-Route::put('update-lokasi-tugas/{bidan}', [BidanController::class, 'updateLokasiTugasBidan'])->name('updateLokasiTugasBidan');
+Route::put('update-lokasi-tugas-bidan/{bidan}', [BidanController::class, 'updateLokasiTugasBidan'])->name('updateLokasiTugasBidan');
+
+Route::get('lokasi-tugas-penyuluh/{penyuluh}', [PenyuluhController::class, 'getLokasiTugasPenyuluh'])->name('lokasiTugasPenyuluh');
+Route::put('update-lokasi-tugas-penyuluh/{penyuluh}', [PenyuluhController::class, 'updateLokasiTugasPenyuluh'])->name('updateLokasiTugasPenyuluh');
 
 Route::resource('bidan', BidanController::class);
+Route::resource('penyuluh', PenyuluhController::class);
+Route::resource('admin', AdminController::class);
+Route::resource('user', UserController::class);
 
 // Wilayah
 Route::get('/provinsi', [ListController::class, 'listProvinsi'])->name('listProvinsi');

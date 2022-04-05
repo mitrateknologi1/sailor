@@ -61,7 +61,7 @@
                             <div class="card shadow-sm w-100 p-4 p-md-5 px-md-3" style="max-width: 35rem;">
                                 <div class="justify-content-center text-center">
                                     <h1>MASUK</h1>
-                                    <span class="text-muted text-center">Pilih ingin masuk sebagai Keluarga/Bidan/Penyuluh BKKBN</span>
+                                    <span class="text-muted text-center">Pilih ingin masuk sebagai Keluarga/Bidan/Penyuluh KB</span>
                                 </div>
                                 <div class="card-header justify-content-center py-4">
                                     <ul class="nav nav-tabs tab-page-toolbar rounded d-inline-flex" role="tablist">

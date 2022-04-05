@@ -45,7 +45,6 @@ class ListController extends Controller
                 ->get();
 
             $anggotaKeluargaHapus = '';
-
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
                 $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)

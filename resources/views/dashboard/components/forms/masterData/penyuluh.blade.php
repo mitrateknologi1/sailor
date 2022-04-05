@@ -18,7 +18,7 @@
         @if ($method == 'POST')
             <div class="col-lg-4 col-md-6">
                 @component('dashboard.components.formElements.select', [
-                    'label' => 'Akun (Nomor HP Bidan)',
+                    'label' => 'Akun (Nomor HP Penyuluh)',
                     'name' => 'user_id',
                     'id' => 'user-id',
                     'class' => 'select2',
@@ -41,7 +41,7 @@
                 'id' => 'nik',
                 'name' => 'nik',
                 'class' => 'angka',
-                'value' => $bidan->nik ?? null,
+                'value' => $penyuluh->nik ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -53,7 +53,7 @@
                 'id' => 'nama-lengkap',
                 'name' => 'nama_lengkap',
                 'class' => '',
-                'value' => $bidan->nama_lengkap ?? null,
+                'value' => $penyuluh->nama_lengkap ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -67,7 +67,7 @@
                         'name' => 'jenis_kelamin',
                         'value' => 'LAKI-LAKI',
                         'label' => 'LAKI-LAKI',
-                        'checked' => isset($bidan) && $bidan->jenis_kelamin == 'LAKI-LAKI' ? 'checked' : '',
+                        'checked' => isset($penyuluh) && $penyuluh->jenis_kelamin == 'LAKI-LAKI' ? 'checked' : '',
                         ])
                     @endcomponent
                 </div>
@@ -77,7 +77,7 @@
                         'name' => 'jenis_kelamin',
                         'value' => 'PEREMPUAN',
                         'label' => 'PEREMPUAN',
-                        'checked' => isset($bidan) && $bidan->jenis_kelamin == 'PEREMPUAN' ? 'checked' : '',
+                        'checked' => isset($penyuluh) && $penyuluh->jenis_kelamin == 'PEREMPUAN' ? 'checked' : '',
                         ])
                     @endcomponent
                 </div>
@@ -91,7 +91,7 @@
                 'id' => 'tempat-lahir',
                 'name' => 'tempat_lahir',
                 'class' => '',
-                'value' => $bidan->tempat_lahir ?? null,
+                'value' => $penyuluh->tempat_lahir ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -104,7 +104,7 @@
                 'name' => 'tanggal_lahir',
                 'class' => 'tanggal',
                 'placeholder' => 'dd-mm-yyyy',
-                'value' => $bidan->tanggal_lahir ?? null,
+                'value' => $penyuluh->tanggal_lahir ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -119,12 +119,12 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])  
             @slot('options')
-                <option value="ISLAM" {{ isset($bidan) && $bidan->agama == 'ISLAM' ? 'selected' : '' }}>ISLAM</option>                                       
-                <option value="KRISTEN" {{ isset($bidan) && $bidan->agama == 'KRISTEN' ? 'selected' : '' }}>KRISTEN (PROTESTAN)</option>                                       
-                <option value="KATHOLIK" {{ isset($bidan) && $bidan->agama == 'KATHOLIK' ? 'selected' : '' }}>KATHOLIK</option>                                       
-                <option value="HINDU" {{ isset($bidan) && $bidan->agama == 'HINDU' ? 'selected' : '' }}>HINDU</option>                                       
-                <option value="BUDHA" {{ isset($bidan) && $bidan->agama == 'BUDHA' ? 'selected' : '' }}>BUDHA</option>                                       
-                <option value="KONGHUCU" {{ isset($bidan) && $bidan->agama == 'KONGHUCU' ? 'selected' : '' }}>KONGHUCU</option>                                       
+                <option value="ISLAM" {{ isset($penyuluh) && $penyuluh->agama == 'ISLAM' ? 'selected' : '' }}>ISLAM</option>                                       
+                <option value="KRISTEN" {{ isset($penyuluh) && $penyuluh->agama == 'KRISTEN' ? 'selected' : '' }}>KRISTEN (PROTESTAN)</option>                                       
+                <option value="KATHOLIK" {{ isset($penyuluh) && $penyuluh->agama == 'KATHOLIK' ? 'selected' : '' }}>KATHOLIK</option>                                       
+                <option value="HINDU" {{ isset($penyuluh) && $penyuluh->agama == 'HINDU' ? 'selected' : '' }}>HINDU</option>                                       
+                <option value="BUDHA" {{ isset($penyuluh) && $penyuluh->agama == 'BUDHA' ? 'selected' : '' }}>BUDHA</option>                                       
+                <option value="KONGHUCU" {{ isset($penyuluh) && $penyuluh->agama == 'KONGHUCU' ? 'selected' : '' }}>KONGHUCU</option>                                       
             @endslot
             @endcomponent
         </div>
@@ -135,7 +135,7 @@
                 'id' => 'tujuh-angka-terakhir-str',
                 'name' => 'tujuh_angka_terakhir_str',
                 'class' => 'angka',
-                'value' => $bidan->tujuh_angka_terakhir_str ?? null,
+                'value' => $penyuluh->tujuh_angka_terakhir_str ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -147,7 +147,7 @@
                 'id' => 'nomor-hp',
                 'name' => 'nomor_hp',
                 'class' => 'angka',
-                'value' => $bidan->nomor_hp ?? null,
+                'value' => $penyuluh->nomor_hp ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -159,7 +159,7 @@
                 'id' => 'email',
                 'name' => 'email',
                 'class' => '',
-                'value' => $bidan->email ?? null,
+                'value' => $penyuluh->email ?? null,
                 // 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -175,7 +175,7 @@
                 ])  
                 @slot('options')
                     @foreach ($provinsi as $prov)
-                        <option value="{{ $prov->id }}" {{ isset($bidan) && $prov->id == $bidan->provinsi_id ? 'selected' : '' }}>{{ $prov->nama }}</option>                                       
+                        <option value="{{ $prov->id }}" {{ isset($penyuluh) && $prov->id == $penyuluh->provinsi_id ? 'selected' : '' }}>{{ $prov->nama }}</option>                                       
                     @endforeach
                 @endslot
             @endcomponent
@@ -192,7 +192,7 @@
                 @slot('options')
                     @if ($method == 'PUT')
                         @foreach ($kabupatenKota as $kab)
-                            <option value="{{ $kab->id }}" {{ isset($bidan) && $kab->id == $bidan->kabupaten_kota_id ? 'selected' : '' }}>{{ $kab->nama }}</option>                                       
+                            <option value="{{ $kab->id }}" {{ isset($penyuluh) && $kab->id == $penyuluh->kabupaten_kota_id ? 'selected' : '' }}>{{ $kab->nama }}</option>                                       
                         @endforeach
                     @endif
                 @endslot
@@ -210,7 +210,7 @@
                 @slot('options')
                     @if ($method == 'PUT')
                         @foreach ($kecamatan as $kec)
-                            <option value="{{ $kec->id }}" {{ isset($bidan) && $kec->id == $bidan->kecamatan_id ? 'selected' : '' }}>{{ $kec->nama }}</option>                                       
+                            <option value="{{ $kec->id }}" {{ isset($penyuluh) && $kec->id == $penyuluh->kecamatan_id ? 'selected' : '' }}>{{ $kec->nama }}</option>                                       
                         @endforeach
                     @endif
                 @endslot
@@ -228,7 +228,7 @@
                 @slot('options')
                     @if ($method == 'PUT')
                         @foreach ($desaKelurahan as $des)
-                            <option value="{{ $des->id }}" {{ isset($bidan) && $des->id == $bidan->desa_kelurahan_id ? 'selected' : '' }}>{{ $des->nama }}</option>                                       
+                            <option value="{{ $des->id }}" {{ isset($penyuluh) && $des->id == $penyuluh->desa_kelurahan_id ? 'selected' : '' }}>{{ $des->nama }}</option>                                       
                         @endforeach
                     @endif
                 @endslot
@@ -241,7 +241,7 @@
                 'id' => 'alamat',
                 'name' => 'alamat',
                 'class' => '',
-                'value' => $bidan->alamat ?? null,
+                'value' => $penyuluh->alamat ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -249,8 +249,8 @@
         <div class="col-lg-4 col-md-6">
             <label class="col-md-3 col-sm-4 col-form-label">Foto Profil</label>
             <div class="col-md-9 col-sm-8">
-                <div class="image-input avatar xxl rounded-4" style="background-image: url({{ isset($bidan) && $bidan->foto_profil != NULL ? asset('upload/foto_profil/bidan/'.$bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
-                    <div class="avatar-wrapper rounded-4" style="background-image: url({{ isset($bidan) && $bidan->foto_profil != NULL ? asset('upload/foto_profil/bidan/'.$bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});"></div>
+                <div class="image-input avatar xxl rounded-4" style="background-image: url({{ isset($penyuluh) && $penyuluh->foto_profil != NULL ? asset('upload/foto_profil/penyuluh/'.$penyuluh->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
+                    <div class="avatar-wrapper rounded-4" style="background-image: url({{ isset($penyuluh) && $penyuluh->foto_profil != NULL ? asset('upload/foto_profil/penyuluh/'.$penyuluh->foto_profil) : asset('assets/dashboard/images/avatar.png') }});"></div>
                     <div class="file-input" style="background: var(--card-color); text-align: center; height: 24px; width: 24px; line-height: 24px; border-radius: 24px; background-position: center !important;">
                         <input type="file" class="form-control" name="foto_profil" id="foto-profil" style="z-index: 999999" value="">
                         <label for="file-input2" class="fa fa-pencil shadow"></label>
@@ -338,23 +338,24 @@
             contentType: false,
             success: function (data) {
                 $("#overlay").fadeOut(100);
+                console.log(data)
                 if ($.isEmptyObject(data.error)) {
                     if('{{$method}}' == 'POST'){
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
-                            text: 'Data bidan berhasil ditambahkan, selanjutnya tentukan lokasi tugas bidan',
+                            text: 'Data penyuluh berhasil ditambahkan, selanjutnya tentukan lokasi tugas penyuluh',
                             showConfirmButton: false,
                             timer: 2500,
                         })
                         .then((result) => {
-                            window.location.href = "{{ url('lokasi-tugas-bidan') }}/"+data.new_bidan_id;
+                            window.location.href = "{{ url('lokasi-tugas-penyuluh') }}/"+data.new_penyuluh_id;
                         })
                     } else{
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
-                            text: 'Data bidan berhasil diubah',
+                            text: 'Data penyuluh berhasil diubah',
                             showConfirmButton: false,
                             timer: 2500,
                         })

@@ -284,7 +284,7 @@
                         }
 
                         $('#nama-anak').append(
-                            `<option value="${result.anggota_keluarga_hapus.id}" ${selected}>${result.anggota_keluarga_hapus.nama_lengkap} (${result.anggota_keluarga_hapus.tanggal_lahir})</option>`
+                            `<option value="${result.anggota_keluarga_hapus.id}" ${selected}>${result.anggota_keluarga_hapus.nama_lengkap} (${moment(result.anggota_keluarga_hapus.tanggal_lahir).format('LL')})</option>`
                         );
 
                     }

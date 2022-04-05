@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Bidan
+    Ubah Bidan
 @endsection
 
 @push('style')
@@ -14,7 +14,7 @@
         <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item active" aria-current="page">Profil</li>
         <li class="breadcrumb-item active" aria-current="page">Bidan</li>
-        <li class="breadcrumb-item active" aria-current="page">Tambah Bidan</li>
+        <li class="breadcrumb-item active" aria-current="page">Ubah Bidan</li>
     </ol>
 </div>
 @endsection
@@ -26,11 +26,16 @@
                 <div class="card p-0">
                     <div class="card-body">
                         @component('dashboard.components.forms.masterData.bidan')
-                            @slot('form_id', 'form_add_bidan')
-                            @slot('users', $users)')
-                            @slot('provinsi', $provinsi)')
-                            @slot('action', route('bidan.store'))
-                            @slot('method', 'POST')
+                            @slot('form_id', 'form_edit_bidan')
+                            @slot('users', $users)
+                            @slot('bidan', $bidan)
+                            @slot('provinsi', $provinsi)
+                            @slot('kabupatenKota', $kabupatenKota)
+                            @slot('kecamatan', $kecamatan)
+                            @slot('desaKelurahan', $desaKelurahan)
+
+                            @slot('action', route('bidan.update', $bidan->id))
+                            @slot('method', 'PUT')
                             @slot('back_url', route('bidan.index'))
                         @endcomponent
                         
@@ -46,7 +51,5 @@
         $('#m-link-profil').addClass('active');
         $('#menu-profil').addClass('collapse show')
         $('#ms-link-master-data-profil-bidan').addClass('active') 
-        
-        
     </script>
 @endpush

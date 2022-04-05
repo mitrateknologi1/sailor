@@ -102,6 +102,8 @@
 
 @push('script')
 <script>
+    
+
     $(document).on('click', '.btnHapusLokasiLama', function () {
         var iteration = $(this).data('iteration');
         $('#daftarLokasi' + iteration).remove();
@@ -211,6 +213,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
+                console.log(response);
                 if(response.res == 'Berhasil'){
                     Swal.fire({
                         icon: 'success',
@@ -222,18 +225,25 @@
                         window.location.href = "{{$back_url}}";
                     });
                 }
+                else if(response.res == 'Tidak Lengkap'){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: response.msg,
+                    })
+                } 
                 else if (response.res = 'Lokasi Tugas Kosong'){
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi Kesalahan',
-                        text: response.msg,
+                        icon: 'warning',
+                        title: 'Lokasi Tugas Dikosongkan',
+                        // title: res.msg,
+                        // text: response.msg,
+                        showConfirmButton: false,
+                        timer: 2000,
                     })
-                } else if(response.res == 'Tidak Lengkap'){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi Kesalahan',
-                        text: response.msg,
-                    })
+                    .then((result) => {
+                        window.location.href = "{{$back_url}}";
+                    });
                 } 
             },
             error: function (response) {
@@ -250,6 +260,9 @@
     
     
     $(function() {
+        if('{{$user->lokasiTugas}}' == '[]'){
+            $('#tambahLokasiTugas').click();
+        }
         // $('.provinsi').trigger('change');
 
     });

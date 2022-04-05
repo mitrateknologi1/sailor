@@ -31,7 +31,7 @@
                         @component('dashboard.components.buttons.add',[
                             'id' => 'catatan-perkembangan-anak',
                             'class' => '',
-                            'url' => '/perkembangan-anak/create',
+                            'url' => route('perkembangan-anak.create'),
                         ])        
                         @endcomponent
                     @endif

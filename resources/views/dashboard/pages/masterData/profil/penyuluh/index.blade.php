@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Bidan
+    Penyuluh
 @endsection
 
 @section('breadcrumb')
@@ -9,7 +9,7 @@
         <ol class="breadcrumb bg-transparent mb-0">
             <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Profil</li>
-            <li class="breadcrumb-item active" aria-current="page">Bidan</li>
+            <li class="breadcrumb-item active" aria-current="page">Penyuluh</li>
         </ol>
     </div>
 @endsection
@@ -20,11 +20,11 @@
         <div class="col">
             <div class="card ">
                 <div class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
-                    <h5 class="card-title mb-0">Data Bidan</h5>
+                    <h5 class="card-title mb-0">Data Penyuluh KB</h5>
                     @component('dashboard.components.buttons.add',[
                         'id' => 'catatan-pertumbuhan-anak',
                         'class' => '',
-                        'url' => route('bidan.create'),
+                        'url' => route('penyuluh.create'),
                     ])        
                     @endcomponent
                 </div>
@@ -106,7 +106,7 @@
             <div class="modal-body custom_scroll p-lg-4 pb-3">
                 <div class="d-flex w-100 justify-content-between mb-1">
                     <div class="w-100">
-                        <h5>Detail Bidan</h5>
+                        <h5>Detail Penyuluh</h5>
                     </div>
                     
                     <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -132,12 +132,12 @@
                     </div>
                 </div>
                 <div class="card fieldset border border-dark my-4">
-                    <span class="fieldset-tile text-dark ml-5 bg-white">Info Bidan:</span>
+                    <span class="fieldset-tile text-dark ml-5 bg-white">Info Penyuluh:</span>
                     <div class="card-body p-0 py-1 px-1">
                         <ul class="list-unstyled mb-0">
                             <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-person fa-lg"></i> Nama Bidan:</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-nama-bidan"> - </span>
+                                <label><i class="fa-solid fa-person fa-lg"></i> Nama Penyuluh:</label>
+                                <span class="badge bg-info float-end text-uppercase" id="modal-nama-penyuluh"> - </span>
                             </li>
                             <li class="justify-content-between mb-2">
                                 <label><i class="fa-solid fa-id-card"></i> NIK:</label>
@@ -223,7 +223,7 @@
     <script>
         $('#m-link-profil').addClass('active');
         $('#menu-profil').addClass('collapse show')
-        $('#ms-link-master-data-profil-bidan').addClass('active') 
+        $('#ms-link-master-data-profil-penyuluh').addClass('active') 
         
         var table = $('#table-bidan').removeAttr('width').DataTable({
             processing: true,
@@ -254,7 +254,7 @@
                 [10, 25, 50, "All"]
             ],  
             ajax: {
-                url: "{{ route('bidan.index') }}",
+                url: "{{ route('penyuluh.index') }}",
                 data: function(d){
                     // d.role = $('#role-filter').val();                    
                     // d.search = $('input[type="search"]').val();
@@ -429,7 +429,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{url('bidan')}}" + '/' + id,
+                        url: "{{url('penyuluh')}}" + '/' + id,
                         data: {
                             _token: _token
                         },
@@ -457,11 +457,10 @@
 
         function modalLihat(id){
             $('#modal-lihat').modal('show');
-
-            var bidan = id;
+            var penyuluh = id;
             $.ajax({
                 type: "GET",
-                url: "{{url('bidan')}}" + '/' + bidan,
+                url: "{{url('penyuluh')}}" + '/' + penyuluh,
                 success: function (data) {
                     $('#modal-lihat').modal('show');
                     $('#modal-created-at').html(moment(data.created_at).format('LL'));
@@ -475,7 +474,7 @@
                     } else{
                         $('#modal-lokasi-tugas').html('<span class="badge rounded-pill bg-danger">Belum Ada Lokasi Tugas</span>');
                     }
-                    $('#modal-nama-bidan').html(data.nama_lengkap);
+                    $('#modal-nama-penyuluh').html(data.nama_lengkap);
                     $('#modal-nik').html(data.nik);
                     $('#modal-jenis-kelamin').html(data.jenis_kelamin);
                     $('#modal-tempat-lahir').html(data.tempat_lahir);
@@ -490,11 +489,11 @@
                     $('#modal-kabupaten-kota').html(data.kabupaten_kota_nama);
                     $('#modal-provinsi').html(data.provinsi_nama);
                     if(data.foto_profil != null){
-                        $('#modal-foto-profil').html('<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/bidan/'+data.foto_profil+')"> <div class="avatar-wrapper rounded-4" style="background-image: url(upload/foto_profil/bidan/'+data.foto_profil+')"></div><div class="file-input"><input type="file" class="form-control" name="file-input" id="file-input"><label for="file-input" class="fa fa-pencil shadow text-muted"></label></div></div>')
+                        $('#modal-foto-profil').html('<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/penyuluh/'+data.foto_profil+')"> <div class="avatar-wrapper rounded-4" style="background-image: url(upload/foto_profil/penyuluh/'+data.foto_profil+')"></div><div class="file-input"><input type="file" class="form-control" name="file-input" id="file-input"><label for="file-input" class="fa fa-pencil shadow text-muted"></label></div></div>')
                     } else{
                         $('#modal-foto-profil').html('<span class="badge bg-info text-uppercase">-</span>')
                     }
-                    $('#modal-btn-ubah').attr('href', '{{url('bidan')}}' + '/' + bidan + '/edit');
+                    $('#modal-btn-ubah').attr('href', '{{url('penyuluh')}}' + '/' + penyuluh + '/edit');
                 },
             })
 
