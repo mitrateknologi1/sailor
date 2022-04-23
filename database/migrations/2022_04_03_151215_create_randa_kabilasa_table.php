@@ -14,12 +14,18 @@ class CreateRandaKabilasaTable extends Migration
     public function up()
     {
         Schema::create('randa_kabilasa', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->bigInteger('anggota_keluarga_id');
             $table->bigInteger('bidan_id');
             $table->integer('is_mencegah_malnutrisi')->default(0);
             $table->integer('is_mencegah_pernikahan_dini')->default(0);
             $table->integer('is_meningkatkan_life_skill')->default(0);
+            $table->string('kategori_hb');
+            $table->string('kategori_lingkar_lengan_atas');
+            $table->string('kategori_imt');
+            $table->string('kategori_mencegah_malnutrisi')->nullable();
+            $table->string('kategori_meningkatkan_life_skill')->nullable();
+            $table->string('kategori_mencegah_pernikahan_dini')->nullable();
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
             $table->timestamps();

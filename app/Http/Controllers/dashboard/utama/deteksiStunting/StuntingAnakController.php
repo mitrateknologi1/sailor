@@ -30,11 +30,45 @@ class StuntingAnakController extends Controller
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                     }
                 })
+                ->where(function ($query) use ($request) {
+                    $query->where(function ($query) use ($request) {
+                        if ($request->statusValidasi) {
+                            $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
+                        }
+
+                        if ($request->kategori) {
+                            $kategori = '';
+                            if ($request->kategori == 'sangat_pendek') {
+                                $kategori = 'Sangat Pendek (Resiko Stunting Tinggi)';
+                            } else if ($request->kategori == 'pendek') {
+                                $kategori = 'Pendek (Resiko Stunting Sedang)';
+                            } else if ($request->kategori == 'normal') {
+                                $kategori = 'Normal';
+                            } else if ($request->kategori == 'tinggi') {
+                                $kategori = 'Tinggi';
+                            }
+                            $query->where('kategori', $kategori);
+                        }
+                    });
+
+                    $query->where(function ($query) use ($request) {
+                        if ($request->search) {
+                            $query->whereHas('bidan', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+
+                            $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+                        }
+                    });
+                })
                 ->orWhere(function ($query) {
                     if (Auth::user()->role == 'bidan') { // bidan
                         $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                     }
-                })->get();
+                })
+                ->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('tanggal_dibuat', function ($row) {

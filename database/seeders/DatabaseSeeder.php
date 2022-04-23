@@ -46,5 +46,17 @@ class DatabaseSeeder extends Seeder
         $this->call(SoalMencegahMalnutrisiTableSeeder::class);
         $this->call(SoalMeningkatkanLifeSkillTableSeeder::class);
         $this->call(PertumbuhanAnakTableSeeder::class);
+        $this->call(StuntingAnakTableSeeder::class);
+        $this->call(DeteksiIbuMelahirkanStuntingTableSeeder::class);
+        $this->call(JawabanDeteksiIbuMelahirkanStuntingTableSeeder::class);
+        $this->call(JawabanDeteksiDiniTableSeeder::class);
+        $this->call(DeteksiDiniTableSeeder::class);
+        $this->call(PemeriksaanAncTableSeeder::class);
+        $this->call(AncTableSeeder::class);
+        $this->call(RandaKabilasaTableSeeder::class);
+        $this->call(MencegahMalnutrisiTableSeeder::class);
+        $this->call(JawabanMencegahMalnutrisiTableSeeder::class);
+        $this->call(JawabanMeningkatkanLifeSkillTableSeeder::class);
+        $this->call(MencegahPernikahanDiniTableSeeder::class);
     }
 }

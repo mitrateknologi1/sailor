@@ -15,7 +15,7 @@ class CreateJawabanDeteksiDiniTable extends Migration
     {
         Schema::create('jawaban_deteksi_dini', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('deteksi_dini_id');
+            $table->uuid('deteksi_dini_id');
             $table->bigInteger('soal_id');
             $table->string('jawaban');
             $table->timestamps();

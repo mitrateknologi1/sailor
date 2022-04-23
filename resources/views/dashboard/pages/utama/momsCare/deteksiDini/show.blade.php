@@ -21,7 +21,7 @@
     <section>
         <div class="row justify-content-center">
             <div class="col-lg-12 col-md-12">
-                <div class="card fieldset border border-secondary bg-white p-0">
+                <div class="card p-0">
                     {{-- <div class="card-header py-3 bg-transparent border-bottom-0">
                         <h6 class="card-title mb-0">Basic example</h6>
                     </div> --}}
@@ -133,7 +133,7 @@
                                         }
                                     @endphp
                                     <input type="text" value="{{ $soal->id }}" hidden name="soal_id[]">
-                                    <div class="card fieldset border border-secondary bg-white p-0">
+                                    <div class="card p-0">
                                         <div class="card-body">
                                             <p>{{ $loop->iteration }}. {{ $soal->soal }}</p>
                                             <div class="form-check form-check-inline">

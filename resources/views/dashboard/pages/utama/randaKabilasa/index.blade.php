@@ -29,9 +29,9 @@
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Randa Kabilasa</h5>
                         @component('dashboard.components.buttons.add', [
-                            'id' => 'catatan-perkiraan-melahirkan',
+                            'id' => 'catatan-mencegah-malnutrisi',
                             'class' => '',
-                            'url' => '/perkiraan-melahirkan/create',
+                            'url' => '/mencegah-malnutrisi/create',
                             ])
                         @endcomponent
                     </div>
@@ -41,30 +41,123 @@
                                 <div class="card fieldset border border-secondary mb-4">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                     <div class="row">
-                                        <div class="col-lg">
+                                        <div class="col-lg-4 mt-2">
                                             @component('dashboard.components.formElements.select', [
-                                                'label' => 'Status',
-                                                'id' => 'status',
-                                                'name' => 'status',
+                                                'label' => 'Status Validasi',
+                                                'id' => 'status_validasi',
+                                                'name' => 'status_validasi',
                                                 'class' => 'filter',
                                                 ])
                                                 @slot('options')
-                                                    <option value="1">Aktif</option>
-                                                    <option value="0">Tidak Aktif</option>
+                                                    <option value="Tervalidasi">Tervalidasi</option>
+                                                    <option value="Belum Tervalidasi">Belum Divalidasi</option>
                                                 @endslot
                                             @endcomponent
                                         </div>
-                                        <div class="col-lg">
+                                        <div class="col-lg-4 mt-2">
                                             @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Tinggi',
-                                                'id' => 'kategori-gizi',
-                                                'name' => 'kategori_gizi',
+                                                'label' => 'Status Asesmen',
+                                                'id' => 'status_asesmen',
+                                                'name' => 'status_asesmen',
                                                 'class' => 'filter',
                                                 ])
                                                 @slot('options')
-                                                    <option>Mustard</option>
-                                                    <option>Ketchup</option>
-                                                    <option>Relish</option>
+                                                    <option value="belum asesmen pernikahan dini">Belum Asesmen Mencegah Pernikahan
+                                                        Dini</option>
+                                                    <option value="belum asesmen meningkatkan life skill">Belum Asesmen Meningkatkan
+                                                        Life Skill</option>
+                                                    <option value="belum asesmen pernikahan dini dan meningkatkan life skill">Belum
+                                                        Asesmen Mencegah Pernikahan Dini dan Meningkatkan Life Skill
+                                                    </option>
+                                                    <option value="sudah asesmen">Sudah Melakukan Seluruh Asesmen</option>
+                                                @endslot
+                                            @endcomponent
+                                        </div>
+                                        <div class="col-lg-4 mt-2">
+                                            @component('dashboard.components.formElements.select', [
+                                                'label' => 'Kategori HB',
+                                                'id' => 'kategori_hb',
+                                                'name' => 'kategori_hb',
+                                                'class' => 'filter',
+                                                ])
+                                                @slot('options')
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Terindikasi Anemia">Terindikasi Anemia</option>
+                                                    <option value="Anemia">Anemia</option>
+                                                @endslot
+                                            @endcomponent
+                                        </div>
+                                        <div class="col-lg-4 mt-2">
+                                            @component('dashboard.components.formElements.select', [
+                                                'label' => 'Kategori Lingkar Lengan Atas',
+                                                'id' => 'kategori_lingkar_lengan_atas',
+                                                'name' => 'kategori_lingkar_lengan_atas',
+                                                'class' => 'filter',
+                                                ])
+                                                @slot('options')
+                                                    <option value="Kurang Gizi">Kurang Gizi</option>
+                                                    <option value="Normal">Normal</option>
+                                                @endslot
+                                            @endcomponent
+                                        </div>
+                                        <div class="col-lg-4 mt-2">
+                                            @component('dashboard.components.formElements.select', [
+                                                'label' => 'Kategori Indeks Masa Tubuh',
+                                                'id' => 'kategori_indeks_masa_tubuh',
+                                                'name' => 'kategori_indeks_masa_tubuh',
+                                                'class' => 'filter',
+                                                ])
+                                                @slot('options')
+                                                    <option value="Sangat Kurus">Sangat Kurus</option>
+                                                    <option value="Kurus">Kurus</option>
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Gemuk">Gemuk</option>
+                                                    <option value="Sangat Gemuk">Sangat Gemuk</option>
+                                                @endslot
+                                            @endcomponent
+                                        </div>
+                                        <div class="col-lg-4 mt-2">
+                                            @component('dashboard.components.formElements.select', [
+                                                'label' => 'Asesmen Mencegah Malnutrisi',
+                                                'id' => 'asesmen_mencegah_malnutrisi',
+                                                'name' => 'asesmen_mencegah_malnutrisi',
+                                                'class' => 'filter',
+                                                ])
+                                                @slot('options')
+                                                    <option value="Berpartisipasi Mencegah Stunting">Berpartisipasi
+                                                        Mencegah Stunting</option>
+                                                    <option value="Tidak Berpartisipasi Mencegah Stunting">Tidak Berpartisipasi
+                                                        Mencegah Stunting</option>
+                                                @endslot
+                                            @endcomponent
+                                        </div>
+                                        <div class="col-lg-4 mt-2">
+                                            @component('dashboard.components.formElements.select', [
+                                                'label' => 'Asesmen Meningkatkan Life Skill',
+                                                'id' => 'asesmen_meningkatkan_life_skill',
+                                                'name' => 'asesmen_meningkatkan_life_skill',
+                                                'class' => 'filter',
+                                                ])
+                                                @slot('options')
+                                                    <option value="Berpartisipasi Mencegah Stunting">Berpartisipasi
+                                                        Mencegah Stunting</option>
+                                                    <option value="Tidak Berpartisipasi Mencegah Stunting">Tidak Berpartisipasi
+                                                        Mencegah Stunting</option>
+                                                @endslot
+                                            @endcomponent
+                                        </div>
+                                        <div class="col-lg-4 mt-2">
+                                            @component('dashboard.components.formElements.select', [
+                                                'label' => 'Asesmen Mencegah Pernikahan Dini',
+                                                'id' => 'asesmen_mencegah_pernikahan_dini',
+                                                'name' => 'asesmen_mencegah_pernikahan_dini',
+                                                'class' => 'filter',
+                                                ])
+                                                @slot('options')
+                                                    <option value="Berpartisipasi Mencegah Stunting">Berpartisipasi
+                                                        Mencegah Stunting</option>
+                                                    <option value="Tidak Berpartisipasi Mencegah Stunting">Tidak Berpartisipasi
+                                                        Mencegah Stunting</option>
                                                 @endslot
                                             @endcomponent
                                         </div>
@@ -77,8 +170,24 @@
                                 <div class="card fieldset border border-secondary">
                                     @component('dashboard.components.dataTables.index', [
                                         'id' => 'table-data',
-                                        'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Remaja', 'Desa / Kelurahan', 'Bidan',
-                                        'Tanggal Validasi', 'Aksi'],
+                                        'th' => [
+                                        'No',
+                                        'Tanggal Dibuat',
+                                        'Status Validasi',
+                                        'Status Asesmen',
+                                        'Nama Remaja',
+                                        'Kategori HB',
+                                        'Kategori Lingkar Lengan Atas',
+                                        'Kategori Indeks Masa Tubuh',
+                                        'Asesmen Mencegah Malnutrisi',
+                                        'Asesmen Meningkatkan Life Skill',
+                                        'Asesmen Mencegah Pernikahan Dini',
+                                        'Desa /
+                                        Kelurahan',
+                                        'Bidan',
+                                        'Tanggal Validasi',
+                                        'Aksi',
+                                        ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -165,7 +274,7 @@
 
     <script>
         $(document).on('click', '#btn-delete', function() {
-            let id = $(this).val();
+            let linkDelete = $(this).val();
 
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -179,7 +288,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('perkiraan-melahirkan') }}" + '/' + id,
+                        url: linkDelete,
                         type: 'DELETE',
                         data: {
                             '_token': '{{ csrf_token() }}'
@@ -267,10 +376,16 @@
                 [10, 25, 50, "All"]
             ],
             ajax: {
-                url: "{{ url('perkiraan-melahirkan') }}",
+                url: "{{ url('randa-kabilasa') }}",
                 data: function(d) {
-                    d.status = $('#status-filter').val();
-                    d.kategori = $('#kategori-gizi-filter').val();
+                    d.statusValidasi = $('#status_validasi').val();
+                    d.status_asesmen = $('#status_asesmen').val();
+                    d.kategori_hb = $('#kategori_hb').val();
+                    d.kategori_lingkar_lengan_atas = $('#kategori_lingkar_lengan_atas').val();
+                    d.kategori_indeks_masa_tubuh = $('#kategori_indeks_masa_tubuh').val();
+                    d.asesmen_mencegah_malnutrisi = $('#asesmen_mencegah_malnutrisi').val();
+                    d.asesmen_meningkatkan_life_skill = $('#asesmen_meningkatkan_life_skill').val();
+                    d.asesmen_mencegah_pernikahan_dini = $('#asesmen_mencegah_pernikahan_dini').val();
                     d.search = $('input[type="search"]').val();
                 }
             },
@@ -292,8 +407,43 @@
                     className: 'text-center',
                 },
                 {
+                    data: 'status_asesmen',
+                    name: 'status_asesmen',
+                    className: 'text-center',
+                },
+                {
                     data: 'nama_remaja',
                     name: 'nama_remaja',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_hb',
+                    name: 'kategori_hb',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_lingkar_lengan_atas',
+                    name: 'kategori_lingkar_lengan_atas',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_indeks_masa_tubuh',
+                    name: 'kategori_indeks_masa_tubuh',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_mencegah_malnutrisi',
+                    name: 'kategori_mencegah_malnutrisi',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_meningkatkan_life_skill',
+                    name: 'kategori_meningkatkan_life_skill',
+                    className: 'text-center',
+                },
+                {
+                    data: 'kategori_mencegah_pernikahan_dini',
+                    name: 'kategori_mencegah_pernikahan_dini',
                     className: 'text-center',
                 },
                 {
@@ -322,15 +472,11 @@
             ],
             columnDefs: [],
         });
+    </script>
 
-        $('#status-filter').change(function() {
+    <script>
+        $('.filter').change(function() {
             table.draw();
-            console.log($('#status-filter').val())
-        })
-
-        $('#kategori-gizi-filter').change(function() {
-            table.draw();
-            console.log($('#kategori-gizi-filter').val())
         })
     </script>
 @endpush

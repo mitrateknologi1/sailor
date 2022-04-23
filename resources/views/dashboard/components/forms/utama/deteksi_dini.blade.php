@@ -66,7 +66,7 @@
                         }
                     @endphp
                 @endif
-                <div class="card fieldset border border-secondary bg-white p-0">
+                <div class="card p-0 my-3">
                     <div class="card-body">
                         <p>{{ $loop->iteration }}. {{ $soal->soal }}</p>
                         <div class="form-check form-check-inline">

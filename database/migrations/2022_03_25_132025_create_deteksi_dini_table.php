@@ -14,7 +14,7 @@ class CreateDeteksiDiniTable extends Migration
     public function up()
     {
         Schema::create('deteksi_dini', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->bigInteger('anggota_keluarga_id');
             $table->bigInteger('bidan_id');
             $table->integer('skor');

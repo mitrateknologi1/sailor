@@ -1,7 +1,7 @@
     @push('style')
         <style>
             #map {
-                height: 400px;
+                height: 600px;
                 margin-top: 0px;
             }
 
@@ -29,11 +29,11 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-xl-8 col-lg-8 col-md-12">
+                            <div class="col-xl-12 col-lg-12 col-md-12">
                                 <div id="map"></div>
                                 <span class="badge bg-danger mt-2 d-none polygon-error"></span>
                             </div>
-                            <div class="col-xl-4 col-lg-4 col-md-12">
+                            <div class="col-xl-12 col-lg-12 col-md-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <form class="row g-3">
@@ -76,9 +76,9 @@
     @push('script')
         <script>
             var warna = $('#warna').val();
-            var center = [-0.8037181, 120.1707766];
+            var center = [-0.8794398, 119.8251756];
 
-            var map = L.map("map").setView(center, 12);
+            var map = L.map("map").setView(center, 11);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
@@ -88,6 +88,7 @@
             var drawnItems = new L.FeatureGroup();
 
             map.addLayer(drawnItems);
+            map.addControl(new L.Control.Fullscreen());
 
             var drawControl = new L.Control.Draw({
                 position: "topright",

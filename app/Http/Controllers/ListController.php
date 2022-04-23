@@ -166,20 +166,20 @@ class ListController extends Controller
         $profil_id = Auth::user()->profil->id; //bidan/penyuluh
         $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
 
-        $lokasiAnak = '';
+        $lokasiIbu = '';
         if ($request->method == "PUT") {
-            $anak = AnggotaKeluarga::with('wilayahDomisili')->withTrashed()->where('id', $request->id_anak)->first();
-            $lokasiAnak = $anak->wilayahDomisili->desa_kelurahan_id;
+            $ibu = AnggotaKeluarga::with('wilayahDomisili')->withTrashed()->where('id', $request->id_edit)->first();
+            $lokasiIbu = $ibu->wilayahDomisili->desa_kelurahan_id;
         }
 
         $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
             ->where('status_hubungan_dalam_keluarga', 'ISTRI')
-            ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+            ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiIbu) {
                 if (Auth::user()->role != 'admin') {
                     if ($request->method == "POST") {
                         return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
                     } else { // PUT
-                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiIbu);
                     }
                 }
             })
@@ -190,9 +190,9 @@ class ListController extends Controller
             $id_edit = $request->id_edit;
             $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
                 ->where('status_hubungan_dalam_keluarga', 'ISTRI')
-                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiIbu) {
                     if (Auth::user()->role != 'admin') {
-                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiIbu);
                     }
                 })
                 ->onlyTrashed()

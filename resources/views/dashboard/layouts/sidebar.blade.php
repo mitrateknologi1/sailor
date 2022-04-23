@@ -96,7 +96,28 @@
                         <span class="ms-2">Randa Kabilasa</span>
                     </a>
                 </li>
+                <li class="collapsed">
+                    <a class="m-link" id="m-link-peta-data" data-bs-toggle="collapse"
+                        data-bs-target="#menu-peta-data" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-map-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M16 .5a.5.5 0 0 0-.598-.49L10.5.99 5.598.01a.5.5 0 0 0-.196 0l-5 1A.5.5 0 0 0 0 1.5v14a.5.5 0 0 0 .598.49l4.902-.98 4.902.98a.502.502 0 0 0 .196 0l5-1A.5.5 0 0 0 16 14.5V.5zM5 14.09V1.11l.5-.1.5.1v12.98l-.402-.08a.498.498 0 0 0-.196 0L5 14.09zm5 .8V1.91l.402.08a.5.5 0 0 0 .196 0L11 1.91v12.98l-.5.1-.5-.1z" />
+                        </svg>
+                        <span class="ms-2">Peta Data</span>
+                        <span class="arrow fa fa-angle-right ms-auto text-end"></span>
+                    </a>
 
+                    <!-- Menu: Sub menu ul -->
+                    <ul class="sub-menu collapse" id="menu-peta-data">
+                        <li><a class="ms-link" id="ms-link-peta-deteksi-stunting"
+                                href="{{ url('map-deteksi-stunting') }}">Deteksi Stunting</a></li>
+                        <li><a class="ms-link" id="ms-link-peta-moms-care"
+                                href="{{ url('map-moms-care') }}">Moms Care</a></li>
+                        <li><a class="ms-link" id="ms-link-peta-randa-kabilasa"
+                                href="{{ url('map-randa-kabilasa') }}">Randa Kabilasa</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="menu-list">
                 <li class="divider py-2 lh-sm"><span class="small">MASTER DATA</span><br></li>

@@ -7,6 +7,7 @@ use App\Models\Anc;
 use App\Models\AnggotaKeluarga;
 use App\Models\KartuKeluarga;
 use App\Models\LokasiTugas;
+use App\Models\PemeriksaanAnc;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -25,18 +26,104 @@ class AncController extends Controller
     {
         if ($request->ajax()) {
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-            $data = Anc::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+            $data = Anc::with('anggotaKeluarga', 'bidan', 'pemeriksaanAnc')->orderBy('created_at', 'DESC')
                 ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
                     if (Auth::user()->role != 'admin') {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                     }
+                })
+                ->where(function ($query) use ($request) {
+                    // $query->where(function ($query) use ($request) {
+                    //     if ($request->statusValidasi) {
+                    //         $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
+                    //     }
+
+                    //     if ($request->kategori_badan) {
+                    //         if ($request->kategori_badan == 'Resiko Tinggi') {
+                    //             $query->where('tinggi_badan', '<=', '145');
+                    //         } else {
+                    //             $query->where('tinggi_badan', '>', '145');
+                    //         }
+                    //     }
+
+                    //     if ($request->kategori_tekanan_darah) {
+                    //         if ($request->kategori_tekanan_darah == 'Hipotensi') {
+                    //             $query->where('tekanan_darah_sistolik', '<', '90');
+                    //         } else if ($request->kategori_tekanan_darah == 'Normal') {
+                    //             $query->where('tekanan_darah_sistolik', '>=', '90');
+                    //             $query->where('tekanan_darah_sistolik', '<=', '120');
+                    //         } else if ($request->kategori_tekanan_darah == 'Prahipertensi') {
+                    //             $query->where('tekanan_darah_sistolik', '>=', '121');
+                    //             $query->where('tekanan_darah_sistolik', '<=', '139');
+                    //         } else if ($request->kategori_tekanan_darah == 'Hipertensi') {
+                    //             $query->where('tekanan_darah_sistolik', '>=', '140');
+                    //         }
+                    //     }
+
+                    //     if ($request->kategori_lengan_atas) {
+                    //         if ($request->kategori_lengan_atas == 'Kurang Gizi (BBLR)') {
+                    //             $query->where('lengan_atas', '<=', '23.5');
+                    //         } else {
+                    //             $query->where('lengan_atas', '>', '23.5');
+                    //         }
+                    //     }
+
+                    //     if ($request->kategori_denyut_jantung) {
+                    //         if ($request->kategori_denyut_jantung == 'Normal') {
+                    //             $query->where('denyut_jantung_janin', '>=', '120');
+                    //             $query->where('denyut_jantung_janin', '<=', '160');
+                    //         } else {
+                    //             $query->where('denyut_jantung_janin', '<', '120');
+                    //             $query->orWhere('denyut_jantung_janin', '>', '160');
+                    //         }
+                    //     }
+
+                    //     if ($request->kategori_hemoglobin_darah) {
+                    //         if ($request->kategori_hemoglobin_darah == 'Normal') {
+                    //             $query->where('hemoglobin_darah', '>=', '11');
+                    //         } else {
+                    //             $query->where('hemoglobin_darah', '<', '11');
+                    //         }
+                    //     }
+
+                    //     if ($request->kategori_vaksin_sebelum_hamil) {
+                    //         $query->where('vaksin_tetanus_sebelum_hamil', $request->kategori_vaksin_sebelum_hamil);
+                    //     }
+
+                    //     if ($request->kategori_vaksin_sesudah_hamil) {
+                    //         $query->where('vaksin_tetanus_sesudah_hamil', $request->kategori_vaksin_sesudah_hamil);
+                    //     }
+
+                    //     if ($request->kategori_posisi_janin) {
+                    //         $query->where('posisi_janin', $request->kategori_posisi_janin);
+                    //     }
+
+                    //     if ($request->kategori_minum_tablet) {
+                    //         $query->where('minum_tablet', $request->kategori_minum_tablet);
+                    //     }
+
+                    //     if ($request->kategori_konseling) {
+                    //         $query->where('konseling', $request->kategori_konseling);
+                    //     }
+                    // });
+
+                    $query->where(function ($query) use ($request) {
+                        if ($request->search) {
+                            $query->whereHas('bidan', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+
+                            $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+                        }
+                    });
                 })
                 ->orWhere(function ($query) {
                     if (Auth::user()->role == 'bidan') { // bidan
                         $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                     }
                 })->get();
-
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('tanggal_dibuat', function ($row) {
@@ -55,52 +142,67 @@ class AncController extends Controller
                 ->addColumn('tanggal_haid_terakhir', function ($row) {
                     return Carbon::parse($row->tanggal_haid_terakhir)->translatedFormat('d F Y');
                 })
+                ->addColumn('kehamilan_ke', function ($row) {
+                    return $row->pemeriksaanAnc->kehamilan_ke;
+                })
                 ->addColumn('usia_kehamilan', function ($row) {
                     return $row->usia_kehamilan . ' Minggu Lagi';
                 })
                 ->addColumn('tanggal_perkiraan_lahir', function ($row) {
                     return Carbon::parse($row->tanggal_perkiraan_lahir)->translatedFormat('d F Y');
                 })
+                ->addColumn('lengan_atas', function ($row) {
+                    return $row->pemeriksaanAnc->lengan_atas;
+                })
+                ->addColumn('tinggi_fundus', function ($row) {
+                    return $row->pemeriksaanAnc->tinggi_fundus;
+                })
+                ->addColumn('hemoglobin_darah', function ($row) {
+                    return $row->pemeriksaanAnc->hemoglobin_darah;
+                })
+                ->addColumn('denyut_jantung_janin', function ($row) {
+                    return $row->pemeriksaanAnc->denyut_jantung_janin;
+                })
                 ->addColumn('tinggi_berat_badan', function ($row) {
-                    return $row->tinggi_badan . ' cm / ' . $row->berat_badan . ' kg';
+                    return $row->pemeriksaanAnc->tinggi_badan . ' cm / ' . $row->pemeriksaanAnc->berat_badan . ' kg';
                 })
                 ->addColumn('tekanan_darah', function ($row) {
-                    return $row->tekanan_darah_sistolik . '/' . $row->tekanan_darah_diastolik;
+                    return $row->pemeriksaanAnc->tekanan_darah_sistolik . '/' . $row->pemeriksaanAnc->tekanan_darah_diastolik;
                 })
                 ->addColumn('kategori_badan', function ($row) {
-                    if ($row->tinggi_badan <= 145) {
+                    if ($row->kategori_badan == 'Resiko Tinggi') {
                         return '<span class="badge badge-danger bg-danger">Resiko Tinggi</span>';
                     } else {
                         return '<span class="badge badge-success bg-success">Normal</span>';
                     }
                 })
                 ->addColumn('kategori_tekanan_darah', function ($row) {
-                    if ($row->tekanan_darah_sistolik < 90) {
+                    if ($row->kategori_tekanan_darah == 'Hipotensi') {
                         return '<span class="badge badge-primary bg-primary">Hipotensi</span>';
-                    } else if ($row->tekanan_darah_sistolik >= 90 && $row->tekanan_darah_sistolik <= 120) {
+                    } else if ($row->kategori_tekanan_darah == 'Normal') {
                         return '<span class="badge badge-success bg-success">Normal</span>';
-                    } else if ($row->tekanan_darah_sistolik >= 121 && $row->tekanan_darah_sistolik <= 139) {
+                    } else if ($row->kategori_tekanan_darah == 'Prahipertensi') {
                         return '<span class="badge badge-warning bg-warning">Prahipertensi</span>';
-                    } else if ($row->tekanan_darah_sistolik >= 140) {
+                    } else if ($row->kategori_tekanan_darah == 'Hipertensi') {
                         return '<span class="badge badge-danger bg-danger">Hipertensi</span>';
                     }
                 })
                 ->addColumn('kategori_lengan_atas', function ($row) {
-                    if ($row->lengan_atas <= 23.5) {
+                    if ($row->kategori_lengan_atas == 'Kurang Gizi (BBLR)') {
                         return '<span class="badge badge-danger bg-danger">Kurang Gizi (BBLR)</span>';
                     } else {
                         return '<span class="badge badge-success bg-success">Normal</span>';
                     }
                 })
                 ->addColumn('kategori_denyut_jantung', function ($row) {
-                    if ($row->denyut_jantung_janin >= 120 && $row->denyut_jantung_janin <= 160) {
+                    if ($row->kategori_denyut_jantung == 'Normal') {
                         return '<span class="badge badge-success bg-success">Normal</span>';
                     } else {
                         return '<span class="badge badge-danger bg-danger">Tidak Normal</span>';
                     }
                 })
                 ->addColumn('kategori_hemoglobin_darah', function ($row) {
-                    if ($row->hemoglobin_darah >= 11) {
+                    if ($row->kategori_hemoglobin_darah == 'Normal') {
                         return '<span class="badge badge-success bg-success">Normal</span>';
                     } else {
                         return '<span class="badge badge-danger bg-danger">Anemia</span>';
@@ -163,7 +265,7 @@ class AncController extends Controller
 
                     return $actionBtn;
                 })
-                ->rawColumns(['status', 'nama_ibu', 'tanggal_haid_terakhir', 'tinggi_berat_badan', 'tekanan_darah', 'kategori_badan', 'kategori_tinggi_badan', 'kategori_tekanan_darah', 'kategori_lengan_atas', 'kategori_denyut_jantung', 'kategori_hemoglobin_darah', 'vaksin_tetanus_sebelum_hamil', 'vaksin_tetanus_sesudah_hamil', 'posisi_janin', 'minum_tablet', 'konseling', 'desa_kelurahan', 'bidan', 'tanggal_validasi', 'action'])
+                ->rawColumns(['status', 'nama_ibu', 'tanggal_haid_terakhir', 'kehamilan_ke', 'tinggi_berat_badan', 'tekanan_darah', 'kategori_badan', 'kategori_tinggi_badan', 'kategori_tekanan_darah', 'kategori_lengan_atas', 'kategori_denyut_jantung', 'kategori_hemoglobin_darah', 'vaksin_tetanus_sebelum_hamil', 'vaksin_tetanus_sesudah_hamil', 'posisi_janin', 'minum_tablet', 'konseling', 'desa_kelurahan', 'bidan', 'tanggal_validasi', 'action'])
                 ->make(true);
         }
         return view('dashboard.pages.utama.momsCare.anc.index');
@@ -363,23 +465,34 @@ class AncController extends Controller
         $anc = new Anc();
         $anc->anggota_keluarga_id = $data['anggota_keluarga_id'];
         $anc->pemeriksaan_ke = $data['pemeriksaan_ke'];
-        $anc->tanggal_haid_terakhir = Carbon::parse($data['tanggal_haid_terakhir']);
-        $anc->kehamilan_ke = $data['kehamilan_ke'];
-        $anc->tinggi_badan = $data['tinggi_badan'];
-        $anc->berat_badan = $data['berat_badan'];
-        $anc->tekanan_darah_sistolik = $data['tekanan_darah_sistolik'];
-        $anc->tekanan_darah_diastolik = $data['tekanan_darah_diastolik'];
-        $anc->lengan_atas = $data['lengan_atas'];
-        $anc->tinggi_fundus = $data['tinggi_fundus'];
-        $anc->denyut_jantung_janin = $data['denyut_jantung'];
-        $anc->hemoglobin_darah = $data['hemoglobin_darah'];
+        $anc->kategori_badan = $data['kategori_tinggi_badan'];
+        $anc->kategori_tekanan_darah = $data['kategori_tekanan_darah'];
+        $anc->kategori_lengan_atas = $data['kategori_lengan_atas'];
+        $anc->kategori_denyut_jantung = $data['kategori_denyut_jantung'];
+        $anc->kategori_hemoglobin_darah = $data['kategori_hemoglobin_darah'];
         $anc->vaksin_tetanus_sebelum_hamil = $data['vaksin_tetanus_sebelum_hamil'];
         $anc->vaksin_tetanus_sesudah_hamil = $data['vaksin_tetanus_sesudah_hamil'];
         $anc->posisi_janin = $data['posisi_janin'];
         $anc->minum_tablet = $data['minum_tablet'];
         $anc->konseling = $data['konseling'];
-        $anc->usia_kehamilan = $data['usia_kehamilan'];
-        $anc->tanggal_perkiraan_lahir = Carbon::parse($data['tanggal_perkiraan_lahir']);
+        $anc->save();
+
+        $pemeriksaanAnc = new PemeriksaanAnc();
+        $pemeriksaanAnc->anc_id = $anc->id;
+        $pemeriksaanAnc->tanggal_haid_terakhir = Carbon::parse($data['tanggal_haid_terakhir']);
+        $pemeriksaanAnc->kehamilan_ke = $data['kehamilan_ke'];
+        $pemeriksaanAnc->tinggi_badan = $data['tinggi_badan'];
+        $pemeriksaanAnc->berat_badan = $data['berat_badan'];
+        $pemeriksaanAnc->tekanan_darah_sistolik = $data['tekanan_darah_sistolik'];
+        $pemeriksaanAnc->tekanan_darah_diastolik = $data['tekanan_darah_diastolik'];
+        $pemeriksaanAnc->lengan_atas = $data['lengan_atas'];
+        $pemeriksaanAnc->tinggi_fundus = $data['tinggi_fundus'];
+        $pemeriksaanAnc->denyut_jantung_janin = $data['denyut_jantung'];
+        $pemeriksaanAnc->hemoglobin_darah = $data['hemoglobin_darah'];
+        $pemeriksaanAnc->usia_kehamilan = $data['usia_kehamilan'];
+        $pemeriksaanAnc->tanggal_perkiraan_lahir = Carbon::parse($data['tanggal_perkiraan_lahir']);
+        $pemeriksaanAnc->save();
+
         if ($role == 'bidan') {
             $anc->bidan_id = Auth::user()->profil->id;
             $anc->tanggal_validasi = Carbon::now();
@@ -405,21 +518,23 @@ class AncController extends Controller
         $namaKepalaKeluarga = $anc->nama_kepala_keluarga;
         $namaIbu = AnggotaKeluarga::where('id', $anc->anggota_keluarga_id)->first()->nama_lengkap;
         $pemeriksaanKe = $anc->pemeriksaan_ke;
-        $tanggalHaidTerakhir = $anc->tanggal_haid_terakhir;
-        $kehamilanKe = $anc->kehamilan_ke;
-        $tinggiBadan = $anc->tinggi_badan;
-        $beratBadan = $anc->berat_badan;
-        $tekananDarahSistolik = $anc->tekanan_darah_sistolik;
-        $tekananDarahDiastolik = $anc->tekanan_darah_diastolik;
-        $lenganAtas = $anc->lengan_atas;
-        $tinggiFundus = $anc->tinggi_fundus;
-        $denyutJantung = $anc->denyut_jantung_janin;
-        $hemoglobinDarah = $anc->hemoglobin_darah;
         $vaksinTetanusSebelumHamil = $anc->vaksin_tetanus_sebelum_hamil;
         $vaksinTetanusSesudahHamil = $anc->vaksin_tetanus_sesudah_hamil;
         $posisiJanin = $anc->posisi_janin;
         $minumTablet = $anc->minum_tablet;
         $konseling = $anc->konseling;
+
+        $tanggalHaidTerakhir = $anc->pemeriksaanAnc->tanggal_haid_terakhir;
+        $kehamilanKe = $anc->pemeriksaanAnc->kehamilan_ke;
+        $tinggiBadan = $anc->pemeriksaanAnc->tinggi_badan;
+        $beratBadan = $anc->pemeriksaanAnc->berat_badan;
+        $tekananDarahSistolik = $anc->pemeriksaanAnc->tekanan_darah_sistolik;
+        $tekananDarahDiastolik = $anc->pemeriksaanAnc->tekanan_darah_diastolik;
+        $lenganAtas = $anc->pemeriksaanAnc->lengan_atas;
+        $tinggiFundus = $anc->pemeriksaanAnc->tinggi_fundus;
+        $denyutJantung = $anc->pemeriksaanAnc->denyut_jantung_janin;
+        $hemoglobinDarah = $anc->pemeriksaanAnc->hemoglobin_darah;
+
 
         if ($tinggiBadan <= 145) {
             $kategoriTinggiBadan = 'Resiko Tinggi';
@@ -494,8 +609,8 @@ class AncController extends Controller
             'kategori_hemoglobin_darah' => $kategoriHemoglobinDarah,
             'usia_kehamilan' => $usiaKehamilan,
             'tanggal_perkiraan_lahir' => $tanggalPerkiraanLahir,
-            'tanggal_perkiraan_lahir_sebut' => Carbon::parse($hpl)->format('d F Y'),
-            'tanggal_haid_terakhir_sebut' => Carbon::parse($tanggalHaidTerakhir)->format('d F Y'),
+            'tanggal_perkiraan_lahir_sebut' => Carbon::parse($hpl)->translatedFormat('d F Y'),
+            'tanggal_haid_terakhir_sebut' => Carbon::parse($tanggalHaidTerakhir)->translatedFormat('d F Y'),
             'bidan_id' => $anc->bidan_id,
         ];
 

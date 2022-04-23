@@ -442,20 +442,21 @@
             $(document).ready(function() {
                 $('#nama-kepala-keluarga').val(
                     '{{ $dataEdit->anggotaKeluarga->kartuKeluarga->id }}').change();
+                $('#pemeriksaan_ke').val("{{ $dataEdit->pemeriksaan_ke }}");
 
                 $('#tanggal_haid_terakhir').val(
-                        "{{ date('d-m-Y', strtotime($dataEdit->tanggal_haid_terakhir)) }}")
+                        "{{ date('d-m-Y', strtotime($dataEdit->pemeriksaanAnc->tanggal_haid_terakhir)) }}")
                     .change();
-                $('#pemeriksaan_ke').val("{{ $dataEdit->pemeriksaan_ke }}");
-                $('#kehamilan_ke').val("{{ $dataEdit->kehamilan_ke }}");
-                $('#tinggi_badan').val("{{ $dataEdit->tinggi_badan }}");
-                $('#berat_badan').val("{{ $dataEdit->berat_badan }}");
-                $('#tekanan_darah_sistolik').val("{{ $dataEdit->tekanan_darah_sistolik }}");
-                $('#tekanan_darah_diastolik').val("{{ $dataEdit->tekanan_darah_diastolik }}");
-                $('#lengan_atas').val("{{ $dataEdit->lengan_atas }}");
-                $('#tinggi_fundus').val("{{ $dataEdit->tinggi_fundus }}");
-                $('#hemoglobin_darah').val("{{ $dataEdit->hemoglobin_darah }}");
-                $('#denyut_jantung').val("{{ $dataEdit->denyut_jantung_janin }}");
+                $('#kehamilan_ke').val("{{ $dataEdit->pemeriksaanAnc->kehamilan_ke }}");
+                $('#tinggi_badan').val("{{ $dataEdit->pemeriksaanAnc->tinggi_badan }}");
+                $('#berat_badan').val("{{ $dataEdit->pemeriksaanAnc->berat_badan }}");
+                $('#tekanan_darah_sistolik').val("{{ $dataEdit->pemeriksaanAnc->tekanan_darah_sistolik }}");
+                $('#tekanan_darah_diastolik').val("{{ $dataEdit->pemeriksaanAnc->tekanan_darah_diastolik }}");
+                $('#lengan_atas').val("{{ $dataEdit->pemeriksaanAnc->lengan_atas }}");
+                $('#tinggi_fundus').val("{{ $dataEdit->pemeriksaanAnc->tinggi_fundus }}");
+                $('#hemoglobin_darah').val("{{ $dataEdit->pemeriksaanAnc->hemoglobin_darah }}");
+                $('#denyut_jantung').val("{{ $dataEdit->pemeriksaanAnc->denyut_jantung_janin }}");
+
                 $('#vaksin_tetanus_sebelum_hamil').val(
                     '{{ $dataEdit->vaksin_tetanus_sebelum_hamil }}').change();
                 $('#vaksin_tetanus_sesudah_hamil').val('{{ $dataEdit->vaksin_tetanus_sesudah_hamil }}')
@@ -557,8 +558,6 @@
                         processData: false,
                         contentType: false,
                         success: function(data) {
-                            console.log(data);
-                            $("#overlay").fadeOut(100);
                             if ($.isEmptyObject(data.error)) {
                                 $('#modal-hasil').modal('show');
                                 $('#tanggal-proses').text('Tanggal : ' + moment().format('LL'))
