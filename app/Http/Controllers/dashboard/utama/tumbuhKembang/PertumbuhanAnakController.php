@@ -48,9 +48,9 @@ class PertumbuhanAnakController extends Controller
                     })
                     ->addColumn('status', function ($row) {
                         if ($row->is_valid == 1) {
-                            return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
+                            return '<span class="badge rounded bg-success">Tervalidasi</span>';
                         } else {
-                            return '<span class="badge rounded-pill bg-danger">Belum Divalidasi</span>';
+                            return '<span class="badge rounded bg-danger">Belum Divalidasi</span>';
                         }
                     })
 
@@ -83,7 +83,7 @@ class PertumbuhanAnakController extends Controller
                     })
 
                     ->addColumn('bidan', function ($row) {
-                        return $row->bidan ? $row->bidan->nama_lengkap : '<span class="badge rounded-pill bg-danger">Belum Ada</span>';
+                        return $row->bidan ? $row->bidan->nama_lengkap : '<span class="badge rounded bg-danger">Belum Ada</span>';
                     })
 
                     ->addColumn('desa_kelurahan', function ($row) {
@@ -93,23 +93,23 @@ class PertumbuhanAnakController extends Controller
 
                     ->addColumn('hasil', function ($row) {
                         if ($row->hasil == 'Gizi Buruk') {
-                            return '<span class="badge rounded-pill bg-danger">Gizi Buruk</span>';
+                            return '<span class="badge rounded bg-danger">Gizi Buruk</span>';
                         } elseif ($row->hasil == 'Gizi Kurang') {
-                            return '<span class="badge rounded-pill bg-warning">Gizi Kurang</span>';
+                            return '<span class="badge rounded bg-warning">Gizi Kurang</span>';
                         } elseif ($row->hasil == 'Gizi Baik') {
-                            return '<span class="badge rounded-pill bg-success">Gizi Baik</span>';
+                            return '<span class="badge rounded bg-success">Gizi Baik</span>';
                         } elseif ($row->hasil == 'Gizi Lebih') {
-                            return '<span class="badge rounded-pill bg-primary">Gizi Lebih</span>';
+                            return '<span class="badge rounded bg-primary">Gizi Lebih</span>';
                         }
                     })
 
                     ->addColumn('action', function ($row) {
                         $actionBtn = '
                             <div class="text-center justify-content-center text-white">';
-                        // if($row->)
                         if($row->is_valid == 1){
                             $actionBtn .= '
-                            <button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat(' . $row->id . ') ><i class="fas fa-eye"></i></button>';
+                            <button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>
+                            ';
                             if (in_array(Auth::user()->role, ['admin', 'bidan'])) {
                                 if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
                                     $actionBtn .= '

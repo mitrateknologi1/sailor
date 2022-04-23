@@ -17,7 +17,7 @@ class PertumbuhanAnakSeeder extends Seeder
         DB::table('pertumbuhan_anak')->insert(array (
             0 => 
             array (
-                'id' => 1,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e42',
                 'anggota_keluarga_id' => 3,
                 'bidan_id' => 1,
                 'berat_badan' => 1,
@@ -31,7 +31,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             1 => 
             array (
-                'id' => 2,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e43',
                 'anggota_keluarga_id' => 3,
                 'bidan_id' => 2,
                 'berat_badan' => 12,
@@ -45,7 +45,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             2 => 
             array (
-                'id' => 3,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e44',
                 'anggota_keluarga_id' => 4,
                 'bidan_id' => 1,
                 'berat_badan' => 12,
@@ -59,7 +59,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             3 => 
             array (
-                'id' => 4,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e45',
                 'anggota_keluarga_id' => 4,
                 'bidan_id' => 2,
                 'berat_badan' => 20,
@@ -73,7 +73,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             4 => 
             array (
-                'id' => 5,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e46',
                 'anggota_keluarga_id' => 5,
                 'bidan_id' => 1,
                 'berat_badan' => 4,
@@ -87,7 +87,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             5 => 
             array (
-                'id' => 6,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e47',
                 'anggota_keluarga_id' => 5,
                 'bidan_id' => 2,
                 'berat_badan' => 10,
@@ -101,7 +101,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             6 => 
             array (
-                'id' => 7,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e48',
                 'anggota_keluarga_id' => 6,
                 'bidan_id' => 1,
                 'berat_badan' => 30,
@@ -115,7 +115,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             7 => 
             array (
-                'id' => 8,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e49',
                 'anggota_keluarga_id' => 6,
                 'bidan_id' => 2,
                 'berat_badan' => 9,
@@ -129,7 +129,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             8 => 
             array (
-                'id' => 9,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e50',
                 'anggota_keluarga_id' => 10,
                 'bidan_id' => 1,
                 'berat_badan' => 10,
@@ -143,7 +143,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             9 => 
             array (
-                'id' => 10,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e51',
                 'anggota_keluarga_id' => 10,
                 'bidan_id' => 2,
                 'berat_badan' => 15,
@@ -157,7 +157,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             10 => 
             array (
-                'id' => 11,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e52',
                 'anggota_keluarga_id' => 11,
                 'bidan_id' => 1,
                 'berat_badan' => 30,
@@ -171,7 +171,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             11 => 
             array (
-                'id' => 12,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e53',
                 'anggota_keluarga_id' => 11,
                 'bidan_id' => 2,
                 'berat_badan' => 10,
@@ -185,7 +185,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             12 => 
             array (
-                'id' => 13,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e54',
                 'anggota_keluarga_id' => 12,
                 'bidan_id' => 1,
                 'berat_badan' => 11,
@@ -199,7 +199,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             13 => 
             array (
-                'id' => 14,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e55',
                 'anggota_keluarga_id' => 12,
                 'bidan_id' => 2,
                 'berat_badan' => 20,
@@ -213,7 +213,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             14 => 
             array (
-                'id' => 15,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e56',
                 'anggota_keluarga_id' => 13,
                 'bidan_id' => 1,
                 'berat_badan' => 30,
@@ -227,7 +227,7 @@ class PertumbuhanAnakSeeder extends Seeder
             ),
             15 => 
             array (
-                'id' => 16,
+                'id' => '4ff9ba91-4778-404c-aa7f-5fd327e87e57',
                 'anggota_keluarga_id' => 13,
                 'bidan_id' => 2,
                 'berat_badan' => 11,

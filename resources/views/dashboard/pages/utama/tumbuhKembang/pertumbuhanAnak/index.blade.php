@@ -330,11 +330,11 @@
         })
 
         
-        function modalLihat(id){
-            var pertumbuhan_anak = id;
+        $(document).on('click', '#btn-lihat', function() {
+            let id = $(this).val();
             $.ajax({
                 type: "GET",
-                url: "{{url('pertumbuhan-anak')}}" + '/' + pertumbuhan_anak,
+                url: "{{url('pertumbuhan-anak')}}" + '/' + id,
                 success: function (data) {
                     $('#modal-lihat').modal('show');
                     $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data.tanggal_proses).format('LL'));
@@ -350,7 +350,7 @@
                     $('#modal-desa-kelurahan').text(data.desa_kelurahan);
                     $('#modal-diperiksa-divalidasi').text(moment(data.tanggal_validasi).format('LL'));
                     $('#modal-nama-bidan').text(data.bidan);
-                    $('#modal-btn-ubah').attr('href', '{{url('pertumbuhan-anak')}}' + '/' + pertumbuhan_anak + '/edit');
+                    $('#modal-btn-ubah').attr('href', '{{url('pertumbuhan-anak')}}' + '/' + id + '/edit');
                     
                     var kategoriBg = ['bg-danger', 'bg-warning', 'bg-info', 'bg-success', 'bg-primary'];
                     var kategoriAlert = ['alert-danger', 'alert-warning', 'alert-info', 'alert-success', 'alert-primary'];
@@ -392,7 +392,7 @@
                 },
             })
 
-        }
+        })
 
         function hapus(id) {
             var _token = "{{csrf_token()}}";
