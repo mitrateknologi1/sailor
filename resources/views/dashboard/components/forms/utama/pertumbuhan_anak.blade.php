@@ -333,6 +333,8 @@
             var selected = '';
             $('#nama-anak').html('');
             $('#nama-anak').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+            changeAnak()
+            $('#nama-bidan').attr('disabled', true);
             $.get("{{ route('getAnak') }}", {
                 id: id,
                 rentang_umur: rentang_umur,
@@ -360,7 +362,7 @@
                         }
 
                         $('#nama-anak').append(
-                            `<option value="${result.anggota_keluarga_hapus.id}" ${selected}>${result.anggota_keluarga_hapus.nama_lengkap} (${result.anggota_keluarga_hapus.tanggal_lahir})</option>`
+                            `<option value="${result.anggota_keluarga_hapus.id}" ${selected}>${result.anggota_keluarga_hapus.nama_lengkap} (${moment(result.anggota_keluarga_hapus.tanggal_lahir).format('LL')})</option>`
                         );
 
                     }
@@ -369,17 +371,15 @@
             });
         }
 
-        function changeAnak(){
-            if(('{{ Auth::user()->role }}' == 'admin') && ('{{$method}}' == 'POST')){
-        // function changeAnak() {
-            // if ('{{ Auth::user()->role }}' == 'admin') {
+        // function changeAnak(){
+        //     if(('{{ Auth::user()->role }}' == 'admin') && ('{{$method}}' == 'POST')){
+        function changeAnak() {
+            if ('{{ Auth::user()->role }}' == 'admin') {
                 var id = $('#nama-anak').val();
-                var fungsi = 'pertumbuhan_anak';
                 $('#nama-bidan').html('');
                 $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
                 $.get("{{ route('getBidan') }}", {
                     id: id,
-                    fungsi: fungsi
                 }, function(result) {
                     $.each(result, function(key, val) {
                         $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
@@ -387,10 +387,6 @@
                     $('#nama-bidan').removeAttr('disabled');
                 });
             }
-            // else{
-            //     console.log('bukan admin')
-            // }
-
         }
     </script>
 @endpush

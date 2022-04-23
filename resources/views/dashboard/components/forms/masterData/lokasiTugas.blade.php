@@ -6,7 +6,7 @@
         <div class="card fieldset border border-secondary mt-4" id="daftarLokasi{{$loop->iteration}}">
             <span class="fieldset-tile text-secondary bg-white ml-6">Lokasi Tugas</span>
             <div class="row g-3 mb-3">
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-3 col-md-6">
                     {{-- Provinsi --}}
                     @component('dashboard.components.formElements.select', [
                         'label' => 'Provinsi',
@@ -23,7 +23,7 @@
                     @endslot
                     @endcomponent
                 </div>
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-3 col-md-6">
                     {{-- Kabupaten / Kota --}}
                     @component('dashboard.components.formElements.select', [
                         'label' => 'Kabupaten / Kota',
@@ -40,7 +40,7 @@
                     @endslot
                     @endcomponent
                 </div>
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-3 col-md-6">
                     {{-- Kecamatan --}}
                     @component('dashboard.components.formElements.select', [
                         'label' => 'Kecamatan',
@@ -57,7 +57,7 @@
                     @endslot
                     @endcomponent
                 </div>
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-3 col-md-6">
                     {{-- Desa / Kelurahan --}}
                     @component('dashboard.components.formElements.select', [
                         'label' => 'Desa / Kelurahan',
@@ -102,6 +102,8 @@
 
 @push('script')
 <script>
+    
+
     $(document).on('click', '.btnHapusLokasiLama', function () {
         var iteration = $(this).data('iteration');
         $('#daftarLokasi' + iteration).remove();
@@ -113,13 +115,13 @@
         i++;
         var lokasi = '<div class="card fieldset border border-secondary mt-4" id="daftarLokasi'+ i +'"><span class="fieldset-tile text-secondary bg-white ml-6">Lokasi Tugas</span> <div class="row g-3 mb-3">' +
         // Provinsi
-        '<div class="col-lg-3 col-md-3"> <label class="form-label">Provinsi <sup class="text-danger">*</sup></label> <select class="form-select select2 provinsi" id="provinsi'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="provinsi[]"> <option value="" selected hidden>- Pilih Salah Satu -</option> </select></div>' +
+        '<div class="col-lg-3 col-md-6"> <label class="form-label">Provinsi <sup class="text-danger">*</sup></label> <select class="form-select select2 provinsi" id="provinsi'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="provinsi[]"> <option value="" selected hidden>- Pilih Salah Satu -</option> </select></div>' +
         // Kabupaten / Kota
-        '<div class="col-lg-3 col-md-3"><label class="form-label">Kabupaten / Kota <sup class="text-danger">*</sup></label><select class="form-select select2 kabupaten-kota" id="kabupaten-kota'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="kabupaten_kota[]"><option value="" selected hidden>- Pilih Salah Satu -</option></select></div>' +
+        '<div class="col-lg-3 col-md-6"><label class="form-label">Kabupaten / Kota <sup class="text-danger">*</sup></label><select class="form-select select2 kabupaten-kota" id="kabupaten-kota'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="kabupaten_kota[]"><option value="" selected hidden>- Pilih Salah Satu -</option></select></div>' +
         // Kecamatan
-        '<div class="col-lg-3 col-md-3"><label class="form-label">Kecamatan <sup class="text-danger">*</sup></label><select class="form-select select2 kecamatan" id="kecamatan'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="kecamatan[]"><option value="" selected hidden>- Pilih Salah Satu -</option></select></div>' +
+        '<div class="col-lg-3 col-md-6"><label class="form-label">Kecamatan <sup class="text-danger">*</sup></label><select class="form-select select2 kecamatan" id="kecamatan'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="kecamatan[]"><option value="" selected hidden>- Pilih Salah Satu -</option></select></div>' +
         // Desa / Kelurahan
-        '<div class="col-lg-3 col-md-3"><label class="form-label">Desa / Kelurahan <sup class="text-danger">*</sup></label><select class="form-select select2 desa-kelurahan" id="desa-kelurahan'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="desa_kelurahan[]"><option value="" selected hidden>- Pilih Salah Satu -</option></select></div>' +
+        '<div class="col-lg-3 col-md-6"><label class="form-label">Desa / Kelurahan <sup class="text-danger">*</sup></label><select class="form-select select2 desa-kelurahan" id="desa-kelurahan'+ i +'" aria-hidden="true" data-iteration = '+ i +' name="desa_kelurahan[]"><option value="" selected hidden>- Pilih Salah Satu -</option></select></div>' +
         // Button Hapus
         '</div> <div class="div d-flex justify-content-end"> <button type="button" class="btn btn-danger btn-sm btnHapusLokasiBaru" data-iteration = '+ i +'><i class="fas fa-trash-alt"></i> Hapus</button></div></div>';
 
@@ -211,6 +213,7 @@
             processData: false,
             contentType: false,
             success: function (response) {
+                console.log(response);
                 if(response.res == 'Berhasil'){
                     Swal.fire({
                         icon: 'success',
@@ -222,18 +225,25 @@
                         window.location.href = "{{$back_url}}";
                     });
                 }
+                else if(response.res == 'Tidak Lengkap'){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan',
+                        text: response.msg,
+                    })
+                } 
                 else if (response.res = 'Lokasi Tugas Kosong'){
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi Kesalahan',
-                        text: response.msg,
+                        icon: 'warning',
+                        title: 'Lokasi Tugas Dikosongkan',
+                        // title: res.msg,
+                        // text: response.msg,
+                        showConfirmButton: false,
+                        timer: 2000,
                     })
-                } else if(response.res == 'Tidak Lengkap'){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi Kesalahan',
-                        text: response.msg,
-                    })
+                    .then((result) => {
+                        window.location.href = "{{$back_url}}";
+                    });
                 } 
             },
             error: function (response) {
@@ -250,6 +260,9 @@
     
     
     $(function() {
+        if('{{$user->lokasiTugas}}' == '[]'){
+            $('#tambahLokasiTugas').click();
+        }
         // $('.provinsi').trigger('change');
 
     });

@@ -5,6 +5,7 @@
 @endsection
 
 @push('style')
+
 @endpush
 
 @section('breadcrumb')
@@ -25,13 +26,13 @@
                 <div class="card p-0">
                     <div class="card-body">
                         @component('dashboard.components.forms.masterData.bidan')
-                            {{-- @slot('kartuKeluarga', $kartuKeluarga)
-                            @slot('bidan', $bidan) --}}
-                            @slot('form_id', 'form_add_pertumbuhan_anak')
-                            @slot('proses', route('proses-pertumbuhan-anak'))'))                                
-                            @slot('action', route('pertumbuhan-anak.store'))
+                            @slot('form_id', 'form_add_bidan')
+                            @slot('users', $users)')
+                            @slot('provinsi', $provinsi)')
+                            @slot('agama', $agama)
+                            @slot('action', route('bidan.store'))
                             @slot('method', 'POST')
-                            @slot('back_url', route('pertumbuhan-anak.index'))
+                            @slot('back_url', route('bidan.index'))
                         @endcomponent
                         
                     </div>
@@ -43,9 +44,9 @@
 
 @push('script')
     <script>
-        $('#m-link-tumbuh-kembang').addClass('active');
-        $('#menu-tumbuh-kembang').addClass('collapse show')
-        $('#ms-link-pertumbuhan-anak').addClass('active') 
+        $('#m-link-profil').addClass('active');
+        $('#menu-profil').addClass('collapse show')
+        $('#ms-link-master-data-profil-bidan').addClass('active') 
         
         
     </script>

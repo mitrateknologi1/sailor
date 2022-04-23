@@ -21,8 +21,8 @@ class CreatePenyuluhsTable extends Migration
             $table->string('jenis_kelamin');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
-            $table->string('agama');
-            $table->string('7_angka_terakhir_str');
+            $table->integer('agama_id');
+            $table->string('tujuh_angka_terakhir_str');
             $table->string('nomor_hp');
             $table->string('email')->nullable();
             $table->string('alamat');

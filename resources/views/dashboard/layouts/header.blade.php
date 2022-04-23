@@ -188,7 +188,7 @@
                                         src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt="">
                                     <div class="flex-fill ms-3">
                                         <h6 class="card-title mb-0">{{ Auth::user()->profil->nama_lengkap }}</h6>
-                                        <span class="text-muted">{{ Auth::user()->role != 'admin' ? Auth::user()->profil->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') : '' }}</span>
+                                        <span class="text-muted">{{ Auth::user()->role == 'bidan' || Auth::user()->role == 'penyuluh' ? Auth::user()->profil->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') : '' }}</span>
                                         </span>
                                     </div>
                                 </div>

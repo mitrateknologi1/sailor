@@ -14,11 +14,13 @@ class PerkembanganAnak extends Model
     protected $guarded = ['id'];
 
     public function anggotaKeluarga(){
-        return $this->belongsTo(AnggotaKeluarga::class);
+        return $this->belongsTo(AnggotaKeluarga::class)
+        ->withTrashed();
     }
 
     public function bidan(){
-        return $this->belongsTo(Bidan::class);
+        return $this->belongsTo(Bidan::class)
+        ->withTrashed();
     }
 
     public function sesuaiLokasiTugas($lokasiTugas){

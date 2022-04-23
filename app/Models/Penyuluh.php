@@ -45,6 +45,11 @@ class Penyuluh extends Model
         return $this->belongsTo(DesaKelurahan::class);
     }
 
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class);
+    }
+
     public function lokasiTugas()
     {
         return $this->hasMany(LokasiTugas::class, 'profil_id', 'id')->where('jenis_profil', 'penyuluh');

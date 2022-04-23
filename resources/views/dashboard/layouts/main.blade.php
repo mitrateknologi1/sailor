@@ -158,6 +158,10 @@
             margin-top: 10px !important;
         }
 
+        /* untuk input foto */
+        .file-input input {
+            height: 25px !important;
+        }
     </style>
     @stack('style')
 
@@ -177,19 +181,26 @@
         @include('dashboard.layouts.header')
 
         <!-- start: page toolbar -->
-        <div class="page-toolbar px-xl-0 px-sm-2 px-0 py-3">
-            <div class="container-fluid">
-                <div class="row mb-3 align-items-center">
-                    @yield('breadcrumb')
-                </div>
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>
-                        {{-- text-muted --}}
+        {{-- @if (Auth::user()->role != 'keluarga') --}}
+            <div class="page-toolbar px-xl-0 px-sm-2 px-0 py-3">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        @yield('breadcrumb')
                     </div>
+                    @if (Auth::user()->role != 'keluarga')
+                        <div class="row align-items-center mt-3">
+                            <div class="col">
+                                <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>                        
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
-        </div>
+        {{-- @else
+            <div class="mt-4">
+                
+            </div>
+        @endif --}}
 
         <!-- start: page body -->
         <div class="page-body px-xl-0 px-sm-2 px-0 py-lg-1 py-0 mt-0">
@@ -400,9 +411,10 @@
     <script src="{{ asset('assets/dashboard') }}/bundles/dataTables.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/select2.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/sweetalert2.bundle.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/bundles/owlcarousel.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/js/jquery.mask.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/js/moment/moment.min.js"></script>
-    <script src="{{ asset('assets/dashboard') }}/js/moment/moment-with-locales.min.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/moment/moment-with-locales.min.js"></script>  
 
     <script src="{{ asset('assets/dashboard') }}/datatables/dataTables.buttons.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/datatables/jszip.min.js"></script>
@@ -410,7 +422,6 @@
     <script src="{{ asset('assets/dashboard') }}/datatables/buttons.html5.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/datatables/buttons.print.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/datatables/buttons.colVis.min.js"></script>
-
 
     <!-- Jquery Page Js -->
     {{-- <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script> --}}
@@ -427,6 +438,7 @@
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
 
     <script>
+        
         $(function() {
             $('.modal').modal({
                 backdrop: 'static',

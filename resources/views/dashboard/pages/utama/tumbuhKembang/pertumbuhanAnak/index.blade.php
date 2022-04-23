@@ -26,14 +26,12 @@
                 <div class="card ">
                     <div class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Pertumbuhan Anak</h5>
-                        @if ((Auth::user()->role == 'admin') || (Auth::user()->role == 'bidan'))
-                            @component('dashboard.components.buttons.add',[
-                                'id' => 'catatan-pertumbuhan-anak',
-                                'class' => '',
-                                'url' => '/pertumbuhan-anak/create',
-                            ])        
-                            @endcomponent
-                        @endif
+                        @component('dashboard.components.buttons.add',[
+                            'id' => 'catatan-pertumbuhan-anak',
+                            'class' => '',
+                            'url' => route('pertumbuhan-anak.create'),
+                        ])        
+                        @endcomponent
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
@@ -79,22 +77,22 @@
                                     @component('dashboard.components.dataTables.index', [
                                         'id' => 'table-pertumbuhan-anak',
                                         'th' => [
-                                            'No',
-                                            'Dibuat Tanggal',
-                                            'Status',
-                                            'Nama Anak',
-                                            'Nama Ayah',
-                                            'Nama Ibu',
-                                            'Jenis Kelamin',
-                                            'Tanggal Lahir',
-                                            'Usia',
-                                            'BB (Kg)',
-                                            'Kategori Gizi',
-                                            'Desa / Kelurahan',
-                                            'Bidan',
-                                            'Tanggal Divalidasi',
-                                            'Aksi',
-                                          ],
+                                                'No',
+                                                'Dibuat Tanggal',
+                                                'Status',
+                                                'Nama Anak',
+                                                'Nama Ayah',
+                                                'Nama Ibu',
+                                                'Jenis Kelamin',
+                                                'Tanggal Lahir',
+                                                'Usia',
+                                                'BB (Kg)',
+                                                'Kategori Gizi',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Divalidasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -309,44 +307,13 @@
             ],  
             columnDefs: [
                 {
-                    targets: 1,
+                    targets: [1,7,13],
                     render: function(data) {
                         return moment(data).format('LL');
                     }
                 },
                 {
-                    targets: 4,
-                    visible: false,
-                },
-                {
-                    targets: 5,
-                    visible: false,
-                },
-                {
-                    targets: 6,
-                    visible: false,
-                },
-                {
-                    targets: 7,
-                    render: function(data) {
-                        return moment(data).format('LL');
-                    },
-                    visible: false,
-
-                },
-                {
-                    targets: 8,
-                    visible: false,
-                },
-                {
-                    targets: 9,
-                    visible: false,
-                },
-                {
-                    targets: 13,
-                    render: function(data) {
-                        return moment(data).format('LL');
-                    },
+                    targets: [4,5,6,7,8,9,13],
                     visible: false,
                 },
             ],        

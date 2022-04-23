@@ -2,22 +2,33 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agama;
 use App\Models\LokasiTugas;
+use App\Models\StatusHubungan;
 use App\Models\SoalMencegahMalnutrisi;
 use App\Models\WilayahDomisili;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
+use App\Models\WilayahDomisiliKK;
 use Database\Seeders\AdminSeeder;
+use Database\Seeders\AgamaSeeder;
 use Database\Seeders\BidanSeeder;
 use Database\Seeders\PenyuluhSeeder;
+use Database\Seeders\PekerjaanSeeder;
+use Database\Seeders\PendidikanSeeder;
 use Database\Seeders\LokasiTugasSeeder;
 use Database\Seeders\KartuKeluargaSeeder;
 use Database\Seeders\ProvinsiTableSeeder;
 use Database\Seeders\KecamatanTableSeeder;
 use Database\Seeders\AnggotaKeluargaSeeder;
+use Database\Seeders\PertumbuhanAnakSeeder;
 use Database\Seeders\WilayahDomisiliSeeder;
+use Database\Seeders\PerkembanganAnakSeeder;
+use Database\Seeders\WilayahDomisiliKKSeeder;
 use Database\Seeders\DesaKelurahanTableSeeder;
 use Database\Seeders\KabupatenKotaTableSeeder;
+use Database\Seeders\SoalDeteksiDiniTableSeeder;
+use Database\Seeders\SoalIbuMelahirkanStuntingSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,9 +51,17 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(LokasiTugasSeeder::class);
         $this->call(WilayahDomisiliSeeder::class);
-        // $this->call(PertumbuhanAnakSeeder::class);
+        // $this->call(WilayahDomisiliKKSeeder::class);
         $this->call(SoalIbuMelahirkanStuntingSeeder::class);
         $this->call(SoalDeteksiDiniTableSeeder::class);
+        $this->call(PertumbuhanAnakSeeder::class);
+        $this->call(PerkembanganAnakSeeder::class);
+        $this->call(PekerjaanSeeder::class);
+        $this->call(AgamaSeeder::class);
+        $this->call(PendidikanSeeder::class);
+        $this->call(GolonganDarahSeeder::class);
+        $this->call(StatusPerkawinanSeeder::class);
+        $this->call(StatusHubunganSeeder::class);
         $this->call(SoalMencegahMalnutrisiTableSeeder::class);
         $this->call(SoalMeningkatkanLifeSkillTableSeeder::class);
         $this->call(PertumbuhanAnakTableSeeder::class);

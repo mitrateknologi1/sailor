@@ -31,7 +31,7 @@
                         @component('dashboard.components.buttons.add',[
                             'id' => 'catatan-perkembangan-anak',
                             'class' => '',
-                            'url' => '/perkembangan-anak/create',
+                            'url' => route('perkembangan-anak.create'),
                         ])        
                         @endcomponent
                     @endif
@@ -306,53 +306,20 @@
             ],  
             columnDefs: [
                 {
-                    targets: 1,
+                    targets: [4,5,6,7,8,13],
+                    visible: false,
+                },
+                {
+                    targets: [1,7,13],
                     render: function(data) {
                         return moment(data).format('LL');
                     }
                 },
                 {
-                    targets: 4,
-                    visible: false,
-                },
-                {
-                    targets: 5,
-                    visible: false,
-                },
-                {
-                    targets: 6,
-                    visible: false,
-                },
-                {
-                    targets: 7,
-                    render: function(data) {
-                        return moment(data).format('LL');
-                    },
-                    visible: false,
-
-                },
-                {
-                    targets: 8,
-                    visible: false,
-                },
-                {
+                    targets: [9,10],
                     render: function (data, type, full, meta) {
                         return "<div style='white-space: normal;width: 180px;'>" + data + "</div>";
                     },
-                    targets: 9,
-                },
-                {
-                    render: function (data, type, full, meta) {
-                        return "<div style='white-space: normal;width: 180px;'>" + data + "</div>";
-                    },
-                    targets: 10
-                },
-                {
-                    targets: 13,
-                    render: function(data) {
-                        return moment(data).format('LL');
-                    },
-                    visible: false,
                 },
             ],        
         });

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\dashboard\masterData\profil;
 
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Agama;
 use App\Models\Bidan;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
@@ -9,10 +12,15 @@ use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use App\Models\DesaKelurahan;
 use App\Models\KabupatenKota;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreBidanRequest;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\UpdateBidanRequest;
+use Illuminate\Support\Facades\Validator;
 
 class BidanController extends Controller
 {
@@ -23,18 +31,10 @@ class BidanController extends Controller
      */
     public function index(Request $request)
     {
-        // $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas')->orderBy('created_at', 'DESC')->get();
-        // $data2 = LokasiTugas::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')->orderBy('created_at', 'DESC')->get();
-        //     dd($data2);
         if ($request->ajax()) {
-            $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas')->orderBy('created_at', 'DESC');
-            // dd($data);
+            $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama')->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
-               
-                // ->addColumn('bidan', function ($row) {     
-                //     return $row->bidan->nama_lengkap;
-                // })
 
                 ->addColumn('desa_kelurahan', function ($row) {     
                     return $row->desaKelurahan->nama;
@@ -52,18 +52,26 @@ class BidanController extends Controller
                     return $row->provinsi->nama;
                 })
 
+                ->addColumn('agama', function ($row) {     
+                    return $row->agama->agama;
+                })
+
                 ->addColumn('lokasi_tugas', function ($row) { 
-                    return $row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
+                    if($row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') == null){ 
+                        return '<a href="'.route('lokasiTugasBidan', $row->id).'" class="btn btn-sm btn-primary text-white shadow"><i class="fa-solid fa-map-location-dot"></i> Tentukan Lokasi Tugas</a>';
+                    } else {
+                        return $row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
+                    }
                 })
                
                 ->addColumn('action', function ($row) {     
                         $actionBtn = '
                         <div class="text-center justify-content-center text-white">';
                         $actionBtn .= '
-                            <button class="btn btn-info btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.') ><i class="fas fa-eye"></i></button>
-                            <a href="'.route('lokasiTugasBidan', $row->id).'" id="btn-edit" class="btn btn-primary btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Lokasi"><i class="fa-solid fa-map-location-dot"></i></a>
-                            <a href="'.route('bidan.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
-                            <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.')><i class="fas fa-eye"></i></button>
+                            <a href="'.route('lokasiTugasBidan', $row->id).'" id="btn-edit" class="btn btn-primary btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lokasi Tugas"><i class="fa-solid fa-map-location-dot"></i></a>
+                            <a href="'.route('bidan.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
+                            <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
                         </div>';
                     return $actionBtn;
                 })
@@ -89,6 +97,7 @@ class BidanController extends Controller
                     'provinsi',
                     'lokasi_tugas',
                 
+                
                 ])
                 ->make(true);
         }
@@ -102,7 +111,15 @@ class BidanController extends Controller
      */
     public function create()
     {
-        return view('dashboard.pages.masterData.profil.bidan.create');
+        $data = [
+            'users' => User::with('bidan')->where('role', 'bidan')
+            ->whereDoesntHave('bidan')
+            ->get(),
+            'agama' => Agama::all(),
+            'new_bidan_id' => Bidan::max('id') + 1,
+            'provinsi' => Provinsi::all(),
+        ];
+        return view('dashboard.pages.masterData.profil.bidan.create', $data);
     }
 
     /**
@@ -111,9 +128,97 @@ class BidanController extends Controller
      * @param  \App\Http\Requests\StoreBidanRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBidanRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'user_id' => 'required',
+                'nik' => 'required|unique:bidan,nik,NULL,id,deleted_at,NULL|digits:16',
+                'nama_lengkap' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required',
+                'agama' => 'required',
+                'tujuh_angka_terakhir_str' => 'required|min:7',
+                'nomor_hp' => 'required',
+                // 'email' => 'required',
+                'alamat' => 'required',
+                'provinsi' => 'required',
+                'kabupaten_kota' => 'required',
+                'kecamatan' => 'required',
+                'desa_kelurahan' => 'required',
+                'foto_profil' => 'image|file|max:3072'
+            ],
+            [
+                'user_id.required' => 'Akun tidak boleh kosong',
+                'nik.required' => 'NIK tidak boleh kosong',
+                'nik.unique' => 'NIK sudah terdaftar',
+                'nik.digits' => 'NIK harus 16 digit',
+                'nama_lengkap.required' => 'Nama lengkap tidak boleh kosong',
+                'jenis_kelamin.required' => 'Jenis kelamin tidak boleh kosong',
+                'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
+                'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
+                'agama.required' => 'Agama tidak boleh kosong',
+                'tujuh_angka_terakhir_str.required' => 'Tujuh angka terakhir tidak boleh kosong',
+                'tujuh_angka_terakhir_str.min' => 'Tujuh angka terakhir STR tidak boleh kurang dari 7 digit',
+                'nomor_hp.required' => 'Nomor HP tidak boleh kosong',
+                // 'email.required' => 'Email tidak boleh kosong',
+                'alamat.required' => 'Alamat tidak boleh kosong',
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'kabupaten_kota.required' => 'Kabupaten/Kota tidak boleh kosong',
+                'kecamatan.required' => 'Kecamatan tidak boleh kosong',
+                'desa_kelurahan.required' => 'Desa/Kelurahan tidak boleh kosong',
+                // 'foto_profil.required' => 'Foto profil tidak boleh kosong',
+                'foto_profil.image' => 'Foto profil harus berupa gambar',
+                'foto_profil.max' => 'Foto profil tidak boleh lebih dari 3MB',
+            
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        
+        $data = [
+            'user_id' => $request->user_id,
+            'nik' => $request->nik,
+            'nama_lengkap' => strtoupper($request->nama_lengkap),
+            'jenis_kelamin' => strtoupper($request->jenis_kelamin),
+            'tempat_lahir' => strtoupper($request->tempat_lahir),
+            'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
+            'agama_id' => $request->agama,
+            'tujuh_angka_terakhir_str' => $request->tujuh_angka_terakhir_str,
+            'nomor_hp' => strtoupper($request->nomor_hp),
+            'email' => $request->email,
+            'alamat' => strtoupper($request->alamat),
+            'provinsi_id' => $request->provinsi,
+            'kabupaten_kota_id' => $request->kabupaten_kota,
+            'kecamatan_id' => $request->kecamatan,
+            'desa_kelurahan_id' => $request->desa_kelurahan,
+            // 'foto_profil' => $request->nik . '.' . $request->file('foto_profil')->extension(),
+        ];
+
+        if($request->file('foto_profil')){
+            $request->file('foto_profil')->storeAs(
+                'upload/foto_profil/bidan/',
+                $request->nik .
+                    '.' . $request->file('foto_profil')->extension()
+            );
+            $data['foto_profil'] = $request->nik .
+                '.' . $request->file('foto_profil')->extension();
+        }
+
+        Bidan::create($data);
+        User::where('id', $request->user_id)->update([
+            'nik' => $request->nik,
+            'nomor_hp' => $request->nomor_hp,
+        ]);
+
+        $new_bidan_id = Bidan::max('id');
+        return response()->json(['success' => 'Berhasil', 'new_bidan_id' => $new_bidan_id]);
+        // dd($request);
     }
 
     /**
@@ -124,7 +229,14 @@ class BidanController extends Controller
      */
     public function show(Bidan $bidan)
     {
-        //
+        $bidan = $bidan;
+        $bidan['agama_'] = $bidan->agama->agama;
+        $bidan['lokasiTugas'] = $bidan->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
+        $bidan['provinsi_nama'] = $bidan->provinsi->nama;
+        $bidan['kabupaten_kota_nama'] = $bidan->kabupatenKota->nama;
+        $bidan['kecamatan_nama'] = $bidan->kecamatan->nama;
+        $bidan['desa_kelurahan_nama'] = $bidan->desaKelurahan->nama;
+        return $bidan;
     }
 
     /**
@@ -135,7 +247,21 @@ class BidanController extends Controller
      */
     public function edit(Bidan $bidan)
     {
-        //
+        $data = [
+            'bidan' => Bidan::with('agama')->select('*', DB::raw('DATE_FORMAT(tanggal_lahir, "%d/%m/%Y") AS tanggal_lahir'))
+                ->where('id', $bidan->id)
+                ->first(),
+            'users' => User::with('bidan')->where('role', 'bidan')
+            ->whereDoesntHave('bidan')
+            ->get(),
+            'agama' => Agama::all(),
+            'new_bidan_id' => Bidan::max('id') + 1,
+            'provinsi' => Provinsi::all(),
+            'kabupatenKota' => KabupatenKota::where('provinsi_id', $bidan->provinsi_id)->get(),
+            'kecamatan' => Kecamatan::where('kabupaten_kota_id', $bidan->kabupaten_kota_id)->get(),
+            'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $bidan->kecamatan_id)->get(),
+        ];
+        return view('dashboard.pages.masterData.profil.bidan.edit', $data);
     }
     
 
@@ -164,8 +290,6 @@ class BidanController extends Controller
                 ]);
             } else{
                 $bidan->lokasiTugas()->delete();
-                // dd($request);
-                // insert request provinsi, kabupaten_kota, kecamatan, desa_kelurahan
                 foreach ($request->provinsi as $key => $value) {
                     $data = [
                         'jenis_profil' => 'bidan',
@@ -186,68 +310,14 @@ class BidanController extends Controller
             }
         } 
         else{
+            $bidan->lokasiTugas()->delete();
+
             return response()->json([
                 'res' => 'Lokasi Tugas Kosong',
-                'msg' => 'Lokasi tugas tidak boleh kosong. Minimal tambahkan 1 lokasi tugas untuk bidan.'
+                'msg' => 'Lokasi tugas bidan dikosongkan',
+                'data' => $request,
             ]);
         }
-    
-        // if(($request->provinsi) || ($request->provinsi_baru)){
-        //     if($request->provinsi){
-        //         if(in_array(null, $request->provinsi) || in_array(null, $request->kabupaten_kota) || in_array(null, $request->kecamatan) || in_array(null, $request->desa_kelurahan)){
-        //             return response()->json([
-        //                 'res' => 'Tidak Lengkap',
-        //                 'msg' => 'Terdapat lokasi tugas yang tidak terisi lengkap. Silahkan lengkapi terlebih dahulu atau hapus lokasi tugas tersebut.'
-        //             ]);
-        //         } else{
-        //             if($request->provinsi_baru){
-        //                 if(in_array(null, $request->provinsi_baru) || in_array(null, $request->kabupaten_kota_baru) || in_array(null, $request->kecamatan_baru) || in_array(null, $request->desa_kelurahan_baru)){
-        //                     return response()->json([
-        //                         'res' => 'Tidak Lengkap',
-        //                         'msg' => 'Terdapat lokasi tugas yang tidak terisi lengkap. Silahkan lengkapi terlebih dahulu atau hapus lokasi tugas tersebut.'
-        //                     ]);
-        //                 } else{
-        //                     // Lokasi Lama + Lokasi Baru
-        //                     return response()->json([
-        //                         'res' => 'Berhasil',
-        //                         'msg' => 'Lokasi tugas berhasil disimpan.'
-        //                     ]);
-        //                 }
-        //             } else{
-        //                 // Lokasi Lama
-        //                 return response()->json([
-        //                     'res' => 'Berhasil',
-        //                     'msg' => 'Lokasi tugas berhasil disimpan.'
-        //                 ]);
-        //             }
-        //         }
-        //     } else{
-        //         if($request->provinsi_baru){
-        //             if(in_array(null, $request->provinsi_baru) || in_array(null, $request->kabupaten_kota_baru) || in_array(null, $request->kecamatan_baru) || in_array(null, $request->desa_kelurahan_baru)){
-        //                 return 'ada yang kosong2';
-        //             } else{
-        //                 return 'berhasil2';
-        //             }
-        //         } else {
-        //             return 'Tidak ada data';
-        //         }
-        //     }
-    
-        // } else{
-        //     return 'Tidak ada data';
-        // }
-          
-
-            // dd($request->desa_kelurahan);
-            // $bidan->lokasiTugas()->delete();
-            
-            // return redirect()->route('bidan.index')->with('success', 'Lokasi tugas bidan berhasil diubah');
-        // dump(count($request->provinsi));
-        // dd($bidan);
-        // $bidan->lokasiTugas()->detach();
-        // $bidan->lokasiTugas()->attach($request->desa_kelurahan_id);
-        // return redirect()->route('bidan.index')->with('success', 'Lokasi tugas bidan berhasil diubah');
-        
     }
 
     /**
@@ -257,9 +327,104 @@ class BidanController extends Controller
      * @param  \App\Models\Bidan  $bidan
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBidanRequest $request, Bidan $bidan)
+    public function update(Request $request, Bidan $bidan)
     {
-        //
+        $validateFotoProfil = '';
+        if($request->file('foto_profil')){
+            $fileName = $request->file('foto_profil');
+            if($fileName != $bidan->foto_profil){
+                $validateFotoProfil = 'required|image|file|max:3072';
+            } 
+        } 
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                // 'user_id' => 'required',
+                'nik' => 'required|unique:bidan,nik,' . $bidan->nik . ',nik,deleted_at,NULL|digits:16',
+                'nama_lengkap' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required',
+                'agama' => 'required',
+                'tujuh_angka_terakhir_str' => 'required|min:7',
+                'nomor_hp' => 'required',
+                // 'email' => 'required',
+                'alamat' => 'required',
+                'provinsi' => 'required',
+                'kabupaten_kota' => 'required',
+                'kecamatan' => 'required',
+                'desa_kelurahan' => 'required',
+                'foto_profil' => $validateFotoProfil,
+            ],
+            [
+                // 'user_id.required' => 'Akun tidak boleh kosong',
+                'nik.required' => 'NIK tidak boleh kosong',
+                'nik.unique' => 'NIK sudah terdaftar',
+                'nik.digits' => 'NIK harus 16 digit',
+                'nama_lengkap.required' => 'Nama lengkap tidak boleh kosong',
+                'jenis_kelamin.required' => 'Jenis kelamin tidak boleh kosong',
+                'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
+                'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
+                'agama.required' => 'Agama tidak boleh kosong',
+                'tujuh_angka_terakhir_str.required' => 'Tujuh angka terakhir tidak boleh kosong',
+                'tujuh_angka_terakhir_str.min' => 'Tujuh angka terakhir STR tidak boleh kurang dari 7 digit',
+                'nomor_hp.required' => 'Nomor HP tidak boleh kosong',
+                // 'email.required' => 'Email tidak boleh kosong',
+                'alamat.required' => 'Alamat tidak boleh kosong',
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'kabupaten_kota.required' => 'Kabupaten/Kota tidak boleh kosong',
+                'kecamatan.required' => 'Kecamatan tidak boleh kosong',
+                'desa_kelurahan.required' => 'Desa/Kelurahan tidak boleh kosong',
+                'foto_profil.required' => 'Foto profil tidak boleh kosong',
+                'foto_profil.image' => 'Foto profil harus berupa gambar',
+                'foto_profil.max' => 'Foto profil tidak boleh lebih dari 3MB',
+            
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $data = [
+            // 'user_id' => $request->user_id,
+            'nik' => $request->nik,
+            'nama_lengkap' => strtoupper($request->nama_lengkap),
+            'jenis_kelamin' => strtoupper($request->jenis_kelamin),
+            'tempat_lahir' => strtoupper($request->tempat_lahir),
+            'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
+            'agama_id' => $request->agama,
+            'tujuh_angka_terakhir_str' => $request->tujuh_angka_terakhir_str,
+            'nomor_hp' => strtoupper($request->nomor_hp),
+            'email' => $request->email,
+            'alamat' => strtoupper($request->alamat),
+            'provinsi_id' => $request->provinsi,
+            'kabupaten_kota_id' => $request->kabupaten_kota,
+            'kecamatan_id' => $request->kecamatan,
+            'desa_kelurahan_id' => $request->desa_kelurahan,
+            // 'foto_profil' => $request->nik . '.' . $request->file('foto_profil')->extension(),
+        ];
+
+        if($request->file('foto_profil')){
+            if (Storage::exists('upload/foto_profil/bidan/' . $bidan->foto_profil)) {
+                Storage::delete('upload/foto_profil/bidan/' . $bidan->foto_profil);
+            }
+            $request->file('foto_profil')->storeAs(
+                'upload/foto_profil/bidan/',
+                $request->nik .
+                    '.' . $request->file('foto_profil')->extension()
+            );
+            $data['foto_profil'] = $request->nik . '.' . $request->file('foto_profil')->extension();
+        }
+
+        $bidan->update($data);
+        User::where('id', $bidan->user_id)->update([
+            'nik' => $request->nik,
+            'nomor_hp' => $request->nomor_hp,
+        ]);
+        $new_bidan_id = Bidan::max('id');
+        return response()->json(['success' => 'Berhasil', 'new_bidan_id' => $new_bidan_id]);
     }
 
     /**
@@ -270,6 +435,14 @@ class BidanController extends Controller
      */
     public function destroy(Bidan $bidan)
     {
-        //
+        if (Storage::exists('upload/foto_profil/bidan/' . $bidan->foto_profil)) {
+            Storage::delete('upload/foto_profil/bidan/' . $bidan->foto_profil);
+        }
+
+        $bidan->lokasiTugas()->delete();
+        $bidan->delete();
+
+        return response()->json(['res' => 'success']);
+        
     }
 }

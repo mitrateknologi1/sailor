@@ -22,7 +22,7 @@
 <section>
     <div class="row justify-content-center">
         <div class="col-lg-12 col-md-12">
-            <div class="card fieldset border border-secondary bg-white p-0">
+            <div class="card p-0">
                 <div class="card-body">
                     @component('dashboard.components.forms.utama.pertumbuhan_anak')
                         @slot('kartuKeluarga', $kartuKeluarga)

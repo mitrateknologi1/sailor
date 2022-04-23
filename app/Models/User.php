@@ -18,7 +18,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    protected $guarded = ['id', 'password'];
+    protected $guarded = ['id'];
     
     public function profil(){
         if(Auth::user()->role == 'bidan'){
@@ -27,7 +27,26 @@ class User extends Authenticatable
             return $this->hasOne(Penyuluh::class, 'user_id', 'id');
         } else if(Auth::user()->role == 'admin'){
             return $this->hasOne(Admin::class, 'user_id', 'id');
+        } else if(Auth::user()->role == 'keluarga'){
+            return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
         }
+    }
+
+    
+    public function keluarga(){
+        return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
+    }
+
+    public function bidan(){
+        return $this->hasOne(Bidan::class, 'user_id', 'id');
+    }
+
+    public function penyuluh(){
+        return $this->hasOne(Penyuluh::class, 'user_id', 'id');
+    }
+
+    public function admin(){
+        return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 
     // lokasi tugas if role != admin

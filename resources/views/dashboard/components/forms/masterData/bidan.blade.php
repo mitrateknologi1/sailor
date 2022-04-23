@@ -1,95 +1,389 @@
-<form id="{{$form_id}}" action="#" method="POST" enctype="multipart/form-data">
+@push('style')
+<style>
+    input { 
+        text-transform: uppercase;
+    }
+    #email {
+        text-transform: lowercase !important;
+    }
+</style>
+@endpush
+
+<form id="{{$form_id}}" action="#" method="POST" enctype="multipart/form-data" autocomplete="off">
     @csrf
     @if(isset($method) && $method == 'PUT')
         @method('PUT')
     @endif
     <div class="row g-4">
-        <div class="col-sm-12 col-md-6 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Anak (Tanggal Lahir)',
-                'id' => 'nama-anak',
-                'name' => 'nama_anak',
-                'class' => 'select2',
-                'attribute' => 'disabled',
-                'wajib' => '<sup class="text-danger">*</sup>'
-            ])
+        @if ($method == 'POST')
+            <div class="col-lg-4 col-md-6">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Akun (Nomor HP Bidan)',
+                    'name' => 'user_id',
+                    'id' => 'user-id',
+                    'class' => 'select2',
+                    'attribute' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'button_add' => '<a href="'.route("user.create").'" class="badge rounded-pill bg-success text-white shadow-sm float-end"><i class="bi bi-plus-circle"></i> Buat Akun</a>'
+                ])  
+                @slot('options')
+                    @foreach ($users as $row)
+                        <option value="{{ $row->id }}" data-nomor-hp="{{ $row->nomor_hp }}">{{ $row->nomor_hp }}</option>                                       
+                    @endforeach
+                @endslot
+                @endcomponent
+            </div>
+        @endif
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Nomor Induk Kependudukan (NIK)',
+                'type' => 'text',
+                'id' => 'nik',
+                'name' => 'nik',
+                'class' => 'angka',
+                'value' => $bidan->nik ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
             @endcomponent
         </div>
-        <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-pertumbuhan-anak',
-                'type' => 'submit',
-            ])      
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Nama Lengkap',
+                'type' => 'text',
+                'id' => 'nama-lengkap',
+                'name' => 'nama_lengkap',
+                'class' => '',
+                'value' => $bidan->nama_lengkap ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
             @endcomponent
         </div>
-    </div>
-    <div class="modal fade" id="modal-hasil" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-body custom_scroll p-lg-4 pb-3">
-                    <div class="d-flex w-100 justify-content-between mb-1">
-                        <div>
-                            <h5>Hasil Perkembangan Anak</h5>
-                            <p class="text-muted" id="tanggal-proses"> - </p>
-                        </div>
-                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="card fieldset border border-primary mb-4">
-                        <span class="fieldset-tile text-primary bg-white">Motorik Kasar:</span>
-                        <p class="text-primary mb-0" id="modal-motorik-kasar" style="text-align: justify">-</p>
-                    </div>
-                    <div class="card fieldset border border-secondary">
-                        <span class="fieldset-tile text-secondary bg-white">Motorik Halus:</span>
-                        <p class="text-secondary mb-0 " id="modal-motorik-halus" style="text-align: justify">-</p>
-                    </div>
-                    <div class="card fieldset border border-dark my-4">
-                        <span class="fieldset-tile text-dark ml-5 bg-white">Info Anak:</span>
-                        <div class="card-body p-0 py-1 px-1">
-                            <ul class="list-unstyled mb-0">
-                                <li class="justify-content-between mb-2">
-                                    <label><i class="fa-solid fa-child"></i> Nama Anak:</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-nama-anak"> - </span>
-                                </li>
-                                <li class="justify-content-between mb-2">
-                                    <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> - </span>
-                                </li>
-                                <li class="justify-content-between mb-2">
-                                    <label><i class="fa-solid fa-cake-candles"></i> Usia</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-usia"> - </span>
-                                </li>
-                                <li class="justify-content-between">
-                                    <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin"> - </span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-sm-6 col-lg-4">
-                            <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i>  Batal</button>
-                        </div>
-                        <div class="col-sm-6 col-lg-8">
-                            @component('dashboard.components.buttons.submit', [
-                                'id' => 'proses-pertumbuhan-anak',
-                                'type' => 'submit',
-                                'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan',
-                            ])      
-                            @endcomponent
-                        </div>
-                    </div>
-                    
+        <div class="col-lg-4 col-md-6">
+            <label for="" class="mb-1">Jenis Kelamin <sup class="text-danger">*</sup></label>
+            <div class="d-flex flex-row">
+                <div class="p-2">
+                    @component('dashboard.components.formElements.radio', [
+                        'id' => 'jenis-kelamin-laki-laki',
+                        'name' => 'jenis_kelamin',
+                        'value' => 'LAKI-LAKI',
+                        'label' => 'LAKI-LAKI',
+                        'checked' => isset($bidan) && $bidan->jenis_kelamin == 'LAKI-LAKI' ? 'checked' : '',
+                        ])
+                    @endcomponent
+                </div>
+                <div class="p-2">
+                    @component('dashboard.components.formElements.radio', [
+                        'id' => 'jenis-kelamin-perempuan',
+                        'name' => 'jenis_kelamin',
+                        'value' => 'PEREMPUAN',
+                        'label' => 'PEREMPUAN',
+                        'checked' => isset($bidan) && $bidan->jenis_kelamin == 'PEREMPUAN' ? 'checked' : '',
+                        ])
+                    @endcomponent
                 </div>
             </div>
+            <span class="text-danger error-text jenis_kelamin-error"></span>  
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Tempat Lahir',
+                'type' => 'text',
+                'id' => 'tempat-lahir',
+                'name' => 'tempat_lahir',
+                'class' => '',
+                'value' => $bidan->tempat_lahir ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Tanggal Lahir',
+                'type' => 'text',
+                'id' => 'tanggal-lahir',
+                'name' => 'tanggal_lahir',
+                'class' => 'tanggal',
+                'placeholder' => 'dd-mm-yyyy',
+                'value' => $bidan->tanggal_lahir ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.select', [
+                'label' => 'Agama',
+                'name' => 'agama',
+                'id' => 'agama',
+                'class' => 'select2 agama',
+                'attribute' => '',
+                'wajib' => '<sup class="text-danger">*</sup>',
+            ])  
+            @slot('options')
+                @foreach ($agama as $row)
+                    <option value="{{ $row->id }}" {{ isset($bidan) && $row->id == $bidan->agama_id ? 'selected' : '' }}>{{ $row->agama }}</option>                                       
+                @endforeach     
+            @endslot
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => '7 Angka Terakhir STR / Tanggal Lahir',
+                'type' => 'text',
+                'id' => 'tujuh-angka-terakhir-str',
+                'name' => 'tujuh_angka_terakhir_str',
+                'class' => 'angka',
+                'value' => $bidan->tujuh_angka_terakhir_str ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Nomor HP',
+                'type' => 'text',
+                'id' => 'nomor-hp',
+                'name' => 'nomor_hp',
+                'class' => 'angka',
+                'value' => $bidan->nomor_hp ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Email',
+                'type' => 'text',
+                'id' => 'email',
+                'name' => 'email',
+                'class' => '',
+                'value' => $bidan->email ?? null,
+                // 'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.select', [
+                    'label' => 'Provinsi',
+                    'name' => 'provinsi',
+                    'id' => 'provinsi',
+                    'class' => 'select2 provinsi',
+                    'attribute' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                ])  
+                @slot('options')
+                    @foreach ($provinsi as $prov)
+                        <option value="{{ $prov->id }}" {{ isset($bidan) && $prov->id == $bidan->provinsi_id ? 'selected' : '' }}>{{ $prov->nama }}</option>                                       
+                    @endforeach
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.select', [
+                    'label' => 'Kabupaten / Kota',
+                    'name' => 'kabupaten_kota',
+                    'id' => 'kabupaten-kota',
+                    'class' => 'select2 kabupaten-kota',
+                    'attribute' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                ])  
+                @slot('options')
+                    @if ($method == 'PUT')
+                        @foreach ($kabupatenKota as $kab)
+                            <option value="{{ $kab->id }}" {{ isset($bidan) && $kab->id == $bidan->kabupaten_kota_id ? 'selected' : '' }}>{{ $kab->nama }}</option>                                       
+                        @endforeach
+                    @endif
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.select', [
+                    'label' => 'Kecamatan',
+                    'name' => 'kecamatan',
+                    'id' => 'kecamatan',
+                    'class' => 'select2 kecamatan',
+                    'attribute' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                ])  
+                @slot('options')
+                    @if ($method == 'PUT')
+                        @foreach ($kecamatan as $kec)
+                            <option value="{{ $kec->id }}" {{ isset($bidan) && $kec->id == $bidan->kecamatan_id ? 'selected' : '' }}>{{ $kec->nama }}</option>                                       
+                        @endforeach
+                    @endif
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.select', [
+                    'label' => 'Desa / Kelurahan',
+                    'name' => 'desa_kelurahan',
+                    'id' => 'desa-kelurahan',
+                    'class' => 'select2 desa-kelurahan',
+                    'attribute' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                ])  
+                @slot('options')
+                    @if ($method == 'PUT')
+                        @foreach ($desaKelurahan as $des)
+                            <option value="{{ $des->id }}" {{ isset($bidan) && $des->id == $bidan->desa_kelurahan_id ? 'selected' : '' }}>{{ $des->nama }}</option>                                       
+                        @endforeach
+                    @endif
+                @endslot
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            @component('dashboard.components.formElements.input', [
+                'label' => 'Alamat',
+                'type' => 'text',
+                'id' => 'alamat',
+                'name' => 'alamat',
+                'class' => '',
+                'value' => $bidan->alamat ?? null,
+                'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <label class="col-md-3 col-sm-4 col-form-label">Foto Profil</label>
+            <div class="col-md-9 col-sm-8">
+                <div class="image-input avatar xxl rounded-4" style="background-image: url({{ isset($bidan) && $bidan->foto_profil != NULL ? asset('upload/foto_profil/bidan/'.$bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
+                    <div class="avatar-wrapper rounded-4" style="background-image: url({{ isset($bidan) && $bidan->foto_profil != NULL ? asset('upload/foto_profil/bidan/'.$bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});"></div>
+                    <div class="file-input" style="background: var(--card-color); text-align: center; height: 24px; width: 24px; line-height: 24px; border-radius: 24px; background-position: center !important;">
+                        <input type="file" class="form-control" name="foto_profil" id="foto-profil" style="z-index: 999999" value="" accept="image/*">
+                        <label for="file-input2" class="fa fa-pencil shadow"></label>
+                    </div>
+                </div>
+            </div>
+            <span class="text-danger error-text foto_profil-error"></span>  
+        </div>
+        <div class="col-12 text-end">
+            @component('dashboard.components.buttons.submit', [
+                'id' => 'proses-pertumbuhan-anak',
+                'type' => 'submit',
+                'class' => 'text-white text-uppercase',
+                'label' => 'Simpan',
+            ])      
+            @endcomponent
         </div>
     </div>
 </form>
 
 
 @push('script')
-    <script>       
+    <script>      
+    if('{{$method}}' == 'POST'){
+        $('#kabupaten-kota').attr('disabled', true)
+        $('#kecamatan').attr('disabled', true)
+        $('#desa-kelurahan').attr('disabled', true)
+    }
 
+
+    $(document).on('change','.provinsi', function(){
+        $('#kecamatan').html('')
+        $('#kecamatan').attr('disabled', true)
+
+        $('#desa-kelurahan').html('')
+        $('#desa-kelurahan').attr('disabled', true)
+
+        $('#kabupaten-kota').html('');
+        $('#kabupaten-kota').attr('disabled', false)
+        $('#kabupaten-kota').append('<option value="">- Pilih Salah Satu -</option>')
+        $.get("{{ route('listKabupatenKota') }}", {idProvinsi: $("#provinsi").val()}, function(result) {
+            $.each(result, function(key, val) {
+                $('#kabupaten-kota').append(`<option value="${val.id}">${val.nama}</option>`);
+            })
+        }); 
+    })
+
+    $(document).on('change','.kabupaten-kota', function(){
+        $('#desa-kelurahan').html('')
+        $('#desa-kelurahan').attr('disabled', true)
+        
+        $('#kecamatan').html('')
+        $('#kecamatan').attr('disabled', false)
+        $('#kecamatan').append('<option value="">- Pilih Salah Satu -</option>')
+        $.get("{{ route('listKecamatan') }}", {idKabupatenKota: $("#kabupaten-kota").val()}, function(result) {
+            $.each(result, function(key, val) {
+                $('#kecamatan').append(`<option value="${val.id}">${val.nama}</option>`);
+            })
+        });
+    })
+
+    $(document).on('change','.kecamatan', function(){
+        $('#desa-kelurahan').html('');
+        $('#desa-kelurahan').attr('disabled', false)
+        $('#desa-kelurahan').append('<option value="">- Pilih Salah Satu -</option>')
+        $.get("{{ route('listDesaKelurahan') }}", {idKecamatan: $("#kecamatan").val()}, function(result) {
+            $.each(result, function(key, val) {
+                $('#desa-kelurahan').append(`<option value="${val.id}">${val.nama}</option>`);
+            })
+        });
+    })
+
+    $('#user-id').change(function(){
+        $('#nomor-hp').val($('#user-id').find(':selected').data('nomor-hp'))
+    })
+
+    $('#{{$form_id}}').submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        var user_id = $('#user-id').val()
+        $('.error-text').text('');
+        $.ajax({
+            type: "POST",
+            url: "{{$action}}",
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+            data: formData,
+            cache : false,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $("#overlay").fadeOut(100);
+                if ($.isEmptyObject(data.error)) {
+                    if('{{$method}}' == 'POST'){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data bidan berhasil ditambahkan, selanjutnya tentukan lokasi tugas bidan',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        })
+                        .then((result) => {
+                            window.location.href = "{{ url('lokasi-tugas-bidan') }}/"+data.new_bidan_id;
+                        })
+                    } else{
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data bidan berhasil diubah',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        })
+                        .then((result) => {
+                            window.location.href = "{{ $back_url }}";
+                        })
+                    }
+                                
+                } else {
+                    Swal.fire(
+                        'Terjadi Kesalahan!',
+                        'Periksa kembali data yang anda masukkan',
+                        'error'
+                    )
+                    printErrorMsg(data.error);
+                }
+            },
+            error: function (data) {
+                alert(data.responseJSON.message)
+            },
+        
+        });
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
+    })
     </script>
 
 @endpush

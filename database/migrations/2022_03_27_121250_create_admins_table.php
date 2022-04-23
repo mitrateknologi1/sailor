@@ -12,7 +12,7 @@ class CreateAdminsTable extends Migration
      * @return void
      */
     public function up()
-    {
+    { 
         Schema::create('admin', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
@@ -21,7 +21,7 @@ class CreateAdminsTable extends Migration
             $table->string('jenis_kelamin');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
-            $table->string('agama');
+            $table->integer('agama_id');
             $table->string('nomor_hp');
             $table->string('email')->nullable();
             $table->string('alamat');
