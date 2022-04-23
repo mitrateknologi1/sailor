@@ -22,7 +22,7 @@
     <section>
         <div class="row justify-content-center">
             <div class="col-lg-12 col-md-12">
-                <div class="card fieldset border border-secondary bg-white p-0">
+                <div class="card p-0">
                     {{-- <div class="card-header py-3 bg-transparent border-bottom-0">
                         <h6 class="card-title mb-0">Basic example</h6>
                     </div> --}}
@@ -46,8 +46,8 @@
 
 @push('script')
     <script>
-        $('#m-link-deteksi-stunting').addClass('active');
-        $('#menu-deteksi-stunting').addClass('collapse show')
-        $('#ms-link-stunting-anak').addClass('active')
+        $('#m-link-moms-care').addClass('active');
+        $('#menu-moms-care').addClass('collapse show')
+        $('#ms-link-perkiraan-melahirkan').addClass('active')
     </script>
 @endpush

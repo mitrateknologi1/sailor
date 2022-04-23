@@ -65,7 +65,7 @@
 
 @push('script')
     <script>
-        var center = [-0.8037181, 120.1707766];
+        var center = [-0.8794398, 119.8251756];
 
         var map = L.map("map").setView(center, 12);
 

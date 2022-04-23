@@ -32,7 +32,7 @@ class AnggotaKeluarga extends Model
     {
         return $this->hasMany(PertumbuhanAnak::class);
     }
-    
+
     public function wilayahDomisili()
     {
         return $this->hasOne(WilayahDomisili::class)
@@ -90,5 +90,19 @@ class AnggotaKeluarga extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+      
+    public function scopeOfDataSesuaiKecamatan($query, $kecamatan)
+    {
+        $query->whereHas('wilayahDomisili', function ($query) use ($kecamatan) {
+            return $query->where('kecamatan_id', $kecamatan);
+        });
+    }
+
+    public function scopeOfDataSesuaiDesa($query, $desa)
+    {
+        $query->whereHas('wilayahDomisili', function ($query) use ($desa) {
+            return $query->where('desa_kelurahan_id', $desa);
+        });
     }
 }

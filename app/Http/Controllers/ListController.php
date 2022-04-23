@@ -50,7 +50,7 @@ class ListController extends Controller
                 ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
                 ->get();
             }
-
+          
             $anggotaKeluargaHapus = '';
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
@@ -66,7 +66,6 @@ class ListController extends Controller
                     ->where('id', $idAnak)
                     ->first();
             }
-            
             return response()->json([
                 'anggota_keluarga' => $anggotaKeluarga,
                 'anggota_keluarga_hapus' => $anggotaKeluargaHapus
@@ -181,10 +180,47 @@ class ListController extends Controller
 
     public function getIbu(Request $request)
     {
-        $ibu = AnggotaKeluarga::where('kartu_keluarga_id', $request->id)
-            ->where('status_hubungan_dalam_keluarga_id', 'ISTRI')
+        $id = $request->id;
+        $profil_id = Auth::user()->profil->id; //bidan/penyuluh
+        $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
+
+        $lokasiIbu = '';
+        if ($request->method == "PUT") {
+            $ibu = AnggotaKeluarga::with('wilayahDomisili')->withTrashed()->where('id', $request->id_edit)->first();
+            $lokasiIbu = $ibu->wilayahDomisili->desa_kelurahan_id;
+        }
+
+        $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+            ->where('status_hubungan_dalam_keluarga', 'ISTRI')
+            ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiIbu) {
+                if (Auth::user()->role != 'admin') {
+                    if ($request->method == "POST") {
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
+                    } else { // PUT
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiIbu);
+                    }
+                }
+            })
             ->get();
-        return $ibu;
+
+        $anggotaKeluargaHapus = '';
+        if ($request->method == "PUT") {
+            $id_edit = $request->id_edit;
+            $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+                ->where('status_hubungan_dalam_keluarga', 'ISTRI')
+                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiIbu) {
+                    if (Auth::user()->role != 'admin') {
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiIbu);
+                    }
+                })
+                ->onlyTrashed()
+                ->where('id', $id_edit)
+                ->first();
+        }
+        return response()->json([
+            'anggota_keluarga' => $anggotaKeluarga,
+            'anggota_keluarga_hapus' => $anggotaKeluargaHapus
+        ]);
     }
 
 

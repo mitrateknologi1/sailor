@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Agama;
 use App\Models\LokasiTugas;
 use App\Models\StatusHubungan;
+use App\Models\SoalMencegahMalnutrisi;
 use App\Models\WilayahDomisili;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
@@ -61,6 +62,20 @@ class DatabaseSeeder extends Seeder
         $this->call(GolonganDarahSeeder::class);
         $this->call(StatusPerkawinanSeeder::class);
         $this->call(StatusHubunganSeeder::class);
-
+        $this->call(SoalMencegahMalnutrisiTableSeeder::class);
+        $this->call(SoalMeningkatkanLifeSkillTableSeeder::class);
+        $this->call(PertumbuhanAnakTableSeeder::class);
+        $this->call(StuntingAnakTableSeeder::class);
+        $this->call(DeteksiIbuMelahirkanStuntingTableSeeder::class);
+        $this->call(JawabanDeteksiIbuMelahirkanStuntingTableSeeder::class);
+        $this->call(JawabanDeteksiDiniTableSeeder::class);
+        $this->call(DeteksiDiniTableSeeder::class);
+        $this->call(PemeriksaanAncTableSeeder::class);
+        $this->call(AncTableSeeder::class);
+        $this->call(RandaKabilasaTableSeeder::class);
+        $this->call(MencegahMalnutrisiTableSeeder::class);
+        $this->call(JawabanMencegahMalnutrisiTableSeeder::class);
+        $this->call(JawabanMeningkatkanLifeSkillTableSeeder::class);
+        $this->call(MencegahPernikahanDiniTableSeeder::class);
     }
 }

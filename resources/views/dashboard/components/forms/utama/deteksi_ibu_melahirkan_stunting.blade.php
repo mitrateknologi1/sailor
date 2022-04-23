@@ -67,7 +67,7 @@
                     @endphp
                 @endif
                 <input type="text" value="{{ $soal->id }}" hidden name="soal_id[]">
-                <div class="card fieldset border border-secondary bg-white p-0">
+                <div class="card p-0 my-3">
                     <div class="card-body">
                         <p>{{ $loop->iteration }}. {{ $soal->soal }}</p>
                         <div class="form-check form-check-inline">
@@ -166,10 +166,6 @@
             $(document).ready(function() {
                 $('#nama-kepala-keluarga').val(
                     '{{ $dataEdit->anggotaKeluarga->kartuKeluarga->id }}').change();
-                setTimeout(function() {
-                    $('#nama-ibu').val(
-                        '{{ $dataEdit->anggotaKeluarga->id }}').change();
-                }, 500);
             });
         </script>
     @endif
@@ -323,19 +319,45 @@
 
         function changeKepalaKeluarga() {
             var id = $('#nama-kepala-keluarga').val();
+            var id_edit = "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}";
+            var selected = '';
             $('#nama-ibu').html('');
             $('#nama-ibu').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
             $.get("{{ url('get-ibu') }}", {
                 id: id,
+                method: "{{ $method }}",
+                id_edit: id_edit
             }, function(result) {
-                $.each(result, function(key, val) {
+                $.each(result.anggota_keluarga, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
+                    selected = '';
+                    if (val.id == "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}") {
+                        selected = 'selected';
+                    }
                     $('#nama-ibu').append(
-                        `<option value="${val.id}">${val.nama_lengkap} (${tanggal_lahir})</option>`);
+                        `<option value="${val.id}" ${selected}>${val.nama_lengkap} (${tanggal_lahir})</option>`
+                    );
                 })
+
+                if ("{{ $method }}" == 'PUT') {
+                    selected = '';
+
+                    if (result.anggota_keluarga_hapus) {
+                        if (result.anggota_keluarga_hapus.id ==
+                            "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}") {
+                            selected = 'selected';
+                        }
+
+                        $('#nama-ibu').append(
+                            `<option value="${result.anggota_keluarga_hapus.id}" ${selected}>${result.anggota_keluarga_hapus.nama_lengkap} (${result.anggota_keluarga_hapus.tanggal_lahir})</option>`
+                        );
+
+                    }
+                }
                 $('#nama-ibu').removeAttr('disabled');
             });
         }
+
 
         function changeIbu() {
             var id = $('#nama-ibu').val();

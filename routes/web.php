@@ -22,6 +22,11 @@ use App\Http\Controllers\dashboard\masterData\wilayah\DesaKelurahanController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KabupatenKotaController;
 use App\Http\Controllers\dashboard\masterData\profil\AnggotaKeluargaController;
 use App\Http\Controllers\dashboard\masterData\wilayah\WilayahDomisiliController;
+use App\Http\Controllers\dashboard\masterData\randaKabilasa\SoalAssessment1Controller;
+use App\Http\Controllers\dashboard\masterData\randaKabilasa\SoalMencegahMalnutrisiController;
+use App\Http\Controllers\dashboard\masterData\randaKabilasa\SoalMeningkatkanLifeSkillController;
+use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStuntingController;
+use App\Http\Controllers\dashboard\utama\petaData\MapDeteksiStuntingController;
 use App\Http\Controllers\dashboard\utama\deteksiStunting\StuntingAnakController;
 use App\Http\Controllers\dashboard\utama\momsCare\PerkiraanMelahirkanController;
 use App\Http\Controllers\dashboard\masterData\momsCare\SoalDeteksiDiniController;
@@ -31,6 +36,15 @@ use App\Http\Controllers\dashboard\utama\deteksiStunting\DeteksiIbuMelahirkanStu
 use App\Http\Controllers\dashboard\masterData\deteksiStunting\SoalIbuMelahirkanStuntingController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\dashboard\utama\petaData\MapMomsCareController;
+use App\Http\Controllers\dashboard\utama\petaData\MapRandaKabilasaController;
+use App\Http\Controllers\dashboard\utama\randaKabilasa\MencegahMalnutrisiController;
+use App\Http\Controllers\dashboard\utama\randaKabilasa\MencegahPernikahanDiniController;
+use App\Http\Controllers\dashboard\utama\randaKabilasa\MeningkatkanLifeSkillController;
+use App\Http\Controllers\dashboard\utama\randaKabilasa\RandaKabilasaController;
+use App\Http\Controllers\dashboard\utama\TesMapController;
+use App\Models\DeteksiDini;
+use App\Models\DeteksiIbuMelahirkanStunting;
 
 /*
 |--------------------------------------------------------------------------
@@ -112,20 +126,19 @@ Route::put('proses-perkembangan-anak', [PerkembanganAnakController::class, 'pros
 
 // ----------------- Start Randa Kabilasa -----------------
 // URL resource-nya nanti sesuai url yang sekarang
-Route::get('mencegah-malnutrisi', function () {
-    return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.index');
-});
+Route::resource('randa-kabilasa', RandaKabilasaController::class);
+Route::resource('mencegah-malnutrisi', MencegahMalnutrisiController::class);
+Route::match(array('PUT', 'POST'), 'proses-mencegah-malnutrisi', [MencegahMalnutrisiController::class, 'proses']);
 
-// URL resource-nya nanti sesuai url yang sekarang
-Route::get('mencegah-pernikahan-dini', function () {
-    return view('dashboard.pages.utama.randaKabilasa.mencegahPernikahanDini.index');
-});
+Route::resource('meningkatkan-life-skill/{randaKabilasa}', MeningkatkanLifeSkillController::class)->parameters([
+    '{randaKabilasa}' => 'meningkatkanLifeSkill'
+]);
+Route::match(array('PUT', 'POST'), 'proses-meningkatkan-life-skill/{randaKabilasa}', [MeningkatkanLifeSkillController::class, 'proses']);
 
-// URL resource-nya nanti sesuai url yang sekarang
-Route::get('meningkatkan-life-skill', function () {
-    return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.index');
-});
-
+Route::resource('mencegah-pernikahan-dini/{randaKabilasa}', MencegahPernikahanDiniController::class)->parameters([
+    '{randaKabilasa}' => 'meningkatkanLifeSkill'
+]);
+Route::match(array('PUT', 'POST'), 'proses-mencegah-pernikahan-dini/{randaKabilasa}', [MencegahPernikahanDiniController::class, 'proses']);
 // ----------------- Start Master -----------------
 Route::resource('masterData/desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
     '{kecamatan}' => 'kelurahan'
@@ -145,6 +158,9 @@ Route::resource('masterData/desaKelurahan/{kecamatan}', DesaKelurahanController:
 Route::resource('/masterData/provinsi', ProvinsiController::class);
 Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
 Route::resource('/masterData/soal-deteksi-dini', SoalDeteksiDiniController::class);
+
+Route::resource('/masterData/soal-mencegah-malnutrisi', SoalMencegahMalnutrisiController::class);
+Route::resource('/masterData/soal-meningkatkan-life-skill', SoalMeningkatkanLifeSkillController::class);
 
 Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
 Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);
@@ -183,3 +199,19 @@ Route::get('/provinsi', [ListController::class, 'listProvinsi'])->name('listProv
 Route::get('/kabupaten-kota', [ListController::class, 'listKabupatenKota'])->name('listKabupatenKota');
 Route::get('/kecamatan', [ListController::class, 'listKecamatan'])->name('listKecamatan');
 Route::get('/desa-kelurahan', [ListController::class, 'listDesaKelurahan'])->name('listDesaKelurahan');
+
+Route::get('/map-deteksi-stunting', [MapDeteksiStuntingController::class, 'index']);
+Route::get('/petaData/stuntingAnak', [MapDeteksiStuntingController::class, 'getMapDataStuntingAnak']);
+Route::get('/petaData/deteksiIbuMelahirkanStunting', [MapDeteksiStuntingController::class, 'getMapDataDeteksiIbuMelahirkanStunting']);
+Route::get('/petaData/detailStuntingAnak', [MapDeteksiStuntingController::class, 'getDetailDataStuntingAnak']);
+Route::get('/petaData/detailIbuMelahirkanStunting', [MapDeteksiStuntingController::class, 'getDetailDataIbuMelahirkanStunting']);
+
+Route::get('/map-moms-care', [MapMomsCareController::class, 'index']);
+Route::get('/petaData/deteksiDini', [MapMomsCareController::class, 'getMapDataDeteksiDini']);
+Route::get('/petaData/anc', [MapMomsCareController::class, 'getMapDataAnc']);
+Route::get('/petaData/detailDeteksiDini', [MapMomsCareController::class, 'getDetailDataDeteksiDini']);
+Route::get('/petaData/detailAnc', [MapMomsCareController::class, 'getDetailDataAnc']);
+
+Route::get('/map-randa-kabilasa', [MapRandaKabilasaController::class, 'index']);
+Route::get('/petaData/randaKabilasa', [MapRandaKabilasaController::class, 'getMapDataRandaKabilasa']);
+Route::get('/petaData/detailRandaKabilasa', [MapRandaKabilasaController::class, 'getDetailDataRandaKabilasa']);

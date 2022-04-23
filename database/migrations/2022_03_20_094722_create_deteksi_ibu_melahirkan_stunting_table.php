@@ -14,7 +14,7 @@ class CreateDeteksiIbuMelahirkanStuntingTable extends Migration
     public function up()
     {
         Schema::create('deteksi_ibu_melahirkan_stunting', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->bigInteger('anggota_keluarga_id');
             $table->bigInteger('bidan_id');
             $table->string('kategori');

@@ -7,6 +7,7 @@ use App\Models\AnggotaKeluarga;
 use App\Models\DeteksiIbuMelahirkanStunting;
 use App\Models\JawabanDeteksiIbuMelahirkanStunting;
 use App\Models\KartuKeluarga;
+use App\Models\LokasiTugas;
 use App\Models\SoalIbuMelahirkanStunting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,9 +25,48 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = DeteksiIbuMelahirkanStunting::with(['anggotaKeluarga'])
-                // ->where('bidan_id', auth()->user()->id)
-                ->get();
+
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            $data = DeteksiIbuMelahirkanStunting::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas, $request) {
+                    if (Auth::user()->role != 'admin') {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    }
+                })
+                ->where(function ($query) use ($request) {
+                    $query->where(function ($query) use ($request) {
+                        if ($request->statusValidasi) {
+                            $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
+                        }
+
+                        if ($request->kategori) {
+                            $kategori = '';
+                            if ($request->kategori == 'beresiko') {
+                                $kategori = 'Beresiko Melahirkan Stunting';
+                            } else if ($request->kategori == 'tidak_beresiko') {
+                                $kategori = 'Tidak Beresiko Melahirkan Stunting';
+                            }
+                            $query->where('kategori', $kategori);
+                        }
+                    });
+
+                    $query->where(function ($query) use ($request) {
+                        if ($request->search) {
+                            $query->whereHas('bidan', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+
+                            $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+                        }
+                    });
+                })
+                ->where(function ($query) {
+                    if (Auth::user()->role == 'bidan') { // bidan
+                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                    }
+                })->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('tanggal_dibuat', function ($row) {
@@ -95,10 +135,12 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
             [
                 'nama_kepala_keluarga' => 'required',
                 'nama_ibu' => 'required',
+                'nama_bidan' => Auth::user()->role == "admin" && $request->isMethod('post') ? 'required' : '',
             ],
             [
                 'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
                 'nama_ibu.required' => 'Nama Ibu Tidak Boleh Kosong',
+                'nama_bidan.required' => 'Nama Bidan Tidak Boleh Kosong',
             ]
         );
 
@@ -123,23 +165,23 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
         }
 
         // Cek Jawaban
-        $jawabanTidak = 0;
+        $jawabanYa = 0;
         for ($i = 0; $i < $totalSoal; $i++) {
             $jawaban = "jawaban-" . ($i + 1);
-            if ($request->$jawaban[0] == "Tidak") {
-                $jawabanTidak++;
+            if ($request->$jawaban[0] == "Ya") {
+                $jawabanYa++;
             }
         }
 
         $kategori = '';
-        if ($jawabanTidak > 0) {
+        if ($jawabanYa > 0) {
             $kategori = 'Beresiko Melahirkan Stunting';
         } else {
             $kategori = 'Tidak Beresiko Melahirkan Stunting';
         }
 
 
-        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+        $ibu = AnggotaKeluarga::where('id', $request->nama_ibu)->withTrashed()->first();
 
         $datetime1 = date_create(date('Y-m-d'));
         $datetime2 = date_create($ibu->tanggal_lahir);

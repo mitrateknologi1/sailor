@@ -22,8 +22,13 @@
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/luno.style.min.css">
 
     {{-- Leaflet --}}
-    <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+        integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+        crossorigin="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css" />
+
     <style>
         .select2+.select2-container .select2-selection {
             border-radius: 1.5rem;
@@ -65,32 +70,33 @@
         @media screen and (max-width:600px) {
             .dataTables_filter {
                 margin-top: 10px;
-            }   
+            }
         }
 
         .dataTables_filter {
             display: inline !important;
             float: right !important;
         }
-        
+
         .dataTables_filter.col-sm {
             margin-top: 10px;
         }
 
         .dt-buttons {
             display: inline !important;
-            
+
             margin-left: 10px !important;
-            float: left !important;;   
+            float: left !important;
+            ;
 
         }
 
-        .dt-button-collection{
+        .dt-button-collection {
             margin-top: 10px !important;
             margin-bottom: 10px !important;
         }
 
-        .buttons-columnVisibility{
+        .buttons-columnVisibility {
             margin-bottom: 5px;
             background-color: rgba(var(--danger-rgb), 0.15);
             color: var(--danger-color);
@@ -106,16 +112,16 @@
             vertical-align: middle;
             user-select: none;
             border: 0.1px solid grey;
-            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         }
-        
-        .buttons-columnVisibility:hover{
+
+        .buttons-columnVisibility:hover {
             background-color: rgba(var(--primary-rgb), 0.15);
             color: var(--primary-color);
             border: 0.1px solid transparent;
         }
 
-        .dt-button-collection .active{
+        .dt-button-collection .active {
             margin-bottom: 5px;
             background-color: rgba(var(--primary-rgb), 0.15);
             color: var(--primary-color);
@@ -135,13 +141,13 @@
             border-right-color: transparent;
             border-bottom-color: transparent;
             border-left-color: transparent;
-            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
         }
 
         .dataTables_length {
-            display: inline !important;     
+            display: inline !important;
             margin-bottom: 5px !important;
-            float: left;   
+            float: left;
         }
 
         .paginate_button {
@@ -416,23 +422,29 @@
     <script src="{{ asset('assets/dashboard') }}/datatables/buttons.html5.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/datatables/buttons.print.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/datatables/buttons.colVis.min.js"></script>
-   
 
     <!-- Jquery Page Js -->
     {{-- <script src="{{ asset('assets/dashboard') }}/js/page/dashboard.js"></script> --}}
 
     {{-- Leaflet --}}
-    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+        crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"
         integrity="sha512-eYE5o0mD7FFys0tVot8r4AnRXzVVXhjVpzNK+AcHkg4zNLvUAaCOJyLFKjmfpJMj6L/tuCzMN7LULBvNDhy5pA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+
     <script>
         
         $(function() {
-            $('.modal').modal({backdrop: 'static', keyboard: false})  
-            moment.locale('id'); 
+            $('.modal').modal({
+                backdrop: 'static',
+                keyboard: false
+            })
+            moment.locale('id');
             $('.tanggal').mask('00-00-0000');
             $('.rupiah').mask('000.000.000.000.000', {
                 reverse: true
