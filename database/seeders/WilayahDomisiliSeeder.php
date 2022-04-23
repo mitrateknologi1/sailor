@@ -23,7 +23,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -34,7 +34,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -45,7 +45,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -56,7 +56,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -67,7 +67,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -78,7 +78,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             /////////////////////////
@@ -90,7 +90,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -101,7 +101,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -112,7 +112,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -123,7 +123,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -134,7 +134,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -145,7 +145,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
             [
@@ -156,7 +156,18 @@ class WilayahDomisiliSeeder extends Seeder
                 'kecamatan_id' => 7271031,
                 'kabupaten_kota_id' => 7271,
                 'provinsi_id' => 72,
-                'foto_ket_domisili' => null,
+                'file_ket_domisili' => null,
+                'created_at' => now(),
+            ],
+            [
+                'id' => 14,
+                'anggota_keluarga_id' => 14,
+                'alamat' => 'Jl. Raya',
+                'desa_kelurahan_id' => 7271031006,
+                'kecamatan_id' => 7271031,
+                'kabupaten_kota_id' => 7271,
+                'provinsi_id' => 72,
+                'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
 

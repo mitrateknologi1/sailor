@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard\masterData\profil;
 
 use App\Models\User;
+use App\Models\Agama;
 use App\Models\Penyuluh;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
@@ -28,7 +29,7 @@ class PenyuluhController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Penyuluh::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas')->orderBy('created_at', 'DESC');
+            $data = Penyuluh::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama')->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -46,6 +47,10 @@ class PenyuluhController extends Controller
 
                 ->addColumn('provinsi', function ($row) {     
                     return $row->provinsi->nama;
+                })
+
+                ->addColumn('agama', function ($row) {     
+                    return $row->agama->agama;
                 })
 
                 ->addColumn('lokasi_tugas', function ($row) { 
@@ -107,6 +112,7 @@ class PenyuluhController extends Controller
             'users' => User::with('penyuluh', 'penyuluh')->where('role', 'penyuluh')
                     ->whereDoesntHave('penyuluh')
                     ->get(),
+            'agama' => Agama::all(),
             'new_penyuluh_id' => Penyuluh::max('id') + 1,
             'provinsi' => Provinsi::all(),
         ];
@@ -178,9 +184,9 @@ class PenyuluhController extends Controller
             'jenis_kelamin' => strtoupper($request->jenis_kelamin),
             'tempat_lahir' => strtoupper($request->tempat_lahir),
             'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
-            'agama' => strtoupper($request->agama),
+            'agama_id' => $request->agama,
             'tujuh_angka_terakhir_str' => $request->tujuh_angka_terakhir_str,
-            'nomor_hp' => strtoupper($request->nomor_hp),
+            'nomor_hp' => $request->nomor_hp,
             'email' => $request->email,
             'alamat' => strtoupper($request->alamat),
             'provinsi_id' => $request->provinsi,
@@ -192,7 +198,7 @@ class PenyuluhController extends Controller
 
         if($request->file('foto_profil')){
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/penyuluh',
+                'upload/foto_profil/penyuluh/',
                 $request->nik .
                     '.' . $request->file('foto_profil')->extension()
             );
@@ -201,6 +207,11 @@ class PenyuluhController extends Controller
         }
 
         Penyuluh::create($data);
+
+        User::where('id', $request->user_id)->update([
+            'nik' => $request->nik,
+            'nomor_hp' => $request->nomor_hp,
+        ]);
 
         $new_penyuluh_id = Penyuluh::max('id');
         return response()->json(['success' => 'Berhasil', 'new_penyuluh_id' => $new_penyuluh_id]);
@@ -270,6 +281,7 @@ class PenyuluhController extends Controller
     public function show(Penyuluh $penyuluh)
     {
         $penyuluh = $penyuluh;
+        $penyuluh['agama_'] = $penyuluh->agama->agama;
         $penyuluh['lokasiTugas'] = $penyuluh->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
         $penyuluh['provinsi_nama'] = $penyuluh->provinsi->nama;
         $penyuluh['kabupaten_kota_nama'] = $penyuluh->kabupatenKota->nama;
@@ -298,6 +310,7 @@ class PenyuluhController extends Controller
             'kabupatenKota' => KabupatenKota::where('provinsi_id', $penyuluh->provinsi_id)->get(),
             'kecamatan' => Kecamatan::where('kabupaten_kota_id', $penyuluh->kabupaten_kota_id)->get(),
             'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $penyuluh->kecamatan_id)->get(),
+            'agama' => Agama::all(),
         ];
         return view('dashboard.pages.masterData.profil.penyuluh.edit', $data);
     }
@@ -376,9 +389,9 @@ class PenyuluhController extends Controller
             'jenis_kelamin' => strtoupper($request->jenis_kelamin),
             'tempat_lahir' => strtoupper($request->tempat_lahir),
             'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
-            'agama' => strtoupper($request->agama),
+            'agama_id' => $request->agama,
             'tujuh_angka_terakhir_str' => $request->tujuh_angka_terakhir_str,
-            'nomor_hp' => strtoupper($request->nomor_hp),
+            'nomor_hp' => $request->nomor_hp,
             'email' => $request->email,
             'alamat' => strtoupper($request->alamat),
             'provinsi_id' => $request->provinsi,
@@ -393,7 +406,7 @@ class PenyuluhController extends Controller
                 Storage::delete('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil);
             }
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/penyuluh',
+                'upload/foto_profil/penyuluh/',
                 $request->nik .
                     '.' . $request->file('foto_profil')->extension()
             );
@@ -402,6 +415,12 @@ class PenyuluhController extends Controller
 
         $penyuluh->update($data);
         $new_penyuluh_id = penyuluh::max('id');
+
+        User::where('id', $penyuluh->user_id)->update([
+            'nik' => $request->nik,
+            'nomor_hp' => $request->nomor_hp,
+        ]);
+
         return response()->json(['success' => 'Berhasil', 'new_penyuluh_id' => $new_penyuluh_id]);
     }
 

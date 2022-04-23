@@ -16,7 +16,7 @@ class CreatePertumbuhanAnaksTable extends Migration
         Schema::create('pertumbuhan_anak', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('anggota_keluarga_id');
-            $table->bigInteger('bidan_id');
+            $table->bigInteger('bidan_id')->nullable();
             $table->integer('berat_badan');
             $table->float('zscore');
             $table->string('hasil');

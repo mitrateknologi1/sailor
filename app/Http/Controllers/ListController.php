@@ -31,7 +31,7 @@ class ListController extends Controller
             }
 
             $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
-                ->where('status_hubungan_dalam_keluarga', 'ANAK')
+                ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
                 ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
                     if (Auth::user()->role != 'admin') {
@@ -44,11 +44,18 @@ class ListController extends Controller
                 })
                 ->get();
 
+            if(Auth::user()->role == 'keluarga'){
+                $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+                ->where('status_hubungan_dalam_keluarga_id', 4)
+                ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
+                ->get();
+            }
+
             $anggotaKeluargaHapus = '';
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
                 $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
-                    ->where('status_hubungan_dalam_keluarga', 'ANAK')
+                    ->where('status_hubungan_dalam_keluarga_id', 4)
                     ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
                     ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
                         if (Auth::user()->role != 'admin') {
@@ -59,6 +66,7 @@ class ListController extends Controller
                     ->where('id', $idAnak)
                     ->first();
             }
+            
             return response()->json([
                 'anggota_keluarga' => $anggotaKeluarga,
                 'anggota_keluarga_hapus' => $anggotaKeluargaHapus
@@ -75,7 +83,7 @@ class ListController extends Controller
             }
 
             $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
-                ->where('status_hubungan_dalam_keluarga', 'ANAK')
+                ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
                     if (Auth::user()->role != 'admin') {
                         if($request->method == "POST"){
@@ -91,7 +99,7 @@ class ListController extends Controller
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
                 $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
-                    ->where('status_hubungan_dalam_keluarga', 'ANAK')
+                    ->where('status_hubungan_dalam_keluarga_id', 4)
                     ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
                         if (Auth::user()->role != 'admin') {
                             return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
@@ -118,6 +126,16 @@ class ListController extends Controller
         $bidan = Bidan::with('lokasiTugas')
             ->whereHas('lokasiTugas', function ($query) use ($lokasiAnak) {
                 return $query->where('desa_kelurahan_id', $lokasiAnak);
+            })->get();
+        return $bidan;
+    }
+
+    public function getBidanAnggotaKeluarga(Request $request)
+    {
+        $lokasiAnggotaKeluarga = $request->lokasi_id;
+        $bidan = Bidan::with('lokasiTugas')
+            ->whereHas('lokasiTugas', function ($query) use ($lokasiAnggotaKeluarga) {
+                return $query->where('desa_kelurahan_id', $lokasiAnggotaKeluarga);
             })->get();
         return $bidan;
     }
@@ -164,7 +182,7 @@ class ListController extends Controller
     public function getIbu(Request $request)
     {
         $ibu = AnggotaKeluarga::where('kartu_keluarga_id', $request->id)
-            ->where('status_hubungan_dalam_keluarga', 'ISTRI')
+            ->where('status_hubungan_dalam_keluarga_id', 'ISTRI')
             ->get();
         return $ibu;
     }

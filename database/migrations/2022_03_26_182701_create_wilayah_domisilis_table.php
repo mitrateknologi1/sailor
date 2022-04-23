@@ -21,7 +21,7 @@ class CreateWilayahDomisilisTable extends Migration
             $table->bigInteger('kecamatan_id');
             $table->bigInteger('kabupaten_kota_id');
             $table->bigInteger('provinsi_id');
-            $table->string('foto_ket_domisili')->nullable();
+            $table->string('file_ket_domisili')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

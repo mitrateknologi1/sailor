@@ -37,4 +37,9 @@ class Admin extends Model
     {
         return $this->belongsTo(DesaKelurahan::class);
     }
+
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class);
+    }
 }

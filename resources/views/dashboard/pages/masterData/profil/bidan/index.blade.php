@@ -113,7 +113,7 @@
                 </div>
                 <div class="row">
                     <div class="col-6"> 
-                        <p class="text-muted mb-0" id="">Didaftarkan: </p>
+                        <p class="text-muted mb-0" id="">Dibuat: </p>
                         <p class="text-muted" id="modal-created-at">-</p>
                     </div>
                     <div class="col-6 float-end text-end">
@@ -136,11 +136,11 @@
                     <div class="card-body p-0 py-1 px-1">
                         <ul class="list-unstyled mb-0">
                             <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-person fa-lg"></i> Nama Bidan:</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-nama-bidan"> - </span>
+                                <label><i class="fa-solid fa-person fa-lg"></i> Nama Lengkap</label>
+                                <span class="badge bg-info float-end text-uppercase" id="modal-nama-lengkap"> - </span>
                             </li>
                             <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-id-card"></i> NIK:</label>
+                                <label><i class="fa-solid fa-id-card"></i> NIK</label>
                                 <span class="badge bg-info float-end text-uppercase" id="modal-nik"> - </span>
                             </li>
                             <li class="justify-content-between mb-2">
@@ -188,7 +188,7 @@
                                 <span class="badge bg-info float-end text-uppercase" id="modal-kabupaten-kota"> - </span>
                             </li>
                             <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-location-dot"></i>Provinsi</label>
+                                <label><i class="fa-solid fa-location-dot"></i> Provinsi</label>
                                 <span class="badge bg-info float-end text-uppercase" id="modal-provinsi"> - </span>
                             </li>
                             <li class="justify-content-between">
@@ -347,58 +347,11 @@
             ],  
             columnDefs: [
                 {
-                    targets: 1,
-                    visible: false,
-                },
-                // {
-                //     targets: 3,
-                //     visible: false,
-                // },
-                {
-                    targets: 4,
+                    targets: [3,4,5,6,7,9,10,11,12,13,14,15],
                     visible: false,
                 },
                 {
-                    targets: 5,
-                    visible: false,
-                    render: function(data) {
-                        return moment(data).format('LL');
-                    }
-                },
-                {
-                    targets: 5,
-                    visible: false,
-                },
-                {
-                    targets: 6,
-                    visible: false,
-                },
-                {
-                    targets: 7,
-                    visible: false,
-                },
-                {
-                    targets: 9,
-                    visible: false,
-                },
-                {
-                    targets: 10,
-                    visible: false,
-                },
-                {
-                    targets: 12,
-                    visible: false,
-                },
-                {
-                    targets: 13,
-                    visible: false,
-                },
-                {
-                    targets: 14,
-                    visible: false,
-                },
-                {
-                    targets: 15,
+                    targets: [5,15],
                     visible: false,
                     render: function(data) {
                         return moment(data).format('LL');
@@ -409,7 +362,7 @@
                     className: 'text-center',
                     render: function (data, type, full, meta) {
                         return "<div style='white-space: normal;width: 180px;'>" + data + "</div>";
-                    },
+                    }
                 },
             ],        
         });
@@ -480,7 +433,7 @@
                     $('#modal-jenis-kelamin').html(data.jenis_kelamin);
                     $('#modal-tempat-lahir').html(data.tempat_lahir);
                     $('#modal-tanggal-lahir').html(moment(data.tanggal_lahir).format('LL'));
-                    $('#modal-agama').html(data.agama);
+                    $('#modal-agama').html(data.agama_);
                     $('#modal-str').html(data.tujuh_angka_terakhir_str);
                     $('#modal-nomor-hp').html(data.nomor_hp);
                     $('#modal-email').html(data.email);
@@ -490,7 +443,7 @@
                     $('#modal-kabupaten-kota').html(data.kabupaten_kota_nama);
                     $('#modal-provinsi').html(data.provinsi_nama);
                     if(data.foto_profil != null){
-                        $('#modal-foto-profil').html('<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/bidan/'+data.foto_profil+')"> <div class="avatar-wrapper rounded-4" style="background-image: url(upload/foto_profil/bidan/'+data.foto_profil+')"></div><div class="file-input"><input type="file" class="form-control" name="file-input" id="file-input"><label for="file-input" class="fa fa-pencil shadow text-muted"></label></div></div>')
+                        $('#modal-foto-profil').html('<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/bidan/'+data.foto_profil+')">')
                     } else{
                         $('#modal-foto-profil').html('<span class="badge bg-info text-uppercase">-</span>')
                     }

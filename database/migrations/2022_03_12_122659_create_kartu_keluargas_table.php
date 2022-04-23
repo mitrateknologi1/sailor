@@ -15,7 +15,7 @@ class CreateKartuKeluargasTable extends Migration
     {
         Schema::create('kartu_keluarga', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('akun_id')->nullable();
+            $table->bigInteger('bidan_id')->nullable();
             $table->bigInteger('nomor_kk');
             $table->text('nama_kepala_keluarga');
             $table->text('alamat');
@@ -26,10 +26,12 @@ class CreateKartuKeluargasTable extends Migration
             $table->bigInteger('kecamatan_id');
             $table->bigInteger('kabupaten_kota_id');
             $table->bigInteger('provinsi_id');
-            $table->date('dikeluarkan_tanggal')->nullable();
-            $table->text('dikeluarkan_oleh')->nullable();
-            $table->text('foto_kk');
+            // $table->date('dikeluarkan_tanggal')->nullable();
+            // $table->text('dikeluarkan_oleh')->nullable();
+            $table->text('file_kk')->nullable();
             $table->integer('is_valid')->default(0);
+            $table->date('tanggal_validasi')->nullable();
+            $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

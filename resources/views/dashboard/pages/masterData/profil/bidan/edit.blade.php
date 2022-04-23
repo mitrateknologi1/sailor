@@ -33,7 +33,7 @@
                             @slot('kabupatenKota', $kabupatenKota)
                             @slot('kecamatan', $kecamatan)
                             @slot('desaKelurahan', $desaKelurahan)
-
+                            @slot('agama', $agama)
                             @slot('action', route('bidan.update', $bidan->id))
                             @slot('method', 'PUT')
                             @slot('back_url', route('bidan.index'))

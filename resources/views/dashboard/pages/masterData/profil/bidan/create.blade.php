@@ -29,6 +29,7 @@
                             @slot('form_id', 'form_add_bidan')
                             @slot('users', $users)')
                             @slot('provinsi', $provinsi)')
+                            @slot('agama', $agama)
                             @slot('action', route('bidan.store'))
                             @slot('method', 'POST')
                             @slot('back_url', route('bidan.index'))

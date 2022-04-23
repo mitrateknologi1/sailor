@@ -24,5 +24,20 @@ class WilayahDomisili extends Model
         return $this->belongsTo(DesaKelurahan::class);
     }
 
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class);
+    }
+
+    public function kabupatenKota()
+    {
+        return $this->belongsTo(KabupatenKota::class);
+    }
+
+    public function provinsi()
+    {
+        return $this->belongsTo(Provinsi::class);
+    }
+
 
 }

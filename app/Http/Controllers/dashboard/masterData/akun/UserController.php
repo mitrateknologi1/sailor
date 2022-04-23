@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\dashboard\masterData\akun;
 
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Bidan;
 use App\Models\Penyuluh;
 use Illuminate\Http\Request;
+use App\Models\AnggotaKeluarga;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,12 +27,19 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::with('bidan', 'penyuluh', 'admin')
+            $data = User::with('bidan', 'penyuluh', 'admin', 'keluarga')
             ->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_lengkap', function($row){
-                    if($row->role == 'bidan'){
+                    if($row->role == 'keluarga'){
+                        if($row->role == 'keluarga'){
+                            return $row->keluarga->nama_lengkap;
+                        } else {
+                            return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
+                        }
+                    }
+                    else if($row->role == 'bidan'){
                         if($row->bidan){
                             return $row->bidan->nama_lengkap;
                         } else {
@@ -49,6 +59,7 @@ class UserController extends Controller
                         }
                     } 
                 })
+                
                 ->addColumn('status', function ($data) {
                     if ($data->status == 1) {
                         return '<span class="badge rounded-pill bg-success">Aktif</span>';
@@ -56,7 +67,6 @@ class UserController extends Controller
                         return '<span class="badge rounded-pill bg-danger">Tidak Aktif</span>';
                     }
                 })
-                
 
                 ->addColumn('role', function ($data) {
                     if ($data->role == 'admin') {
@@ -71,7 +81,6 @@ class UserController extends Controller
                         return '<span class="badge rounded-pill bg-success">Keluarga</span>';
                     }
                 })
-            
                
                 ->addColumn('action', function ($row) {     
                         $actionBtn = '
@@ -147,7 +156,9 @@ class UserController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nomor_hp' => 'required|unique:users,nomor_hp,NULL,id,deleted_at,NULL|max:13',
+                'nomor_hp' => ['required','max:13', Rule::unique('users')->where(function ($query) use($request) {
+                    return $query->where('role', $request->role)->whereNull('deleted_at');
+                })],
                 'kata_sandi' => 'required|min:6',
                 'ulangi_kata_sandi' => 'required|same:kata_sandi',
                 'role' => 'required',
@@ -210,7 +221,8 @@ class UserController extends Controller
                 if(($user->id == Auth::user()->id)){
                     return view('dashboard.pages.masterData.akun.edit', compact('user'));
                 } else{
-                    return abort(404);
+                    return abort(403, 'Oops! Access Forbidden');
+
                 }
             }
         } else{
@@ -230,7 +242,9 @@ class UserController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nomor_hp' => 'required|unique:users,nomor_hp,' . $user->nomor_hp . ',nomor_hp,deleted_at,NULL|max:13',
+                'nomor_hp' => ['required','max:13', Rule::unique('users')->where(function ($query) use($user) {
+                    return $query->where('role', $user->role)->whereNull('deleted_at');
+                })->ignore($user->id)],
                 // 'kata_sandi' => 'min:6',
                 'ulangi_kata_sandi' => 'same:kata_sandi',
                 // 'role' => 'required',
@@ -263,7 +277,20 @@ class UserController extends Controller
         }
 
         User::where('id', $user->id)->update($data);
-        
+
+        if($user->role == 'admin'){
+            Admin::where('user_id', $user->id)->update([
+                'nomor_hp' => $request->nomor_hp,
+            ]);
+        } else if($user->role == 'bidan'){
+            Bidan::where('user_id', $user->id)->update([
+                'nomor_hp' => $request->nomor_hp,
+            ]);
+        } else if($user->role == 'penyuluh'){
+            Penyuluh::where('user_id', $user->id)->update([
+                'nomor_hp' => $request->nomor_hp,
+            ]);
+        } 
         return $request;
     }
 

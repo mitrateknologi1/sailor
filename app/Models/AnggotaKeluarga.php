@@ -22,6 +22,12 @@ class AnggotaKeluarga extends Model
         return $this->belongsTo(KartuKeluarga::class);
     }
 
+
+    public function bidan()
+    {
+        return $this->belongsTo(Bidan::class);
+    }
+
     public function pertumbuhanAnak()
     {
         return $this->hasMany(PertumbuhanAnak::class);
@@ -29,7 +35,8 @@ class AnggotaKeluarga extends Model
     
     public function wilayahDomisili()
     {
-        return $this->hasOne(WilayahDomisili::class);
+        return $this->hasOne(WilayahDomisili::class)
+        ->withTrashed();
     }
 
     public function scopeOfDataSesuaiLokasiTugas($query, $lokasiTugas)
@@ -37,5 +44,51 @@ class AnggotaKeluarga extends Model
         $query->whereHas('wilayahDomisili', function ($query) use ($lokasiTugas) {
             return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
         });
+    }
+
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class);
+    }
+
+    public function pendidikan()
+    {
+        return $this->belongsTo(Pendidikan::class);
+    }
+
+    public function pekerjaan()
+    {
+        return $this->belongsTo(Pekerjaan::class, 'jenis_pekerjaan_id');
+    }
+
+    public function golonganDarah()
+    {
+        return $this->belongsTo(GolonganDarah::class);
+    }
+
+    public function statusPerkawinan()
+    {
+        return $this->belongsTo(StatusPerkawinan::class);
+    }
+
+    public function getBidan($id)
+    {
+        $anggotaKeluarga = AnggotaKeluarga::where('id', $id)
+            ->first();
+        $lokasiDomisili = $anggotaKeluarga->wilayahDomisili->desa_kelurahan_id;
+        $bidan = Bidan::with('lokasiTugas')
+            ->whereHas('lokasiTugas', function ($query) use ($lokasiDomisili) {
+                return $query->where('desa_kelurahan_id', $lokasiDomisili);
+            })->get();
+        return $bidan;
+    }
+
+    public function statusHubunganDalamKeluarga()
+    {
+        return $this->belongsTo(StatusHubungan::class, 'status_hubungan_dalam_keluarga_id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

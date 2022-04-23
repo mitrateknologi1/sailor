@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Agama;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
 use App\Models\LokasiTugas;
@@ -42,6 +43,11 @@ class Bidan extends Model
     public function desaKelurahan()
     {
         return $this->belongsTo(DesaKelurahan::class);
+    }
+
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class);
     }
 
     public function lokasiTugas()

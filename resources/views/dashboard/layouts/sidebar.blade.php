@@ -24,6 +24,14 @@
                         <span class="ms-2">Dashboard</span>
                     </a>
                 </li>
+                @if (Auth::user()->role == 'keluarga')
+                    <li>
+                        <a class="m-link" id="m-link-anggota-keluarga" href="{{ url('anggota-keluarga/' . Auth::user()->profil->kartu_keluarga_id) }}">
+                            <i class="fa-solid fa-people-roof"></i>
+                            <span class="ms-2">Anggota Keluarga</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="collapsed">
                     <a class="m-link collapsed" id="m-link-deteksi-stunting" data-bs-toggle="collapse"
                         data-bs-target="#menu-deteksi-stunting" href="#">
@@ -175,10 +183,12 @@
 
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-profil">
-                        <li><a class="ms-link" id="ms-link-master-data-profil-keluarga" href="account-settings.html">Keluarga</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-keluarga" href="{{ url('/keluarga') }}">Keluarga</a></li>
                         <li><a class="ms-link" id="ms-link-master-data-profil-bidan" href="{{ url('/bidan') }}">Bidan</a></li>
                         <li><a class="ms-link" id="ms-link-master-data-profil-penyuluh" href="{{ url('/penyuluh') }}">Penyuluh KB</a></li>
-                        <li><a class="ms-link" id="ms-link-master-data-profil-admin" href="{{ url('/admin') }}">Admin</a></li>
+                        @if (Auth::user()->id == 1)
+                            <li><a class="ms-link" id="ms-link-master-data-profil-admin" href="{{ url('/admin') }}">Admin</a></li>
+                        @endif
                     </ul>
                 </li>
 

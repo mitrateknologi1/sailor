@@ -11,7 +11,7 @@
                 'id' => 'nomor-hp',
                 'name' => 'nomor_hp',
                 'class' => 'angka',
-                'value' => $user->nomor_hp ?? null,
+                'value' => isset($user) ? $user->nomor_hp : null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
@@ -58,10 +58,15 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])  
             @slot('options')
+                @if (isset($user) && $user->role == 'keluarga')
                 <option value="keluarga" {{ isset($user) && $user->role == 'keluarga' ? 'selected' : '' }}>Keluarga</option>                                       
+                    
+                @endif
                 <option value="bidan" {{ isset($user) && $user->role == 'bidan' ? 'selected' : '' }}>Bidan</option>                                       
-                <option value="penyuluh" {{ isset($user) && $user->role == 'penyuluh' ? 'selected' : '' }}>Penyuluh KB</option>                                       
-                <option value="admin" {{ isset($user) && $user->role == 'admin' ? 'selected' : '' }}>Admin</option>                                       
+                <option value="penyuluh" {{ isset($user) && $user->role == 'penyuluh' ? 'selected' : '' }}>Penyuluh KB</option>          
+                @if ((isset($user)) && ((Auth::user()->id == 1) || (Auth::user()->id == $user->id)))
+                    <option value="admin" {{ isset($user) && $user->role == 'admin' ? 'selected' : '' }}>Admin</option>                                       
+                @endif                             
             @endslot
             @endcomponent
         </div>

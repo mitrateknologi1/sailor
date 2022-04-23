@@ -27,7 +27,14 @@ class User extends Authenticatable
             return $this->hasOne(Penyuluh::class, 'user_id', 'id');
         } else if(Auth::user()->role == 'admin'){
             return $this->hasOne(Admin::class, 'user_id', 'id');
+        } else if(Auth::user()->role == 'keluarga'){
+            return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
         }
+    }
+
+    
+    public function keluarga(){
+        return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
     }
 
     public function bidan(){

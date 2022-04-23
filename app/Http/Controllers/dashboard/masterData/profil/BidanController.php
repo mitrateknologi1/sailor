@@ -4,6 +4,7 @@ namespace App\Http\Controllers\dashboard\masterData\profil;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Agama;
 use App\Models\Bidan;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
@@ -31,7 +32,7 @@ class BidanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas')->orderBy('created_at', 'DESC');
+            $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama')->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
 
@@ -49,6 +50,10 @@ class BidanController extends Controller
 
                 ->addColumn('provinsi', function ($row) {     
                     return $row->provinsi->nama;
+                })
+
+                ->addColumn('agama', function ($row) {     
+                    return $row->agama->agama;
                 })
 
                 ->addColumn('lokasi_tugas', function ($row) { 
@@ -110,6 +115,7 @@ class BidanController extends Controller
             'users' => User::with('bidan')->where('role', 'bidan')
             ->whereDoesntHave('bidan')
             ->get(),
+            'agama' => Agama::all(),
             'new_bidan_id' => Bidan::max('id') + 1,
             'provinsi' => Provinsi::all(),
         ];
@@ -182,7 +188,7 @@ class BidanController extends Controller
             'jenis_kelamin' => strtoupper($request->jenis_kelamin),
             'tempat_lahir' => strtoupper($request->tempat_lahir),
             'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
-            'agama' => strtoupper($request->agama),
+            'agama_id' => $request->agama,
             'tujuh_angka_terakhir_str' => $request->tujuh_angka_terakhir_str,
             'nomor_hp' => strtoupper($request->nomor_hp),
             'email' => $request->email,
@@ -196,7 +202,7 @@ class BidanController extends Controller
 
         if($request->file('foto_profil')){
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/bidan',
+                'upload/foto_profil/bidan/',
                 $request->nik .
                     '.' . $request->file('foto_profil')->extension()
             );
@@ -205,6 +211,10 @@ class BidanController extends Controller
         }
 
         Bidan::create($data);
+        User::where('id', $request->user_id)->update([
+            'nik' => $request->nik,
+            'nomor_hp' => $request->nomor_hp,
+        ]);
 
         $new_bidan_id = Bidan::max('id');
         return response()->json(['success' => 'Berhasil', 'new_bidan_id' => $new_bidan_id]);
@@ -220,6 +230,7 @@ class BidanController extends Controller
     public function show(Bidan $bidan)
     {
         $bidan = $bidan;
+        $bidan['agama_'] = $bidan->agama->agama;
         $bidan['lokasiTugas'] = $bidan->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
         $bidan['provinsi_nama'] = $bidan->provinsi->nama;
         $bidan['kabupaten_kota_nama'] = $bidan->kabupatenKota->nama;
@@ -237,12 +248,13 @@ class BidanController extends Controller
     public function edit(Bidan $bidan)
     {
         $data = [
-            'bidan' => Bidan::select('*', DB::raw('DATE_FORMAT(tanggal_lahir, "%d/%m/%Y") AS tanggal_lahir'))
+            'bidan' => Bidan::with('agama')->select('*', DB::raw('DATE_FORMAT(tanggal_lahir, "%d/%m/%Y") AS tanggal_lahir'))
                 ->where('id', $bidan->id)
                 ->first(),
             'users' => User::with('bidan')->where('role', 'bidan')
             ->whereDoesntHave('bidan')
             ->get(),
+            'agama' => Agama::all(),
             'new_bidan_id' => Bidan::max('id') + 1,
             'provinsi' => Provinsi::all(),
             'kabupatenKota' => KabupatenKota::where('provinsi_id', $bidan->provinsi_id)->get(),
@@ -382,7 +394,7 @@ class BidanController extends Controller
             'jenis_kelamin' => strtoupper($request->jenis_kelamin),
             'tempat_lahir' => strtoupper($request->tempat_lahir),
             'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
-            'agama' => strtoupper($request->agama),
+            'agama_id' => $request->agama,
             'tujuh_angka_terakhir_str' => $request->tujuh_angka_terakhir_str,
             'nomor_hp' => strtoupper($request->nomor_hp),
             'email' => $request->email,
@@ -399,7 +411,7 @@ class BidanController extends Controller
                 Storage::delete('upload/foto_profil/bidan/' . $bidan->foto_profil);
             }
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/bidan',
+                'upload/foto_profil/bidan/',
                 $request->nik .
                     '.' . $request->file('foto_profil')->extension()
             );
@@ -407,6 +419,10 @@ class BidanController extends Controller
         }
 
         $bidan->update($data);
+        User::where('id', $bidan->user_id)->update([
+            'nik' => $request->nik,
+            'nomor_hp' => $request->nomor_hp,
+        ]);
         $new_bidan_id = Bidan::max('id');
         return response()->json(['success' => 'Berhasil', 'new_bidan_id' => $new_bidan_id]);
     }

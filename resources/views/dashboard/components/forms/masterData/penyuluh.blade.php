@@ -28,7 +28,7 @@
                 ])  
                 @slot('options')
                     @foreach ($users as $row)
-                        <option value="{{ $row->id }}">{{ $row->nomor_hp }}</option>                                       
+                        <option value="{{ $row->id }}" data-nomor-hp="{{ $row->nomor_hp }}">{{ $row->nomor_hp }}</option>                                       
                     @endforeach
                 @endslot
                 @endcomponent
@@ -119,12 +119,9 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])  
             @slot('options')
-                <option value="ISLAM" {{ isset($penyuluh) && $penyuluh->agama == 'ISLAM' ? 'selected' : '' }}>ISLAM</option>                                       
-                <option value="KRISTEN" {{ isset($penyuluh) && $penyuluh->agama == 'KRISTEN' ? 'selected' : '' }}>KRISTEN (PROTESTAN)</option>                                       
-                <option value="KATHOLIK" {{ isset($penyuluh) && $penyuluh->agama == 'KATHOLIK' ? 'selected' : '' }}>KATHOLIK</option>                                       
-                <option value="HINDU" {{ isset($penyuluh) && $penyuluh->agama == 'HINDU' ? 'selected' : '' }}>HINDU</option>                                       
-                <option value="BUDHA" {{ isset($penyuluh) && $penyuluh->agama == 'BUDHA' ? 'selected' : '' }}>BUDHA</option>                                       
-                <option value="KONGHUCU" {{ isset($penyuluh) && $penyuluh->agama == 'KONGHUCU' ? 'selected' : '' }}>KONGHUCU</option>                                       
+                @foreach ($agama as $row)
+                    <option value="{{ $row->id }}" {{ isset($penyuluh) && $row->id == $penyuluh->agama_id ? 'selected' : '' }}>{{ $row->agama }}</option>                                       
+                @endforeach     
             @endslot
             @endcomponent
         </div>
@@ -252,7 +249,7 @@
                 <div class="image-input avatar xxl rounded-4" style="background-image: url({{ isset($penyuluh) && $penyuluh->foto_profil != NULL ? asset('upload/foto_profil/penyuluh/'.$penyuluh->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
                     <div class="avatar-wrapper rounded-4" style="background-image: url({{ isset($penyuluh) && $penyuluh->foto_profil != NULL ? asset('upload/foto_profil/penyuluh/'.$penyuluh->foto_profil) : asset('assets/dashboard/images/avatar.png') }});"></div>
                     <div class="file-input" style="background: var(--card-color); text-align: center; height: 24px; width: 24px; line-height: 24px; border-radius: 24px; background-position: center !important;">
-                        <input type="file" class="form-control" name="foto_profil" id="foto-profil" style="z-index: 999999" value="">
+                        <input type="file" class="form-control" name="foto_profil" id="foto-profil" style="z-index: 999999" value="" accept="image/*">
                         <label for="file-input2" class="fa fa-pencil shadow"></label>
                     </div>
                 </div>
@@ -321,6 +318,10 @@
                 $('#desa-kelurahan').append(`<option value="${val.id}">${val.nama}</option>`);
             })
         });
+    })
+
+    $('#user-id').change(function(){
+        $('#nomor-hp').val($('#user-id').find(':selected').data('nomor-hp'))
     })
 
     $('#{{$form_id}}').submit(function(e) {
