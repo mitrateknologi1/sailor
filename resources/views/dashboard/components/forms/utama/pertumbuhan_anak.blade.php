@@ -339,7 +339,6 @@
                 method: "{{ $method }}",
                 id_anak: id_anak
             }, function(result) {
-                console.log(result);
                 $.each(result.anggota_keluarga, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
                     selected = '';

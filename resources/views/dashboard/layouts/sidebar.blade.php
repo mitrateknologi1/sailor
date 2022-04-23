@@ -84,9 +84,8 @@
                                 href="{{ url('perkembangan-anak') }}">Perkembangan Anak</a></li>
                     </ul>
                 </li>
-                <li class="collapsed">
-                    <a class="m-link" id="m-link-randa-kabilasa" data-bs-toggle="collapse"
-                        data-bs-target="#menu-randa-kabilasa" href="#">
+                <li>
+                    <a class="m-link" id="m-link-randa-kabilasa" href="{{ url('randa-kabilasa') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor" class="bi bi-people-fill"
                             viewBox="0 0 16 16">
                             <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
@@ -95,22 +94,30 @@
                             <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
                         </svg>
                         <span class="ms-2">Randa Kabilasa</span>
+                    </a>
+                </li>
+                <li class="collapsed">
+                    <a class="m-link" id="m-link-peta-data" data-bs-toggle="collapse"
+                        data-bs-target="#menu-peta-data" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-map-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M16 .5a.5.5 0 0 0-.598-.49L10.5.99 5.598.01a.5.5 0 0 0-.196 0l-5 1A.5.5 0 0 0 0 1.5v14a.5.5 0 0 0 .598.49l4.902-.98 4.902.98a.502.502 0 0 0 .196 0l5-1A.5.5 0 0 0 16 14.5V.5zM5 14.09V1.11l.5-.1.5.1v12.98l-.402-.08a.498.498 0 0 0-.196 0L5 14.09zm5 .8V1.91l.402.08a.5.5 0 0 0 .196 0L11 1.91v12.98l-.5.1-.5-.1z" />
+                        </svg>
+                        <span class="ms-2">Peta Data</span>
                         <span class="arrow fa fa-angle-right ms-auto text-end"></span>
-
                     </a>
 
                     <!-- Menu: Sub menu ul -->
-                    <ul class="sub-menu collapse" id="menu-randa-kabilasa">
-                        <li><a class="ms-link" id="ms-link-mencegah-malnutrisi"
-                                href="{{ url('mencegah-malnutrisi') }}">Mencegah Malnutrisi</a></li>
-                        <li><a class="ms-link" id="ms-link-mencegah-pernikahan-dini"
-                                href="{{ url('mencegah-pernikahan-dini') }}">Mencegah Pernikahan Dini</a></li>
-                        <li><a class="ms-link" id="ms-link-meningkatkan-life-skill"
-                                href="{{ url('meningkatkan-life-skill') }}  ">Meningkatkan Life Skill & Potensi
-                                Diri</a></li>
+                    <ul class="sub-menu collapse" id="menu-peta-data">
+                        <li><a class="ms-link" id="ms-link-peta-deteksi-stunting"
+                                href="{{ url('map-deteksi-stunting') }}">Deteksi Stunting</a></li>
+                        <li><a class="ms-link" id="ms-link-peta-moms-care"
+                                href="{{ url('map-moms-care') }}">Moms Care</a></li>
+                        <li><a class="ms-link" id="ms-link-peta-randa-kabilasa"
+                                href="{{ url('map-randa-kabilasa') }}">Randa Kabilasa</a></li>
                     </ul>
                 </li>
-
             </ul>
             <ul class="menu-list">
                 <li class="divider py-2 lh-sm"><span class="small">MASTER DATA</span><br></li>
@@ -150,6 +157,33 @@
                                 href="{{ url('masterData/soal-deteksi-dini') }}">Soal Deteksi Dini</a></li>
                     </ul>
                 </li>
+                <li class="collapsed">
+                    <a class="m-link" id="m-link-master-data-randa-kabilasa" data-bs-toggle="collapse"
+                        data-bs-target="#menu-master-data-randa-kabilasa" href="#">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor" class="bi bi-people-fill"
+                            viewBox="0 0 16 16">
+                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                            <path fill-rule="evenodd"
+                                d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
+                            <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+                        </svg>
+                        <span class="ms-2">Randa Kabilasa</span>
+                        <span class="arrow fa fa-angle-right ms-auto text-end"></span>
+
+                    </a>
+
+                    <!-- Menu: Sub menu ul -->
+                    <ul class="sub-menu collapse" id="menu-master-data-randa-kabilasa">
+                        <li><a class="ms-link" id="ms-link-master-data-soal-mencegah-malnutrisi"
+                                href="{{ url('masterData/soal-mencegah-malnutrisi') }}">Soal Hemoglobin Mencegah
+                                Malnutrisi</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-soal-meningkatkan-life-skill"
+                                href="{{ url('masterData/soal-meningkatkan-life-skill') }}  ">Soal Meningkatkan Life
+                                Skill &
+                                Potensi
+                                Diri</a></li>
+                    </ul>
+                </li>
                 <li>
                     <a class="m-link" id="m-link-wilayah" href="{{ url('masterData/provinsi') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -175,9 +209,12 @@
 
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-profil">
-                        <li><a class="ms-link" id="ms-link-master-data-profil-keluarga" href="account-settings.html">Keluarga</a></li>
-                        <li><a class="ms-link" id="ms-link-master-data-profil-bidan" href="{{ url('/bidan') }}">Bidan</a></li>
-                        <li><a class="ms-link" id="ms-link-master-data-profil-penyuluh" href="account-create-invoices.html">Penyuluh BKKBN</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-keluarga"
+                                href="account-settings.html">Keluarga</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-bidan"
+                                href="{{ url('/bidan') }}">Bidan</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-penyuluh"
+                                href="account-create-invoices.html">Penyuluh BKKBN</a></li>
                     </ul>
                 </li>
 

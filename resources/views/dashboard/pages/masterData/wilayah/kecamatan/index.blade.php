@@ -64,9 +64,10 @@
 
 @push('script')
     <script>
-        var center = [-0.8037181, 120.1707766];
+        var center = [-1.4615206, 119.4422679];
 
-        var map = L.map("map").setView(center, 12);
+        var map = L.map("map").setView(center, 9);
+        map.addControl(new L.Control.Fullscreen());
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',

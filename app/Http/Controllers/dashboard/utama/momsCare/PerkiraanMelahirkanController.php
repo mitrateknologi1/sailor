@@ -31,6 +31,25 @@ class PerkiraanMelahirkanController extends Controller
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                     }
                 })
+                ->where(function ($query) use ($request) {
+                    $query->where(function ($query) use ($request) {
+                        if ($request->statusValidasi) {
+                            $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
+                        }
+                    });
+
+                    $query->where(function ($query) use ($request) {
+                        if ($request->search) {
+                            $query->whereHas('bidan', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+
+                            $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+                        }
+                    });
+                })
                 ->orWhere(function ($query) {
                     if (Auth::user()->role == 'bidan') { // bidan
                         $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
@@ -145,7 +164,7 @@ class PerkiraanMelahirkanController extends Controller
 
         $selisihHari = date_diff(Carbon::now(), Carbon::parse($hpl));
         $selisihHariSebut = $selisihHari->y . ' Tahun ' . $selisihHari->m . ' Bulan ' . $selisihHari->d . ' Hari';
-        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+        $ibu = AnggotaKeluarga::where('id', $request->nama_ibu)->withTrashed()->first();
 
         if (Carbon::parse($hpl) > Carbon::now()) {
             $status = 'Belum Lahir';

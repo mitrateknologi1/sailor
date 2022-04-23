@@ -14,8 +14,8 @@ class CreateJawabanDeteksiIbuMelahirkanStuntingTable extends Migration
     public function up()
     {
         Schema::create('jawaban_deteksi_ibu_melahirkan_stunting', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('deteksi_ibu_melahirkan_stunting_id');
+            $table->uuid('id')->primary();
+            $table->uuid('deteksi_ibu_melahirkan_stunting_id');
             $table->bigInteger('soal_id');
             $table->string('jawaban');
             $table->timestamps();

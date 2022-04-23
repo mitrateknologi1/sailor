@@ -44,27 +44,28 @@
                                         <div class="col-lg">
                                             @component('dashboard.components.formElements.select', [
                                                 'label' => 'Status',
-                                                'id' => 'status',
+                                                'id' => 'status-validasi',
                                                 'name' => 'status',
                                                 'class' => 'filter',
                                                 ])
                                                 @slot('options')
-                                                    <option value="1">Aktif</option>
-                                                    <option value="0">Tidak Aktif</option>
+                                                    <option value="Tervalidasi">Tervalidasi</option>
+                                                    <option value="Belum Tervalidasi">Belum Divalidasi</option>
                                                 @endslot
                                             @endcomponent
                                         </div>
                                         <div class="col-lg">
                                             @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Tinggi',
-                                                'id' => 'kategori-gizi',
-                                                'name' => 'kategori_gizi',
+                                                'label' => 'Kategori',
+                                                'id' => 'kategori',
+                                                'name' => 'kategori',
                                                 'class' => 'filter',
                                                 ])
                                                 @slot('options')
-                                                    <option>Mustard</option>
-                                                    <option>Ketchup</option>
-                                                    <option>Relish</option>
+                                                    <option value="sangat_pendek">Sangat Pendek (Resiko Stunting Tinggi)</option>
+                                                    <option value="pendek">Pendek (Resiko Stunting Sedang)</option>
+                                                    <option value="normal">Normal</option>
+                                                    <option value="tinggi">Tinggi</option>
                                                 @endslot
                                             @endcomponent
                                         </div>
@@ -336,8 +337,8 @@
             ajax: {
                 url: "{{ url('stunting-anak') }}",
                 data: function(d) {
-                    d.status = $('#status-filter').val();
-                    d.kategori = $('#kategori-gizi-filter').val();
+                    d.statusValidasi = $('#status-validasi').val();
+                    d.kategori = $('#kategori').val();
                     d.search = $('input[type="search"]').val();
                 }
             },
@@ -404,15 +405,11 @@
 
             ],
         });
+    </script>
 
-        $('#status-filter').change(function() {
+    <script>
+        $('.filter').change(function() {
             table.draw();
-            console.log($('#status-filter').val())
-        })
-
-        $('#kategori-gizi-filter').change(function() {
-            table.draw();
-            console.log($('#kategori-gizi-filter').val())
         })
     </script>
 @endpush

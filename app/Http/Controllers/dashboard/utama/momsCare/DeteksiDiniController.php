@@ -32,6 +32,37 @@ class DeteksiDiniController extends Controller
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                     }
                 })
+                ->where(function ($query) use ($request) {
+                    $query->where(function ($query) use ($request) {
+                        if ($request->statusValidasi) {
+                            $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
+                        }
+
+                        if ($request->kategori) {
+                            $kategori = '';
+                            if ($request->kategori == 'resiko_rendah') {
+                                $kategori = 'Kehamilan : KRR (Beresiko Rendah)';
+                            } else if ($request->kategori == 'resiko_tinggi') {
+                                $kategori = 'Kehamilan : KRT (Beresiko TINGGI)';
+                            } else if ($request->kategori == 'resiko_sangat_tinggi') {
+                                $kategori = 'Kehamilan : KRST (Beresiko SANGAT TINGGI)';
+                            }
+                            $query->where('kategori', $kategori);
+                        }
+                    });
+
+                    $query->where(function ($query) use ($request) {
+                        if ($request->search) {
+                            $query->whereHas('bidan', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+
+                            $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                            });
+                        }
+                    });
+                })
                 ->orWhere(function ($query) {
                     if (Auth::user()->role == 'bidan') { // bidan
                         $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
@@ -43,7 +74,7 @@ class DeteksiDiniController extends Controller
                     $actionBtn = '<a href=" ' . url('deteksi-dini' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a>';
 
                     if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
-                        $actionBtn .= '<a href="' . url('anc/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
+                        $actionBtn .= '<a href="' . url('deteksi-dini/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
                     }
 
                     return $actionBtn;
@@ -163,7 +194,7 @@ class DeteksiDiniController extends Controller
             $kategori = 'Kehamilan : KRST (Beresiko SANGAT TINGGI)';
         }
 
-        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+        $ibu = AnggotaKeluarga::where('id', $request->nama_ibu)->withTrashed()->first();
 
         $datetime1 = date_create(date('Y-m-d'));
         $datetime2 = date_create($ibu->tanggal_lahir);
