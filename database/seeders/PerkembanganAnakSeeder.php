@@ -14,11 +14,10 @@ class PerkembanganAnakSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('perkembangan_anak')->delete();
-        
         DB::table('perkembangan_anak')->insert(array (
             0 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b528',
                 'anggota_keluarga_id' => 10,
                 'bidan_id' => 2,
                 'created_at' => '2022-04-01 17:58:42',
@@ -32,6 +31,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             1 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b529',
                 'anggota_keluarga_id' => 3,
                 'bidan_id' => 1,
                 'created_at' => '2022-04-01 21:11:16',
@@ -45,6 +45,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             2 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b530',
                 'anggota_keluarga_id' => 4,
                 'bidan_id' => 1,
                 'created_at' => '2022-04-01 21:11:49',
@@ -58,6 +59,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             3 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b531',
                 'anggota_keluarga_id' => 9,
                 'bidan_id' => 1,
                 'created_at' => '2022-04-01 21:12:27',
@@ -71,6 +73,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             4 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b532',
                 'anggota_keluarga_id' => 10,
                 'bidan_id' => 1,
                 'created_at' => '2022-04-01 21:13:03',
@@ -84,6 +87,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             5 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b533',
                 'anggota_keluarga_id' => 11,
                 'bidan_id' => 2,
                 'created_at' => '2022-04-01 21:14:04',
@@ -97,6 +101,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             6 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b534',
                 'anggota_keluarga_id' => 5,
                 'bidan_id' => 2,
                 'created_at' => '2022-04-01 21:14:38',
@@ -110,6 +115,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             7 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b535',
                 'anggota_keluarga_id' => 6,
                 'bidan_id' => 2,
                 'created_at' => '2022-04-01 21:14:46',
@@ -123,6 +129,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             8 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b536',
                 'anggota_keluarga_id' => 13,
                 'bidan_id' => 2,
                 'created_at' => '2022-04-01 21:17:57',
@@ -136,6 +143,7 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             9 => 
             array (
+                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b537',
                 'anggota_keluarga_id' => 11,
                 'bidan_id' => 2,
                 'created_at' => '2022-04-01 21:24:10',

@@ -14,7 +14,7 @@ class CreatePertumbuhanAnaksTable extends Migration
     public function up()
     {
         Schema::create('pertumbuhan_anak', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->bigInteger('anggota_keluarga_id');
             $table->bigInteger('bidan_id')->nullable();
             $table->integer('berat_badan');
