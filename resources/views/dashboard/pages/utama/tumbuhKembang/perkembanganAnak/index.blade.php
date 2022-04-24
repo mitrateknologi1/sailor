@@ -334,11 +334,11 @@
             console.log($('#kategori-gizi-filter').val())       
         })
 
-        function modalLihat(id){
-            var perkembangan_anak = id;
+        $(document).on('click', '#btn-lihat', function() {
+            let id = $(this).val();
             $.ajax({
                 type: "GET",
-                url: "{{url('perkembangan-anak')}}" + '/' + perkembangan_anak,
+                url: "{{url('perkembangan-anak')}}" + '/' + id,
                 success: function (data) {
                     $('#modal-lihat').modal('show');
                     $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data.tanggal_proses).format('LL'));
@@ -354,7 +354,7 @@
                     $('#modal-desa-kelurahan').text(data.desa_kelurahan);
                     $('#modal-diperiksa-divalidasi').text(moment(data.tanggal_validasi).format('LL'));
                     $('#modal-nama-bidan').text(data.bidan);
-                    $('#modal-btn-ubah').attr('href', '{{url('perkembangan-anak')}}' + '/' + perkembangan_anak + '/edit');
+                    $('#modal-btn-ubah').attr('href', '{{url('perkembangan-anak')}}' + '/' + id + '/edit');
                     
                   
                     if(('{{Auth::user()->profil->nama_lengkap}}' == data.bidan) || ('{{Auth::user()->role}}' == 'admin')){
@@ -366,7 +366,7 @@
                 },
             })
 
-        }
+        })
 
 
         function hapus(id) {

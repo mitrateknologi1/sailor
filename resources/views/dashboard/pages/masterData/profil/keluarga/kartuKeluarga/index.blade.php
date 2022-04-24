@@ -589,7 +589,8 @@
                 },
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
+                    className: 'text-center',
                 },
                 {
                     data: 'nomor_kk',

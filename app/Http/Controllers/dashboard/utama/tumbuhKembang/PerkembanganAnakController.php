@@ -44,9 +44,9 @@ class PerkembanganAnakController extends Controller
                     })
                     ->addColumn('status', function ($row) {   
                         if($row->is_valid == 1){
-                            return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
+                            return '<span class="badge rounded bg-success">Tervalidasi</span>';
                         }else{
-                            return '<span class="badge rounded-pill bg-danger">Belum Divalidasi</span>';
+                            return '<span class="badge rounded bg-danger">Belum Divalidasi</span>';
                         }
                     })
     
@@ -91,7 +91,7 @@ class PerkembanganAnakController extends Controller
                             <div class="text-center justify-content-center text-white">';
                         // if($row->)
                         $actionBtn .= '
-                            <button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.') ><i class="fas fa-eye"></i></button>';
+                            <button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>';
                         if((Auth::user()->role != 'penyuluh')){
                             if(($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')){
                                 $actionBtn .= '

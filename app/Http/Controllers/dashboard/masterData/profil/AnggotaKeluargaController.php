@@ -59,11 +59,11 @@ class AnggotaKeluargaController extends Controller
                     })
                     ->addColumn('status', function ($row) {   
                         if($row->is_valid == 1){
-                            return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
+                            return '<span class="badge rounded bg-success">Tervalidasi</span>';
                         } else if ($row->is_valid == 0){
-                            return '<span class="badge rounded-pill bg-primary">Belum Divalidasi</span>';
+                            return '<span class="badge rounded bg-primary">Belum Divalidasi</span>';
                         } else{
-                            return '<span class="badge rounded-pill bg-danger">Ditolak</span>';
+                            return '<span class="badge rounded bg-danger">Ditolak</span>';
                         }
                     })
     

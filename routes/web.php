@@ -32,6 +32,7 @@ use App\Http\Controllers\dashboard\utama\momsCare\PerkiraanMelahirkanController;
 use App\Http\Controllers\dashboard\masterData\momsCare\SoalDeteksiDiniController;
 use App\Http\Controllers\dashboard\utama\tumbuhKembang\PertumbuhanAnakController;
 use App\Http\Controllers\dashboard\utama\tumbuhKembang\PerkembanganAnakController;
+use App\Http\Controllers\dashboard\masterData\deteksiStunting\SoalIbuMelahirkanStuntingController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\dashboard\utama\petaData\MapMomsCareController;
