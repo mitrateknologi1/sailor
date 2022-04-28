@@ -9,11 +9,9 @@ use App\Http\Controllers\ListController;
 use App\Models\DeteksiIbuMelahirkanStunting;
 use App\Http\Controllers\dashboard\utama\momsCare\AncController;
 use App\Http\Controllers\dashboard\masterData\akun\UserController;
-
 use App\Http\Controllers\dashboard\masterData\profil\AdminController;
 use App\Http\Controllers\dashboard\masterData\profil\BidanController;
 use App\Http\Controllers\dashboard\masterData\profil\PenyuluhController;
-
 use App\Http\Controllers\dashboard\utama\momsCare\DeteksiDiniController;
 use App\Http\Controllers\dashboard\masterData\wilayah\ProvinsiController;
 use App\Http\Controllers\dashboard\masterData\wilayah\KecamatanController;
@@ -103,6 +101,7 @@ Route::get('anc-cek-pemeriksaan', [AncController::class, 'cekPemeriksaan']);
 // ----------------- Start Tumbuh Kembang -----------------
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
+Route::put('pertumbuhan-anak/validasi/{pertumbuhan_anak}', [PertumbuhanAnakController::class, 'validasi'])->name('validasiPertumbuhanAnak');
 Route::post('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::put('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');

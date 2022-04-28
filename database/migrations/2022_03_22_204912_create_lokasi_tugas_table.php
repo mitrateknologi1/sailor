@@ -16,7 +16,7 @@ class CreateLokasiTugasTable extends Migration
         Schema::create('lokasi_tugas', function (Blueprint $table) {
             $table->id();
             $table->string('jenis_profil');
-            $table->bigInteger('profil_id');
+            $table->uuid('profil_id');
             $table->bigInteger('desa_kelurahan_id');
             $table->bigInteger('kecamatan_id');
             $table->bigInteger('kabupaten_kota_id');

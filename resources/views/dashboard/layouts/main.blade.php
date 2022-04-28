@@ -30,6 +30,13 @@
         href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css" />
 
     <style>
+
+        @media only screen and (max-width: 567px) {
+            .pulse-ring {
+                left: -2px !important;
+            }
+        }
+
         .select2+.select2-container .select2-selection {
             border-radius: 1.5rem;
         }
@@ -203,7 +210,7 @@
         @endif --}}
 
         <!-- start: page body -->
-        <div class="page-body px-xl-0 px-sm-2 px-0 py-lg-1 py-0 mt-0">
+        <div class="page-body px-xl-0 px-sm-2 px-0 py-lg-1 pb-3 mt-0">
             <div class="container-fluid">
                 @yield('content')
             </div>
@@ -457,6 +464,15 @@
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
                     .format('YYYY-MM-DD'));
             });
+
+        })
+        $(document).on('click', '.btn-delete-pemberitahuan', function() {
+            alert('test')
+            // let id = $(this).data('test');
+            // var _token = "{{csrf_token()}}";
+            // alert(id)
+            // console.log(id);
+            
         })
 
         // project data table
@@ -490,7 +506,11 @@
         $('.numerik').on('input', function(e) {
             this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
         });
+
+
+        
     </script>
+
     @stack('script')
 
 </body>

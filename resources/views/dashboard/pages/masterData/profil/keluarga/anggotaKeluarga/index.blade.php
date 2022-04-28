@@ -90,7 +90,7 @@
     </div>
 </section>
 
-<div class="modal fade" id="modal-validasi-ubah" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modal-lihat" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-body custom_scroll p-lg-4 pb-3">
@@ -225,11 +225,11 @@
                                         <label><i class="fa-solid fa-clipboard-question"></i> Status</label>
                                         <span class="badge bg-info float-end text-uppercase" id="modal-status-konfirmasi"> - </span>
                                     </li>
-                                    <li class="justify-content-between mb-2">
+                                    <li class="justify-content-between mb-2" id="li-modal-tanggal-konfirmasi">
                                         <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Konfirmasi</label>
                                         <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-konfirmasi"> - </span>
                                     </li>
-                                    <li class="justify-content-between mb-2">
+                                    <li class="justify-content-between mb-2" id="li-modal-oleh-bidan">
                                         <label><i class="fa-solid fa-stethoscope"></i> Oleh Bidan</label>
                                         <span class="badge bg-info float-end text-uppercase" id="modal-oleh-bidan"> - </span>
                                     </li>
@@ -244,8 +244,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row d-none align-items-end" id="form-konfirmasi">
-                    <div class="col" id="pilih-konfirmasi">
+                <div class="row g-3 align-items-end" id="form-konfirmasi">
+                    <div class="col-lg col-sm-12" id="pilih-konfirmasi">
                         @component('dashboard.components.formElements.select', [
                             'label' => 'Konfirmasi',
                             'id' => 'konfirmasi',
@@ -254,13 +254,13 @@
                             'wajib' => '<sup class="text-danger">*</sup>',
                             ])
                             @slot('options')
-                                <option value="1">Setujui</option>
+                                <option value="1">Validasi</option>
                                 <option value="2">Tolak</option>
                             @endslot
                         @endcomponent
                     </div>
                     @if (Auth::user()->role == 'admin')
-                    <div class="col" id="pilih-bidan">
+                    <div class="col-lg col-sm-12" id="pilih-bidan">
                         @component('dashboard.components.formElements.select', [
                             'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
                             'id' => 'nama-bidan',
@@ -277,190 +277,25 @@
                         <span class="text-danger error-text alasan-error"></span>
 
                     </div>
-                    
                 </div>
                 <div class="row g-2 mt-3">
                     <div class="col">
                         <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i>  Tutup</button>
                     </div>
-                    <div class="col-sm-6 col-lg-8 d-none" id="col-btn-validasi">
-                        @component('dashboard.components.buttons.konfirmasi', [
-                            'id' => 'modal-btn-validasi',
-                        ])      
-                        @endcomponent
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-lihat" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-body custom_scroll p-lg-4 pb-3">
-                <div class="d-flex w-100 justify-content-between mb-1">
-                    <div class="w-100">
-                        <h5>Detail Keluarga</h5>
-                    </div>
-                    
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="row">
-                    <div class="col-6"> 
-                        <p class="text-muted mb-0" id="">Dibuat: </p>
-                        <p class="text-muted" id="modal-created-at2">-</p>
-                    </div>
-
-                    <div class="col-6 float-end text-end" id="terakhir-diperbarui">
-                        <p class="text-muted mb-0" id="">Terakhir Diperbarui: </p>
-                        <p class="text-muted" id="modal-updated-at2">-</p>
-                    </div>
-                </div>
-
-                <div class="alert kategori-alert alert-primary rounded-4 mb-0">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light mx-1"><i class="fa-solid fa-map-location-dot"></i></div>
-                        <div class="d-flex w-100 justify-content-between align-items-center" style="font-size: 0.8em">
-                            <div class="" id="">DOMISILI: </div>
-                            <div class="float-end text-end" id="modal-domisili2"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col mb-2">
-                        <div class="card fieldset border border-dark">
-                            <span class="fieldset-tile text-dark ml-5 bg-white">Info Kepala Keluarga:</span>
-                            <div class="card-body p-0 py-1 px-1">
-                                <ul class="list-unstyled mb-0">
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-person fa-lg"></i> Nama Lengkap</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-nama-lengkap2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-id-card"></i> NIK</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-nik2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-map-location-dot"></i> Tempat Lahir</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-tempat-lahir2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-hands-praying"></i> Agama</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-agama2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-graduation-cap"></i> Pendidikan</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-pendidikan2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-briefcase"></i> Jenis Pekerjaan</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-jenis-pekerjaan2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-droplet"></i> Golongan Darah</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-golongan-darah2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-ring"></i> Status Perkawinan</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-status-perkawinan2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-calendar-day"></i> Tanggal Perkawinan</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-perkawinan2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-flag"></i> Kewarganegaraan</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-kewarganegaraan2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2" id="li-nomor-paspor">
-                                        <label><i class="fa-solid fa-passport"></i> Nomor Paspor</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-nomor-paspor2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2" id="li-nomor-kitap">
-                                        <label><i class="fa-solid fa-passport"></i> Nomor KITAP</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-nomor-kitap2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-person fa-lg"></i> Nama Ayah</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-nama-ayah2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-person-dress fa-lg"></i> Nama Ibu</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-nama-ibu2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-road"></i> Alamat Domisili</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-alamat-domisili2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-location-dot"></i> Desa/Kelurahan Domisili</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-desa-kelurahan-domisili2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-location-dot"></i> Kecamatan Domisili</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-kecamatan-domisili2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-location-dot"></i> Kabupaten/Kota Domisili</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-kabupaten-kota-domisili2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-location-dot"></i> Provinsi Domisili</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-provinsi-domisili2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2 d-none" id="col-sk-domisili">
-                                        <label><i class="fa-solid fa-file"></i> Surat Keterangan Domisili</label>
-                                        <a href="#" id="file-surat-keterangan-domisili2" target="_blank"><span class="badge bg-success shadow float-end text-uppercase">Lihat</span></a>
-                                        <span class="badge bg-info shadow float-end text-uppercase" id="modal-file-surat-keterangan-domisili2">Tidak Ada</span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-phone"></i> Nomor HP</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-nomor-hp2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-clipboard-question"></i> Status</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-status-konfirmasi2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Konfirmasi</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-konfirmasi2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between mb-2">
-                                        <label><i class="fa-solid fa-stethoscope"></i> Oleh Bidan</label>
-                                        <span class="badge bg-info float-end text-uppercase" id="modal-oleh-bidan2"> - </span>
-                                    </li>
-                                    <li class="justify-content-between">
-                                        <label><i class="fa-solid fa-image"></i> Foto Profil</label>
-                                        <span class="float-end" id="modal-foto-profil2">
-                                        </span>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-2 mt-3">
-                    <div class="col">
-                        <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i>  Tutup</button>
-                    </div>
-                    <div class="col-sm-6 col-lg-8 d-none" id="col-modal-btn-ubah">
+                    <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
                         @component('dashboard.components.buttons.edit', [
                             'id' => 'modal-btn-ubah',
                         ])      
                         @endcomponent
                     </div>
+                    <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
+                        @component('dashboard.components.buttons.konfirmasi', [
+                            'id' => 'modal-btn-konfirmasi',
+                        ])      
+                        @endcomponent
+                    </div>
                 </div>
+
                 
             </div>
         </div>
@@ -566,8 +401,9 @@
             // ],        
         });
 
-        function hapus(idAnggota, idKeluarga) {
-            var _token = "{{csrf_token()}}";
+        $(document).on('click', '#btn-delete', function() {
+            let anggotaKeluarga = $(this).data('anggota-keluarga');
+            let keluarga = $(this).data('kartu-keluarga');
             Swal.fire({
                 title : 'Apakah anda yakin?',
                 text : "Data bidan yang dipilih akan dihapus!",
@@ -581,9 +417,9 @@
                 if (result.value) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{url('anggota-keluarga')}}" + '/' + idKeluarga + '/' + idAnggota,
+                        url: "{{url('anggota-keluarga')}}" + '/' + keluarga + '/' + anggotaKeluarga,
                         data: {
-                            _token: _token
+                            _token: "{{csrf_token()}}",
                         },
                         success: function(response) {
                             if (response.res == 'success') {
@@ -605,15 +441,30 @@
                     })
                 } 
             })
-        }
+        });
 
-        function modalValidasi(anggotaKeluarga, keluarga){
+        $(document).on('click', '#btn-lihat', function() {
+            let anggotaKeluarga = $(this).data('anggota-keluarga');
+            let keluarga = $(this).data('kartu-keluarga');
             $.ajax({
                 type: "GET",
                 url: "{{url('anggota-keluarga')}}" + '/' + keluarga + '/' + anggotaKeluarga,
                 success: function (data) {
+                    $('#modal-lihat').modal('show');
+                    $('#col-sk-domisili').addClass('d-none');
+                    $('#modal-file-surat-keterangan-domisili').addClass('d-none')
+                    $('#file-surat-keterangan-domisili').addClass('d-none')
+                    $('#col-modal-btn-ubah').addClass('d-none');
+                    $('#col-modal-btn-konfirmasi').addClass('d-none');
+                    $('#li-modal-tanggal-konfirmasi').addClass('d-none');
+                    $('#li-modal-oleh-bidan').addClass('d-none');
+                    $('#form-konfirmasi').addClass('d-none');
                     $('#col-alasan').addClass('d-none');
-                    $('#modal-validasi-ubah').modal('show');
+                    $('#konfirmasi').val('');
+                    $('#nama-bidan').val('');
+                    $('#alasan').val('');
+
+
                     $('#modal-created-at').html(moment(data.created_at).format('LL'));
                     if(data.updated_at != null){
                         $('#modal-updated-at').html(moment(data.updated_at).format('LL'));
@@ -648,28 +499,60 @@
                     $('#modal-kabupaten-kota-domisili').html(data.kabupaten_kota_domisili);
                     $('#modal-provinsi-domisili').html(data.provinsi_domisili);
 
-                    if(data.is_valid == 1){
-                        $('#modal-status-konfirmasi').html('Valid');
+                     if(data.is_valid == 0){
+                        $('#modal-status-konfirmasi').text('Belum Divalidasi');
+                        $('#col-modal-btn-konfirmasi').removeClass('d-none');
+                        $('#form-konfirmasi').removeClass('d-none');
+                        $('#konfirmasi').change(function(){
+                            if($('#konfirmasi').val() == 1){
+                                $('#col-alasan').addClass('d-none');
+                            } else{
+                                $('#col-alasan').removeClass('d-none');
+                            }
+                            $('#alasan').val('');
+                        })
+                        if('{{Auth::user()->role}}' == 'admin'){
+                            $.each(data.bidan_konfirmasi, function(key, val) {
+                                $('#nama-bidan').html('')
+                                $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+                                $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
+                            })
+                        } else if('{{Auth::user()->role}}' == 'bidan'){
+                            $('#pilih-bidan').addClass('d-none');
+                        }
+
+                        $('#modal-btn-konfirmasi').data('anggota-keluarga', anggotaKeluarga);
+                        $('#modal-btn-konfirmasi').data('kartu-keluarga', keluarga);
+                        
                     } else{
-                        $('#modal-status-konfirmasi').html('Tidak Valid');
+                        $('#li-modal-tanggal-konfirmasi').removeClass('d-none');
+                        $('#li-modal-oleh-bidan').removeClass('d-none');
+                        if(data.is_valid == 1){
+                            $('#modal-status-konfirmasi').text('Tervalidasi');
+                            if(('{{Auth::user()->profil->nama_lengkap}}' == data.nama_bidan) || ('{{Auth::user()->role}}' == 'admin')){
+                                $('#col-modal-btn-ubah').removeClass('d-none');
+                                $('#modal-btn-ubah').attr('href', '{{url('anggota-keluarga')}}' + '/' + keluarga + '/' + anggotaKeluarga + '/edit');
+                            } else {
+                                $('#col-modal-btn-ubah').addClass('d-none');
+                            }
+                        } else if(data.is_valid == 2){
+                            $('#modal-status-konfirmasi').text('Ditolak');
+                        }
+                        $('#modal-tanggal-konfirmasi').text(moment(data.tanggal_validasi).format('LL'));
+                        $('#modal-tanggal-konfirmasi').html(moment(data.tanggal_validasi).format('LL'));
+                        $('#modal-oleh-bidan').text(data.nama_bidan);
                     }
 
-                    $('#modal-tanggal-konfirmasi').html(moment(data.tanggal_validasi).format('LL'));
-                    $('#modal-oleh-bidan').html(data.nama_bidan)
                     
                     if(data.desa_kelurahan_nama != data.desa_kelurahan_domisili){
                         $('#col-sk-domisili').removeClass('d-none');
                         if(data.surat_keterangan_domisili){
-                            $('#modal-file-surat-keterangan-domisili').addClass('d-none')
                             $('#file-surat-keterangan-domisili').removeClass('d-none');
                             $('#file-surat-keterangan-domisili').attr('href', '{{ asset("upload/surat_keterangan_domisili") }}/'+data.surat_keterangan_domisili);
                         } else{
                             $('#modal-file-surat-keterangan-domisili').removeClass('d-none')
-                            $('#file-surat-keterangan-domisili').addClass('d-none')
                         }
-                    } else{
-                        $('#col-sk-domisili').addClass('d-none');
-                    }
+                    } 
 
                     if(data.foto_profil != null){
                         $('#modal-foto-profil').html('<div class="image-input shadow avatar xxl rounded-4" style="background-image: url(../upload/foto_profil/keluarga/'+data.foto_profil+')">')
@@ -677,238 +560,84 @@
                         $('#modal-foto-profil').html('<span class="badge bg-info text-uppercase shadow">Tidak Ada</span>')
                     }
 
-                    $('#modal-nomor-hp2').html(data.nomor_hp);
+                    $('#modal-nomor-hp').html(data.nomor_hp);
+                },
+            })
+        })
 
-                    if(data.is_valid == 1){
-                        $('#modal-status-konfirmasi').html('Valid');
-                    } else{
-                        $('#modal-status-konfirmasi').html('Tidak Valid');
-                    }
-
-                    $('#modal-tanggal-konfirmasi').html(moment(data.tanggal_validasi).format('LL'));
-
-                    if(data.nama_bidan != null){
-                        $('#modal-oleh-bidan').html(data.nama_bidan);
-                    } else{
-                        $('#modal-oleh-bidan').html('-');
-                    }
-
-                    if(data.is_valid == 1){
-                        $('#col-modal-btn-ubah').removeClass('d-none');
-                        $('#modal-btn-ubah').attr('href', '{{url('anggota-keluarga')}}' + '/' + data.kartu_keluarga_id + '/' + data.id + '/edit');
-                    }
-
-                    if(data.is_valid == 0){
-                        $('#form-konfirmasi').removeClass('d-none');
-                        $('#col-btn-validasi').removeClass('d-none');
-                        $('#status-konfirmasi').addClass('d-none');
-
-                        $('#nama-bidan').html('');
-                        $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
-                        $('#konfirmasi').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
-
-                        if('{{Auth::user()->role}}' == 'admin'){
-                            $.each(data.bidan_konfirmasi, function(key, val) {
-                                $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
-                            })
-                        } else if('{{Auth::user()->role}}' == 'bidan'){
-                            $('#pilih-bidan').addClass('d-none');
-                        }
-                        $('#col-modal-btn-ubah').addClass('d-none');
-                       
-                        $('#modal-btn-validasi').click(function(e){
-                            e.preventDefault();
-                            $('.error-text').text('');
-                            if('{{Auth::user()->role}}' == 'admin'){
-                                var bidan_id = $('#nama-bidan').val();
-                                var konfirmasi = $('#konfirmasi').val();
-                                var alasan = $('#alasan').val();
-                            } else if ('{{Auth::user()->role}}' == 'bidan'){
-                                var bidan_id = '{{Auth::user()->profil->id}}';
-                                var konfirmasi = $('#konfirmasi').val();
-                                var alasan = $('#alasan').val();
-                            }
-                            Swal.fire({
-                                title : 'Apakah anda yakin?',
-                                text : "Konfirmasi data keluarga ini?",
-                                icon : 'question',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                cancelButtonText: 'Batal',
-                                confirmButtonText: 'Ya, Konfirmasi'
-                            }).then((result) => {
-                                if (result.value) {
-                                    $.ajax({
-                                        type: "PUT",
-                                        url: "{{url('anggota-keluarga/validasi')}}" + '/' + keluarga + '/' + anggotaKeluarga,
-                                        data: {
-                                            _token: "{{csrf_token()}}",
-                                            id: data.id,
-                                            bidan_id: bidan_id,
-                                            konfirmasi: konfirmasi,
-                                            alasan: alasan
-                                        },
-                                        success: function(response) {
-                                            if ($.isEmptyObject(response.error)) {
-                                                console.log(response);
-                                                if (response.res == 'success') {
-                                                    $('#modal-validasi-ubah').modal('hide');
-                                                    if(response.konfirmasi == 1){
-                                                        Swal.fire(
-                                                            'Berhasil!',
-                                                            'Data divalidasi.',
-                                                            'success'
-                                                        ).then(function() {
-                                                            table.draw();
-                                                        })
-                                                    } else{
-                                                        Swal.fire(
-                                                            'Berhasil!',
-                                                            'Data ditolak.',
-                                                            'success'
-                                                        ).then(function() {
-                                                            table.draw();
-                                                        })
-                                                    }
-                                                } 
-                                            } else {
-                                                $('#overlay').hide();
-                                                printErrorMsg(response.error);
-                                                
-                                                Swal.fire(
-                                                    'Terjadi Kesalahan!',
-                                                    'Periksa kembali data yang anda masukkan',
-                                                    'error'
-                                                )
-                                                // console.log(response.error)
-                                            }
-                                        }
-                                    })
+        $(document).on('click', '#modal-btn-konfirmasi', function() {
+            let anggotaKeluarga = $(this).data('anggota-keluarga');
+            let keluarga = $(this).data('kartu-keluarga');
+            Swal.fire({
+                title : 'Apakah anda yakin?',
+                text : "Konfirmasi data anggota keluarga ini?",
+                icon : 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Konfirmasi'
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "PUT",
+                        url: "{{url('anggota-keluarga/validasi')}}" + '/' + keluarga + '/' + anggotaKeluarga,
+                        data: {
+                            _token: "{{csrf_token()}}",
+                            id: anggotaKeluarga,
+                            bidan_id: '{{ Auth::user()->role }}' == "admin" ? $("#nama-bidan").val() : '{{Auth::user()->profil->id }}',
+                            konfirmasi: $('#konfirmasi').val(),
+                            alasan: $('#alasan').val()
+                        },
+                        success: function(response) {
+                            if ($.isEmptyObject(response.error)) {
+                                console.log(response);
+                                if (response.res == 'success') {
+                                    $('#modal-validasi-ubah').modal('hide');
+                                    if(response.konfirmasi == 1){
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil divalidasi.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+                                        })
+                                    } else{
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil ditolak.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+                                        })
+                                    }
                                 } 
-                            })
-                        })
-
-                        const printErrorMsg = (msg) => {
-                            $.each(msg, function(key, value) {
-                                $('.' + key + '-error').text(value);
-                            });
-                        }
-                    } else{
-                        $('#form-konfirmasi').addClass('d-none');
-                        $('#col-btn-validasi').addClass('d-none');
-                        $('#status-konfirmasi').removeClass('d-none');
-                    }
-
-                    $('#konfirmasi').change(function(){
-                        if($('#konfirmasi').val() == 1){
-                            $('#col-alasan').addClass('d-none');
-                        } else{
-                            $('#col-alasan').removeClass('d-none');
-                            $('#alasan').val('');
+                            } else {
+                                $('#overlay').hide();
+                                printErrorMsg(response.error);
+                                
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                                // console.log(response.error)
+                            }
                         }
                     })
-                    
-                    
-                },
+                }
             })
-            // console.log(keluarga + ' ' + anggotaKeluarga);
+        })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
         }
 
-        function modalLihat(anggotaKeluarga, keluarga){
-            $.ajax({
-                type: "GET",
-                url: "{{url('anggota-keluarga')}}" + '/' + keluarga + '/' + anggotaKeluarga,
-                success: function (data) {
-                    $('#modal-lihat').modal('show');
-                    $('#modal-created-at2').html(moment(data.created_at).format('LL'));
-                    if(data.updated_at != null){
-                        $('#modal-updated-at2').html(moment(data.updated_at).format('LL'));
-                    } else{
-                        $('#modal-updated-at2').html(moment(data.created_at).format('LL'));
-                    }
-                    $('#modal-domisili2').html(data.desa_kelurahan_domisili+', '+data.kecamatan_domisili+', '+data.kabupaten_kota_domisili+', '+data.provinsi_domisili)
-                    $('#modal-nama-lengkap2').html(data.nama_lengkap);
-                    $('#modal-jenis-kelamin2').html(data.jenis_kelamin);
-                    $('#modal-nik2').html(data.nik);
-                    $('#modal-tempat-lahir2').html(data.tempat_lahir);
-                    $('#modal-tanggal-lahir2').html(moment(data.tanggal_lahir).format('LL'));
-                    $('#modal-agama2').html(data.agama_);
-                    $('#modal-pendidikan2').html(data.pendidikan_);
-                    $('#modal-jenis-pekerjaan2').html(data.pekerjaan_);
-                    $('#modal-golongan-darah2').html(data.golongan_darah_);
-                    $('#modal-status-perkawinan2').html(data.status_perkawinan_);
-                    if(data.tanggal_perkawinan != null){
-                        $('#modal-tanggal-perkawinan2').html(moment(data.tanggal_perkawinan).format('LL'));
-                    } else{
-                        $('#modal-tanggal-perkawinan2').html('-');
-                    }
-                    $('#modal-kewarganegaraan2').html(data.kewarganegaraan);
-                    $('#modal-nomor-paspor2').html(data.no_paspor);
-                    $('#modal-nomor-kitap2').html(data.no_kitap);
-                    $('#modal-nama-ayah2').html(data.nama_ayah);
-                    $('#modal-nama-ibu2').html(data.nama_ibu);
-
-                    $('#modal-alamat-domisili2').html(data.alamat_domisili);
-                    $('#modal-desa-kelurahan-domisili2').html(data.desa_kelurahan_domisili);
-                    $('#modal-kecamatan-domisili2').html(data.kecamatan_domisili);
-                    $('#modal-kabupaten-kota-domisili2').html(data.kabupaten_kota_domisili);
-                    $('#modal-provinsi-domisili2').html(data.provinsi_domisili);
-
-                    if(data.is_valid == 1){
-                        $('#modal-status-konfirmasi2').html('Valid');
-                    } else{
-                        $('#modal-status-konfirmasi2').html('Tidak Valid');
-                    }
-
-                    $('#modal-tanggal-konfirmasi2').html(moment(data.tanggal_validasi).format('LL'));
-                    $('#modal-oleh-bidan2').html(data.nama_bidan)
-                    
-                    if(data.desa_kelurahan_nama != data.desa_kelurahan_domisili){
-                        $('#col-sk-domisili').removeClass('d-none');
-                        if(data.surat_keterangan_domisili){
-                            $('#modal-file-surat-keterangan-domisili2').addClass('d-none')
-                            $('#file-surat-keterangan-domisili2').removeClass('d-none');
-                            $('#file-surat-keterangan-domisili2').attr('href', '{{ asset("upload/surat_keterangan_domisili") }}/'+data.surat_keterangan_domisili);
-                        } else{
-                            $('#modal-file-surat-keterangan-domisili2').removeClass('d-none')
-                            $('#file-surat-keterangan-domisili2').addClass('d-none')
-                        }
-                    } else{
-                        $('#col-sk-domisili').addClass('d-none');
-                    }
-
-                    if(data.foto_profil != null){
-                        $('#modal-foto-profil2').html('<div class="image-input shadow avatar xxl rounded-4" style="background-image: url(../upload/foto_profil/keluarga/'+data.foto_profil+')">')
-                    } else{
-                        $('#modal-foto-profil2').html('<span class="badge bg-info text-uppercase shadow">Tidak Ada</span>')
-                    }
-
-                    $('#modal-nomor-hp2').html(data.nomor_hp);
-
-                    if(data.is_valid == 1){
-                        $('#modal-status-konfirmasi2').html('Valid');
-                    } else{
-                        $('#modal-status-konfirmasi2').html('Tidak Valid');
-                    }
-
-                    $('#modal-tanggal-konfirmasi2').html(moment(data.tanggal_validasi).format('LL'));
-
-                    if(data.nama_bidan != null){
-                        $('#modal-oleh-bidan2').html(data.nama_bidan);
-                    } else{
-                        $('#modal-oleh-bidan2').html('-');
-                    }
-
-                    if(data.is_valid == 1){
-                        $('#col-modal-btn-ubah').removeClass('d-none');
-                        $('#modal-btn-ubah').attr('href', '{{url('anggota-keluarga')}}' + '/' + data.kartu_keluarga_id + '/' + data.id + '/edit');
-                    }
-                    
-                    
-                },
-            })
-            // console.log(keluarga + ' ' + anggotaKeluarga);
-        }
+    
     </script>
 @endpush

@@ -35,111 +35,48 @@
             <!-- start: link -->
             <ul class="header-right justify-content-end d-flex align-items-center mb-0">
                 <!-- start: notifications dropdown-menu -->
-                <li>
-                    <div class="dropdown morphing scale-left notifications text-success">
-                        <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-toggle="dropdown">
-                            <i class="fa fa-bell"></i>
-                            <span class="pulse-ring text-danger"></span>
-                        </a>
-                        <div id="NotificationsDiv" class="dropdown-menu shadow rounded-4 border-0 p-0 m-0">
-                            <div class="card w380">
-                                <div class="card-header p-3">
-                                    <h6 class="card-title mb-0">Pemberitahuan</h6>
-                                    <span class="badge bg-danger text-light">14</span>
+                @if (Auth::user()->role == 'keluarga')
+                    <li>
+                        <div class="dropdown morphing scale-left notifications">
+                            <a class="nav-link dropdown-toggle pulse justify-content-center text-center" href="#" role="button" data-toggle="dropdown">
+                                <i class="fa fa-bell text-secondary text-center"></i>
+                                <span class="pulse-ring mx-auto"></span>
+                            </a>
+                            <div id="NotificationsDiv" class="dropdown-menu shadow rounded-4 border-0 p-0 m-0">
+                                
+                                <div class="card w380">
+                                    <div class="card-header p-3 bg-secondary text-white">
+                                        <h6 class="card-title text-white mb-0">Pemberitahuan</h6>
+                                        <span class="badge bg-danger text-light">{{ Auth::user()->pemberitahuan->count() }}</span>
+                                    </div>
+                                    <div class="tab-content card-body custom_scroll">
+                                        <div class="tab-pane fade show active" id="Noti-tab-Message" role="tabpanel">
+                                            <ul class="list-unstyled list mb-0">
+                                                @foreach (Auth::user()->pemberitahuan as $item)
+                                                    <li class="py-2 mb-1 border-bottom">
+                                                        <span class="d-flex">
+                                                            <img class="avatar rounded-circle"
+                                                                src="{{ isset($item->anggotaKeluarga) && $item->anggotaKeluarga->foto_profil != NULL ? asset('upload/foto_profil/keluarga/'.$item->anggotaKeluarga->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
+                                                                alt="">
+                                                            <div class="flex-fill ms-3">
+                                                                <p class="d-flex justify-content-between mb-0">
+                                                                    <span>{{ $item->anggotaKeluarga->nama_lengkap }}</span> <small>{{ $item->updated_at->diffForHumans() }} <a href='#' class="text-danger btn-delete-pemberitahuan" data-test="{{ $item->id }}"><i class="fas fa-trash"></i></a></small>
+                                                                </p>
+                                                                <span>{{ $item->judul }}</span><br>
+                                                                <span class="text-muted">{{ $item->isi }}</span>
+                                                            </div>
+                                                        </span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="btn btn-danger text-light rounded-0"><i class="fas fa-trash"></i> Hapus Semua Pemberitahuan</a>
                                 </div>
-                                <ul class="nav nav-tabs tab-card d-flex text-center" role="tablist">
-                                    <li class="nav-item flex-fill"><a class="nav-link active" data-bs-toggle="tab"
-                                            href="#Noti-tab-Message" role="tab">Validasi Keluarga</a>
-                                    </li>
-                                    <li class="nav-item flex-fill"><a class="nav-link" data-bs-toggle="tab"
-                                            href="#Noti-tab-Events" role="tab">Events</a>
-                                    </li>
-                                    <li class="nav-item flex-fill"><a class="nav-link" data-bs-toggle="tab"
-                                            href="#Noti-tab-Logs" role="tab">Logs</a></li>
-                                </ul>
-                                <div class="tab-content card-body custom_scroll">
-                                    <div class="tab-pane fade show active" id="Noti-tab-Message" role="tabpanel">
-                                        <ul class="list-unstyled list mb-0">
-                                            <li class="py-2 mb-1 border-bottom">
-                                                <a href="javascript:void(0);" class="d-flex">
-                                                    <img class="avatar rounded-circle"
-                                                        src="{{ asset('assets/dashboard') }}/images/xs/avatar3.jpg"
-                                                        alt="">
-                                                    <div class="flex-fill ms-3">
-                                                        <p class="d-flex justify-content-between mb-0">
-                                                            <span>Eileen Dover</span> <small>1HR</small>
-                                                        </p>
-                                                        <span>There are many variations of passages</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="py-2 mb-1 border-bottom">
-                                                <a href="javascript:void(0);" class="d-flex">
-                                                    <img class="avatar rounded-circle"
-                                                        src="{{ asset('assets/dashboard') }}/images/xs/avatar4.jpg"
-                                                        alt="">
-                                                    <div class="flex-fill ms-3">
-                                                        <p class="d-flex justify-content-between mb-0">
-                                                            <span>Carmen Goh</span> <small>1DAY</small>
-                                                        </p>
-                                                        <span>Contrary to popular belief <span
-                                                                class="badge bg-danger">Code</span></span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="py-2">
-                                                <a href="javascript:void(0);" class="d-flex">
-                                                    <img class="avatar rounded-circle"
-                                                        src="{{ asset('assets/dashboard') }}/images/xs/avatar7.jpg"
-                                                        alt="">
-                                                    <div class="flex-fill ms-3">
-                                                        <p class="d-flex justify-content-between mb-0">
-                                                            <span>Karen Onnabit</span> <small>1DAY</small>
-                                                        </p>
-                                                        <span>The generated Lorem Ipsum</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="tab-pane fade" id="Noti-tab-Events" role="tabpanel">
-                                        <ul class="list-unstyled list mb-0">
-                                            <li class="py-2 mb-1 border-bottom">
-                                                <a href="javascript:void(0);" class="d-flex">
-                                                    <div class="avatar rounded-circle no-thumbnail"><i
-                                                            class="fa fa-info-circle fa-lg"></i></div>
-                                                    <div class="flex-fill ms-3">
-                                                        <p class="mb-0">Campaign <strong
-                                                                class="text-primary">Holiday Sale</strong> is
-                                                            nearly reach budget limit.</p>
-                                                        <small>10:00 AM Today</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="py-2 mb-1 border-bottom">
-                                                <a href="javascript:void(0);" class="d-flex">
-                                                    <div class="avatar rounded-circle no-thumbnail"><i
-                                                            class="fa fa-warning fa-lg"></i></div>
-                                                    <div class="flex-fill ms-3">
-                                                        <p class="mb-0"><strong
-                                                                class="text-warning">Error</strong> on
-                                                            website analytics configurations</p>
-                                                        <small>Yesterday</small>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="tab-pane fade" id="Noti-tab-Logs" role="tabpanel">
-                                        <h4 class="color-400">No Logs right now!</h4>
-                                    </div>
-                                </div>
-                                <a href="#" class="btn btn-primary text-light rounded-0">View all
-                                    notifications</a>
                             </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                @endif
                 <!-- start: My notes toggle modal -->
                 <li class="d-none d-sm-inline-block d-xl-none">
                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#MynotesModal">
@@ -206,7 +143,7 @@
                     </div>
                 </li>
                 <!-- start: Settings toggle modal -->
-                <li>
+                <li class="{{ Auth::user()->role == 'keluarga' ? 'd-none' : '' }}">
                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#SettingsModal"
                         title="Settings">
                         <svg viewBox="0 0 16 16" width="18px" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -224,3 +161,5 @@
 
     </div>
 </header>
+
+
