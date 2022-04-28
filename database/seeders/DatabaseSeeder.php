@@ -23,7 +23,6 @@ use Database\Seeders\KecamatanTableSeeder;
 use Database\Seeders\AnggotaKeluargaSeeder;
 use Database\Seeders\PertumbuhanAnakSeeder;
 use Database\Seeders\WilayahDomisiliSeeder;
-use Database\Seeders\PerkembanganAnakSeeder;
 use Database\Seeders\WilayahDomisiliKKSeeder;
 use Database\Seeders\DesaKelurahanTableSeeder;
 use Database\Seeders\KabupatenKotaTableSeeder;

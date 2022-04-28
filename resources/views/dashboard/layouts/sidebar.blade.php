@@ -123,7 +123,7 @@
                                 href="{{ url('map-deteksi-stunting') }}">Deteksi Stunting</a></li>
                         <li><a class="ms-link" id="ms-link-peta-moms-care"
                                 href="{{ url('map-moms-care') }}">Moms Care</a></li>
-                        <li><a class="ms-link" id="ms-link-peta-moms-care"
+                        <li><a class="ms-link" id="ms-link-peta-tumbuh-kembang"
                                 href="{{ url('map-tumbuh-kembang') }}">Tumbuh Kembang</a></li>
                         <li><a class="ms-link" id="ms-link-peta-randa-kabilasa"
                                 href="{{ url('map-randa-kabilasa') }}">Randa Kabilasa</a></li>

@@ -37,6 +37,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\dashboard\utama\petaData\MapMomsCareController;
 use App\Http\Controllers\dashboard\utama\petaData\MapRandaKabilasaController;
+use App\Http\Controllers\dashboard\utama\petaData\MapTumbuhKembangController;
 use App\Http\Controllers\dashboard\utama\randaKabilasa\MencegahMalnutrisiController;
 use App\Http\Controllers\dashboard\utama\randaKabilasa\MencegahPernikahanDiniController;
 use App\Http\Controllers\dashboard\utama\randaKabilasa\MeningkatkanLifeSkillController;
@@ -212,3 +213,7 @@ Route::get('/petaData/detailAnc', [MapMomsCareController::class, 'getDetailDataA
 Route::get('/map-randa-kabilasa', [MapRandaKabilasaController::class, 'index']);
 Route::get('/petaData/randaKabilasa', [MapRandaKabilasaController::class, 'getMapDataRandaKabilasa']);
 Route::get('/petaData/detailRandaKabilasa', [MapRandaKabilasaController::class, 'getDetailDataRandaKabilasa']);
+
+Route::get('/map-tumbuh-kembang', [MapTumbuhKembangController::class, 'index']);
+Route::get('/petaData/pertumbuhanAnak', [MapTumbuhKembangController::class, 'getMapDataPertumbuhanAnak']);
+Route::get('/petaData/detailPertumbuhanAnak', [MapTumbuhKembangController::class, 'getDetailDataPertumbuhanAnak']);
