@@ -14,9 +14,9 @@ class PerkembanganAnakSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('perkembangan_anak')->insert(array (
-            0 => 
-            array (
+        DB::table('perkembangan_anak')->insert(array(
+            0 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120002', //1
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000b',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
@@ -28,8 +28,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:23:45',
             ),
-            1 => 
-            array (
+            1 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120003', //2
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120004',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
@@ -41,8 +41,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:11:32',
             ),
-            2 => 
-            array (
+            2 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120004', //3
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120005',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
@@ -54,8 +54,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:11:49',
             ),
-            3 => 
-            array (
+            3 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120005', //4
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000a',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
@@ -67,8 +67,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:12:27',
             ),
-            4 => 
-            array (
+            4 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120006', //5
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000b',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
@@ -80,8 +80,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:13:03',
             ),
-            5 => 
-            array (
+            5 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120007', //6
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000c',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
@@ -93,8 +93,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:15:57',
             ),
-            6 => 
-            array (
+            6 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120008', //7
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
@@ -106,8 +106,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:14:38',
             ),
-            7 => 
-            array (
+            7 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120009', //8
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
@@ -115,12 +115,12 @@ class PerkembanganAnakSeeder extends Seeder
                 'id' => 8,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mengoceh, sudah mengenal wajah seseorang, bisa membedakan suara, belajar makan dan mengunyah',
-            'motorik_kasar' => 'Dapat menegakkan kepala, belajar tengkurap sampai dengan duduk (pada usia 8-9 bulan), memainkan ibu jari kaki',
+                'motorik_kasar' => 'Dapat menegakkan kepala, belajar tengkurap sampai dengan duduk (pada usia 8-9 bulan), memainkan ibu jari kaki',
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:14:46',
             ),
-            8 => 
-            array (
+            8 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120010', //9
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000e',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
@@ -132,8 +132,8 @@ class PerkembanganAnakSeeder extends Seeder
                 'tanggal_validasi' => '2022-04-01',
                 'updated_at' => '2022-04-01 21:17:57',
             ),
-            9 => 
-            array (
+            9 =>
+            array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120011', //10
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000c',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',

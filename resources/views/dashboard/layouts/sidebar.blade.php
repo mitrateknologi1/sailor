@@ -26,7 +26,8 @@
                 </li>
                 @if (Auth::user()->role == 'keluarga')
                     <li>
-                        <a class="m-link" id="m-link-anggota-keluarga" href="{{ url('anggota-keluarga/' . Auth::user()->profil->kartu_keluarga_id) }}">
+                        <a class="m-link" id="m-link-anggota-keluarga"
+                            href="{{ url('anggota-keluarga/' . Auth::user()->profil->kartu_keluarga_id) }}">
                             <i class="fa-solid fa-people-roof"></i>
                             <span class="ms-2">Anggota Keluarga</span>
                         </a>
@@ -122,6 +123,8 @@
                                 href="{{ url('map-deteksi-stunting') }}">Deteksi Stunting</a></li>
                         <li><a class="ms-link" id="ms-link-peta-moms-care"
                                 href="{{ url('map-moms-care') }}">Moms Care</a></li>
+                        <li><a class="ms-link" id="ms-link-peta-tumbuh-kembang"
+                                href="{{ url('map-tumbuh-kembang') }}">Tumbuh Kembang</a></li>
                         <li><a class="ms-link" id="ms-link-peta-randa-kabilasa"
                                 href="{{ url('map-randa-kabilasa') }}">Randa Kabilasa</a></li>
                     </ul>
@@ -217,11 +220,15 @@
 
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-profil">
-                        <li><a class="ms-link" id="ms-link-master-data-profil-keluarga" href="{{ url('/keluarga') }}">Keluarga</a></li>
-                        <li><a class="ms-link" id="ms-link-master-data-profil-bidan" href="{{ url('/bidan') }}">Bidan</a></li>
-                        <li><a class="ms-link" id="ms-link-master-data-profil-penyuluh" href="{{ url('/penyuluh') }}">Penyuluh KB</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-keluarga"
+                                href="{{ url('/keluarga') }}">Keluarga</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-bidan"
+                                href="{{ url('/bidan') }}">Bidan</a></li>
+                        <li><a class="ms-link" id="ms-link-master-data-profil-penyuluh"
+                                href="{{ url('/penyuluh') }}">Penyuluh KB</a></li>
                         @if (Auth::user()->id == 1)
-                            <li><a class="ms-link" id="ms-link-master-data-profil-admin" href="{{ url('/admin') }}">Admin</a></li>
+                            <li><a class="ms-link" id="ms-link-master-data-profil-admin"
+                                    href="{{ url('/admin') }}">Admin</a></li>
                         @endif
                     </ul>
                 </li>
