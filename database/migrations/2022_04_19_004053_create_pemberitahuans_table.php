@@ -15,8 +15,8 @@ class CreatePemberitahuansTable extends Migration
     {
         Schema::create('pemberitahuan', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
-            $table->bigInteger('anggota_keluarga_id');
+            $table->uuid('user_id');
+            $table->uuid('anggota_keluarga_id');
             $table->text('judul');
             $table->text('isi');
             $table->text('tentang');

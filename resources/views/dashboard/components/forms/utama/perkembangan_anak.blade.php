@@ -13,9 +13,12 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])         
                 @slot('options')
-                    @foreach ($kartuKeluarga as $kk)
-                        <option value="{{ $kk->id }}" {{ (isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id) ? 'selected' : '' }}>{{$kk->nama_kepala_keluarga}} / {{$kk->nomor_kk}}</option>
-                    @endforeach
+                    {{-- @if (Auth::user()->role != 'keluarga') --}}
+                        @foreach ($kartuKeluarga as $kk)
+                            <option value="{{ $kk->id }}" {{ (isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id) ? 'selected' : '' }}>{{$kk->nama_kepala_keluarga}} / {{$kk->nomor_kk}}</option>
+                        @endforeach
+                    {{-- @endif --}}
+
                 @endslot               
             @endcomponent
         </div>
@@ -127,6 +130,7 @@
         }
 
         $(function() {
+            
             if ($('#nama-kepala-keluarga').val() != '') {
                 changeKepalaKeluarga()
             }
@@ -248,12 +252,17 @@
         });
 
         function changeKepalaKeluarga(){
-            var id = $('#nama-kepala-keluarga').val();
+            if('{{ Auth::user()->role }}' != 'keluarga'){
+                var id = $('#nama-kepala-keluarga').val();
+            } else{
+                var id = '{{ Auth::user()->profil->id }}';
+            }
             var rentang_umur = 'semua_umur';
             var id_anak = "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}";
             var selected = '';
             $('#nama-anak').html('');
             $('#nama-anak').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+            changeAnak()
             $('#nama-bidan').html('');
             changeAnak()
             $('#nama-bidan').attr('disabled', true);

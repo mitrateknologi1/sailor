@@ -16,8 +16,8 @@ class AdminSeeder extends Seeder
     {
         $data = [
             [
-                'id' => 1,
-                'user_id' => 1,
+                'id' => 'f63782d8-c4a5-11ec-9d64-0242ac120002', //1
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e80',
                 'nik' => 1234567890123456,
                 'nama_lengkap' => 'ADMIN 1',
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -35,8 +35,8 @@ class AdminSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 2,
-                'user_id' => 7,
+                'id' => 'f63782d8-c4a5-11ec-9d64-0242ac120003', //2
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e86',
                 'nik' => 1234567890123453,
                 'nama_lengkap' => 'ADMIN 2',
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -54,8 +54,8 @@ class AdminSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 3,
-                'user_id' => 8,
+                'id' => 'f63782d8-c4a5-11ec-9d64-0242ac120004', //3
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e87',
                 'nik' => 1234567890123459,
                 'nama_lengkap' => 'ADMIN 3',
                 'jenis_kelamin' => 'PEREMPUAN',

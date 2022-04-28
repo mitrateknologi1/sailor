@@ -14,10 +14,11 @@ class BidanSeeder extends Seeder
      */
     public function run()
     {
+        // uuid generate random = 
         $data = [
             [
-                'id' => 1,
-                'user_id' => 2,
+                'id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002', //1
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e81',
                 'nik' => 1234567890123456,
                 'nama_lengkap' => 'YUNI',
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -36,8 +37,8 @@ class BidanSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 2,
-                'user_id' => 3,
+                'id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003', //2
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e82',
                 'nik' => 6543211234567891,
                 'nama_lengkap' => 'IIN',
                 'jenis_kelamin' => 'PEREMPUAN',

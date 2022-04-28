@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TraitUuid;
 use App\Models\KartuKeluarga;
 use App\Models\PertumbuhanAnak;
 use App\Models\WilayahDomisili;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class AnggotaKeluarga extends Model
 {
     use HasFactory;
+    use TraitUuid;
     use SoftDeletes;
     protected $table = 'anggota_keluarga';
     protected $guarded = ['id'];
@@ -21,7 +23,6 @@ class AnggotaKeluarga extends Model
     {
         return $this->belongsTo(KartuKeluarga::class);
     }
-
 
     public function bidan()
     {
@@ -74,8 +75,9 @@ class AnggotaKeluarga extends Model
     public function getBidan($id)
     {
         $anggotaKeluarga = AnggotaKeluarga::where('id', $id)
-            ->first();
-        $lokasiDomisili = $anggotaKeluarga->wilayahDomisili->desa_kelurahan_id;
+            ->withTrashed()->first();
+        $lokasiDomisili = $anggotaKeluarga->wilayahDomisili
+        ->desa_kelurahan_id;
         $bidan = Bidan::with('lokasiTugas')
             ->whereHas('lokasiTugas', function ($query) use ($lokasiDomisili) {
                 return $query->where('desa_kelurahan_id', $lokasiDomisili);
@@ -104,5 +106,10 @@ class AnggotaKeluarga extends Model
         $query->whereHas('wilayahDomisili', function ($query) use ($desa) {
             return $query->where('desa_kelurahan_id', $desa);
         });
+    }
+
+    public function scopeValid($query)
+    {
+        $query->where('is_valid', 1);
     }
 }

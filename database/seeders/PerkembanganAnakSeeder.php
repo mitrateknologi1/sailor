@@ -17,11 +17,10 @@ class PerkembanganAnakSeeder extends Seeder
         DB::table('perkembangan_anak')->insert(array (
             0 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b528',
-                'anggota_keluarga_id' => 10,
-                'bidan_id' => 2,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120002', //1
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000b',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'created_at' => '2022-04-01 17:58:42',
-                'deleted_at' => '2022-04-01 21:23:45',
                 'id' => 1,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mulai belajar membaca berhitung, menggambar, mewarnai dan merangkai kalimat dengan baik',
@@ -31,11 +30,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             1 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b529',
-                'anggota_keluarga_id' => 3,
-                'bidan_id' => 1,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120003', //2
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120004',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'created_at' => '2022-04-01 21:11:16',
-                'deleted_at' => NULL,
                 'id' => 2,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mulai belajar membaca berhitung, menggambar, mewarnai dan merangkai kalimat dengan baik',
@@ -45,11 +43,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             2 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b530',
-                'anggota_keluarga_id' => 4,
-                'bidan_id' => 1,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120004', //3
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120005',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'created_at' => '2022-04-01 21:11:49',
-                'deleted_at' => NULL,
                 'id' => 3,
                 'is_valid' => 1,
                 'motorik_halus' => 'Keterampilan tangan mulai membaik, pada usia 3 tahun belajar menggunting kertas, belajar bernyanyi dan membuat coretan sederhana',
@@ -59,11 +56,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             3 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b531',
-                'anggota_keluarga_id' => 9,
-                'bidan_id' => 1,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120005', //4
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000a',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'created_at' => '2022-04-01 21:12:27',
-                'deleted_at' => NULL,
                 'id' => 4,
                 'is_valid' => 1,
                 'motorik_halus' => 'Menggambar dengan pola proporsional, memakai dan mengancingkan baju, menulis, lancar membaca, sudah bisa berhitung, belajar bahasa asing, mulai belajar memainkan alat musik',
@@ -73,11 +69,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             4 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b532',
-                'anggota_keluarga_id' => 10,
-                'bidan_id' => 1,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120006', //5
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000b',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'created_at' => '2022-04-01 21:13:03',
-                'deleted_at' => NULL,
                 'id' => 5,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mulai belajar membaca berhitung, menggambar, mewarnai dan merangkai kalimat dengan baik',
@@ -87,11 +82,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             5 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b533',
-                'anggota_keluarga_id' => 11,
-                'bidan_id' => 2,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120007', //6
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000c',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'created_at' => '2022-04-01 21:14:04',
-                'deleted_at' => NULL,
                 'id' => 6,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mulai belajar membaca berhitung, menggambar, mewarnai dan merangkai kalimat dengan baik',
@@ -101,11 +95,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             6 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b534',
-                'anggota_keluarga_id' => 5,
-                'bidan_id' => 2,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120008', //7
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'created_at' => '2022-04-01 21:14:38',
-                'deleted_at' => NULL,
                 'id' => 7,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mulai belajar berbicara, mempunyai ketertarikan terhadap jenis-jenis benda dan mulai muncul rasa ingin tahu',
@@ -115,11 +108,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             7 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b535',
-                'anggota_keluarga_id' => 6,
-                'bidan_id' => 2,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120009', //8
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'created_at' => '2022-04-01 21:14:46',
-                'deleted_at' => NULL,
                 'id' => 8,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mengoceh, sudah mengenal wajah seseorang, bisa membedakan suara, belajar makan dan mengunyah',
@@ -129,11 +121,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             8 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b536',
-                'anggota_keluarga_id' => 13,
-                'bidan_id' => 2,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120010', //9
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000e',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'created_at' => '2022-04-01 21:17:57',
-                'deleted_at' => NULL,
                 'id' => 9,
                 'is_valid' => 1,
                 'motorik_halus' => 'Keterampilan tangan mulai membaik, pada usia 3 tahun belajar menggunting kertas, belajar bernyanyi dan membuat coretan sederhana',
@@ -143,11 +134,10 @@ class PerkembanganAnakSeeder extends Seeder
             ),
             9 => 
             array (
-                'id' => 'f3036920-d9da-4c2c-8d38-3dad6807b537',
-                'anggota_keluarga_id' => 11,
-                'bidan_id' => 2,
+                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120011', //10
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000c',
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'created_at' => '2022-04-01 21:24:10',
-                'deleted_at' => '2022-04-01 21:24:25',
                 'id' => 10,
                 'is_valid' => 1,
                 'motorik_halus' => 'Mulai belajar membaca berhitung, menggambar, mewarnai dan merangkai kalimat dengan baik',

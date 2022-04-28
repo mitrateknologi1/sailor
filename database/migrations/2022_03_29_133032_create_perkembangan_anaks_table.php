@@ -15,14 +15,13 @@ class CreatePerkembanganAnaksTable extends Migration
     {
         Schema::create('perkembangan_anak', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->bigInteger('anggota_keluarga_id');
-            $table->bigInteger('bidan_id')->nullable();
+            $table->uuid('anggota_keluarga_id');
+            $table->uuid('bidan_id')->nullable();
             $table->text('motorik_kasar');
             $table->text('motorik_halus');
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

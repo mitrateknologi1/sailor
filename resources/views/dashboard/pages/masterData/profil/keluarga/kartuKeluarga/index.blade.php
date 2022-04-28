@@ -675,8 +675,8 @@
             ],        
         });
 
-        function hapus(id) {
-            var _token = "{{csrf_token()}}";
+        $(document).on('click', '#btn-delete', function() {
+            let id = $(this).val();
             Swal.fire({
                 title : 'Apakah anda yakin?',
                 text : "Data keluarga akan dihapus, termasuk data anggota keluarganya!",
@@ -692,7 +692,7 @@
                         type: "DELETE",
                         url: "{{url('keluarga')}}" + '/' + id,
                         data: {
-                            _token: _token
+                            _token: "{{csrf_token()}}",
                         },
                         success: function(response) {
                             console.log(response);
@@ -715,9 +715,10 @@
                     })
                 } 
             })
-        }
+        })
 
-        function modalValidasi(keluarga){
+        $(document).on('click', '#btn-validasi', function() {
+            var keluarga = $(this).val();
             $.ajax({
                 type: "GET",
                 url: "{{url('keluarga')}}" + '/' + keluarga,
@@ -731,7 +732,7 @@
                         $('#modal-updated-at').html(moment(data.created_at).format('LL'));
                     }
                     $('#modal-domisili').html(data.desa_kelurahan_domisili+', '+data.kecamatan_domisili+', '+data.kabupaten_kota_domisili+', '+data.provinsi_domisili)
-                   
+                
                     $('#modal-nomor-kartu-keluarga').html(data.nomor_kk);
                     $('#modal-nama-kepala-keluarga').html(data.nama_kepala_keluarga);
                     $('#modal-alamat').html(data.alamat);
@@ -827,7 +828,7 @@
                             $('#pilih-bidan').addClass('d-none');
                         }
                         $('#col-modal-btn-ubah').addClass('d-none');
-                       
+                    
                         $('#modal-btn-validasi').click(function(e){
                             e.preventDefault();
                             $('.error-text').text('');
@@ -868,15 +869,15 @@
                                                     if(response.konfirmasi == 1){
                                                         Swal.fire(
                                                             'Berhasil!',
-                                                            'Data divalidasi.',
+                                                            'Data berhasil divalidasi.',
                                                             'success'
                                                         ).then(function() {
                                                             table.draw();
                                                         })
                                                     } else{
                                                         Swal.fire(
-                                                            'Berhasil!',
-                                                            'Data ditolak.',
+                                                            'Ditolak!',
+                                                            'Data berhasil ditolak.',
                                                             'success'
                                                         ).then(function() {
                                                             table.draw();
@@ -921,9 +922,10 @@
                     })
                 },
             })
-        }
+        })
 
-        function modalLihat(keluarga){
+        $(document).on('click', '#btn-lihat', function() {
+            var keluarga = $(this).val();
             $.ajax({
                 type: "GET",
                 url: "{{url('keluarga')}}" + '/' + keluarga,
@@ -978,7 +980,7 @@
                     }
                 },
             })
-        }
+        })
 
         
     </script>

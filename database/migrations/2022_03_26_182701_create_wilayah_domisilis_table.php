@@ -15,7 +15,7 @@ class CreateWilayahDomisilisTable extends Migration
     {
         Schema::create('wilayah_domisili', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('anggota_keluarga_id');
+            $table->uuid('anggota_keluarga_id');
             $table->text('alamat');
             $table->bigInteger('desa_kelurahan_id');
             $table->bigInteger('kecamatan_id');

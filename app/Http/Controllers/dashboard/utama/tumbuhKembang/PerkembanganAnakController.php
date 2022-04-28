@@ -27,16 +27,48 @@ class PerkembanganAnakController extends Controller
         if(in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])){
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-                
-                $data = PerkembanganAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC');
-                if(Auth::user()->role != 'admin'){ // bidan/penyuluh 
-                    $data->whereHas('anggotaKeluarga', function (Builder $query) use($lokasiTugas) {
-                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
-                    });
-                }
-                if(Auth::user()->role == 'bidan'){ // bidan
-                    $data->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
+                $data = PerkembanganAnak::with('anggotaKeluarga', 'bidan')
+                ->where(function (Builder $query) use ($lokasiTugas) {
+                    if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                        $query->whereHas('anggotaKeluarga', function (Builder $query) use ($lokasiTugas) {
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                        });
+                        
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        } 
+        
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->valid();
+                        } 
+                    }
+                });
+
+                // Filter
+                $data->where(function ($query) use ($request) {
+                    if ($request->statusValidasi) {
+                        if($request->statusValidasi == 'Tervalidasi'){
+                            $query->where('is_valid', 1);
+                        } else if($request->statusValidasi == 'Belum Tervalidasi'){
+                            $query->where('is_valid', 0);
+                        } else if($request->statusValidasi == 'Ditolak'){
+                            $query->where('is_valid', 2);
+                        }
+                    }
+
+                    if ($request->search) {
+                        $query->whereHas('bidan', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+    
+                        $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+                    }
+                });
+
+                $data->orderBy('created_at', 'DESC');
+
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('nakes', function ($row) {     
@@ -105,21 +137,6 @@ class PerkembanganAnakController extends Controller
                         return $actionBtn;
                     })
     
-                    ->filter(function ($query) use ($request) {    
-                        // if ($request->search != '') {
-                        //     $query->whereHas('anggotaKeluarga', function ($query) use ($request) {
-                        //         $query->where("nama_lengkap", "LIKE", "%$request->search%");
-                        //     });
-                        // }    
-                                        
-                        // if (!empty($request->status)) {
-                        //     $query->where("is_valid", $request->status);
-                        // }
-    
-                        // if (!empty($request->kategori)) {
-                        //     $query->where("hasil", $request->kategori);
-                        // }
-                    })
                     ->rawColumns([
                         'action',
                         'status',
@@ -132,8 +149,18 @@ class PerkembanganAnakController extends Controller
             }
             return view('dashboard.pages.utama.tumbuhKembang.perkembanganAnak.index');
         } // else keluarga
-        
-        
+        else{
+            $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
+            $perkembanganAnak = PerkembanganAnak::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+                $query->where('kartu_keluarga_id', $kartuKeluarga);
+            })->latest();
+
+            $data = [
+                'perkembanganAnak' => $perkembanganAnak->get(),
+            ];
+            
+            return view('dashboard.pages.utama.tumbuhKembang.perkembanganAnak.indexKeluarga', $data); 
+        }
     }
 
     /**
@@ -143,23 +170,31 @@ class PerkembanganAnakController extends Controller
      */
     public function create()
     {
-        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-        if(Auth::user()->role != 'bidan'){
-            $kartuKeluarga = KartuKeluarga::latest()->get();
-        } else{
-            $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
-                            ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                                $query->ofDataSesuaiLokasiTugas($lokasiTugas);
-                            })->latest()->get();
-        }
+        if(in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])){
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if(Auth::user()->role == 'admin'){
+                $kartuKeluarga = KartuKeluarga::valid()->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
+                ->valid()
+                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                    $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                })->latest()->get();
+            } else if (Auth::user()->role == 'keluarga') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+
+            }
             
-        if(in_array(Auth::user()->role, ['bidan', 'admin'])){
             $data = [
                 'kartuKeluarga' => $kartuKeluarga,
                 'bidan' => Bidan::with('user')->active()->get(),
             ];
+
             return view('dashboard.pages.utama.tumbuhKembang.perkembanganAnak.create', $data);
-        } // else keluarga
+
+        } else{
+            abort(404);
+        }
         
     }
 
@@ -261,21 +296,29 @@ class PerkembanganAnakController extends Controller
             $bidan_id = $request->nama_bidan;
         } else if (Auth::user()->role == 'bidan') {
             $bidan_id = Auth::user()->profil->id;  
+        } else if (Auth::user()->role == 'keluarga'){
+            $bidan_id = null;
         }
+
         $perkembanganAnak = [
             'anggota_keluarga_id' => $dataAnak['anggota_keluarga_id'],
             'bidan_id' => $bidan_id,
             'motorik_kasar' => $dataAnak['motorik_kasar'],
             'motorik_halus' => $dataAnak['motorik_halus'],
-            'is_valid' => 1,
-            'tanggal_validasi' => Carbon::now()
         ];
 
+        if(Auth::user()->role != 'keluarga') {
+            $perkembanganAnak['is_valid'] = 1;
+            $perkembanganAnak['tanggal_validasi'] = Carbon::now();
+        } else{
+            $perkembanganAnak['is_valid'] = 0;
+            $perkembanganAnak['tanggal_validasi'] = null;
+        }
+        
         PerkembanganAnak::create($perkembanganAnak);
         return response()->json([
             'res' => 'success'
         ]);
-
     }
 
     /**
@@ -303,8 +346,9 @@ class PerkembanganAnakController extends Controller
             'jenis_kelamin' => $perkembanganAnak->anggotaKeluarga->jenis_kelamin,
             'desa_kelurahan' => $perkembanganAnak->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
             'tanggal_validasi' => $perkembanganAnak->tanggal_validasi,
-            'bidan' => $perkembanganAnak->bidan->nama_lengkap
-            // 'usia_bulan' => $perkembanganAnak->anggotaKeluarga->usia_bulan,
+            'bidan' => $perkembanganAnak->bidan ? $perkembanganAnak->bidan->nama_lengkap : '-',
+            'is_valid' => $perkembanganAnak->is_valid,
+            'bidan_konfirmasi' => $perkembanganAnak->anggotaKeluarga->getBidan($perkembanganAnak->anggota_keluarga_id)
         ];
         return $data;
     }
