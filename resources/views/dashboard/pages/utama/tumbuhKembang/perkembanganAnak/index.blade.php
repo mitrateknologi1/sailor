@@ -50,23 +50,11 @@
                                             'class' => 'filter',
                                             ])
                                             @slot('options')
-                                                <option value="1">Tervalidasi</option>
-                                                <option value="0">Belum Divalidasi</option>
-                                            @endslot
-                                        @endcomponent
-                                    </div>
-                                    <div class="col-lg">
-                                        @component('dashboard.components.formElements.select', [
-                                            'label' => 'Kategori Gizi',
-                                            'id' => 'kategori-gizi-filter',
-                                            'name' => 'kategori_gizi',
-                                            'class' => 'filter',
-                                            ])
-                                            @slot('options')
-                                                <option value="Gizi Buruk">Gizi Buruk</option>
-                                                <option value="Gizi Kurang">Gizi Kurang</option>
-                                                <option value="Gizi Baik">Gizi Baik</option>
-                                                <option value="Gizi Lebih">Gizi Lebih</option>
+                                                @if (Auth::user()->role != 'penyuluh')
+                                                    <option value="Tervalidasi">Tervalidasi</option>
+                                                    <option value="Belum Tervalidasi">Belum Divalidasi</option>
+                                                    <option value="Ditolak">Ditolak</option>
+                                                @endif
                                             @endslot
                                         @endcomponent
                                     </div>
@@ -225,8 +213,7 @@
             ajax: {
                 url: "{{ route('perkembangan-anak.index') }}",
                 data: function(d){
-                    d.status = $('#status-filter').val();       
-                    d.kategori = $('#kategori-gizi-filter').val();             
+                    d.statusValidasi = $('#status-filter').val();       
                     d.search = $('input[type="search"]').val();
                 }
             },
@@ -324,18 +311,13 @@
             ],        
         });
         
-        $('#status-filter').change(function () {
+        $('.filter').change(function () {
             table.draw();     
-            console.log($('#status-filter').val())       
-        })
-
-        $('#kategori-gizi-filter').change(function () {
-            table.draw();     
-            console.log($('#kategori-gizi-filter').val())       
         })
 
         $(document).on('click', '#btn-lihat', function() {
             let id = $(this).val();
+            alert(id);
             $.ajax({
                 type: "GET",
                 url: "{{url('perkembangan-anak')}}" + '/' + id,

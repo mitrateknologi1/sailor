@@ -81,49 +81,63 @@
         $('#update-kartu-keluarga').submit(function(e) {
             e.preventDefault();
             var formData = new FormData(this);
-            $('.error-text').text('');
-            $.ajax({
-                type: "POST",
-                url: "{{ route('keluarga.update', $kartuKeluarga->id) }}",
-                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                data: formData,
-                cache : false,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    $("#overlay").fadeOut(100);
-                    if ($.isEmptyObject(data.error)) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: data.mes,
-                            showConfirmButton: false,
-                            timer: 2500,
-                        })
-                        .then((result) => {
-                            window.location.href = "{{ url()->previous() }}";
-                        })
-                        
-                    } else {
-                        Swal.fire(
-                            'Terjadi Kesalahan!',
-                            'Periksa kembali data yang anda masukkan',
-                            'error'
-                        )
-                        printErrorMsg(data.error);
-                    }
-                },
-                error: function (data) {
-                    alert(data.responseJSON.message)
-                },
-            
-            });
-            const printErrorMsg = (msg) => {
-                $.each(msg, function(key, value) {
-                    $('.' + key + '-error').text(value);
-                });
-            }
+            Swal.fire({
+                title : 'Perbarui Data?',
+                text : "Apakah anda yakin ingin memperbarui data ini?",
+                icon : 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Perbarui'
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('keluarga.update', $kartuKeluarga->id) }}",
+                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                        data: formData,
+                        cache : false,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            $("#overlay").fadeOut(100);
+                            if ($.isEmptyObject(data.error)) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: 'Data berhasil diperbarui.',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                })
+                                .then((result) => {
+                                    window.location.href = "{{ url()->previous() }}";
+                                })
+                                
+                            } else {
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                                printErrorMsg(data.error);
+                            }
+                        },
+                        error: function (data) {
+                            alert(data.responseJSON.message)
+                        },
+                    
+                    });
+                }
+            })
         })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
 
     </script>
 @endpush

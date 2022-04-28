@@ -14,22 +14,22 @@ class CreateAnggotaKeluargasTable extends Migration
     public function up()
     {
         Schema::create('anggota_keluarga', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('bidan_id')->nullable();
-            $table->bigInteger('kartu_keluarga_id');
-            $table->bigInteger('user_id')->nullable();
+            $table->uuid('id')->primary();
+            $table->uuid('bidan_id')->nullable();
+            $table->uuid('kartu_keluarga_id');
+            $table->uuid('user_id')->nullable();
             $table->string('nama_lengkap');
             $table->bigInteger('nik');
             $table->string('jenis_kelamin');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
-            $table->string('agama_id');
-            $table->string('pendidikan_id');
-            $table->string('jenis_pekerjaan_id');
-            $table->string('golongan_darah_id');
-            $table->string('status_perkawinan_id');
+            $table->integer('agama_id');
+            $table->integer('pendidikan_id');
+            $table->integer('jenis_pekerjaan_id');
+            $table->integer('golongan_darah_id');
+            $table->integer('status_perkawinan_id');
             $table->date('tanggal_perkawinan')->nullable();
-            $table->string('status_hubungan_dalam_keluarga_id');
+            $table->integer('status_hubungan_dalam_keluarga_id');
             $table->string('kewarganegaraan');
             $table->string('no_paspor')->default('-');
             $table->string('no_kitap')->default('-');

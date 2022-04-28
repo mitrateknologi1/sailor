@@ -16,10 +16,10 @@ class AnggotaKeluargaSeeder extends Seeder
     {
         $data = [
             [
-                'id' => 1,
-                'bidan_id' => 1,
-                'kartu_keluarga_id' => 1,
-                'user_id' => 13,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120002', //1
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002',
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e92',
                 'nama_lengkap' => 'KEVIN',
                 'nik' => 7206091803080001,
                 'jenis_kelamin' => 'LAKI-LAKI',
@@ -39,12 +39,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'MUJI',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
             [
-                'id' => 2,
-                'bidan_id' => 1,
-                'kartu_keluarga_id' => 1,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120003', //2
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002',
                 'user_id' => null,
                 'nama_lengkap' => 'RIA',
                 'nik' => 7206091803080002,
@@ -65,12 +66,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'MUJI',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
             [
-                'id' => 3,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120004', //3
                 'bidan_id' => null,
-                'kartu_keluarga_id' => 1,
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002',
                 'user_id' => null,
                 'nama_lengkap' => 'LIDYA',
                 'nik' => 7206091803080003,
@@ -91,12 +93,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'RIA',
                 'foto_profil' => NULL,
                 'is_valid' => 0,
+                'tanggal_validasi' => NULL,
                 'created_at' => now(),
             ],
             [
-                'id' => 4,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120005', //4
                 'bidan_id' => null,
-                'kartu_keluarga_id' => 1,
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002',
                 'user_id' => null,
                 'nama_lengkap' => 'AINI',
                 'nik' => 7206091803080004,
@@ -117,12 +120,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'RIA',
                 'foto_profil' => NULL,
                 'is_valid' => 0,
+                'tanggal_validasi' => NULL,
                 'created_at' => now(),
             ],
             [
-                'id' => 5,
-                'bidan_id' => 1,
-                'kartu_keluarga_id' => 1,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120006', //5
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002',
                 'user_id' => null,
                 'nama_lengkap' => 'VIDIA',
                 'nik' => 7206091803080005,
@@ -143,12 +147,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'RIA',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
             [
-                'id' => 6,
-                'bidan_id' => 1,
-                'kartu_keluarga_id' => 1,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120007', //6
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002',
                 'user_id' => null,
                 'nama_lengkap' => 'FARA',
                 'nik' => 7206091803080006,
@@ -169,15 +174,16 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'RIA',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
 
             // Kartu Keluarga 2
             [
-                'id' => 7,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120008', //7
                 'bidan_id' => null,
-                'kartu_keluarga_id' => 2,
-                'user_id' => '12',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003',
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e91',
                 'nama_lengkap' => 'RANGGA',
                 'nik' => 8902983209990001,
                 'jenis_kelamin' => 'LAKI-LAKI',
@@ -197,12 +203,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'MAYA',
                 'foto_profil' => NULL,
                 'is_valid' => 0,
+                'tanggal_validasi' => NULL,
                 'created_at' => now(),
             ],
             [
-                'id' => 8,
-                'bidan_id' => 2,
-                'kartu_keluarga_id' => 2,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac120009', //8
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003',
                 'user_id' => null,
                 'nama_lengkap' => 'LINDA',
                 'nik' => 8902983209990002,
@@ -223,12 +230,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'MAYA',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
             [
-                'id' => 9,
-                'bidan_id' => 2,
-                'kartu_keluarga_id' => 2,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac12000a', //9
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003',
                 'user_id' => null,
                 'nama_lengkap' => 'NANA',
                 'nik' => 8902983209990003,
@@ -249,12 +257,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'LINDA',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
             [
-                'id' => 10,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac12000b', //10
                 'bidan_id' => null,
-                'kartu_keluarga_id' => 2,
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003',
                 'user_id' => null,
                 'nama_lengkap' => 'HARITH',
                 'nik' => 8902983209990004,
@@ -275,12 +284,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'LINDA',
                 'foto_profil' => NULL,
                 'is_valid' => 0,
+                'tanggal_validasi' => NULL,
                 'created_at' => now(),
             ],
             [
-                'id' => 11,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac12000c', //11
                 'bidan_id' => null,
-                'kartu_keluarga_id' => 2,
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003',
                 'user_id' => null,
                 'nama_lengkap' => 'FIKI',
                 'nik' => 8902983209990005,
@@ -301,12 +311,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'LINDA',
                 'foto_profil' => NULL,
                 'is_valid' => 0,
+                'tanggal_validasi' => NULL,
                 'created_at' => now(),
             ],
             [
-                'id' => 12,
-                'bidan_id' => 2,
-                'kartu_keluarga_id' => 2,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac12000d', //12
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003',
                 'user_id' => null,
                 'nama_lengkap' => 'RISKI',
                 'nik' => 8902983209990006,
@@ -327,12 +338,13 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'LINDA',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
             [
-                'id' => 13,
-                'bidan_id' => 2,
-                'kartu_keluarga_id' => 2,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac12000e', //13
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003',
                 'user_id' => null,
                 'nama_lengkap' => 'FATIN',
                 'nik' => 8902983209990007,
@@ -353,13 +365,14 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'LINDA',
                 'foto_profil' => NULL,
                 'is_valid' => 1,
+                'tanggal_validasi' => '2022-04-26',
                 'created_at' => now(),
             ],
             [
-                'id' => 14,
+                'id' => '674085d6-c4a3-11ec-9d64-0242ac12000f', //14
                 'bidan_id' => null,
-                'kartu_keluarga_id' => 3,
-                'user_id' => '11',
+                'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120004',
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e90',
                 'nama_lengkap' => 'AHMAD',
                 'nik' => 8902983209990007,
                 'jenis_kelamin' => 'LAKI-LAKI',
@@ -379,6 +392,7 @@ class AnggotaKeluargaSeeder extends Seeder
                 'nama_ibu' => 'LINDA',
                 'foto_profil' => NULL,
                 'is_valid' => 0,
+                'tanggal_validasi' => NULL,
                 'created_at' => now(),
             ],
 

@@ -4,6 +4,7 @@
         @method('PUT')
     @endif
     <div class="row g-4">
+        @if (Auth::user()->role != 'keluarga')
         <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Kepala Keluarga / Nomor KK',
@@ -14,13 +15,14 @@
                 ])
                 @slot('options')
                     @foreach ($kartuKeluarga as $kk)
-                        <option value="{{ $kk->id }}"
-                            {{ isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id ? 'selected' : '' }}>
-                            {{ $kk->nama_kepala_keluarga }} / {{ $kk->nomor_kk }}</option>
+                        <option value="{{ $kk->id }}" {{ (isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id) ? 'selected' : '' }}>{{$kk->nama_kepala_keluarga}} / {{$kk->nomor_kk}}</option>
                     @endforeach
                 @endslot
             @endcomponent
+                        {{-- <option value="{{ Auth::user()->profil->kartu_keluarga_id }}" selected>
+                            {{Auth::user()->profil->kartuKeluarga->nama_kepala_keluarga}} / {{ Auth::user()->profil->kartuKeluarga->nomor_kk}}</option> --}}
         </div>
+        @endif
         <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Anak (Tanggal Lahir)',
@@ -35,10 +37,10 @@
         <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.input', [
                 'label' => 'Berat Badan (Kg)',
-                'type' => 'number',
+                'type' => 'text',
                 'id' => 'berat-badan',
                 'name' => 'berat_badan',
-                'class' => '',
+                'class' => 'angka',
                 'value' => $anak->berat_badan ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
                 ])
@@ -136,8 +138,9 @@
                                 'id' => 'proses-pertumbuhan-anak',
                                 'type' => 'submit',
                                 'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan',
-                                ])
+                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' : null ,
+                                'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
+                            ])
                             @endcomponent
                         </div>
                     </div>
@@ -184,13 +187,25 @@
                 }
                 // formData.append('method', '{{$method}}');
 
+                if('{{ Auth::user()->role }}' == 'keluarga'){
+                    var textConfirm = 'Jika sudah sesuai, maka data akan dikirim untuk dilakukan Validasi'
+                    var confirmButtonText = 'Ya, Kirim Data'
+                    var titleResult = 'Data berhasil dikirim'
+                    var textResult = 'Data berhasil dikirim dan sedang menunggu proses Validasi.'
+                } else{
+                    var textConfirm = 'Jika sudah sesuai, maka data akan disimpan dan dapat oleh Penyuluh BKKBN dan Dinas P2KB'
+                    var confirmButtonText = 'Ya, Simpan'
+                    var titleResult = 'Data berhasil disimpan'
+                    var textResult = 'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
+                }
+
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
-                        icon: 'warning',
+                        icon: 'question',
                         title: 'Apakah data sudah sesuai?',
-                        text: 'Jika sudah sesuai, maka data akan disimpan dan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                        text: textConfirm,
                         showCancelButton: true,
-                        confirmButtonText: 'Ya, Simpan',
+                        confirmButtonText: confirmButtonText,
                         cancelButtonText: 'Batal',
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -208,10 +223,8 @@
                                     if (response.res == 'success') {
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Data berhasil disimpan',
-                                            text: 'Data akan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
-                                            showConfirmButton: false,
-                                            timer: 2000,
+                                            title: titleResult,
+                                            text: textResult,
                                         }).then((result) => {
                                             window.location.href =
                                                 "{{ $back_url }}";
@@ -327,7 +340,11 @@
         });
 
         function changeKepalaKeluarga() {
-            var id = $('#nama-kepala-keluarga').val();
+            if('{{ Auth::user()->role }}' != 'keluarga'){
+                var id = $('#nama-kepala-keluarga').val();
+            } else{
+                var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
+            }
             var rentang_umur = 'balita';
             var id_anak = "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}";
             var selected = '';

@@ -16,8 +16,8 @@ class PenyuluhSeeder extends Seeder
     {
         $data = [
             [
-                'id' => 1,
-                'user_id' => 6,
+                'id' => '13c1ca42-c4a7-11ec-9d64-0242ac120002', //1
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e85',
                 'nik' => 6543211234567891,
                 'nama_lengkap' => 'SITI',
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -28,16 +28,16 @@ class PenyuluhSeeder extends Seeder
                 'nomor_hp' => '08123456789',
                 'email' => 'test@email.com',
                 'alamat' => 'Jl. Mangga',
-                'desa_kelurahan_id' => 7271031004, //7271031006
-                'kecamatan_id' => 7271031,
-                'kabupaten_kota_id' => 7271,
+                'desa_kelurahan_id' => 7210120004,
+                'kecamatan_id' => 7210120,
+                'kabupaten_kota_id' => 7210,
                 'provinsi_id' => 72,
                 'foto_profil' => NULL,
                 'created_at' => now(),
             ],
             [
-                'id' => 2,
-                'user_id' => 9,
+                'id' => '13c1ca42-c4a7-11ec-9d64-0242ac120003', //2
+                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e88',
                 'nik' => 6543211234567892,
                 'nama_lengkap' => 'NURBAYAH',
                 'jenis_kelamin' => 'PEREMPUAN',
@@ -48,9 +48,9 @@ class PenyuluhSeeder extends Seeder
                 'nomor_hp' => '08123456789',
                 'email' => 'test@email.com',
                 'alamat' => 'Jl. Mangga',
-                'desa_kelurahan_id' => 7271031004, //7271031006
-                'kecamatan_id' => 7271031,
-                'kabupaten_kota_id' => 7271,
+                'desa_kelurahan_id' => 7210120004,
+                'kecamatan_id' => 7210120,
+                'kabupaten_kota_id' => 7210,
                 'provinsi_id' => 72,
                 'foto_profil' => NULL,
                 'created_at' => now(),

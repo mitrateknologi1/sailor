@@ -17,7 +17,7 @@ class WilayahDomisiliSeeder extends Seeder
         $data = [
             [
                 'id' => 1,
-                'anggota_keluarga_id' => 1,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210120004,
                 'kecamatan_id' => 7210120,
@@ -28,7 +28,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'anggota_keluarga_id' => 2,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120003',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210120004,
                 'kecamatan_id' => 7210120,
@@ -39,7 +39,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'anggota_keluarga_id' => 3,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120004',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210120004,
                 'kecamatan_id' => 7210120,
@@ -50,7 +50,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 4,
-                'anggota_keluarga_id' => 4,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120005',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210120004,
                 'kecamatan_id' => 7210120,
@@ -61,7 +61,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 5,
-                'anggota_keluarga_id' => 5,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210120004,
                 'kecamatan_id' => 7210120,
@@ -72,7 +72,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 6,
-                'anggota_keluarga_id' => 6,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210120004,
                 'kecamatan_id' => 7210120,
@@ -84,7 +84,7 @@ class WilayahDomisiliSeeder extends Seeder
             /////////////////////////
             [
                 'id' => 7,
-                'anggota_keluarga_id' => 7,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120008',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
@@ -95,7 +95,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 8,
-                'anggota_keluarga_id' => 8,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120009',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
@@ -106,7 +106,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 9,
-                'anggota_keluarga_id' => 9,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000a',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
@@ -117,7 +117,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 10,
-                'anggota_keluarga_id' => 10,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000b',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
@@ -128,7 +128,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 11,
-                'anggota_keluarga_id' => 11,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000c',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
@@ -139,7 +139,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 12,
-                'anggota_keluarga_id' => 12,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000d',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
@@ -150,7 +150,7 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 13,
-                'anggota_keluarga_id' => 13,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000e',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
@@ -161,11 +161,11 @@ class WilayahDomisiliSeeder extends Seeder
             ],
             [
                 'id' => 14,
-                'anggota_keluarga_id' => 14,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000f',
                 'alamat' => 'Jl. Raya',
                 'desa_kelurahan_id' => 7210110011,
                 'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7271,
+                'kabupaten_kota_id' => 7210,
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),

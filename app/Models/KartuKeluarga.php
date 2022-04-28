@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TraitUuid;
 use App\Models\Bidan;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class KartuKeluarga extends Model
 {
     use HasFactory;
+    use TraitUuid;
     use SoftDeletes;
     protected $table = 'kartu_keluarga';
     protected $guarded = ['id'];
@@ -78,5 +80,10 @@ class KartuKeluarga extends Model
     public function statusKeluarga($status)
     {
         return $this->hasMany(AnggotaKeluarga::class)->where('status_hubungan_dalam_keluarga_id', 'like', '%' . $status . '%');
+    }
+
+    public function scopeValid($query)
+    {
+        $query->where('is_valid', 1);
     }
 }

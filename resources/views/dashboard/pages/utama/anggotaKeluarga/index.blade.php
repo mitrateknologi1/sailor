@@ -90,7 +90,7 @@
                                                                 <div class="row justify-content-center mt-3">
                                                                     <div class="col-lg-12 text-center">
                                                                         <a href="{{ url('anggota-keluarga/' . $item->kartu_keluarga_id .'/'.$item->id).'/edit' }}">
-                                                                            <span class="btn btn-sm btn-outline-info shadow-sm"><i class="fas fa-edit"></i> Perbarui Data</span>
+                                                                            <span class="btn btn-sm btn-outline-danger shadow-sm"><i class="fas fa-edit"></i> Perbarui Data</span>
                                                                         </a>
                                                                     </div>
                                                                 </div>

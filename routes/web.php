@@ -103,6 +103,7 @@ Route::get('anc-cek-pemeriksaan', [AncController::class, 'cekPemeriksaan']);
 // ----------------- Start Tumbuh Kembang -----------------
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
+Route::put('pertumbuhan-anak/validasi/{pertumbuhan_anak}', [PertumbuhanAnakController::class, 'validasi'])->name('validasiPertumbuhanAnak');
 Route::post('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::put('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
 Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');

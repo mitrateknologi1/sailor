@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TraitUuid;
 use App\Models\User;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Penyuluh extends Model
 {
     use HasFactory;
+    use TraitUuid;
     use SoftDeletes;
     protected $table = 'penyuluh';
     protected $guarded = ['id'];

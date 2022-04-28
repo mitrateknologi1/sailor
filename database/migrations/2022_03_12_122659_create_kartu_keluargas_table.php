@@ -14,8 +14,8 @@ class CreateKartuKeluargasTable extends Migration
     public function up()
     {
         Schema::create('kartu_keluarga', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('bidan_id')->nullable();
+            $table->uuid('id')->primary();
+            $table->uuid('bidan_id')->nullable();
             $table->bigInteger('nomor_kk');
             $table->text('nama_kepala_keluarga');
             $table->text('alamat');

@@ -16,8 +16,8 @@ class KartuKeluargaSeeder extends Seeder
     {
         $data = [
             [
-                'id' => 1,
-                'bidan_id' =>  1,
+                'id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002', //1
+                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002', //1
                 'nomor_kk' => 7206091803080165,
                 'nama_kepala_keluarga' => 'KEVIN',
                 'alamat' => 'JL. RAYA CIKAMPEK NO. 1',
@@ -37,7 +37,7 @@ class KartuKeluargaSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 2,
+                'id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003', //2
                 'bidan_id' =>  null,
                 'nomor_kk' => 8902983209900001,
                 'nama_kepala_keluarga' => 'RANGGA',
@@ -58,7 +58,7 @@ class KartuKeluargaSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 3,
+                'id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120004', //3
                 'bidan_id' =>  null,
                 'nomor_kk' => 8902983209921088,
                 'nama_kepala_keluarga' => 'AHMAD',
