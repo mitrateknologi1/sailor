@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Pertumbuhan Anak
+    Perkembangan Anak
 @endsection
 
 @push('style')
@@ -14,7 +14,7 @@
         <ol class="breadcrumb bg-transparent mb-0">
             <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Tumbuh Kembang</li>
-            <li class="breadcrumb-item active" aria-current="page">Pertumbuhan Anak</li>
+            <li class="breadcrumb-item active" aria-current="page">Perkembangan Anak</li>
         </ol>
     </div>
 @endsection
@@ -25,12 +25,12 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
-                        <h5 class="card-title mb-2">Data Pertumbuhan Anak</h5>
+                        <h5 class="card-title mb-2">Data Perkembangan Anak</h5>
                         @if (Auth::user()->role != 'penyuluh')
                             @component('dashboard.components.buttons.add',[
                                 'id' => 'catatan-pertumbuhan-anak',
                                 'class' => '',
-                                'url' => route('pertumbuhan-anak.create'),
+                                'url' => route('perkembangan-anak.create'),
                             ])        
                             @endcomponent
                         @endif
@@ -42,14 +42,13 @@
                                     <div class="owl-carousel owl-theme owl-loaded owl-drag" id="anggota-keluarga-list">
                                         <div class="owl-stage-outer">
                                             <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 1084px;">
-                                                @foreach ($pertumbuhanAnak as $item)
+                                                @foreach ($perkembanganAnak as $item)
                                                     @php
                                                         $datetime1 = date_create($item->created_at);
                                                         $datetime2 = date_create($item->anggotaKeluarga->tanggal_lahir);
                                                         $interval = date_diff($datetime1, $datetime2);
                                                         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
                                                     @endphp
-                                                    {{-- @if ($item->is_valid == 1) --}}
                                                     <div class="owl-item active" style="width: 206.8px; margin-right: 10px;">
                                                         <div class="item card ribbon fieldset border border-info">
                                                             <div class="card-body p-0">
@@ -61,23 +60,12 @@
                                                                 <small class="text-muted">{{ Carbon\Carbon::parse($item->created_at)->translatedFormat('j F Y') }} </small>
                                                                 <div class="d-flex">
                                                                     <p>{{ $item->anggotaKeluarga->nama_lengkap }}</p>
-                                                                    <p style="margin-left: auto; order: 2"><a href="#" id="btn-lihat" data-toggle="tooltip" data-placement="top" title="Lihat" data-pertumbuhan={{ $item->id }}><i class="fa-solid shadow fa-circle-info"></i></a></p>
+                                                                    <p style="margin-left: auto; order: 2"><a href="#" id="btn-lihat" class="btn-lihat" data-toggle="tooltip" data-placement="top" title="Lihat" data-perkembangan={{ $item->id }}><i class="fa-solid shadow fa-circle-info"></i></a></p>
                                                                 </div>
                                                                 <ul class="list-group list-group-custom text-center">
                                                                     <li class="list-group-item p-2 py-1 text-muted"><span>{{ $usia }}</span></li>
-                                                                    <li class="list-group-item p-2 py-1 text-muted"><span>{{ $item->berat_badan }} Kg</span></li>
                                                                     <li class="list-group-item p-2 py-1 text-muted">
-                                                                        <span>
-                                                                            @if ($item->hasil == 'Gizi Buruk')
-                                                                                <span class="badge bg-danger">Gizi Buruk</span>
-                                                                            @elseif($item->hasil == 'Gizi Kurang')
-                                                                                <span class="badge bg-warning">Gizi Kurang</span>
-                                                                            @elseif($item->hasil == 'Gizi Baik')
-                                                                                <span class="badge bg-success">Gizi Baik</span>
-                                                                            @elseif($item->hasil == 'Gizi Lebih')
-                                                                                <span class="badge bg-primary">Gizi Lebih</span>
-                                                                            @endif
-                                                                        </span>
+                                                                        <a href="#" id="btn-lihat2" class="btn-lihat shadow-sm" data-toggle="tooltip" data-placement="top" title="Lihat" data-perkembangan={{ $item->id }}><span class="badge rounded-pill bg-primary shadow-sm">Lihat Hasil</span></a>
                                                                     </li>
                                                                     <li class="list-group-item p-2 py-1 text-muted">
                                                                         <span>
@@ -104,8 +92,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                        
-                                                    {{-- @endif --}}
                                                 @endforeach
                                                 <div class="owl-item active" style="width: 206.8px; margin-right: 10px; height: 328.5px;">
                                                     <div class="row align-items-center justify-content-center" style="height: 326px;">
@@ -136,19 +122,18 @@
                 <div class="modal-body custom_scroll p-lg-4 pb-3">
                     <div class="d-flex w-100 justify-content-between mb-1">
                         <div>
-                            <h5>Detail Pertumbuhan Anak</h5>
+                            <h5>Detail Perkembangan Anak</h5>
                             <p class="text-muted tanggal-proses" id="tanggal-proses"> - </p>
                         </div>
                         <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="alert kategori-alert rounded-4">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar rounded no-thumbnail kategori-bg text-light "><i id="kategori-emot" class="kategori-emot"></i></div>
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0 modal-kategori" id="modal-kategori" style="margin-left: 5px"> - </div>
-                                <div class="float-end modal-zscore" id="modal-zscore"><span class="badge kategori-bg"> - </span></div>
-                            </div>
-                        </div>
+                    <div class="card fieldset border border-primary mb-4">
+                        <span class="fieldset-tile text-primary bg-white">Motorik Kasar:</span>
+                        <p class="text-primary mb-0" id="modal-motorik-kasar" style="text-align: justify">-</p>
+                    </div>
+                    <div class="card fieldset border border-secondary">
+                        <span class="fieldset-tile text-secondary bg-white">Motorik Halus:</span>
+                        <p class="text-secondary mb-0 " id="modal-motorik-halus" style="text-align: justify">-</p>
                     </div>
                     <div class="card fieldset border border-dark my-4">
                         <span class="fieldset-tile text-dark ml-5 bg-white">Info Anak:</span>
@@ -158,14 +143,6 @@
                                     <label><i class="fa-solid fa-child"></i> Nama Anak:</label>
                                     <span class="badge bg-info float-end text-uppercase modal-nama-anak" id="modal-nama-anak"> - </span>
                                 </li>
-                                {{-- <li class="justify-content-between mb-2">
-                                    <label><i class="fa-solid fa-person fa-lg"></i> Nama Ayah:</label>
-                                    <span class="badge bg-info float-end text-uppercase modal-nama-ayah" id="modal-nama-ayah"> - </span>
-                                </li>
-                                <li class="justify-content-between mb-2">
-                                    <label><i class="fa-solid fa-person-dress fa-lg"></i> Nama Ibu:</label>
-                                    <span class="badge bg-info float-end text-uppercase modal-nama-ibu" id="modal-nama-ibu"> - </span>
-                                </li> --}}
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
                                     <span class="badge bg-info float-end text-uppercase modal-jenis-kelamin" id="modal-jenis-kelamin"> - </span>
@@ -177,10 +154,6 @@
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-cake-candles"></i> Usia</label>
                                     <span class="badge bg-info float-end text-uppercase modal-usia" id="modal-usia"> - </span>
-                                </li>
-                                <li class="justify-content-between mb-2">
-                                    <label><i class="fa-solid fa-weight-scale"></i> Berat Badan</label>
-                                    <span class="badge bg-info float-end text-uppercase modal-berat-badan" id="modal-berat-badan"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-map-location-dot"></i> Desa/Kelurahan</label>
@@ -291,13 +264,13 @@
 
         $('#m-link-tumbuh-kembang').addClass('active');
         $('#menu-tumbuh-kembang').addClass('collapse show')
-        $('#ms-link-pertumbuhan-anak').addClass('active')
+        $('#ms-link-perkembangan-anak').addClass('active')
 
-        $(document).on('click', '#btn-lihat', function() {
-            let id = $(this).data('pertumbuhan');
+        $(document).on('click', '.btn-lihat', function() {
+            let id = $(this).data('perkembangan');
             $.ajax({
                 type: "GET",
-                url: "{{url('pertumbuhan-anak')}}" + '/' + id,
+                url: "{{url('perkembangan-anak')}}" + '/' + id,
                 success: function (data) {
                     $('#modal-lihat').modal('show');
                     $('#col-modal-btn-ubah').addClass('d-none');
@@ -310,44 +283,15 @@
                     $('#nama-bidan').val('');
                     $('#alasan').val('');
 
-                    var kategoriBg = ['bg-danger', 'bg-warning', 'bg-info', 'bg-success', 'bg-primary'];
-                    var kategoriAlert = ['alert-danger', 'alert-warning', 'alert-info', 'alert-success', 'alert-primary'];
-                    var kategoriEmot = ['fa-solid fa-face-frown', 'fa-solid fa-face-meh', 'fa-solid fa-face-smile', 'fa-solid fa-face-surprise'];
-                    $.each(kategoriBg, function(i, v){
-                        $('.kategori-bg').removeClass(v);
-                    });
-                    $.each(kategoriAlert, function(i, v){
-                        $('.kategori-alert').removeClass(v);
-                    });
-                    $.each(kategoriEmot, function(i, v){
-                        $('.kategori-emot').removeClass(v);
-                    });
-
-                    if(data.kategori == 'Gizi Buruk'){
-                        $('.kategori-bg').addClass('bg-danger');
-                        $('.kategori-alert').addClass('alert-danger');
-                        $('.kategori-emot').addClass('fa-solid fa-face-frown');
-                    } else if(data.kategori == 'Gizi Kurang'){
-                        $('.kategori-bg').addClass('bg-warning');
-                        $('.kategori-alert').addClass('alert-warning');
-                        $('.kategori-emot').addClass('fa-solid fa-face-meh');
-                    } else if(data.kategori == 'Gizi Baik'){
-                        $('.kategori-bg').addClass('bg-success');
-                        $('.kategori-alert').addClass('alert-success');
-                        $('.kategori-emot').addClass('fa-solid fa-face-smile');
-                    } else if(data.kategori == 'Gizi Lebih'){
-                        $('.kategori-bg').addClass('bg-primary');
-                        $('.kategori-alert').addClass('alert-primary');
-                        $('.kategori-emot').addClass('fa-solid fa-face-surprise');
-                    }
                     $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data.tanggal_proses).format('LL'));
+                    $('#modal-motorik-kasar').text(data.motorik_kasar);
+                    $('#modal-motorik-halus').text(data.motorik_halus);
                     $('#modal-nama-anak').text(data.nama_anak);
                     $('#modal-nama-ayah').text(data.nama_ayah);
                     $('#modal-nama-ibu').text(data.nama_ibu);
                     $('#modal-tanggal-lahir').text(moment(data.tanggal_lahir).format('LL'));
                     $('#modal-usia').text(data.usia_tahun);
                     $('#modal-jenis-kelamin').text(data.jenis_kelamin);
-                    $('#modal-berat-badan').text(data.berat_badan + ' Kg');
                     $('#modal-kategori').text(data.kategori);
                     $('#modal-zscore').text('ZScore : '+ data.zscore);
                     $('#modal-desa-kelurahan').text(data.desa_kelurahan);
@@ -375,8 +319,6 @@
                                 $('#pilih-bidan').addClass('d-none');
                             }
                             $('#modal-btn-konfirmasi').val(id)
-                        } else{
-                            $('#modal-status-konfirmasi').text('Belum Divalidasi');
                         }
                     } else{
                         $('#li-modal-tanggal-konfirmasi').removeClass('d-none');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TraitUuid;
 use App\Models\Admin;
 use App\Models\Bidan;
 use App\Models\Penyuluh;
@@ -16,7 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TraitUuid;
 
     protected $guarded = ['id'];
     
@@ -53,6 +54,10 @@ class User extends Authenticatable
     public function lokasiTugas(){
         $profil = $this->profil;
         
+    }
+
+    public function pemberitahuan(){
+        return $this->hasMany(Pemberitahuan::class, 'user_id', 'id')->latest();
     }
 
     // public function lokasiTugas(){

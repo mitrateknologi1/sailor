@@ -46,11 +46,11 @@ class KartuKeluargaController extends Controller
                 ->addIndexColumn()
                 ->addColumn('status', function ($row) {   
                     if($row->is_valid == 1){
-                        return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
+                        return '<span class="badge rounded bg-success">Tervalidasi</span>';
                     } else if ($row->is_valid == 0){
-                        return '<span class="badge rounded-pill bg-primary">Belum Divalidasi</span>';
+                        return '<span class="badge rounded bg-warning">Belum Divalidasi</span>';
                     } else{
-                        return '<span class="badge rounded-pill bg-danger text-white">Ditolak</span>';
+                        return '<span class="badge rounded bg-danger text-white">Ditolak</span>';
                     }
                 })
 
@@ -96,14 +96,15 @@ class KartuKeluargaController extends Controller
                     $actionBtn = '
                     <div class="text-center justify-content-center text-white">';
                     if($row->is_valid == 0){
-                        $actionBtn .= '<button class="btn btn-primary btn-sm me-1 shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" onclick=modalValidasi('.$row->id.')><i class="fa-solid fa-lg fa-clipboard-check"></i></button> ';
+                        // $actionBtn .= '<button class="btn btn-primary btn-sm me-1 shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" onclick=modalValidasi('.$row->id.')><i class="fa-solid fa-lg fa-clipboard-check"></i></button> ';
+                        $actionBtn .= '<button id="btn-validasi" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" value='.$row->id.'><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
                     } else{
-                        $actionBtn .= '<button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.')><i class="fas fa-eye"></i></button> ';
+                        $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat"  value='.$row->id.'><i class="fas fa-eye"></i></button>';
                         $actionBtn .= '<a href="' . url('anggota-keluarga/' . $row->id) . '" class="btn btn-success text-white btn-sm me-1 shadow" data-toggle="tooltip" data-placement="top" title="Anggota Keluarga"><i class="fa-solid fa-people-roof"></i></a>';
                         if($row->is_valid != 2){
                             $actionBtn .= '<a href="'.route('keluarga.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
                         }
-                        $actionBtn .= '<button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
+                        $actionBtn .= '<button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
                         </div>';
                     }
                     return $actionBtn;
@@ -268,8 +269,8 @@ class KartuKeluargaController extends Controller
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $kepalaKeluarga->first()->user_id,
                 'anggota_keluarga_id' => $kepalaKeluarga->first()->id,
-                'judul' => 'Selamat Kartu Keluarga anda telah divalidasi',
-                'isi' => 'Kartu Keluarga anda telah divalidasi oleh bidan '. $namaBidan->nama_lengkap . '. Silahkan menambahkan data anggota keluarga anda seperti Istri dan Anak anda.',
+                'judul' => 'Selamat, kartu keluarga anda telah divalidasi.',
+                'isi' => 'Kartu Keluarga anda telah divalidasi oleh bidan '. $namaBidan->nama_lengkap . '. Silahkan menambahkan data anggota keluarga anda seperti Istri dan Anak anda pada menu Anggota Keluarga.',
                 'tentang' => 'validasi_kartu_keluarga',
                 'is_valid' => 1,
             ]);
@@ -405,7 +406,14 @@ class KartuKeluargaController extends Controller
             if (Storage::exists('upload/foto_profil/keluarga/' . $anggota->foto_profil)) {
                 Storage::delete('upload/foto_profil/keluarga/' . $anggota->foto_profil);
             }
+
+            $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
+        
+            if($pemberitahuan){
+                $pemberitahuan->delete();
+            }
         }
+
         if (Storage::exists('upload/kartu_keluarga/' . $keluarga->file_kk)) {
             Storage::delete('upload/kartu_keluarga/' . $keluarga->file_kk);
         }

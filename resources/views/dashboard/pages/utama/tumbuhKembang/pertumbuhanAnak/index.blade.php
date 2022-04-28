@@ -47,14 +47,17 @@
                                                 'class' => 'filter',
                                                 ])
                                                 @slot('options')
-                                                    <option value="1">Tervalidasi</option>
-                                                    <option value="0">Belum Divalidasi</option>
+                                                    @if (Auth::user()->role != 'penyuluh')
+                                                        <option value="Tervalidasi">Tervalidasi</option>
+                                                        <option value="Belum Tervalidasi">Belum Divalidasi</option>
+                                                        <option value="Ditolak">Ditolak</option>
+                                                    @endif
                                                 @endslot
                                             @endcomponent
                                         </div>
                                         <div class="col-lg">
                                             @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Gizi',
+                                                'label' => 'Kategori',
                                                 'id' => 'kategori-gizi-filter',
                                                 'name' => 'kategori_gizi',
                                                 'class' => 'filter',
@@ -87,7 +90,7 @@
                                                 'Tanggal Lahir',
                                                 'Usia',
                                                 'BB (Kg)',
-                                                'Kategori Gizi',
+                                                'Kategori',
                                                 'Desa / Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Divalidasi',
@@ -111,16 +114,16 @@
                     <div class="d-flex w-100 justify-content-between mb-1">
                         <div>
                             <h5>Detail Pertumbuhan Anak</h5>
-                            <p class="text-muted" id="tanggal-proses"> - </p>
+                            <p class="text-muted tanggal-proses" id="tanggal-proses"> - </p>
                         </div>
                         <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="alert kategori-alert rounded-4">
                         <div class="d-flex align-items-center">
-                            <div class="avatar rounded no-thumbnail kategori-bg text-light"><i id="kategori-emot" class=""></i></div>
+                            <div class="avatar rounded no-thumbnail kategori-bg text-light "><i id="kategori-emot" class="kategori-emot"></i></div>
                             <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-kategori" style="margin-left: 5px"> - </div>
-                                <div class="float-end" id="modal-zscore"><span class="badge kategori-bg"> - </span></div>
+                                <div class="h6 mb-0 modal-kategori" id="modal-kategori" style="margin-left: 5px"> - </div>
+                                <div class="float-end modal-zscore" id="modal-zscore"><span class="badge kategori-bg"> - </span></div>
                             </div>
                         </div>
                     </div>
@@ -130,58 +133,104 @@
                             <ul class="list-unstyled mb-0">
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-child"></i> Nama Anak:</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-nama-anak"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-nama-anak" id="modal-nama-anak"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-person fa-lg"></i> Nama Ayah:</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-nama-ayah"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-nama-ayah" id="modal-nama-ayah"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-person-dress fa-lg"></i> Nama Ibu:</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-nama-ibu"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-nama-ibu" id="modal-nama-ibu"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-jenis-kelamin" id="modal-jenis-kelamin"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-tanggal-lahir" id="modal-tanggal-lahir"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-cake-candles"></i> Usia</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-usia"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-usia" id="modal-usia"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-weight-scale"></i> Berat Badan</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-berat-badan"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-berat-badan" id="modal-berat-badan"> - </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-map-location-dot"></i> Desa/Kelurahan</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-desa-kelurahan"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-desa-kelurahan" id="modal-desa-kelurahan"> - </span>
                                 </li>
-                                <li class="justify-content-between mb-2">
-                                    <label><i class="bi bi-calendar2-event-fill"></i> Tanggal diperiksa/validasi</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-diperiksa-divalidasi"> - </span>
+                                <li class="justify-content-between mb-2" id="li-modal-status-konfirmasi">
+                                    <label><i class="fa-solid fa-clipboard-question"></i> Status</label>
+                                    <span class="badge bg-info float-end text-uppercase modal-status-konfirmasi" id="modal-status-konfirmasi"> - </span>
                                 </li>
-                                <li class="justify-content-between">
+                                <li class="justify-content-between mb-2" id="li-modal-tanggal-konfirmasi">
+                                    <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Konfirmasi</label>
+                                    <span class="badge bg-info float-end text-uppercase modal-tanggal-konfirmasi" id="modal-tanggal-konfirmasi"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2" id="li-modal-oleh-bidan">
                                     <label><i class="fa-solid fa-stethoscope"></i> Oleh Bidan</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-nama-bidan"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase modal-oleh-bidan" id="modal-oleh-bidan"> - </span>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="row g-2">
+                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                        <div class="col-lg col-sm-12" id="pilih-konfirmasi">
+                            @component('dashboard.components.formElements.select', [
+                                'label' => 'Konfirmasi',
+                                'id' => 'konfirmasi',
+                                'name' => 'konfirmasi',
+                                'class' => 'kosong',
+                                'wajib' => '<sup class="text-danger">*</sup>',
+                                ])
+                                @slot('options')
+                                    <option value="1">Validasi</option>
+                                    <option value="2">Tolak</option>
+                                @endslot
+                            @endcomponent
+                        </div>
+                        @if (Auth::user()->role == 'admin')
+                        <div class="col-lg col-sm-12" id="pilih-bidan">
+                            @component('dashboard.components.formElements.select', [
+                                'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                'id' => 'nama-bidan',
+                                'name' => 'bidan_id',
+                                'class' => 'bidan_id filter',
+                                'wajib' => '<sup class="text-danger">*</sup>',
+                                ])
+                            @endcomponent
+                        </div>
+                        @endif
+                        <div class="col-12 mt-3 d-none" id="col-alasan">
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
+                            <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
+                            <span class="text-danger error-text alasan-error"></span>
+    
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-3">
                         <div class="col">
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i>  Tutup</button>
                         </div>
-                        <div class="col-sm-6 col-lg-8" id="col-modal-btn-ubah">
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
                             @component('dashboard.components.buttons.edit', [
                                 'id' => 'modal-btn-ubah',
                             ])      
                             @endcomponent
                         </div>
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
+                            @component('dashboard.components.buttons.konfirmasi', [
+                                'id' => 'modal-btn-konfirmasi',
+                            ])      
+                            @endcomponent
+                        </div>
                     </div>
+
+
                     
                 </div>
             </div>
@@ -226,7 +275,7 @@
             ajax: {
                 url: "{{ route('pertumbuhan-anak.index') }}",
                 data: function(d){
-                    d.status = $('#status-filter').val();       
+                    d.statusValidasi = $('#status-filter').val();       
                     d.kategori = $('#kategori-gizi-filter').val();             
                     d.search = $('input[type="search"]').val();
                 }
@@ -290,7 +339,8 @@
                 },
                 {
                     data: 'bidan',
-                    name: 'bidan'
+                    name: 'bidan',
+                    className: 'text-center',
                 },
                 {
                     data: 'tanggal_validasi',
@@ -316,42 +366,32 @@
                     targets: [4,5,6,7,8,9,13],
                     visible: false,
                 },
-            ],        
+            ],   
+            
+            
         });
         
-        $('#status-filter').change(function () {
+        $('.filter').change(function () {
             table.draw();     
-            console.log($('#status-filter').val())       
         })
-
-        $('#kategori-gizi-filter').change(function () {
-            table.draw();     
-            console.log($('#kategori-gizi-filter').val())       
-        })
-
         
-        function modalLihat(id){
-            var pertumbuhan_anak = id;
+        $(document).on('click', '#btn-lihat', function() {
+            let id = $(this).val();
             $.ajax({
                 type: "GET",
-                url: "{{url('pertumbuhan-anak')}}" + '/' + pertumbuhan_anak,
+                url: "{{url('pertumbuhan-anak')}}" + '/' + id,
                 success: function (data) {
                     $('#modal-lihat').modal('show');
-                    $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data.tanggal_proses).format('LL'));
-                    $('#modal-nama-anak').text(data.nama_anak);
-                    $('#modal-nama-ayah').text(data.nama_ayah);
-                    $('#modal-nama-ibu').text(data.nama_ibu);
-                    $('#modal-tanggal-lahir').text(moment(data.tanggal_lahir).format('LL'));
-                    $('#modal-usia').text(data.usia_tahun);
-                    $('#modal-jenis-kelamin').text(data.jenis_kelamin);
-                    $('#modal-berat-badan').text(data.berat_badan + ' Kg');
-                    $('#modal-kategori').text(data.kategori);
-                    $('#modal-zscore').text('ZScore : '+ data.zscore);
-                    $('#modal-desa-kelurahan').text(data.desa_kelurahan);
-                    $('#modal-diperiksa-divalidasi').text(moment(data.tanggal_validasi).format('LL'));
-                    $('#modal-nama-bidan').text(data.bidan);
-                    $('#modal-btn-ubah').attr('href', '{{url('pertumbuhan-anak')}}' + '/' + pertumbuhan_anak + '/edit');
-                    
+                    $('#col-modal-btn-ubah').addClass('d-none');
+                    $('#col-modal-btn-konfirmasi').addClass('d-none');
+                    $('#li-modal-tanggal-konfirmasi').addClass('d-none');
+                    $('#li-modal-oleh-bidan').addClass('d-none');
+                    $('#form-konfirmasi').addClass('d-none');
+                    $('#col-alasan').addClass('d-none');
+                    $('#konfirmasi').val('');
+                    $('#nama-bidan').val('');
+                    $('#alasan').val('');
+
                     var kategoriBg = ['bg-danger', 'bg-warning', 'bg-info', 'bg-success', 'bg-primary'];
                     var kategoriAlert = ['alert-danger', 'alert-warning', 'alert-info', 'alert-success', 'alert-primary'];
                     var kategoriEmot = ['fa-solid fa-face-frown', 'fa-solid fa-face-meh', 'fa-solid fa-face-smile', 'fa-solid fa-face-surprise'];
@@ -368,33 +408,155 @@
                     if(data.kategori == 'Gizi Buruk'){
                         $('.kategori-bg').addClass('bg-danger');
                         $('.kategori-alert').addClass('alert-danger');
-                        $('#kategori-emot').addClass('fa-solid fa-face-frown');
+                        $('.kategori-emot').addClass('fa-solid fa-face-frown');
                     } else if(data.kategori == 'Gizi Kurang'){
                         $('.kategori-bg').addClass('bg-warning');
                         $('.kategori-alert').addClass('alert-warning');
-                        $('#kategori-emot').addClass('fa-solid fa-face-meh');
+                        $('.kategori-emot').addClass('fa-solid fa-face-meh');
                     } else if(data.kategori == 'Gizi Baik'){
                         $('.kategori-bg').addClass('bg-success');
                         $('.kategori-alert').addClass('alert-success');
-                        $('#kategori-emot').addClass('fa-solid fa-face-smile');
+                        $('.kategori-emot').addClass('fa-solid fa-face-smile');
                     } else if(data.kategori == 'Gizi Lebih'){
                         $('.kategori-bg').addClass('bg-primary');
                         $('.kategori-alert').addClass('alert-primary');
-                        $('#kategori-emot').addClass('fa-solid fa-face-surprise');
+                        $('.kategori-emot').addClass('fa-solid fa-face-surprise');
+                    }
+                    $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data.tanggal_proses).format('LL'));
+                    $('#modal-nama-anak').text(data.nama_anak);
+                    $('#modal-nama-ayah').text(data.nama_ayah);
+                    $('#modal-nama-ibu').text(data.nama_ibu);
+                    $('#modal-tanggal-lahir').text(moment(data.tanggal_lahir).format('LL'));
+                    $('#modal-usia').text(data.usia_tahun);
+                    $('#modal-jenis-kelamin').text(data.jenis_kelamin);
+                    $('#modal-berat-badan').text(data.berat_badan + ' Kg');
+                    $('#modal-kategori').text(data.kategori);
+                    $('#modal-zscore').text('ZScore : '+ data.zscore);
+                    $('#modal-desa-kelurahan').text(data.desa_kelurahan);
+
+                    if(data.is_valid == 0){
+                        $('#modal-status-konfirmasi').text('Belum Divalidasi');
+                        $('#col-modal-btn-konfirmasi').removeClass('d-none');
+                        $('#form-konfirmasi').removeClass('d-none');
+                        $('#konfirmasi').change(function(){
+                            if($('#konfirmasi').val() == 1){
+                                $('#col-alasan').addClass('d-none');
+                            } else{
+                                $('#col-alasan').removeClass('d-none');
+                            }
+                            $('#alasan').val('');
+                        })
+                        if('{{Auth::user()->role}}' == 'admin'){
+                            $.each(data.bidan_konfirmasi, function(key, val) {
+                                $('#nama-bidan').html('')
+                                $('#nama-bidan').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
+                                $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
+                            })
+                        } else if('{{Auth::user()->role}}' == 'bidan'){
+                            $('#pilih-bidan').addClass('d-none');
+                        }
+
+                        $('#modal-btn-konfirmasi').val(id)
+                        
+                    } else{
+                        $('#li-modal-tanggal-konfirmasi').removeClass('d-none');
+                        $('#li-modal-oleh-bidan').removeClass('d-none');
+                        if(data.is_valid == 1){
+                            $('#modal-status-konfirmasi').text('Tervalidasi');
+                            if(('{{Auth::user()->profil->nama_lengkap}}' == data.bidan) || ('{{Auth::user()->role}}' == 'admin')){
+                                $('#col-modal-btn-ubah').removeClass('d-none');
+                                $('#modal-btn-ubah').attr('href', '{{url('pertumbuhan-anak')}}' + '/' + id + '/edit');
+                            } else {
+                                $('#col-modal-btn-ubah').addClass('d-none');
+                            }
+                        } else if(data.is_valid == 2){
+                            $('#modal-status-konfirmasi').text('Ditolak');
+                        }
+                        $('#modal-tanggal-konfirmasi').text(moment(data.tanggal_validasi).format('LL'));
+                        $('#modal-oleh-bidan').text(data.bidan);
                     }
 
-                    if(('{{Auth::user()->profil->nama_lengkap}}' == data.bidan) || ('{{Auth::user()->role}}' == 'admin')){
-                        $('#col-modal-btn-ubah').show();
-                    } else {
-                        $('#col-modal-btn-ubah').hide();
-                    }
+                    
              
                 },
             })
 
+        })
+
+        $(document).on('click', '#modal-btn-konfirmasi', function() {
+            let id = $(this).val();
+            Swal.fire({
+                title : 'Apakah anda yakin?',
+                text : "Konfirmasi data pertumbuhan anak ini?",
+                icon : 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Konfirmasi'
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "PUT",
+                        url: "{{ url('pertumbuhan-anak/validasi') }}" + '/' + id,
+                        data: {
+                            _token: "{{csrf_token()}}",
+                            id: id,
+                            bidan_id: '{{ Auth::user()->role }}' == "admin" ? $("#nama-bidan").val() : '{{Auth::user()->profil->id }}',
+                            konfirmasi: $('#konfirmasi').val(),
+                            alasan: $('#alasan').val()
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if ($.isEmptyObject(response.error)) {
+                                if (response.res == 'success') {
+                                    if(response.konfirmasi == 1){
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil divalidasi.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+                                        })
+                                    } else{
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil ditolak.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+
+                                        })
+                                    }
+                                } 
+                            } else {
+                                $('#overlay').hide();
+                                printErrorMsg(response.error);
+                                
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                            }
+                        }
+                    })
+                }
+            })
+        })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
         }
 
-        function hapus(id) {
+    
+        $(document).on('click', '#btn-delete', function() {
+            let id = $(this).val();
             var _token = "{{csrf_token()}}";
             Swal.fire({
                 title : 'Apakah anda yakin?',
@@ -411,7 +573,7 @@
                         type: "DELETE",
                         url: "{{url('pertumbuhan-anak')}}" + '/' + id,
                         data: {
-                            _token: _token
+                            _token: "{{csrf_token()}}",
                         },
                         success: function(response) {
                             if (response.res == 'success') {
@@ -433,6 +595,6 @@
                     })
                 } 
             })
-        }
+        })
     </script>
 @endpush

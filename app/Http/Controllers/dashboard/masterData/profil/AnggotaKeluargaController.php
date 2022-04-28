@@ -59,11 +59,11 @@ class AnggotaKeluargaController extends Controller
                     })
                     ->addColumn('status', function ($row) {   
                         if($row->is_valid == 1){
-                            return '<span class="badge rounded-pill bg-success">Tervalidasi</span>';
+                            return '<span class="badge rounded bg-success">Tervalidasi</span>';
                         } else if ($row->is_valid == 0){
-                            return '<span class="badge rounded-pill bg-primary">Belum Divalidasi</span>';
+                            return '<span class="badge rounded bg-warning">Belum Divalidasi</span>';
                         } else{
-                            return '<span class="badge rounded-pill bg-danger">Ditolak</span>';
+                            return '<span class="badge rounded bg-danger">Ditolak</span>';
                         }
                     })
     
@@ -71,14 +71,15 @@ class AnggotaKeluargaController extends Controller
                         $actionBtn = '
                         <div class="text-center justify-content-center text-white">';
                         if($data->is_valid == 0){
-                            $actionBtn .= '<button class="btn btn-primary btn-sm me-1 shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" onclick=modalValidasi('.$data->id.','.$data->kartu_keluarga_id.')><i class="fa-solid fa-lg fa-clipboard-check"></i></button> ';
+                            $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" data-anggota-keluarga='.$data->id.' data-kartu-keluarga='.$data->kartu_keluarga_id.'><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
                         } else{
-                            $actionBtn .= '<button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$data->id.','.$data->kartu_keluarga_id.')><i class="fas fa-eye"></i></button>';
-                            $actionBtn .= '
-                                <a href="'.url('anggota-keluarga/' . $data->kartu_keluarga_id .'/'.$data->id).'/edit" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                            $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" data-anggota-keluarga='.$data->id.' data-kartu-keluarga='.$data->kartu_keluarga_id.'><i class="fas fa-eye"></i></button>';
+                            if($data->is_valid == 1){
+                                $actionBtn .= '<a href="'.url('anggota-keluarga/' . $data->kartu_keluarga_id .'/'.$data->id).'/edit" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                            }
                             if($data->status_hubungan_dalam_keluarga_id != 1){
                                 $actionBtn .= '
-                                    <button id="btn-delete" onclick="hapus(' . $data->id . ', '. $data->kartuKeluarga->id .')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $data->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
+                                    <button id="btn-delete" data-anggota-keluarga='.$data->id.' data-kartu-keluarga='.$data->kartu_keluarga_id.' class="btn btn-danger btn-sm mr-1 my-1 shadow" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
                                 </div>';
                             }
                         }
@@ -276,8 +277,10 @@ class AnggotaKeluargaController extends Controller
 
         AnggotaKeluarga::create($dataAnggotaKeluarga);
 
+        $anggotaKeluargaLatest = AnggotaKeluarga::latest()->first();
+
         $dataWilayahDomisili = [
-            'anggota_keluarga_id' => AnggotaKeluarga::max('id'),
+            'anggota_keluarga_id' => $anggotaKeluargaLatest->id,
             'alamat' => strtoupper($request->alamat_domisili),
             'desa_kelurahan_id' => $request->desa_kelurahan_domisili,
             'kecamatan_id' => $request->kecamatan_domisili,
@@ -329,11 +332,13 @@ class AnggotaKeluargaController extends Controller
             $anggotaKeluarga['nomor_hp'] = '-';
         } 
         $anggotaKeluarga['surat_keterangan_domisili'] = $anggotaKeluarga->wilayahDomisili->file_ket_domisili;
-        if($anggotaKeluarga->bidan){
-            $anggotaKeluarga['nama_bidan'] = $anggotaKeluarga->bidan->nama_lengkap;
-        } else {
-            $anggotaKeluarga['nama_bidan'] = '-';
-        }
+        $anggotaKeluarga['nama_bidan'] = $anggotaKeluarga->bidan ? $anggotaKeluarga->bidan->nama_lengkap : '-';
+
+        // if($anggotaKeluarga->bidan){
+        //     $anggotaKeluarga['nama_bidan'] = $anggotaKeluarga->bidan->nama_lengkap;
+        // } else {
+        //     $anggotaKeluarga['nama_bidan'] = '-';
+        // }
         $anggotaKeluarga['foto_profil'] = $anggotaKeluarga->foto_profil;
         $anggotaKeluarga['bidan_konfirmasi'] = $anggotaKeluarga->getBidan($anggotaKeluarga->id);
 
@@ -606,8 +611,8 @@ class AnggotaKeluargaController extends Controller
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
                 'anggota_keluarga_id' => $anggotaKeluarga->id,
-                'judul' => 'Selamat, data '. ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda telah divalidasi',
-                'isi' => 'Data '. ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda ('. ucwords(strtolower($anggotaKeluarga->nama_lengkap)) .') divalidasi oleh bidan '. $namaBidan->nama_lengkap,
+                'judul' => 'Selamat, data '. strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan) . ' anda telah divalidasi.',
+                'isi' => 'Data '. ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda ('. ucwords(strtolower($anggotaKeluarga->nama_lengkap)) .') divalidasi oleh bidan '. $namaBidan->nama_lengkap.'.',
                 'tentang' => 'validasi_anggota_keluarga',
                 'is_valid' => 1,
             ]);
@@ -615,8 +620,8 @@ class AnggotaKeluargaController extends Controller
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
                 'anggota_keluarga_id' => $anggotaKeluarga->id,
-                'judul' => 'Maaf, data '. ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda ('. ucwords(strtolower($anggotaKeluarga->nama_lengkap)) .') ditolak',
-                'isi' => 'Silahkan perbarui data untuk melihat alasan data anda ditolak dan mengirim ulang data. Terima Kasih.',
+                'judul' => 'Maaf, data '. strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan) . ' anda ('. ucwords(strtolower($anggotaKeluarga->nama_lengkap)) .') ditolak.',
+                'isi' => 'Silahkan perbarui data untuk melihat alasan data ditolak dan mengirim ulang data. Terima Kasih.',
                 'tentang' => 'validasi_anggota_keluarga',
                 'is_valid' => 2,
             ]);
@@ -645,6 +650,11 @@ class AnggotaKeluargaController extends Controller
             Storage::delete('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili);
         }
 
+        $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id);
+        
+        if($pemberitahuan){
+            $pemberitahuan->delete();
+        }
         $anggotaKeluarga->wilayahDomisili->delete();
         $anggotaKeluarga->delete();
         return response()->json(['res' => 'success']);

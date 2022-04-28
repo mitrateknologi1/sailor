@@ -103,53 +103,74 @@
         var kecamatanKK = '{{ $kecamatanKK }}'
         var desaKelurahanKK = '{{ $desaKelurahanKK }}';
         
+        if('{{ Auth::user()->role }}' == 'keluarga'){
+            var textConfirm = 'Jika sudah sesuai, maka data akan dikirim untuk dilakukan Validasi'
+            var confirmButtonText = 'Ya, Kirim Data'
+            var titleResult = 'Data berhasil dikirim'
+            var textResult = 'Data berhasil dikirim dan sedang menunggu proses Validasi.'
+        } else{
+            var textConfirm = 'Jika sudah sesuai, maka data akan disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB'
+            var confirmButtonText = 'Ya, Simpan'
+            var titleResult = 'Data berhasil disimpan'
+            var textResult = 'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
+        }
+
         $('#insert-anggota-keluarga').submit(function(e) {
             e.preventDefault();
             var formData = new FormData(this);
-            $('.error-text').text('');
-            $.ajax({
-                type: "POST",
-                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                url: "{{ url('anggota-keluarga' . '/' . $kartu_keluarga_id) }}",
-                data: formData,
-                cache : false,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    console.log(data)
-                    $("#overlay").fadeOut(100);
-                    if ($.isEmptyObject(data.error)) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: data.mes,
-                            showConfirmButton: false,
-                            timer: 2500,
-                        })
-                        .then((result) => {
-                            window.location.href = "{{ url()->previous() }}";
-                        })
-                        
-                    } else {
-                        Swal.fire(
-                            'Terjadi Kesalahan!',
-                            'Periksa kembali data yang anda masukkan',
-                            'error'
-                        )
-                        printErrorMsg(data.error);
-                    }
-                },
-                error: function (data) {
-                    alert(data.responseJSON.message)
-                },
-            
-            });
-            const printErrorMsg = (msg) => {
-                $.each(msg, function(key, value) {
-                    $('.' + key + '-error').text(value);
-                });
-            }
+            Swal.fire({
+                icon : 'question',
+                title : 'Apakah data sudah sesuai dengan kartu keluarga?',
+                text: textConfirm,
+                showCancelButton: true,
+                confirmButtonText: confirmButtonText,
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "POST",
+                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                        url: "{{ url('anggota-keluarga' . '/' . $kartu_keluarga_id) }}",
+                        data: formData,
+                        cache : false,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data)
+                            $("#overlay").fadeOut(100);
+                            if ($.isEmptyObject(data.error)) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: titleResult,
+                                    text: textResult,
+                                })
+                                .then((result) => {
+                                    window.location.href = "{{ url()->previous() }}";
+                                })
+                                
+                            } else {
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                                printErrorMsg(data.error);
+                            }
+                        },
+                        error: function (data) {
+                            alert(data.responseJSON.message)
+                        },
+                    });
+                }
+            })
         })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
 
         $('#desa-kelurahan-domisili').change(function() {
             // console.log('test')

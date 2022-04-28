@@ -26,11 +26,11 @@ class ListController extends Controller
 
             $lokasiAnak = '';
             if($request->method == "PUT"){
-                $anak = AnggotaKeluarga::with('wilayahDomisili')->withTrashed()->where('id', $request->id_anak)->first();
+                $anak = AnggotaKeluarga::with('wilayahDomisili')->withTrashed()->valid()->where('id', $request->id_anak)->first();
                 $lokasiAnak = $anak->wilayahDomisili->desa_kelurahan_id;
             }
 
-            $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+            $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
                 ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
                 ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
@@ -42,12 +42,14 @@ class ListController extends Controller
                         }
                     }
                 })
+                ->latest()
                 ->get();
 
             if(Auth::user()->role == 'keluarga'){
-                $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+                $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
                 ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
+                ->latest()
                 ->get();
             }
           
@@ -77,11 +79,11 @@ class ListController extends Controller
             $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
             $lokasiAnak = '';
             if($request->method == "PUT"){
-                $anak = AnggotaKeluarga::with('wilayahDomisili')->withTrashed()->where('id', $request->id_anak)->first();
+                $anak = AnggotaKeluarga::with('wilayahDomisili')->valid()->withTrashed()->where('id', $request->id_anak)->first();
                 $lokasiAnak = $anak->wilayahDomisili->desa_kelurahan_id;
             }
 
-            $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+            $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
                 ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
                     if (Auth::user()->role != 'admin') {
@@ -97,7 +99,7 @@ class ListController extends Controller
             $anggotaKeluargaHapus = '';
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
-                $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+                $anggotaKeluargaHapus = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
                     ->where('status_hubungan_dalam_keluarga_id', 4)
                     ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
                         if (Auth::user()->role != 'admin') {
@@ -125,7 +127,7 @@ class ListController extends Controller
         $bidan = Bidan::with('lokasiTugas')
             ->whereHas('lokasiTugas', function ($query) use ($lokasiAnak) {
                 return $query->where('desa_kelurahan_id', $lokasiAnak);
-            })->get();
+            })->latest()->get();
         return $bidan;
     }
 

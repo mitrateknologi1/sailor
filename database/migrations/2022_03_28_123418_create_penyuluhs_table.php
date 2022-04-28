@@ -14,8 +14,8 @@ class CreatePenyuluhsTable extends Migration
     public function up()
     {
         Schema::create('penyuluh', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('user_id');
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
             $table->bigInteger('nik');
             $table->text('nama_lengkap');
             $table->string('jenis_kelamin');

@@ -2,22 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 class PertumbuhanAnak extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use TraitUuid;
     protected $table = 'pertumbuhan_anak';
     protected $guarded = ['id'];
 
     public function anggotaKeluarga(){
         return $this->belongsTo(AnggotaKeluarga::class)
-        ->withTrashed()
-        ;
+        ->withTrashed();
     }
 
     public function bidan(){
@@ -31,9 +29,8 @@ class PertumbuhanAnak extends Model
         return $this->hasMany(AnggotaKeluarga::class)->whereIn('desa_kelurahan_id', $lokasiTugas);
     }
 
-    // active
-    public function scopeOfValid($query, $status)
+    public function scopeValid($query)
     {
-        return $query->where('is_valid', $status);
+        $query->where('is_valid', 1);
     }
 }
