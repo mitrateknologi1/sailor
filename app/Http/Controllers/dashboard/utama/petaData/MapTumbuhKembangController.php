@@ -12,6 +12,7 @@ class MapTumbuhKembangController extends Controller
 {
     public function index()
     {
+        // Ini Index
         return view('dashboard.pages.utama.petaData.tumbuhKembang.index');
     }
 
