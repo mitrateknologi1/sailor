@@ -552,8 +552,7 @@ class AnggotaKeluargaController extends Controller
         $anggotaKeluarga->wilayahDomisili->update($dataWilayahDomisili);
 
         $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id)
-            ->where('tentang', 'validasi_anggota_keluarga')
-            ->where('is_valid', 2)
+            ->where('tentang', 'anggota_keluarga')
             ->first();
         
         if($pemberitahuan){
@@ -613,8 +612,7 @@ class AnggotaKeluargaController extends Controller
                 'anggota_keluarga_id' => $anggotaKeluarga->id,
                 'judul' => 'Selamat, data '. strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan) . ' anda telah divalidasi.',
                 'isi' => 'Data '. ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda ('. ucwords(strtolower($anggotaKeluarga->nama_lengkap)) .') divalidasi oleh bidan '. $namaBidan->nama_lengkap.'.',
-                'tentang' => 'validasi_anggota_keluarga',
-                'is_valid' => 1,
+                'tentang' => 'anggota_keluarga',
             ]);
         } else{
             $pemberitahuan = Pemberitahuan::create([
@@ -622,8 +620,7 @@ class AnggotaKeluargaController extends Controller
                 'anggota_keluarga_id' => $anggotaKeluarga->id,
                 'judul' => 'Maaf, data '. strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan) . ' anda ('. ucwords(strtolower($anggotaKeluarga->nama_lengkap)) .') ditolak.',
                 'isi' => 'Silahkan perbarui data untuk melihat alasan data ditolak dan mengirim ulang data. Terima Kasih.',
-                'tentang' => 'validasi_anggota_keluarga',
-                'is_valid' => 2,
+                'tentang' => 'anggota_keluarga',
             ]);
         }
            

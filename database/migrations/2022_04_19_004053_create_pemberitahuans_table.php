@@ -16,11 +16,11 @@ class CreatePemberitahuansTable extends Migration
         Schema::create('pemberitahuan', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_id');
+            $table->uuid('fitur_id')->nullable();
             $table->uuid('anggota_keluarga_id');
             $table->text('judul');
             $table->text('isi');
             $table->text('tentang');
-            $table->integer('is_valid');
             $table->timestamps();
         });
     }

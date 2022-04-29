@@ -5,23 +5,23 @@
     @endif
     <div class="row g-4">
         @if (Auth::user()->role != 'keluarga')
-        <div class="col-sm-12 col-md-6 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                ])
-                @slot('options')
-                    @foreach ($kartuKeluarga as $kk)
-                        <option value="{{ $kk->id }}" {{ (isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id) ? 'selected' : '' }}>{{$kk->nama_kepala_keluarga}} / {{$kk->nomor_kk}}</option>
-                    @endforeach
-                @endslot
-            @endcomponent
-                        {{-- <option value="{{ Auth::user()->profil->kartu_keluarga_id }}" selected>
-                            {{Auth::user()->profil->kartuKeluarga->nama_kepala_keluarga}} / {{ Auth::user()->profil->kartuKeluarga->nomor_kk}}</option> --}}
-        </div>
+            <div class="col-sm-12 col-md-6 col-lg">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Nama Kepala Keluarga / Nomor KK',
+                    'id' => 'nama-kepala-keluarga',
+                    'name' => 'nama_kepala_keluarga',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($kartuKeluarga as $kk)
+                            <option value="{{ $kk->id }}"
+                                {{ isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id ? 'selected' : '' }}>
+                                {{ $kk->nama_kepala_keluarga }} / {{ $kk->nomor_kk }}</option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
         @endif
         <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.select', [
@@ -62,14 +62,15 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-lg-6 col-md-6">
-                    <small class="text-muted" style="font-style: italic">* Nama Anak yang tampil hanya yang berumur dibawah 5 tahun (BALITA)</small>
-    
+                    <small class="text-muted" style="font-style: italic">* Nama Anak yang tampil hanya yang berumur
+                        dibawah 5 tahun (BALITA)</small>
+
                 </div>
                 <div class="col-lg-6 col-md-6 text-end align-self-center">
                     @component('dashboard.components.buttons.process', [
                         'id' => 'proses-pertumbuhan-anak',
                         'type' => 'submit',
-                    ])      
+                        ])
                     @endcomponent
                 </div>
             </div>
@@ -138,9 +139,10 @@
                                 'id' => 'proses-pertumbuhan-anak',
                                 'type' => 'submit',
                                 'class' => 'text-white text-uppercase w-100',
-                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' : null ,
+                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' :
+                                null,
                                 'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
-                            ])
+                                ])
                             @endcomponent
                         </div>
                     </div>
@@ -178,6 +180,7 @@
             $('#{{ $form_id }}').submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
+                formData.append('method', '{{ $method }}');
                 const formatYmd = date => date.toISOString().slice(0, 10);
                 if ('{{ $method }}' == 'POST') {
                     formData.append('tanggal_proses', formatYmd(new Date()));
@@ -185,18 +188,19 @@
                     formData.append('tanggal_proses',
                         '{{ isset($anak) ? $anak->created_at->format('Y-m-d') : null }}');
                 }
-                // formData.append('method', '{{$method}}');
 
-                if('{{ Auth::user()->role }}' == 'keluarga'){
+                if ('{{ Auth::user()->role }}' == 'keluarga') {
                     var textConfirm = 'Jika sudah sesuai, maka data akan dikirim untuk dilakukan Validasi'
                     var confirmButtonText = 'Ya, Kirim Data'
                     var titleResult = 'Data berhasil dikirim'
                     var textResult = 'Data berhasil dikirim dan sedang menunggu proses Validasi.'
-                } else{
-                    var textConfirm = 'Jika sudah sesuai, maka data akan disimpan dan dapat oleh Penyuluh BKKBN dan Dinas P2KB'
+                } else {
+                    var textConfirm =
+                        'Jika sudah sesuai, maka data akan disimpan dan dapat oleh Penyuluh BKKBN dan Dinas P2KB'
                     var confirmButtonText = 'Ya, Simpan'
                     var titleResult = 'Data berhasil disimpan'
-                    var textResult = 'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
+                    var textResult =
+                        'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
                 }
 
                 if ($('#modal-hasil').hasClass('show')) {
@@ -229,13 +233,19 @@
                                             window.location.href =
                                                 "{{ $back_url }}";
                                         })
+                                    } else if (response.res ==
+                                        'sudah_ada_tapi_belum_divalidasi') {
+                                        Swal.fire(
+                                            'Terjadi kesalahan',
+                                            response.mes,
+                                            'error',
+                                        )
+                                        $('#modal-hasil').modal('hide')
                                     } else {
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Terjadi kesalahan',
                                             text: 'Data gagal disimpan',
-                                            // showConfirmButton: false,
-                                            // timer: 1500
                                         })
                                     }
 
@@ -327,9 +337,7 @@
                             }
                         }
                     });
-
                 }
-
             });
 
             const printErrorMsg = (msg) => {
@@ -340,9 +348,9 @@
         });
 
         function changeKepalaKeluarga() {
-            if('{{ Auth::user()->role }}' != 'keluarga'){
+            if ('{{ Auth::user()->role }}' != 'keluarga') {
                 var id = $('#nama-kepala-keluarga').val();
-            } else{
+            } else {
                 var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
             }
             var rentang_umur = 'balita';
@@ -388,8 +396,6 @@
             });
         }
 
-        // function changeAnak(){
-        //     if(('{{ Auth::user()->role }}' == 'admin') && ('{{$method}}' == 'POST')){
         function changeAnak() {
             if ('{{ Auth::user()->role }}' == 'admin') {
                 var id = $('#nama-anak').val();

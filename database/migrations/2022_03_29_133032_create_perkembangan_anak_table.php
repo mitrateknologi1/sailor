@@ -21,6 +21,7 @@ class CreatePerkembanganAnakTable extends Migration
             $table->text('motorik_halus');
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
+            $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
         });
     }

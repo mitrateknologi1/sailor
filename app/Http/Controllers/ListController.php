@@ -31,25 +31,25 @@ class ListController extends Controller
             }
 
             $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
-                ->where('status_hubungan_dalam_keluarga_id', 4)
-                ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
-                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
-                    if (Auth::user()->role != 'admin') {
-                        if($request->method == "POST"){
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
-                        } else{ // PUT
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
-                        }
+            ->where('status_hubungan_dalam_keluarga_id', 4)
+            ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
+            ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                if (Auth::user()->role != 'admin') {
+                    if($request->method == "POST"){
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
+                    } else{ // PUT
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
                     }
-                })
-                ->latest()
-                ->get();
+                }
+            })
+            ->orderBy('tanggal_lahir', 'desc')
+            ->get();
 
             if(Auth::user()->role == 'keluarga'){
                 $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
                 ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
-                ->latest()
+                ->orderBy('tanggal_lahir', 'desc')
                 ->get();
             }
           
@@ -57,22 +57,23 @@ class ListController extends Controller
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
                 $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
-                    ->where('status_hubungan_dalam_keluarga_id', 4)
-                    ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
-                    ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
-                        if (Auth::user()->role != 'admin') {
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
-                        }
-                    })
-                    ->onlyTrashed()
-                    ->where('id', $idAnak)
-                    ->first();
+                ->where('status_hubungan_dalam_keluarga_id', 4)
+                ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
+                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                    if (Auth::user()->role != 'admin') {
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
+                    }
+                })
+                ->onlyTrashed()
+                ->where('id', $idAnak)
+                ->first();
             }
             return response()->json([
                 'anggota_keluarga' => $anggotaKeluarga,
                 'anggota_keluarga_hapus' => $anggotaKeluargaHapus
             ]);
         } 
+
         else if ($request->rentang_umur == 'semua_umur'){
             $id = $request->id;
             $profil_id = Auth::user()->profil->id; //bidan/penyuluh
@@ -84,31 +85,39 @@ class ListController extends Controller
             }
 
             $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
-                ->where('status_hubungan_dalam_keluarga_id', 4)
-                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
-                    if (Auth::user()->role != 'admin') {
-                        if($request->method == "POST"){
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
-                        } else{ // PUT
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
-                        }
+            ->where('status_hubungan_dalam_keluarga_id', 4)
+            ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                if (Auth::user()->role != 'admin') {
+                    if($request->method == "POST"){
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
+                    } else{ // PUT
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
                     }
-                })
+                }
+            })
+            ->orderBy('tanggal_lahir', 'desc')
+            ->get();
+
+            if(Auth::user()->role == 'keluarga'){
+                $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
+                ->where('status_hubungan_dalam_keluarga_id', 4)
+                ->orderBy('tanggal_lahir', 'desc')
                 ->get();
+            }
 
             $anggotaKeluargaHapus = '';
             if ($request->method == "PUT") {
                 $idAnak = $request->id_anak;
-                $anggotaKeluargaHapus = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
-                    ->where('status_hubungan_dalam_keluarga_id', 4)
-                    ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
-                        if (Auth::user()->role != 'admin') {
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
-                        }
-                    })
-                    ->onlyTrashed()
-                    ->where('id', $idAnak)
-                    ->first();
+                $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+                ->where('status_hubungan_dalam_keluarga_id', 4)
+                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                    if (Auth::user()->role != 'admin') {
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
+                    }
+                })
+                ->onlyTrashed()
+                ->where('id', $idAnak)
+                ->first();
             }
             return response()->json([
                 'anggota_keluarga' => $anggotaKeluarga,

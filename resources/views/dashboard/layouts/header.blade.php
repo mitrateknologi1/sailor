@@ -38,16 +38,17 @@
                 @if (Auth::user()->role == 'keluarga')
                     <li>
                         <div class="dropdown morphing scale-left notifications">
-                            <a class="nav-link dropdown-toggle pulse justify-content-center text-center" href="#" role="button" data-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle pulse justify-content-center text-center" href="#"
+                                role="button" data-toggle="dropdown">
                                 <i class="fa fa-bell text-secondary text-center"></i>
                                 <span class="pulse-ring mx-auto"></span>
                             </a>
                             <div id="NotificationsDiv" class="dropdown-menu shadow rounded-4 border-0 p-0 m-0">
-                                
                                 <div class="card w380">
                                     <div class="card-header p-3 bg-secondary text-white">
                                         <h6 class="card-title text-white mb-0">Pemberitahuan</h6>
-                                        <span class="badge bg-danger text-light">{{ Auth::user()->pemberitahuan->count() }}</span>
+                                        <span
+                                            class="badge bg-danger text-light">{{ Auth::user()->pemberitahuan->count() }}</span>
                                     </div>
                                     <div class="tab-content card-body custom_scroll">
                                         <div class="tab-pane fade show active" id="Noti-tab-Message" role="tabpanel">
@@ -56,11 +57,16 @@
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <span class="d-flex">
                                                             <img class="avatar rounded-circle"
-                                                                src="{{ isset($item->anggotaKeluarga) && $item->anggotaKeluarga->foto_profil != NULL ? asset('upload/foto_profil/keluarga/'.$item->anggotaKeluarga->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
+                                                                src="{{ isset($item->anggotaKeluarga) && $item->anggotaKeluarga->foto_profil != null? asset('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
                                                                 alt="">
                                                             <div class="flex-fill ms-3">
                                                                 <p class="d-flex justify-content-between mb-0">
-                                                                    <span>{{ $item->anggotaKeluarga->nama_lengkap }}</span> <small>{{ $item->updated_at->diffForHumans() }} <a href='#' class="text-danger btn-delete-pemberitahuan" data-test="{{ $item->id }}"><i class="fas fa-trash"></i></a></small>
+                                                                    <span>{{ $item->anggotaKeluarga->nama_lengkap }}</span>
+                                                                    <small>{{ $item->updated_at->diffForHumans() }} <a
+                                                                            href='#'
+                                                                            class="text-danger btn-delete-pemberitahuan"
+                                                                            data-test="{{ $item->id }}"><i
+                                                                                class="fas fa-trash"></i></a></small>
                                                                 </p>
                                                                 <span>{{ $item->judul }}</span><br>
                                                                 <span class="text-muted">{{ $item->isi }}</span>
@@ -71,7 +77,8 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <a href="#" class="btn btn-danger text-light rounded-0"><i class="fas fa-trash"></i> Hapus Semua Pemberitahuan</a>
+                                    <a href="#" class="btn btn-danger text-light rounded-0"><i
+                                            class="fas fa-trash"></i> Hapus Semua Pemberitahuan</a>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +132,8 @@
                                         src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt="">
                                     <div class="flex-fill ms-3">
                                         <h6 class="card-title mb-0">{{ Auth::user()->profil->nama_lengkap }}</h6>
-                                        <span class="text-muted">{{ Auth::user()->role == 'bidan' || Auth::user()->role == 'penyuluh' ? Auth::user()->profil->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') : '' }}</span>
+                                        <span
+                                            class="text-muted">{{ Auth::user()->role == 'bidan' || Auth::user()->role == 'penyuluh'? Auth::user()->profil->lokasiTugas->pluck('desaKelurahan.nama')->implode(', '): '' }}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -161,5 +169,3 @@
 
     </div>
 </header>
-
-

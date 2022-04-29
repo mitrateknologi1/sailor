@@ -57,7 +57,7 @@ class User extends Authenticatable
     }
 
     public function pemberitahuan(){
-        return $this->hasMany(Pemberitahuan::class, 'user_id', 'id')->latest();
+        return $this->hasMany(Pemberitahuan::class)->latest();
     }
 
     // public function lokasiTugas(){

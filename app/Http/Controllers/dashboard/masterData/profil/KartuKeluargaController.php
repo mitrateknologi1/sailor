@@ -271,7 +271,7 @@ class KartuKeluargaController extends Controller
                 'anggota_keluarga_id' => $kepalaKeluarga->first()->id,
                 'judul' => 'Selamat, kartu keluarga anda telah divalidasi.',
                 'isi' => 'Kartu Keluarga anda telah divalidasi oleh bidan '. $namaBidan->nama_lengkap . '. Silahkan menambahkan data anggota keluarga anda seperti Istri dan Anak anda pada menu Anggota Keluarga.',
-                'tentang' => 'validasi_kartu_keluarga',
+                'tentang' => 'kartu_keluarga',
                 'is_valid' => 1,
             ]);
         } else{
