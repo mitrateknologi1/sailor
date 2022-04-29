@@ -11,6 +11,7 @@ use App\Models\Pemberitahuan;
 use Illuminate\Support\Carbon;
 use App\Models\AnggotaKeluarga;
 use App\Models\PertumbuhanAnak;
+use Illuminate\Validation\Rule;
 use App\Models\TumbuhKembangAnak;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -262,6 +263,7 @@ class PertumbuhanAnakController extends Controller
             [
                 'nama_kepala_keluarga.required' => 'Nama Kepala Keluarga tidak boleh kosong',
                 'nama_anak.required' => 'Nama Anak tidak boleh kosong',
+                'nama_anak.unique' => 'Nama Anak sudah ada tapi belum divalidasi',
                 'berat_badan.required' => 'Berat Badan tidak boleh kosong',
                 'nama_bidan.required' => 'Nama Bidan tidak boleh kosong',
             ]
@@ -847,10 +849,26 @@ class PertumbuhanAnakController extends Controller
             'hasil' => $dataAnak['kategori'],
         ];
 
+        $terdapatDataBelumValidasi = PertumbuhanAnak::where('anggota_keluarga_id', $dataAnak['anggota_keluarga_id'])->where('is_valid', '!=', 1);
+
+        $anak = AnggotaKeluarga::find($dataAnak['anggota_keluarga_id']);
+
         if(Auth::user()->role != 'keluarga') {
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan data  pertumbuhan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak.',
+                ]);
+            } 
             $pertumbuhanAnak['is_valid'] = 1;
             $pertumbuhanAnak['tanggal_validasi'] = Carbon::now();
         } else{
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim data  pertumbuhan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data pertumbuhan anak tersebut apabila statusnya ditolak.' ,
+                ]);
+            } 
             $pertumbuhanAnak['is_valid'] = 0;
             $pertumbuhanAnak['tanggal_validasi'] = null;
         }
@@ -904,7 +922,7 @@ class PertumbuhanAnakController extends Controller
      */
     public function edit(PertumbuhanAnak $pertumbuhanAnak)
     {
-        if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')|| (Auth::user()->profil->kartu_keluarga_id == $pertumbuhanAnak->anggotaKeluarga->kartu_keluarga_id)) {
+        if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $pertumbuhanAnak->anggotaKeluarga->kartu_keluarga_id)) {
             $data = [
                 'anak' => PertumbuhanAnak::where('id', $pertumbuhanAnak->id)->first(),
                 'kartuKeluarga' => KartuKeluarga::latest()->get(),
@@ -947,8 +965,8 @@ class PertumbuhanAnakController extends Controller
             ->update($pertumbuhanAnakUpdate);
         
         $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $pertumbuhanAnak->anggota_keluarga_id)
-        ->where('tentang', 'validasi_pertumbuhan_anak')
-        ->where('is_valid', 2)
+        ->where('tentang', 'pertumbuhan_anak')
+        ->where('fitur_id', $pertumbuhanAnak->id)
         ->first();
         
         if($pemberitahuan){
@@ -1004,20 +1022,20 @@ class PertumbuhanAnakController extends Controller
         if($request->konfirmasi == 1){
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $pertumbuhanAnak->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
+                'fitur_id' => $pertumbuhanAnak->id,
                 'anggota_keluarga_id' => $pertumbuhanAnak->anggota_keluarga_id,
                 'judul' => 'Selamat, data pertumbuhan anak anda telah divalidasi.',
                 'isi' => 'Data pertumbuhan anak anda ('. ucwords(strtolower($pertumbuhanAnak->anggotaKeluarga->nama_lengkap)) .') divalidasi oleh bidan '. $namaBidan->nama_lengkap.'.',
-                'tentang' => 'validasi_pertumbuhan_anak',
-                'is_valid' => 1,
+                'tentang' => 'pertumbuhan_anak',
             ]);
         } else{
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $pertumbuhanAnak->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
+                'fitur_id' => $pertumbuhanAnak->id,
                 'anggota_keluarga_id' => $pertumbuhanAnak->anggota_keluarga_id,
                 'judul' => 'Maaf, data pertumbuhan anak anda' . ' ('. ucwords(strtolower($pertumbuhanAnak->anggotaKeluarga->nama_lengkap)) .') ditolak.',
                 'isi' => 'Silahkan perbarui data untuk melihat alasan data pertumbuhan anak ditolak dan mengirim ulang data. Terima Kasih.',
-                'tentang' => 'validasi_pertumbuhan_anak',
-                'is_valid' => 2,
+                'tentang' => 'pertumbuhan_anak',
             ]);
         }
 
@@ -1039,8 +1057,8 @@ class PertumbuhanAnakController extends Controller
     public function destroy(PertumbuhanAnak $pertumbuhanAnak)
     {
         if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')) {
-            $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $pertumbuhanAnak->anggota_keluarga_id)
-            ->where('tentang', 'validasi_pertumbuhan_anak');
+            $pemberitahuan = Pemberitahuan::where('fitur_id', $pertumbuhanAnak->id)
+            ->where('tentang', 'pertumbuhan_anak');
             if($pemberitahuan){
                 $pemberitahuan->delete();
             }

@@ -113,6 +113,7 @@ Route::get('get-bidan-anggota-keluarga', [ListController::class, 'getBidanAnggot
 
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('perkembangan-anak', PerkembanganAnakController::class);
+Route::put('perkembangan-anak/validasi/{perkembangan_anak}', [PerkembanganAnakController::class, 'validasi'])->name('validasiPerkembanganAnak');
 Route::post('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
 Route::put('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
 

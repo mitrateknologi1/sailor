@@ -4,25 +4,25 @@
         @method('PUT')
     @endif
     <div class="row g-4">
-        <div class="col-sm-12 col-md-6 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                ])
-                @slot('options')
-                    {{-- @if (Auth::user()->role != 'keluarga') --}}
-                    @foreach ($kartuKeluarga as $kk)
-                        <option value="{{ $kk->id }}"
-                            {{ isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id ? 'selected' : '' }}>
-                            {{ $kk->nama_kepala_keluarga }} / {{ $kk->nomor_kk }}</option>
-                    @endforeach
-                    {{-- @endif --}}
-                @endslot
-            @endcomponent
-        </div>
+        @if (Auth::user()->role != 'keluarga')
+            <div class="col-sm-12 col-md-6 col-lg">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Nama Kepala Keluarga / Nomor KK',
+                    'id' => 'nama-kepala-keluarga',
+                    'name' => 'nama_kepala_keluarga',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($kartuKeluarga as $kk)
+                            <option value="{{ $kk->id }}"
+                                {{ isset($anak) && $anak->anggotaKeluarga->kartuKeluarga->id == $kk->id ? 'selected' : '' }}>
+                                {{ $kk->nama_kepala_keluarga }} / {{ $kk->nomor_kk }}</option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
+        @endif
         <div class="col-sm-12 col-md-6 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Anak (Tanggal Lahir)',
@@ -112,7 +112,9 @@
                                 'id' => 'proses-pertumbuhan-anak',
                                 'type' => 'submit',
                                 'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan',
+                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' :
+                                null,
+                                'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -136,7 +138,6 @@
         }
 
         $(function() {
-
             if ($('#nama-kepala-keluarga').val() != '') {
                 changeKepalaKeluarga()
             }
@@ -152,6 +153,7 @@
             $('#{{ $form_id }}').submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
+                formData.append('method', '{{ $method }}');
                 const formatYmd = date => date.toISOString().slice(0, 10);
                 if ('{{ $method }}' == 'POST') {
                     formData.append('tanggal_proses', formatYmd(new Date()));
@@ -159,15 +161,28 @@
                     formData.append('tanggal_proses',
                         '{{ isset($anak) ? $anak->created_at->format('Y-m-d') : null }}');
                 }
-                // formData.append('method', '{{ $method }}');
+
+                if ('{{ Auth::user()->role }}' == 'keluarga') {
+                    var textConfirm = 'Jika sudah sesuai, maka data akan dikirim untuk dilakukan Validasi'
+                    var confirmButtonText = 'Ya, Kirim Data'
+                    var titleResult = 'Data berhasil dikirim'
+                    var textResult = 'Data berhasil dikirim dan sedang menunggu proses Validasi.'
+                } else {
+                    var textConfirm =
+                        'Jika sudah sesuai, maka data akan disimpan dan dapat oleh Penyuluh BKKBN dan Dinas P2KB'
+                    var confirmButtonText = 'Ya, Simpan'
+                    var titleResult = 'Data berhasil disimpan'
+                    var textResult =
+                        'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
+                }
 
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
-                        icon: 'warning',
+                        icon: 'question',
                         title: 'Apakah data sudah sesuai?',
-                        text: 'Jika sudah sesuai, maka data akan disimpan dan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                        text: textConfirm,
                         showCancelButton: true,
-                        confirmButtonText: 'Ya, Simpan',
+                        confirmButtonText: confirmButtonText,
                         cancelButtonText: 'Batal',
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -185,21 +200,25 @@
                                     if (response.res == 'success') {
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Data berhasil disimpan',
-                                            text: 'Data akan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
-                                            showConfirmButton: false,
-                                            timer: 2000,
+                                            title: titleResult,
+                                            text: textResult,
                                         }).then((result) => {
                                             window.location.href =
                                                 "{{ $back_url }}";
                                         })
+                                    } else if (response.res ==
+                                        'sudah_ada_tapi_belum_divalidasi') {
+                                        Swal.fire(
+                                            'Terjadi kesalahan',
+                                            response.mes,
+                                            'error',
+                                        )
+                                        $('#modal-hasil').modal('hide')
                                     } else {
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Terjadi kesalahan',
                                             text: 'Data gagal disimpan',
-                                            // showConfirmButton: false,
-                                            // timer: 1500
                                         })
                                     }
 
@@ -232,7 +251,8 @@
                                     $('#tanggal-proses').text('Tanggal: ' + moment(data
                                         .tanggal_proses).format('LL'))
                                 } else {
-                                    $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(data
+                                    $('#tanggal-proses').text('Dibuat Tanggal: ' + moment(
+                                        data
                                         .tanggal_proses).format('LL'))
                                 }
                                 $('#modal-motorik-kasar').text(data.motorik_kasar);
@@ -242,7 +262,6 @@
                                     .format('LL'));
                                 $('#modal-usia').text(data.usia_tahun);
                                 $('#modal-jenis-kelamin').text(data.jenis_kelamin);
-                                console.log(data)
                             } else {
                                 Swal.fire(
                                     'Terjadi Kesalahan!',
@@ -253,9 +272,7 @@
                             }
                         }
                     });
-
                 }
-
             });
 
             const printErrorMsg = (msg) => {
@@ -269,15 +286,13 @@
             if ('{{ Auth::user()->role }}' != 'keluarga') {
                 var id = $('#nama-kepala-keluarga').val();
             } else {
-                var id = '{{ Auth::user()->profil->id }}';
+                var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
             }
             var rentang_umur = 'semua_umur';
             var id_anak = "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}";
             var selected = '';
             $('#nama-anak').html('');
             $('#nama-anak').append('<option value="" selected hidden>- Pilih Salah Satu -</option>')
-            changeAnak()
-            $('#nama-bidan').html('');
             changeAnak()
             $('#nama-bidan').attr('disabled', true);
             $.get("{{ route('getAnak') }}", {
@@ -325,7 +340,8 @@
                     id: id,
                 }, function(result) {
                     $.each(result, function(key, val) {
-                        $('#nama-bidan').append(`<option value="${val.id}">${val.nama_lengkap}</option>`);
+                        $('#nama-bidan').append(
+                            `<option value="${val.id}">${val.nama_lengkap}</option>`);
                     })
                     $('#nama-bidan').removeAttr('disabled');
                 });
