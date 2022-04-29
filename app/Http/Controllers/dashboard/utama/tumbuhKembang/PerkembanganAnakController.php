@@ -331,7 +331,7 @@ class PerkembanganAnakController extends Controller
             if ($terdapatDataBelumValidasi->count() > 0) {
                 return response()->json([
                     'res' => 'sudah_ada_tapi_belum_divalidasi',
-                    'mes' => 'Maaf, tidak dapat menambahkan data  pertumbuhan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak.',
+                    'mes' => 'Maaf, tidak dapat menambahkan data perkembangan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data perkembangannya yang berstatus belum divalidasi/ditolak.',
                 ]);
             } 
             $perkembanganAnak['is_valid'] = 1;
@@ -340,7 +340,7 @@ class PerkembanganAnakController extends Controller
             if ($terdapatDataBelumValidasi->count() > 0) {
                 return response()->json([
                     'res' => 'sudah_ada_tapi_belum_divalidasi',
-                    'mes' => 'Maaf, tidak dapat mengirim data  pertumbuhan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data pertumbuhan anak tersebut apabila statusnya ditolak.' ,
+                    'mes' => 'Maaf, tidak dapat mengirim data perkembangan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data perkembangannya yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data perkembangan anak tersebut apabila statusnya ditolak.' ,
                 ]);
             } 
             $perkembanganAnak['is_valid'] = 0;
