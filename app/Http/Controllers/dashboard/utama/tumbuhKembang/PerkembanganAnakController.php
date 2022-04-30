@@ -57,6 +57,9 @@ class PerkembanganAnakController extends Controller
                         }
                     }
 
+                });
+                
+                $data->where(function ($query) use ($request) {
                     if ($request->search) {
                         $query->whereHas('bidan', function ($query) use ($request) {
                             $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
