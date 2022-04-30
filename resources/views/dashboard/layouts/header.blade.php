@@ -36,7 +36,7 @@
             <ul class="header-right justify-content-end d-flex align-items-center mb-0">
                 <!-- start: notifications dropdown-menu -->
                 @if (Auth::user()->role == 'keluarga')
-                    <li>
+                    <li class="@if (Auth::user()->pemberitahuan->count() == 0) d-none @endif">
                         <div class="dropdown morphing scale-left notifications">
                             <a class="nav-link dropdown-toggle pulse justify-content-center text-center" href="#"
                                 role="button" data-toggle="dropdown">

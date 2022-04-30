@@ -76,6 +76,9 @@ class PertumbuhanAnakController extends Controller
                         $query->where('hasil', $kategori);
                     }
 
+                });
+                
+                $data->where(function ($query) use ($request) {
                     if ($request->search) {
                         $query->whereHas('bidan', function ($query) use ($request) {
                             $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
