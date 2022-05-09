@@ -41,6 +41,8 @@ use App\Http\Controllers\dashboard\utama\randaKabilasa\MencegahPernikahanDiniCon
 use App\Http\Controllers\dashboard\utama\randaKabilasa\MeningkatkanLifeSkillController;
 use App\Http\Controllers\dashboard\utama\randaKabilasa\RandaKabilasaController;
 use App\Http\Controllers\dashboard\utama\TesMapController;
+use App\Http\Controllers\PemberitahuanController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -180,6 +182,9 @@ Route::resource('anggota-keluarga/{keluarga}', AnggotaKeluargaController::class)
     '{keluarga}' => 'anggotaKeluarga'
 ]);
 
+Route::get('cek-bidan-domisili/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'cekBidanDomisili']);
+
+
 Route::put('anggota-keluarga/validasi/{keluarga}/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'validasi']);
 
 
@@ -191,6 +196,7 @@ Route::get('registrasi', [AuthController::class, 'registrasi'])->name('registras
 Route::get('registrasi-ulang/{keluarga}', [AuthController::class, 'registrasiUlang']);
 Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
 Route::put('registrasi-ulang/{keluarga}', [AuthController::class, 'updateRegistrasi'])->name('updateRegistrasi');
+
 
 // Wilayah
 Route::get('/provinsi', [ListController::class, 'listProvinsi'])->name('listProvinsi');
@@ -217,3 +223,6 @@ Route::get('/petaData/detailRandaKabilasa', [MapRandaKabilasaController::class, 
 Route::get('/map-tumbuh-kembang', [MapTumbuhKembangController::class, 'index']);
 Route::get('/petaData/pertumbuhanAnak', [MapTumbuhKembangController::class, 'getMapDataPertumbuhanAnak']);
 Route::get('/petaData/detailPertumbuhanAnak', [MapTumbuhKembangController::class, 'getDetailDataPertumbuhanAnak']);
+
+Route::resource('pemberitahuan', PemberitahuanController::class);
+Route::post('pemberitahuan/destroy-all', [PemberitahuanController::class, 'destroyAll'])->name('destroyAllPemberitahuan');

@@ -34,30 +34,30 @@ class PertumbuhanAnakController extends Controller
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
                 $data = PertumbuhanAnak::with('anggotaKeluarga', 'bidan')
-                ->where(function (Builder $query) use ($lokasiTugas) {
-                    if (Auth::user()->role != 'admin') { // bidan/penyuluh
-                        $query->whereHas('anggotaKeluarga', function (Builder $query) use ($lokasiTugas) {
-                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
-                        });
+                    ->where(function (Builder $query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function (Builder $query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
 
-                        if (Auth::user()->role == 'bidan') { // bidan
-                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                        } 
-        
-                        if (Auth::user()->role == 'penyuluh') { // penyuluh
-                            $query->valid();
-                        } 
-                    }
-                });
+                            if (Auth::user()->role == 'bidan') { // bidan
+                                $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                            }
+
+                            if (Auth::user()->role == 'penyuluh') { // penyuluh
+                                $query->valid();
+                            }
+                        }
+                    });
 
                 // Filter
                 $data->where(function ($query) use ($request) {
                     if ($request->statusValidasi) {
-                        if($request->statusValidasi == 'Tervalidasi'){
+                        if ($request->statusValidasi == 'Tervalidasi') {
                             $query->where('is_valid', 1);
-                        } else if($request->statusValidasi == 'Belum Tervalidasi'){
+                        } else if ($request->statusValidasi == 'Belum Tervalidasi') {
                             $query->where('is_valid', 0);
-                        } else if($request->statusValidasi == 'Ditolak'){
+                        } else if ($request->statusValidasi == 'Ditolak') {
                             $query->where('is_valid', 2);
                         }
                     }
@@ -75,15 +75,14 @@ class PertumbuhanAnakController extends Controller
                         }
                         $query->where('hasil', $kategori);
                     }
-
                 });
-                
+
                 $data->where(function ($query) use ($request) {
                     if ($request->search) {
                         $query->whereHas('bidan', function ($query) use ($request) {
                             $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
                         });
-    
+
                         $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
                             $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
                         });
@@ -100,9 +99,9 @@ class PertumbuhanAnakController extends Controller
                     ->addColumn('status', function ($row) {
                         if ($row->is_valid == 0) {
                             return '<span class="badge rounded bg-warning">Belum Divalidasi</span>';
-                        } else if($row->is_valid == 1) {
+                        } else if ($row->is_valid == 1) {
                             return '<span class="badge rounded bg-success">Tervalidasi</span>';
-                        } else if($row->is_valid == 2) {
+                        } else if ($row->is_valid == 2) {
                             return '<span class="badge rounded bg-danger">Ditolak</span>';
                         }
                     })
@@ -139,6 +138,14 @@ class PertumbuhanAnakController extends Controller
                         return $row->bidan ? $row->bidan->nama_lengkap : '<span class="badge rounded bg-warning">Belum Ada</span>';
                     })
 
+                    ->addColumn('tanggal_validasi', function ($row) {
+                        if ($row->tanggal_validasi == null) {
+                            return '-';
+                        } else {
+                            return Carbon::parse($row->tanggal_validasi)->translatedFormat('j F Y');
+                        }
+                    })
+
                     ->addColumn('desa_kelurahan', function ($row) {
                         return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
                     })
@@ -158,24 +165,23 @@ class PertumbuhanAnakController extends Controller
                     ->addColumn('action', function ($row) {
                         $actionBtn = '
                             <div class="text-center justify-content-center text-white">';
-                            if($row->is_valid == 0){
-                                $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" data-toggle="tooltip" data-placement="top" title="Konfirmasi" value="' . $row->id . '" ><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
-                            } else{
-                                $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>';
-                            }
-                            if(in_array(Auth::user()->role, ['bidan', 'admin'])){
-                                if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                    // if($row->is_valid == 1){
-                                    //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                    // } 
+                        if ($row->is_valid == 0) {
+                            $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" data-toggle="tooltip" data-placement="top" title="Konfirmasi" value="' . $row->id . '" ><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
+                        } else {
+                            $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>';
+                        }
+                        if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
+                            if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
+                                if (($row->is_valid == 1) && (Auth::user()->role == 'admin') && ($row->anggotaKeluarga->deleted_at == null)) {
+                                    $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                }
 
-                                    if($row->is_valid != 0){
-                                        $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
-                                    }
-                                    
+                                if ($row->is_valid != 0) {
+                                    $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
                                 }
                             }
-                        
+                        }
+
                         $actionBtn .= '
                         </div>';
                         return $actionBtn;
@@ -193,7 +199,7 @@ class PertumbuhanAnakController extends Controller
             }
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
         } // else keluarga
-        else{
+        else {
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
             $pertumbuhanAnak = PertumbuhanAnak::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
@@ -202,7 +208,7 @@ class PertumbuhanAnakController extends Controller
             $data = [
                 'pertumbuhanAnak' => $pertumbuhanAnak->get(),
             ];
-            
+
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.indexKeluarga', $data);
         }
     }
@@ -218,12 +224,12 @@ class PertumbuhanAnakController extends Controller
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
                 $kartuKeluarga = KartuKeluarga::valid()
-                ->latest()->get();
+                    ->latest()->get();
             } else if (Auth::user()->role == 'bidan') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
-                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                    $query->ofDataSesuaiLokasiTugas($lokasiTugas);
-                })->latest()->get();
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    })->latest()->get();
             } else if (Auth::user()->role == 'keluarga') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
@@ -234,8 +240,7 @@ class PertumbuhanAnakController extends Controller
             ];
 
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.create', $data);
-
-        } else{
+        } else {
             abort(404);
         }
     }
@@ -243,15 +248,15 @@ class PertumbuhanAnakController extends Controller
 
     public function proses(Request $request)
     {
-        if((Auth::user()->role == 'admin') && ($request->method == 'POST')){
+        if ((Auth::user()->role == 'admin') && ($request->method == 'POST')) {
             $namaBidanReq = 'required';
-        } else{
+        } else {
             $namaBidanReq = '';
         }
-        
-        if(Auth::user()->role == 'keluarga'){
+
+        if (Auth::user()->role == 'keluarga') {
             $namaKepalaKeluargaReq = '';
-        } else{
+        } else {
             $namaKepalaKeluargaReq = 'required';
         }
 
@@ -840,10 +845,10 @@ class PertumbuhanAnakController extends Controller
             $bidan_id = $request->nama_bidan;
         } else if (Auth::user()->role == 'bidan') {
             $bidan_id = Auth::user()->profil->id;
-        } else if (Auth::user()->role == 'keluarga'){
+        } else if (Auth::user()->role == 'keluarga') {
             $bidan_id = null;
         }
-        
+
         $pertumbuhanAnak = [
             'anggota_keluarga_id' => $dataAnak['anggota_keluarga_id'],
             'bidan_id' => $bidan_id,
@@ -856,22 +861,22 @@ class PertumbuhanAnakController extends Controller
 
         $anak = AnggotaKeluarga::find($dataAnak['anggota_keluarga_id']);
 
-        if(Auth::user()->role != 'keluarga') {
+        if (Auth::user()->role != 'keluarga') {
             if ($terdapatDataBelumValidasi->count() > 0) {
                 return response()->json([
                     'res' => 'sudah_ada_tapi_belum_divalidasi',
-                    'mes' => 'Maaf, tidak dapat menambahkan data  pertumbuhan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak.',
+                    'mes' => 'Maaf, tidak dapat menambahkan data  pertumbuhan anak ' . $anak->nama_lengkap . ', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak.',
                 ]);
-            } 
+            }
             $pertumbuhanAnak['is_valid'] = 1;
             $pertumbuhanAnak['tanggal_validasi'] = Carbon::now();
-        } else{
+        } else {
             if ($terdapatDataBelumValidasi->count() > 0) {
                 return response()->json([
                     'res' => 'sudah_ada_tapi_belum_divalidasi',
-                    'mes' => 'Maaf, tidak dapat mengirim data  pertumbuhan anak '. $anak->nama_lengkap .', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data pertumbuhan anak tersebut apabila statusnya ditolak.' ,
+                    'mes' => 'Maaf, tidak dapat mengirim data  pertumbuhan anak ' . $anak->nama_lengkap . ', dikarenakan masih terdapat data pertumbuhannya yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data pertumbuhan anak tersebut apabila statusnya ditolak.',
                 ]);
-            } 
+            }
             $pertumbuhanAnak['is_valid'] = 0;
             $pertumbuhanAnak['tanggal_validasi'] = null;
         }
@@ -913,7 +918,7 @@ class PertumbuhanAnakController extends Controller
             'bidan_konfirmasi' => $pertumbuhanAnak->anggotaKeluarga->getBidan($pertumbuhanAnak->anggota_keluarga_id)
 
         ];
-        
+
         return $data;
     }
 
@@ -957,22 +962,22 @@ class PertumbuhanAnakController extends Controller
             'tanggal_validasi' => Carbon::now()
         ];
 
-        if((Auth::user()->role == 'keluarga') && ($pertumbuhanAnak->is_valid == 2)){
+        if ((Auth::user()->role == 'keluarga') && ($pertumbuhanAnak->is_valid == 2)) {
             $pertumbuhanAnakUpdate['bidan_id'] = null;
             $pertumbuhanAnakUpdate['is_valid'] = 0;
             $pertumbuhanAnakUpdate['tanggal_validasi'] = null;
             $pertumbuhanAnakUpdate['alasan_ditolak'] = null;
-        } 
+        }
 
         PertumbuhanAnak::where('id', $pertumbuhanAnak->id)
             ->update($pertumbuhanAnakUpdate);
-        
+
         $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $pertumbuhanAnak->anggota_keluarga_id)
-        ->where('tentang', 'pertumbuhan_anak')
-        ->where('fitur_id', $pertumbuhanAnak->id)
-        ->first();
-        
-        if($pemberitahuan){
+            ->where('tentang', 'pertumbuhan_anak')
+            ->where('fitur_id', $pertumbuhanAnak->id)
+            ->first();
+
+        if ($pemberitahuan) {
             $pemberitahuan->delete();
         }
 
@@ -981,21 +986,22 @@ class PertumbuhanAnakController extends Controller
         ]);
     }
 
-    public function validasi(Request $request, PertumbuhanAnak $pertumbuhanAnak){
+    public function validasi(Request $request, PertumbuhanAnak $pertumbuhanAnak)
+    {
         $id = $request->id;
 
-        if($request->konfirmasi == 1){
+        if ($request->konfirmasi == 1) {
             $alasan_req = '';
             $alasan = null;
-        } else{
+        } else {
             $alasan_req = 'required';
             $alasan = $request->alasan;
         }
 
-        if(Auth::user()->role == 'admin'){
+        if (Auth::user()->role == 'admin') {
             $bidan_id_req = 'required';
             $bidan_id = $request->bidan_id;
-        } else{
+        } else {
             $bidan_id_req = '';
             $bidan_id = Auth::user()->profil->id;
         }
@@ -1019,36 +1025,35 @@ class PertumbuhanAnakController extends Controller
         }
 
         $updatePertumbuhanAnak = $pertumbuhanAnak
-        ->update(['is_valid' => $request->konfirmasi, 'bidan_id' => $bidan_id, 'tanggal_validasi' => Carbon::now(), 'alasan_ditolak' => $alasan]);
+            ->update(['is_valid' => $request->konfirmasi, 'bidan_id' => $bidan_id, 'tanggal_validasi' => Carbon::now(), 'alasan_ditolak' => $alasan]);
 
         $namaBidan = Bidan::where('id', $bidan_id)->first();
-        if($request->konfirmasi == 1){
+        if ($request->konfirmasi == 1) {
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $pertumbuhanAnak->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
                 'fitur_id' => $pertumbuhanAnak->id,
                 'anggota_keluarga_id' => $pertumbuhanAnak->anggota_keluarga_id,
                 'judul' => 'Selamat, data pertumbuhan anak anda telah divalidasi.',
-                'isi' => 'Data pertumbuhan anak anda ('. ucwords(strtolower($pertumbuhanAnak->anggotaKeluarga->nama_lengkap)) .') divalidasi oleh bidan '. $namaBidan->nama_lengkap.'.',
+                'isi' => 'Data pertumbuhan anak anda (' . ucwords(strtolower($pertumbuhanAnak->anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.',
                 'tentang' => 'pertumbuhan_anak',
             ]);
-        } else{
+        } else {
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $pertumbuhanAnak->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
                 'fitur_id' => $pertumbuhanAnak->id,
                 'anggota_keluarga_id' => $pertumbuhanAnak->anggota_keluarga_id,
-                'judul' => 'Maaf, data pertumbuhan anak anda' . ' ('. ucwords(strtolower($pertumbuhanAnak->anggotaKeluarga->nama_lengkap)) .') ditolak.',
+                'judul' => 'Maaf, data pertumbuhan anak anda' . ' (' . ucwords(strtolower($pertumbuhanAnak->anggotaKeluarga->nama_lengkap)) . ') ditolak.',
                 'isi' => 'Silahkan perbarui data untuk melihat alasan data pertumbuhan anak ditolak dan mengirim ulang data. Terima Kasih.',
                 'tentang' => 'pertumbuhan_anak',
             ]);
         }
 
-        if($updatePertumbuhanAnak){
+        if ($updatePertumbuhanAnak) {
             $pemberitahuan;
             return response()->json(['res' => 'success', 'konfirmasi' => $request->konfirmasi]);
-        } else{
+        } else {
             return response()->json(['res' => 'error']);
         }
-
     }
 
     /**
@@ -1061,8 +1066,8 @@ class PertumbuhanAnakController extends Controller
     {
         if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin')) {
             $pemberitahuan = Pemberitahuan::where('fitur_id', $pertumbuhanAnak->id)
-            ->where('tentang', 'pertumbuhan_anak');
-            if($pemberitahuan){
+                ->where('tentang', 'pertumbuhan_anak');
+            if ($pemberitahuan) {
                 $pemberitahuan->delete();
             }
 

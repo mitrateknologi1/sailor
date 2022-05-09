@@ -14,6 +14,7 @@ use App\Models\GolonganDarah;
 use App\Models\KabupatenKota;
 use App\Models\KartuKeluarga;
 use App\Models\StatusHubungan;
+use Illuminate\Support\Carbon;
 use App\Models\AnggotaKeluarga;
 use App\Models\WilayahDomisili;
 use Illuminate\Validation\Rule;
@@ -34,7 +35,7 @@ class AuthController extends Controller
 
     public function cekLogin(Request $request)
     {
-        if(($request->nomor_hp == '') || ($request->password == '')){
+        if (($request->nomor_hp == '') || ($request->password == '')) {
             return response()->json([
                 'res' => 'inputan_tidak_lengkap',
             ]);
@@ -53,17 +54,17 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials) || Auth::attempt($credentials2)) {
-            if(Auth::user()->status == 1){
-                if(Auth::user()->role == 'keluarga'){
-                    if(Auth::user()->profil->kartuKeluarga->is_valid == 0){
+            if (Auth::user()->status == 1) {
+                if (Auth::user()->role == 'keluarga') {
+                    if (Auth::user()->profil->kartuKeluarga->is_valid == 0) {
                         Auth::logout();
                         return response()->json([
                             'res' => 'tidak_valid',
-                            'mes' => 'Mohon maaf, data anda masih menunggu proses validasi, silahkan coba lagi nanti. Terima Kasih.',
+                            'mes' => 'Mohon maaf, data anda masih menunggu proses Validasi, silahkan coba lagi nanti. Terima Kasih.',
                         ]);
-                    } 
+                    }
                 }
-                if(!Auth::user()->profil){
+                if (!Auth::user()->profil) {
                     return response()->json([
                         'res' => 'tidak_ada_profil',
                     ]);
@@ -72,16 +73,16 @@ class AuthController extends Controller
                 return response()->json([
                     'res' => 'berhasil',
                 ]);
-            } else{
-                if(Auth::user()->role == 'keluarga'){
-                    if(Auth::user()->profil->kartuKeluarga->is_valid == 0){
+            } else {
+                if (Auth::user()->role == 'keluarga') {
+                    if (Auth::user()->profil->kartuKeluarga->is_valid == 0) {
                         Auth::logout();
                         return response()->json([
                             'res' => 'tidak_valid',
-                            'mes' => 'Mohon maaf, data anda masih menunggu proses validasi, silahkan coba lagi nanti. Terima Kasih.',
+                            'mes' => 'Mohon maaf, data anda masih menunggu proses Validasi, silahkan coba lagi nanti. Terima Kasih.',
                         ]);
-                    } 
-                    if(Auth::user()->profil->kartuKeluarga->is_valid == 2){
+                    }
+                    if (Auth::user()->profil->kartuKeluarga->is_valid == 2) {
                         $id = Auth::user()->profil->kartuKeluarga->id;
                         Auth::logout();
                         return response()->json([
@@ -101,7 +102,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'res' => 'gagal',
-            'mes' => 'Nomor HP dan kata sandi '. $request->role .' tidak ditemukan. Silahkan cek kembali inputan anda.',
+            'mes' => 'Nomor HP dan kata sandi ' . $request->role . ' tidak ditemukan. Silahkan cek kembali inputan anda.',
             'data' => $credentials,
         ]);
     }
@@ -114,10 +115,11 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function lengkapiProfil(){
-        if(!Auth::user()->profil){
+    public function lengkapiProfil()
+    {
+        if (!Auth::user()->profil) {
             return view('dashboard.pages.masterData.profil.lengkapiProfil.index');
-        } else{
+        } else {
             abort(404);
         }
     }
@@ -135,17 +137,25 @@ class AuthController extends Controller
             'kabupatenKota' => KabupatenKota::all(),
             'kecamatan' => Kecamatan::all(),
             'desaKelurahan' => DesaKelurahan::all(),
-            
+
         ];
         return view('dashboard.pages.guest.register', $data);
     }
 
-    public function insertRegistrasi(Request $request){
-        if($request->status_perkawinan != 1){
+    public function insertRegistrasi(Request $request)
+    {
+        if ($request->status_perkawinan != 1) {
             $tanggal_perkawinan_req = 'required';
-        } else{
+        } else {
             $tanggal_perkawinan_req = '';
         }
+
+        if ((Auth::check()) && (in_array(Auth::user()->role, ['admin']))) {
+            $namaBidanReq = 'required';
+        } else {
+            $namaBidanReq = '';
+        }
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -189,6 +199,7 @@ class AuthController extends Controller
                 })],
                 'kata_sandi' => 'required',
                 'ulangi_kata_sandi' => 'required|same:kata_sandi',
+                'nama_bidan' => $namaBidanReq,
             ],
             [
                 'nomor_kk.required' => 'Nomor Kartu Keluarga tidak boleh kosong',
@@ -239,6 +250,7 @@ class AuthController extends Controller
                 'kata_sandi.required' => 'Kata Sandi tidak boleh kosong',
                 'ulangi_kata_sandi.required' => 'Ulangi Kata Sandi tidak boleh kosong',
                 'ulangi_kata_sandi.same' => 'Kata Sandi tidak sama',
+                'nama_bidan.required' => 'Nama Bidan tidak boleh kosong',
             ]
         );
 
@@ -259,14 +271,26 @@ class AuthController extends Controller
             'provinsi_id' => $request->provinsi,
         ];
 
-        if($request->file('file_kartu_keluarga')) {
+        if ((Auth::check()) && (in_array(Auth::user()->role, ['admin', 'bidan']))) {
+            if (Auth::user()->role == 'bidan') {
+                $dataKartuKeluarga['bidan_id'] = Auth::user()->profil->id;
+            } else {
+                $dataKartuKeluarga['bidan_id'] = $request->nama_bidan;
+            }
+            $dataKartuKeluarga['is_valid'] = 1;
+            $dataKartuKeluarga['tanggal_validasi'] = Carbon::now();
+        }
+
+        if ($request->file('file_kartu_keluarga')) {
             $request->file('file_kartu_keluarga')->storeAs(
-                'upload/kartu_keluarga/', $request->nomor_kk. '.'. $request->file('file_kartu_keluarga')->extension()
+                'upload/kartu_keluarga/',
+                $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension()
             );
-            $dataKartuKeluarga['file_kk'] = $request->nomor_kk. '.'. $request->file('file_kartu_keluarga')->extension();
+            $dataKartuKeluarga['file_kk'] = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
         }
 
         KartuKeluarga::create($dataKartuKeluarga);
+        $maxIdKK = KartuKeluarga::latest()->pluck('id')->first();
 
         $dataAkun = [
             'nomor_hp' => $request->nomor_hp,
@@ -275,11 +299,16 @@ class AuthController extends Controller
             'role' => 'keluarga',
         ];
 
+        if ((Auth::check()) && (in_array(Auth::user()->role, ['admin', 'bidan']))) {
+            $dataAkun['status'] = 1;
+        }
+
         User::create($dataAkun);
+        $maxIdUser = User::latest()->pluck('id')->first();
 
         $dataKepalaKeluarga = [
-            'kartu_keluarga_id' => KartuKeluarga::max('id'),
-            'user_id' => User::max('id'),
+            'kartu_keluarga_id' => $maxIdKK,
+            'user_id' => $maxIdUser,
             'nama_lengkap' => strtoupper($request->nama_lengkap),
             'nik' => $request->nik,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -298,21 +327,34 @@ class AuthController extends Controller
             'nama_ibu' => strtoupper($request->ibu),
         ];
 
-        if($request->status_perkawinan != 1){
+        if ($request->status_perkawinan != 1) {
             $dataKepalaKeluarga['tanggal_perkawinan'] = date("Y-m-d", strtotime($request->tanggal_perkawinan));
-        } 
+        }
 
-        if($request->file('foto_profil')) {
+        if ((Auth::check()) && (in_array(Auth::user()->role, ['admin', 'bidan']))) {
+            if (Auth::user()->role == 'bidan') {
+                $dataKepalaKeluarga['bidan_id'] = Auth::user()->profil->id;
+            } else {
+                $dataKepalaKeluarga['bidan_id'] = $request->nama_bidan;
+            }
+            $dataKepalaKeluarga['is_valid'] = 1;
+            $dataKepalaKeluarga['tanggal_validasi'] = Carbon::now();
+        }
+
+        if ($request->file('foto_profil')) {
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/keluarga/', $request->nik. '.'. $request->file('foto_profil')->extension()
+                'upload/foto_profil/keluarga/',
+                $request->nik . '.' . $request->file('foto_profil')->extension()
             );
-            $dataKepalaKeluarga['foto_profil'] = $request->nik. '.'. $request->file('foto_profil')->extension();
+            $dataKepalaKeluarga['foto_profil'] = $request->nik . '.' . $request->file('foto_profil')->extension();
         }
 
         AnggotaKeluarga::create($dataKepalaKeluarga);
+        $maxAnggotaKeluarga = AnggotaKeluarga::latest()->pluck('id')->first();
+
 
         $dataWilayahDomisili = [
-            'anggota_keluarga_id' => AnggotaKeluarga::max('id'),
+            'anggota_keluarga_id' => $maxAnggotaKeluarga,
             'alamat' => strtoupper($request->alamat_domisili),
             'desa_kelurahan_id' => $request->desa_kelurahan_domisili,
             'kecamatan_id' => $request->kecamatan_domisili,
@@ -320,21 +362,23 @@ class AuthController extends Controller
             'provinsi_id' => $request->provinsi_domisili,
 
         ];
-        
-        if($request->file('file_domisili')) {
+
+        if ($request->file('file_domisili')) {
             $request->file('file_domisili')->storeAs(
-                'upload/surat_keterangan_domisili/', $request->nik. '.'. $request->file('file_domisili')->extension()
+                'upload/surat_keterangan_domisili/',
+                $request->nik . '.' . $request->file('file_domisili')->extension()
             );
-            $dataWilayahDomisili['file_ket_domisili'] = $request->nik. '.'. $request->file('file_domisili')->extension();
+            $dataWilayahDomisili['file_ket_domisili'] = $request->nik . '.' . $request->file('file_domisili')->extension();
         }
 
         WilayahDomisili::create($dataWilayahDomisili);
 
-        return response()->json(['success' => 'Berhasil', 'mes' => 'Registrasi berhasil, data anda sedang dalam proses validasi. Silahkan login secara berkala menggunakan Nomor HP/NIK beserta kata sandi yang anda telah anda inputkan sebelumnya.']);
+        return response()->json(['success' => 'Berhasil', 'mes' => 'Registrasi berhasil, data anda menunggu proses Validasi. Silahkan login secara berkala menggunakan Nomor HP/NIK beserta kata sandi yang anda telah anda inputkan sebelumnya.']);
     }
 
-    public function registrasiUlang(KartuKeluarga $keluarga){
-        if($keluarga->is_valid == 2){
+    public function registrasiUlang(KartuKeluarga $keluarga)
+    {
+        if ($keluarga->is_valid == 2) {
             $data = [
                 'kartuKeluarga' => $keluarga,
                 'anggotaKeluarga' => $keluarga->kepalaKeluarga,
@@ -358,22 +402,22 @@ class AuthController extends Controller
                 'alamatKK' => $keluarga->alamat,
             ];
             return view('dashboard.pages.guest.register', $data);
-            
-        } else{
+        } else {
             abort(404);
         }
     }
 
-    public function updateRegistrasi(KartuKeluarga $keluarga, Request $request){
-        if($request->status_perkawinan != 1){
+    public function updateRegistrasi(KartuKeluarga $keluarga, Request $request)
+    {
+        if ($request->status_perkawinan != 1) {
             $tanggal_perkawinan_req = 'required';
-        } else{
+        } else {
             $tanggal_perkawinan_req = '';
         }
         $validator = Validator::make(
             $request->all(),
             [
-                'nomor_kk' => 'required|unique:kartu_keluarga,nomor_kk,'. $keluarga->nomor_kk .',nomor_kk,deleted_at,NULL|digits:16',
+                'nomor_kk' => 'required|unique:kartu_keluarga,nomor_kk,' . $keluarga->nomor_kk . ',nomor_kk,deleted_at,NULL|digits:16',
                 'nama_kepala_keluarga' => 'required',
                 'alamat' => 'required',
                 'rt' => 'required',
@@ -385,7 +429,7 @@ class AuthController extends Controller
                 'desa_kelurahan' => 'required',
                 'file_kartu_keluarga' => 'mimes:jpeg,jpg,png,pdf|max:3072',
                 'nama_lengkap' => 'required',
-                'nik' => 'required|unique:anggota_keluarga,nik,'. $keluarga->kepalaKeluarga->nik .',nik,deleted_at,NULL|digits:16',
+                'nik' => 'required|unique:anggota_keluarga,nik,' . $keluarga->kepalaKeluarga->nik . ',nik,deleted_at,NULL|digits:16',
                 'jenis_kelamin' => 'required',
                 'tempat_lahir' => 'required',
                 'tanggal_lahir' => 'required',
@@ -476,14 +520,15 @@ class AuthController extends Controller
             'alasan_ditolak' => null
         ];
 
-        if($request->file('file_kartu_keluarga')) {
+        if ($request->file('file_kartu_keluarga')) {
             if (Storage::exists('upload/kartu_keluarga/' . $keluarga->file_kk)) {
                 Storage::delete('upload/kartu_keluarga/' . $keluarga->file_kk);
             }
             $request->file('file_kartu_keluarga')->storeAs(
-                'upload/kartu_keluarga/', $request->nomor_kk. '.'. $request->file('file_kartu_keluarga')->extension()
+                'upload/kartu_keluarga/',
+                $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension()
             );
-            $dataKartuKeluarga['file_kk'] = $request->nomor_kk. '.'. $request->file('file_kartu_keluarga')->extension();
+            $dataKartuKeluarga['file_kk'] = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
         }
 
         $keluarga->update($dataKartuKeluarga);
@@ -512,20 +557,21 @@ class AuthController extends Controller
             'alasan_ditolak' => null
         ];
 
-        if($request->status_perkawinan != 1){
+        if ($request->status_perkawinan != 1) {
             $dataKepalaKeluarga['tanggal_perkawinan'] = date("Y-m-d", strtotime($request->tanggal_perkawinan));
-        } else{
+        } else {
             $dataKepalaKeluarga['tanggal_perkawinan'] = null;
         }
 
-        if($request->file('foto_profil')) {
+        if ($request->file('foto_profil')) {
             if (Storage::exists('upload/foto_profil/keluarga/' . $keluarga->kepalaKeluarga->foto_profil)) {
                 Storage::delete('upload/foto_profil/keluarga/' . $keluarga->kepalaKeluarga->foto_profil);
             }
             $request->file('foto_profil')->storeAs(
-                'upload/foto_profil/keluarga/', $request->nik. '.'. $request->file('foto_profil')->extension()
+                'upload/foto_profil/keluarga/',
+                $request->nik . '.' . $request->file('foto_profil')->extension()
             );
-            $dataKepalaKeluarga['foto_profil'] = $request->nik. '.'. $request->file('foto_profil')->extension();
+            $dataKepalaKeluarga['foto_profil'] = $request->nik . '.' . $request->file('foto_profil')->extension();
         }
 
         $keluarga->kepalaKeluarga->update($dataKepalaKeluarga);
@@ -541,20 +587,20 @@ class AuthController extends Controller
             'provinsi_id' => $request->provinsi_domisili,
 
         ];
-        
-        if($request->file('file_domisili')) {
+
+        if ($request->file('file_domisili')) {
             if (Storage::exists('upload/surat_keterangan_domisili/' . $keluarga->kepalaKeluarga->wilayahDomisili->file_ket_domisili)) {
                 Storage::delete('upload/surat_keterangan_domisili/' . $keluarga->kepalaKeluarga->wilayahDomisili->file_ket_domisili);
             }
             $request->file('file_domisili')->storeAs(
-                'upload/surat_keterangan_domisili/', $request->nik. '.'. $request->file('file_domisili')->extension()
+                'upload/surat_keterangan_domisili/',
+                $request->nik . '.' . $request->file('file_domisili')->extension()
             );
-            $dataWilayahDomisili['file_ket_domisili'] = $request->nik. '.'. $request->file('file_domisili')->extension();
+            $dataWilayahDomisili['file_ket_domisili'] = $request->nik . '.' . $request->file('file_domisili')->extension();
         }
 
         $keluarga->kepalaKeluarga->wilayahDomisili->update($dataWilayahDomisili);
 
-        return response()->json(['success' => 'Berhasil', 'mes' => 'Data Keluarga berhasil diperbarui, silahkan login secara berkala untuk mengetahui status data anda']);
+        return response()->json(['success' => 'Berhasil', 'mes' => 'Data Keluarga berhasil diperbarui, silahkan login secara berkala untuk mengetahui status data anda.']);
     }
-
 }

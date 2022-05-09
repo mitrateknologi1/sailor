@@ -44,65 +44,65 @@ class KartuKeluargaController extends Controller
             $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('status', function ($row) {   
-                    if($row->is_valid == 1){
+                ->addColumn('status', function ($row) {
+                    if ($row->is_valid == 1) {
                         return '<span class="badge rounded bg-success">Tervalidasi</span>';
-                    } else if ($row->is_valid == 0){
+                    } else if ($row->is_valid == 0) {
                         return '<span class="badge rounded bg-warning">Belum Divalidasi</span>';
-                    } else{
+                    } else {
                         return '<span class="badge rounded bg-danger text-white">Ditolak</span>';
                     }
                 })
 
-                ->addColumn('jumlah_anggota_keluarga', function ($row) {   
+                ->addColumn('jumlah_anggota_keluarga', function ($row) {
                     $total = $row->anggotaKeluarga->count();
-                    $anggota = $total;  
+                    $anggota = $total;
                     return $anggota . ' Orang';
                 })
 
-                ->addColumn('desa_kelurahan_domisili', function ($row) {     
+                ->addColumn('desa_kelurahan_domisili', function ($row) {
                     // return $row->wilayahDomisili->desaKelurahan->nama;
-                    if($row->kepalaKeluarga){
+                    if ($row->kepalaKeluarga) {
                         return $row->kepalaKeluarga->wilayahDomisili->desaKelurahan->nama;
                     }
                     // return $row->kepalaKeluarga->wilayahDomisili->desaKelurahan->nama;
                 })
 
-                ->addColumn('desa_kelurahan', function ($row) {     
+                ->addColumn('desa_kelurahan', function ($row) {
                     return $row->desaKelurahan->nama;
                 })
 
-                ->addColumn('kecamatan', function ($row) {     
+                ->addColumn('kecamatan', function ($row) {
                     return $row->kecamatan->nama;
                 })
 
-                ->addColumn('kabupaten_kota', function ($row) {     
+                ->addColumn('kabupaten_kota', function ($row) {
                     return $row->kabupatenKota->nama;
                 })
 
-                ->addColumn('provinsi', function ($row) {     
+                ->addColumn('provinsi', function ($row) {
                     return $row->provinsi->nama;
                 })
 
-                ->addColumn('bidan', function ($row) { 
-                    if($row->bidan){
+                ->addColumn('bidan', function ($row) {
+                    if ($row->bidan) {
                         return $row->bidan->nama_lengkap;
-                    } else{
+                    } else {
                         return '-';
                     }
                 })
-               
-                ->addColumn('action', function ($row) {     
+
+                ->addColumn('action', function ($row) {
                     $actionBtn = '
                     <div class="text-center justify-content-center text-white">';
-                    if($row->is_valid == 0){
+                    if ($row->is_valid == 0) {
                         // $actionBtn .= '<button class="btn btn-primary btn-sm me-1 shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" onclick=modalValidasi('.$row->id.')><i class="fa-solid fa-lg fa-clipboard-check"></i></button> ';
-                        $actionBtn .= '<button id="btn-validasi" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" value='.$row->id.'><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
-                    } else{
-                        $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat"  value='.$row->id.'><i class="fas fa-eye"></i></button>';
+                        $actionBtn .= '<button id="btn-validasi" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" value=' . $row->id . '><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
+                    } else {
+                        $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat"  value=' . $row->id . '><i class="fas fa-eye"></i></button>';
                         $actionBtn .= '<a href="' . url('anggota-keluarga/' . $row->id) . '" class="btn btn-success text-white btn-sm me-1 shadow" data-toggle="tooltip" data-placement="top" title="Anggota Keluarga"><i class="fa-solid fa-people-roof"></i></a>';
-                        if($row->is_valid != 2){
-                            $actionBtn .= '<a href="'.route('keluarga.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
+                        if ($row->is_valid != 2) {
+                            $actionBtn .= '<a href="' . route('keluarga.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
                         }
                         $actionBtn .= '<button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
                         </div>';
@@ -116,7 +116,7 @@ class KartuKeluargaController extends Controller
                 //             $query->where("nama_lengkap", "LIKE", "%$request->search%");
                 //         });
                 //     }      
-                                    
+
                 //     // if (!empty($request->role)) {
                 //     //     $query->whereHas('user', function ($query) use ($request) {
                 //     //         $query->where('users.role', $request->role);                       
@@ -143,16 +143,20 @@ class KartuKeluargaController extends Controller
      */
     public function create()
     {
-        // $data = [
-        //     'agama' => Agama::all(),
-        //     'pendidikan' => Pendidikan::all(),
-        //     'pekerjaan' => Pekerjaan::all(),
-        //     'golonganDarah' => GolonganDarah::all(),
-        //     'statusPerkawinan' => StatusPerkawinan::all(),
-        //     'statusHubungan' => StatusHubungan::all(),
-        //     'provinsi' => Provinsi::all()
-        // ];
-        // return view('dashboard.pages.masterData.profil.keluarga.kepalaKeluarga.register', $data);
+        $data = [
+            'agama' => Agama::all(),
+            'pendidikan' => Pendidikan::all(),
+            'pekerjaan' => Pekerjaan::all(),
+            'golonganDarah' => GolonganDarah::all(),
+            'statusPerkawinan' => StatusPerkawinan::all(),
+            'statusHubungan' => StatusHubungan::all(),
+            'provinsi' => Provinsi::all(),
+            'kabupatenKota' => KabupatenKota::all(),
+            'kecamatan' => Kecamatan::all(),
+            'desaKelurahan' => DesaKelurahan::all(),
+
+        ];
+        return view('dashboard.pages.masterData.profil.keluarga.kartuKeluarga.create', $data);
     }
 
     /**
@@ -208,9 +212,9 @@ class KartuKeluargaController extends Controller
         $keluarga['nomor_hp'] = $keluarga->kepalaKeluarga->user->nomor_hp;
         $keluarga['surat_keterangan_domisili'] = $keluarga->kepalaKeluarga->wilayahDomisili->file_ket_domisili;
         $keluarga['foto_profil'] = $keluarga->kepalaKeluarga->foto_profil;
-        if($keluarga->bidan){
+        if ($keluarga->bidan) {
             $keluarga['nama_bidan'] = $keluarga->bidan->nama_lengkap;
-        } else{
+        } else {
             $keluarga['nama_bidan'] = '-';
         }
 
@@ -218,21 +222,22 @@ class KartuKeluargaController extends Controller
         return $keluarga;
     }
 
-    public function validasi(Request $request){
+    public function validasi(Request $request)
+    {
         $id = $request->id;
 
-        if($request->konfirmasi == 1){
+        if ($request->konfirmasi == 1) {
             $alasan_req = '';
             $alasan = null;
-        } else{
+        } else {
             $alasan_req = 'required';
             $alasan = $request->alasan;
         }
 
-        if(Auth::user()->role == 'admin'){
+        if (Auth::user()->role == 'admin') {
             $bidan_id_req = 'required';
             $bidan_id = $request->bidan_id;
-        } else{
+        } else {
             $bidan_id_req = '';
             $bidan_id = Auth::user()->profil->id;
         }
@@ -255,7 +260,7 @@ class KartuKeluargaController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        
+
         $updateKartuKeluarga = KartuKeluarga::where('id', $id)->update(['is_valid' => $request->konfirmasi, 'bidan_id' => $bidan_id, 'tanggal_validasi' => Carbon::now(), 'alasan_ditolak' => $alasan]);
 
         $kepalaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)->where('status_hubungan_dalam_keluarga_id', 1);
@@ -264,24 +269,24 @@ class KartuKeluargaController extends Controller
 
         $namaBidan = Bidan::where('id', $bidan_id)->first();
 
-        if($request->konfirmasi == 1){
+        if ($request->konfirmasi == 1) {
             $updateAkun = User::where('id', $kepalaKeluarga->first()->user_id)->update(['status' => 1]);
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $kepalaKeluarga->first()->user_id,
                 'anggota_keluarga_id' => $kepalaKeluarga->first()->id,
                 'judul' => 'Selamat, kartu keluarga anda telah divalidasi.',
-                'isi' => 'Kartu Keluarga anda telah divalidasi oleh bidan '. $namaBidan->nama_lengkap . '. Silahkan menambahkan data anggota keluarga anda seperti Istri dan Anak anda pada menu Anggota Keluarga.',
+                'isi' => 'Kartu Keluarga anda telah divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '. Silahkan menambahkan data anggota keluarga anda seperti Istri dan Anak anda pada menu Anggota Keluarga.',
                 'tentang' => 'kartu_keluarga',
                 'is_valid' => 1,
             ]);
-        } else{
+        } else {
             $updateAkun = User::where('id', $kepalaKeluarga->first()->user_id)->update(['status' => 0]);
         }
 
-        if($updateKartuKeluarga && $updateKepalaKeluarga && $updateAkun){
+        if ($updateKartuKeluarga && $updateKepalaKeluarga && $updateAkun) {
             $pemberitahuan;
             return response()->json(['res' => 'success', 'konfirmasi' => $request->konfirmasi]);
-        } else{
+        } else {
             return response()->json(['res' => 'error']);
         }
     }
@@ -327,7 +332,7 @@ class KartuKeluargaController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nomor_kk' => 'required|unique:kartu_keluarga,nomor_kk,'. $keluarga->nomor_kk .',nomor_kk,deleted_at,NULL|digits:16',
+                'nomor_kk' => 'required|unique:kartu_keluarga,nomor_kk,' . $keluarga->nomor_kk . ',nomor_kk,deleted_at,NULL|digits:16',
                 'nama_kepala_keluarga' => 'required',
                 'alamat' => 'required',
                 'rt' => 'required',
@@ -373,23 +378,24 @@ class KartuKeluargaController extends Controller
             'kecamatan_id' => $request->kecamatan,
             'desa_kelurahan_id' => $request->desa_kelurahan,
         ];
-        
-        if($request->file('file_kartu_keluarga')) {
+
+        if ($request->file('file_kartu_keluarga')) {
             if (Storage::exists('upload/kartu_keluarga/' . $keluarga->file_kk)) {
                 Storage::delete('upload/kartu_keluarga/' . $keluarga->file_kk);
             }
             $request->file('file_kartu_keluarga')->storeAs(
-                'upload/kartu_keluarga/', $request->nomor_kk. '.'. $request->file('file_kartu_keluarga')->extension()
+                'upload/kartu_keluarga/',
+                $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension()
             );
-            $data['file_kk'] = $request->nomor_kk. '.'. $request->file('file_kartu_keluarga')->extension();
+            $data['file_kk'] = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
         }
 
         $keluarga->update($data);
 
         AnggotaKeluarga::where('kartu_keluarga_id', $keluarga->id)->where('status_hubungan_dalam_keluarga_id', 1)
-        ->update([
-            'nama_lengkap' => strtoupper($request->nama_kepala_keluarga),
-        ]);
+            ->update([
+                'nama_lengkap' => strtoupper($request->nama_kepala_keluarga),
+            ]);
 
         return response()->json(['success' => 'Berhasil', 'mes' => 'Data Kartu Keluarga berhasil perbarui.']);
     }
@@ -402,14 +408,14 @@ class KartuKeluargaController extends Controller
      */
     public function destroy(KartuKeluarga $keluarga)
     {
-        foreach($keluarga->anggotaKeluarga as $anggota){
+        foreach ($keluarga->anggotaKeluarga as $anggota) {
             if (Storage::exists('upload/foto_profil/keluarga/' . $anggota->foto_profil)) {
                 Storage::delete('upload/foto_profil/keluarga/' . $anggota->foto_profil);
             }
 
             $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
-        
-            if($pemberitahuan){
+
+            if ($pemberitahuan) {
                 $pemberitahuan->delete();
             }
         }
@@ -423,7 +429,7 @@ class KartuKeluargaController extends Controller
 
         $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $keluarga->id);
         $anggotaKeluarga->delete();
-        
+
         $user = User::where('id', $keluarga->kepalaKeluarga->user_id);
         $user->delete();
 

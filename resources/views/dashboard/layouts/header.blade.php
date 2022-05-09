@@ -38,49 +38,12 @@
                 @if (Auth::user()->role == 'keluarga')
                     <li class="@if (Auth::user()->pemberitahuan->count() == 0) d-none @endif">
                         <div class="dropdown morphing scale-left notifications">
-                            <a class="nav-link dropdown-toggle pulse justify-content-center text-center" href="#"
-                                role="button" data-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle pulse justify-content-center text-center"
+                                id="pemberitahuan" href="#">
                                 <i class="fa fa-bell text-secondary text-center"></i>
-                                <span class="pulse-ring mx-auto"></span>
+                                <span class="
+                                    pulse-ring mx-auto"></span>
                             </a>
-                            <div id="NotificationsDiv" class="dropdown-menu shadow rounded-4 border-0 p-0 m-0">
-                                <div class="card w380">
-                                    <div class="card-header p-3 bg-secondary text-white">
-                                        <h6 class="card-title text-white mb-0">Pemberitahuan</h6>
-                                        <span
-                                            class="badge bg-danger text-light">{{ Auth::user()->pemberitahuan->count() }}</span>
-                                    </div>
-                                    <div class="tab-content card-body custom_scroll">
-                                        <div class="tab-pane fade show active" id="Noti-tab-Message" role="tabpanel">
-                                            <ul class="list-unstyled list mb-0">
-                                                @foreach (Auth::user()->pemberitahuan as $item)
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <span class="d-flex">
-                                                            <img class="avatar rounded-circle"
-                                                                src="{{ isset($item->anggotaKeluarga) && $item->anggotaKeluarga->foto_profil != null? asset('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
-                                                                alt="">
-                                                            <div class="flex-fill ms-3">
-                                                                <p class="d-flex justify-content-between mb-0">
-                                                                    <span>{{ $item->anggotaKeluarga->nama_lengkap }}</span>
-                                                                    <small>{{ $item->updated_at->diffForHumans() }} <a
-                                                                            href='#'
-                                                                            class="text-danger btn-delete-pemberitahuan"
-                                                                            data-test="{{ $item->id }}"><i
-                                                                                class="fas fa-trash"></i></a></small>
-                                                                </p>
-                                                                <span>{{ $item->judul }}</span><br>
-                                                                <span class="text-muted">{{ $item->isi }}</span>
-                                                            </div>
-                                                        </span>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-danger text-light rounded-0"><i
-                                            class="fas fa-trash"></i> Hapus Semua Pemberitahuan</a>
-                                </div>
-                            </div>
                         </div>
                     </li>
                 @endif
@@ -138,8 +101,8 @@
                                     </div>
                                 </div>
                                 <div class="list-group m-2 mb-3">
-                                    <a class="list-group-item list-group-item-action border-0"
-                                        href="page-profile.html"><i class="w30 fa fa-user"></i>Profile &
+                                    <a class="list-group-item list-group-item-action border-0 test" href="#" id=""><i
+                                            class="w30 fa fa-user"></i>Profile &
                                         account</a>
                                     <a class="list-group-item list-group-item-action border-0"
                                         href="account-settings.html"><i class="w30 fa fa-gear"></i>Settings</a>
@@ -169,3 +132,101 @@
 
     </div>
 </header>
+
+<div id="pemberitahuanModalDiv">
+    <!-- Modal: my notes -->
+    <div class="modal fade" id="pemberitahuanModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-vertical modal-dialog-scrollable">
+            <div class="modal-content" id="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@push('script')
+    <script>
+        $(document).on('click', '#pemberitahuan', function() {
+            listPemberitahuan()
+        });
+
+        function listPemberitahuan() {
+            $.ajax({
+                method: "GET",
+                url: '{{ route('pemberitahuan.index') }}',
+                success: function(response) {
+                    if (response.pemberitahuan == 0) {
+                        $('#pemberitahuanModal').modal('hide')
+                        Swal.fire(
+                            'Berhasil dibersihkan!',
+                            'Semua pemberitahuan berhasil dibersihkan.',
+                            'success'
+                        ).then(function() {
+                            location.reload()
+                        })
+                    } else {
+                        $('#modal-content').html(response)
+                        $('#pemberitahuanModal').modal('show')
+                    }
+                },
+            });
+        }
+
+        $(document).on('click', '.delete-pemberitahuan', function() {
+            $.ajax({
+                url: "{{ url('pemberitahuan') }}" + '/' + $(this).data('id'),
+                type: 'DELETE',
+                data: {
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    listPemberitahuan()
+                }
+            })
+        })
+
+        $(document).on('click', '#delete-all-pemberitahuan', function() {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Anda ingin membersihkan semua pemberitahuan yang ada?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: "{{ url('pemberitahuan/destroy-all') }}",
+                        type: 'POST',
+                        data: {
+                            '_token': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.status == 'success') {
+                                $('#pemberitahuanModal').modal('hide')
+                                Swal.fire(
+                                    'Berhasil dibersihkan!',
+                                    'Semua pemberitahuan berhasil dibersihkan.',
+                                    'success'
+                                ).then(function() {
+                                    location.reload()
+                                })
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    'Pemberitahuan gagal dibersihkan.',
+                                    'error'
+                                )
+                            }
+                        }
+                    })
+                }
+            })
+
+        })
+    </script>
+@endpush
