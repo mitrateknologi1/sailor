@@ -149,6 +149,48 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                @if ($data['is_valid'] == 0)
+                                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                                        <div class="col-lg col-sm-12" id="pilih-konfirmasi">
+                                            @component('dashboard.components.formElements.select', [
+                                                'label' => 'Konfirmasi',
+                                                'id' => 'konfirmasi',
+                                                'name' => 'konfirmasi',
+                                                'class' => 'kosong',
+                                                'wajib' => '<sup class="text-danger">*</sup>',
+                                                ])
+                                                @slot('options')
+                                                    <option value="1">Validasi</option>
+                                                    <option value="2">Tolak</option>
+                                                @endslot
+                                            @endcomponent
+                                        </div>
+                                        @if (Auth::user()->role == 'admin')
+                                            <div class="col-lg col-sm-12" id="pilih-bidan">
+                                                @component('dashboard.components.formElements.select', [
+                                                    'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                                    'id' => 'nama-bidan',
+                                                    'name' => 'bidan_id',
+                                                    'class' => 'bidan_id filter',
+                                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                                    ])
+                                                    @slot('options')
+                                                        @foreach ($data['bidan_konfirmasi'] as $bidan)
+                                                            <option value="{{ $bidan->id }}">{{ $bidan->nama_lengkap }}
+                                                            </option>
+                                                        @endforeach
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
+                                        @endif
+                                        <div class="col-12 mt-3 d-none" id="col-alasan">
+                                            <label for="textareaInput" class="form-label">Alasan <sup
+                                                    class="text-danger">*</sup></label>
+                                            <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
+                                            <span class="text-danger error-text alasan-error"></span>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="row g-2 mt-2">
                                     <div class="col-sm-6 col-lg">
                                         @component('dashboard.components.buttons.back', [
@@ -156,16 +198,24 @@
                                             ])
                                         @endcomponent
                                     </div>
-                                    @if (Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id || Auth::user()->role == 'admin')
-                                        <div class="col-sm-6 col-lg">
-                                            @component('dashboard.components.buttons.edit', [
-                                                'id' => 'modal-btn-ubah',
-                                                'url' => url('deteksi-ibu-melahirkan-stunting' . '/' .
-                                                $deteksiIbuMelahirkanStunting->id . '/edit'),
+                                    @if ($data['is_valid'] == 0)
+                                        <div class="col-sm-12 col-lg" id="col-modal-btn-konfirmasi">
+                                            @component('dashboard.components.buttons.konfirmasi', [
+                                                'id' => 'modal-btn-konfirmasi',
                                                 ])
                                             @endcomponent
                                         </div>
                                     @endif
+
+                                    {{-- @if (Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id || Auth::user()->role == 'admin')
+                                        <div class="col-sm-6 col-lg">
+                                            @component('dashboard.components.buttons.edit', [
+    'id' => 'modal-btn-ubah',
+    'url' => url('deteksi-ibu-melahirkan-stunting' . '/' . $deteksiIbuMelahirkanStunting->id . '/edit'),
+])
+                                            @endcomponent
+                                        </div>
+                                    @endif --}}
                                 </div>
                             </div>
                         </div>
@@ -177,6 +227,86 @@
 @endsection
 
 @push('script')
+    <script>
+        $('#konfirmasi').change(function() {
+            if ($('#konfirmasi').val() == 1) {
+                $('#col-alasan').addClass('d-none');
+            } else {
+                $('#col-alasan').removeClass('d-none');
+            }
+            $('#alasan').val('');
+        })
+
+        $(document).on('click', '#modal-btn-konfirmasi', function() {
+            let id = '{{ $data['id'] }}';
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Konfirmasi data deteksi ibu melahirkan stunting ini?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Konfirmasi'
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "PUT",
+                        url: "{{ url('deteksi-ibu-melahirkan-stunting/validasi') }}" + '/' + id,
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: id,
+                            bidan_id: '{{ Auth::user()->role }}' == "admin" ? $("#nama-bidan")
+                                .val() : '{{ Auth::user()->profil->id }}',
+                            konfirmasi: $('#konfirmasi').val(),
+                            alasan: $('#alasan').val()
+                        },
+                        success: function(response) {
+                            if ($.isEmptyObject(response.error)) {
+                                if (response.res == 'success') {
+                                    if (response.konfirmasi == 1) {
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil divalidasi.',
+                                            'success'
+                                        ).then(function() {
+                                            window.location.href =
+                                                "{{ url('deteksi-ibu-melahirkan-stunting') }}";
+                                        })
+                                    } else {
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil ditolak.',
+                                            'success'
+                                        ).then(function() {
+                                            window.location.href =
+                                                "{{ url('deteksi-ibu-melahirkan-stunting') }}";
+                                        })
+                                    }
+                                }
+                            } else {
+                                printErrorMsg(response.error);
+
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                            }
+                        }
+                    })
+                }
+            })
+        })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
+    </script>
+
     <script>
         $('#m-link-deteksi-stunting').addClass('active');
         $('#menu-deteksi-stunting').addClass('collapse show')

@@ -3,175 +3,192 @@
     @if (isset($method) && $method == 'PUT')
         @method('PUT')
     @endif
+    <div class="row g-4 mb-3">
+        @if (Auth::user()->role != 'keluarga')
+            <div class="col-sm-12 col-lg">
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Nama Kepala Keluarga / Nomor KK',
+                        'id' => 'nama-kepala-keluarga',
+                        'name' => 'nama_kepala_keluarga',
+                        'class' => 'select2',
+                        'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($kartuKeluarga as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
+                            </option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
+        @endif
+        <div class="col-sm-12 col-lg">
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Nama Ibu (Tanggal Lahir)',
+                    'id' => 'nama-ibu',
+                    'name' => 'nama_ibu',
+                    'class' => 'select2',
+                    'attribute' => 'disabled',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                ])
+            @endcomponent
+        </div>
+        <div class="col-sm-12 col-lg">
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Pemeriksaan Ke',
+                    'type' => 'text',
+                    'id' => 'pemeriksaan_ke',
+                    'name' => 'pemeriksaan_ke',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'attribute' => 'readonly',
+                    'placeholder' => 'Pemeriksaan Ke',
+                ])
+            @endcomponent
+        </div>
+    </div>
     <div class="row g-4">
-        <div class="col-sm-12 col-lg-4">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                ])
-                @slot('options')
-                    @foreach ($kartuKeluarga as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
-                        </option>
-                    @endforeach
-                @endslot
-
-            @endcomponent
-        </div>
-        <div class="col-sm-12 col-lg-4">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Ibu (Tanggal Lahir)',
-                'id' => 'nama-ibu',
-                'name' => 'nama_ibu',
-                'class' => 'select2',
-                'attribute' => 'disabled',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                ])
-            @endcomponent
-        </div>
-        <div class="col-sm-12 col-lg-4">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Pemeriksaan Ke',
-                'type' => 'text',
-                'id' => 'pemeriksaan_ke',
-                'name' => 'pemeriksaan_ke',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'attribute' => 'readonly',
-                'placeholder' => 'Pemeriksaan Ke',
+        <div class="col-sm-12 col-lg-6">
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Tanggal Haid Terakhir (31-12-2022)',
+                    'type' => 'text',
+                    'id' => 'tanggal_haid_terakhir',
+                    'name' => 'tanggal_haid_terakhir',
+                    'class' => 'tanggal',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => '31-12-2022',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Tanggal Haid Terakhir (31-12-2022)',
-                'type' => 'text',
-                'id' => 'tanggal_haid_terakhir',
-                'name' => 'tanggal_haid_terakhir',
-                'class' => 'tanggal',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => '31-12-2022',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Kehamilan Ke',
+                    'type' => 'text',
+                    'id' => 'kehamilan_ke',
+                    'name' => 'kehamilan_ke',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Kehamilan Ke',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Kehamilan Ke',
-                'type' => 'text',
-                'id' => 'kehamilan_ke',
-                'name' => 'kehamilan_ke',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Kehamilan Ke',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Tinggi Badan (Cm)',
+                    'type' => 'text',
+                    'id' => 'tinggi_badan',
+                    'name' => 'tinggi_badan',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Tinggi Badan',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Tinggi Badan (Cm)',
-                'type' => 'text',
-                'id' => 'tinggi_badan',
-                'name' => 'tinggi_badan',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Tinggi Badan',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Berat Badan (Kg)',
+                    'type' => 'text',
+                    'id' => 'berat_badan',
+                    'name' => 'berat_badan',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Berat Badan',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Berat Badan (Kg)',
-                'type' => 'text',
-                'id' => 'berat_badan',
-                'name' => 'berat_badan',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Berat Badan',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Tekanan Darah Sistolik',
+                    'type' => 'text',
+                    'id' => 'tekanan_darah_sistolik',
+                    'name' => 'tekanan_darah_sistolik',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Tekanan Darah Sistolik',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Tekanan Darah Sistolik',
-                'type' => 'text',
-                'id' => 'tekanan_darah_sistolik',
-                'name' => 'tekanan_darah_sistolik',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Tekanan Darah Sistolik',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Tekanan Darah Diastolik',
+                    'type' => 'text',
+                    'id' => 'tekanan_darah_diastolik',
+                    'name' => 'tekanan_darah_diastolik',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Tekanan Darah Diastolik',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Tekanan Darah Diastolik',
-                'type' => 'text',
-                'id' => 'tekanan_darah_diastolik',
-                'name' => 'tekanan_darah_diastolik',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Tekanan Darah Diastolik',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Lengan Atas',
+                    'type' => 'text',
+                    'id' => 'lengan_atas',
+                    'name' => 'lengan_atas',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Lengan Atas',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Lengan Atas',
-                'type' => 'text',
-                'id' => 'lengan_atas',
-                'name' => 'lengan_atas',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Lengan Atas',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Tinggi Fundus (Dalam Cm)',
+                    'type' => 'text',
+                    'id' => 'tinggi_fundus',
+                    'name' => 'tinggi_fundus',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Tinggi Fundus (Dalam Cm)',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Tinggi Fundus (Dalam Cm)',
-                'type' => 'text',
-                'id' => 'tinggi_fundus',
-                'name' => 'tinggi_fundus',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Tinggi Fundus (Dalam Cm)',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Hemoglobin Darah',
+                    'type' => 'text',
+                    'id' => 'hemoglobin_darah',
+                    'name' => 'hemoglobin_darah',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Hemoglobin Darah',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Hemoglobin Darah',
-                'type' => 'text',
-                'id' => 'hemoglobin_darah',
-                'name' => 'hemoglobin_darah',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Hemoglobin Darah',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Denyut Jantung Janin (Dalam Menit)',
+                    'type' => 'text',
+                    'id' => 'denyut_jantung',
+                    'name' => 'denyut_jantung',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Denyut Jantung Janin (Dalam Menit)',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Denyut Jantung Janin (Dalam Menit)',
-                'type' => 'text',
-                'id' => 'denyut_jantung',
-                'name' => 'denyut_jantung',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Denyut Jantung Janin (Dalam Menit)',
-                ])
-            @endcomponent
-        </div>
-        <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Vaksin Tetanus (Sebelum Hamil)',
-                'id' => 'vaksin_tetanus_sebelum_hamil',
-                'name' => 'vaksin_tetanus_sebelum_hamil',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Vaksin Tetanus (Sebelum Hamil)',
+                    'id' => 'vaksin_tetanus_sebelum_hamil',
+                    'name' => 'vaksin_tetanus_sebelum_hamil',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
                     <option value="Sudah">Sudah</option>
@@ -180,12 +197,13 @@
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Vaksin Tetanus (Sesudah Hamil)',
-                'id' => 'vaksin_tetanus_sesudah_hamil',
-                'name' => 'vaksin_tetanus_sesudah_hamil',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Vaksin Tetanus (Sesudah Hamil)',
+                    'id' => 'vaksin_tetanus_sesudah_hamil',
+                    'name' => 'vaksin_tetanus_sesudah_hamil',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
                     <option value="Sudah">Sudah</option>
@@ -194,12 +212,13 @@
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-4">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Posisi Janin',
-                'id' => 'posisi_janin',
-                'name' => 'posisi_janin',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Posisi Janin',
+                    'id' => 'posisi_janin',
+                    'name' => 'posisi_janin',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
                     <option value="Normal">Normal</option>
@@ -208,12 +227,13 @@
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-4">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Minum 90 Tablet Tambah Darah',
-                'id' => 'minum_tablet',
-                'name' => 'minum_tablet',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Minum 90 Tablet Tambah Darah',
+                    'id' => 'minum_tablet',
+                    'name' => 'minum_tablet',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
                     <option value="Sudah">Sudah</option>
@@ -222,12 +242,13 @@
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-4">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Konseling',
-                'id' => 'konseling',
-                'name' => 'konseling',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Konseling',
+                    'id' => 'konseling',
+                    'name' => 'konseling',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
                     <option value="Sudah">Sudah</option>
@@ -237,21 +258,23 @@
         </div>
         @if (Auth::user()->role == 'admin' && $method == 'POST')
             <div class="col-sm-12 col-md-12">
-                @component('dashboard.components.formElements.select', [
-                    'label' => 'Bidan sesuai lokasi anak',
-                    'id' => 'nama-bidan',
-                    'name' => 'nama_bidan',
-                    'class' => 'select2',
-                    'attribute' => 'disabled',
-                    'wajib' => '<sup class="text-danger">*</sup>',
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Bidan sesuai lokasi anak',
+                        'id' => 'nama-bidan',
+                        'name' => 'nama_bidan',
+                        'class' => 'select2',
+                        'attribute' => 'disabled',
+                        'wajib' => '<sup class="text-danger">*</sup>',
                     ])
                 @endcomponent
             </div>
         @endif
         <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-anc',
-                'type' => 'submit',
+            @component('dashboard.components.buttons.process',
+                [
+                    'id' => 'proses-anc',
+                    'type' => 'submit',
                 ])
             @endcomponent
         </div>
@@ -419,11 +442,12 @@
                         </div>
                         <div class="col-sm-6 col-lg-8">
                             {{-- <a href="#" class="btn btn-info text-white text-uppercase w-100" id="simpan-pertumbuhan-anak"><i class="fa-solid fa-floppy-disk"></i> Simpan</a> --}}
-                            @component('dashboard.components.buttons.submit', [
-                                'id' => 'proses-pertumbuhan-anak',
-                                'type' => 'submit',
-                                'class' => 'text-white text-uppercase w-100 simpan',
-                                'label' => 'Simpan',
+                            @component('dashboard.components.buttons.submit',
+                                [
+                                    'id' => 'proses-pertumbuhan-anak',
+                                    'type' => 'submit',
+                                    'class' => 'text-white text-uppercase w-100 simpan',
+                                    'label' => 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -722,7 +746,11 @@
         });
 
         function changeKepalaKeluarga() {
-            var id = $('#nama-kepala-keluarga').val();
+            if ('{{ Auth::user()->role }}' != 'keluarga') {
+                var id = $('#nama-kepala-keluarga').val();
+            } else {
+                var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
+            }
             var id_edit = "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}";
             var selected = '';
             $('#nama-ibu').html('');

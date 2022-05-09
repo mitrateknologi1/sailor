@@ -4,8 +4,10 @@ namespace App\Http\Controllers\dashboard\utama\deteksiStunting;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
+use App\Models\Bidan;
 use App\Models\KartuKeluarga;
 use App\Models\LokasiTugas;
+use App\Models\Pemberitahuan;
 use App\Models\StuntingAnak;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -22,105 +24,135 @@ class StuntingAnakController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-            $data = StuntingAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
-                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                    if (Auth::user()->role != 'admin') {
-                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
-                    }
-                })
-                ->where(function ($query) use ($request) {
-                    $query->where(function ($query) use ($request) {
-                        if ($request->statusValidasi) {
-                            $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
+        if (in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])) {
+            if ($request->ajax()) {
+                $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+                $data = StuntingAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') {
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                         }
-
-                        if ($request->kategori) {
-                            $kategori = '';
-                            if ($request->kategori == 'sangat_pendek') {
-                                $kategori = 'Sangat Pendek (Resiko Stunting Tinggi)';
-                            } else if ($request->kategori == 'pendek') {
-                                $kategori = 'Pendek (Resiko Stunting Sedang)';
-                            } else if ($request->kategori == 'normal') {
-                                $kategori = 'Normal';
-                            } else if ($request->kategori == 'tinggi') {
-                                $kategori = 'Tinggi';
+                    })
+                    ->where(function ($query) use ($request) {
+                        $query->where(function ($query) use ($request) {
+                            if ($request->statusValidasi) {
+                                $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
                             }
-                            $query->where('kategori', $kategori);
+
+                            if (Auth::user()->role == 'penyuluh') {
+                                $query->where('is_valid', 1);
+                            }
+
+                            if ($request->kategori) {
+                                $kategori = '';
+                                if ($request->kategori == 'sangat_pendek') {
+                                    $kategori = 'Sangat Pendek (Resiko Stunting Tinggi)';
+                                } else if ($request->kategori == 'pendek') {
+                                    $kategori = 'Pendek (Resiko Stunting Sedang)';
+                                } else if ($request->kategori == 'normal') {
+                                    $kategori = 'Normal';
+                                } else if ($request->kategori == 'tinggi') {
+                                    $kategori = 'Tinggi';
+                                }
+                                $query->where('kategori', $kategori);
+                            }
+                        });
+
+                        $query->where(function ($query) use ($request) {
+                            if ($request->search) {
+                                $query->whereHas('bidan', function ($query) use ($request) {
+                                    $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                                });
+
+                                $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                    $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                                });
+                            }
+                        });
+                    })
+                    ->orWhere(function ($query) {
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                         }
-                    });
-
-                    $query->where(function ($query) use ($request) {
-                        if ($request->search) {
-                            $query->whereHas('bidan', function ($query) use ($request) {
-                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
-                            });
-
-                            $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
-                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
-                            });
+                    })
+                    ->get();
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('tanggal_dibuat', function ($row) {
+                        return Carbon::parse($row->created_at)->translatedFormat('d F Y');
+                    })
+                    ->addColumn('status', function ($row) {
+                        if ($row->is_valid == 0) {
+                            return '<span class="badge badge-danger bg-danger">Belum Divalidasi</span>';
+                        } else if ($row->is_valid == 2) {
+                            return '<span class="badge badge-danger bg-danger">Ditolak</span>';
+                        } else {
+                            return '<span class="badge badge-success bg-success">Tervalidasi</span>';
                         }
-                    });
-                })
-                ->orWhere(function ($query) {
-                    if (Auth::user()->role == 'bidan') { // bidan
-                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                    }
-                })
-                ->get();
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('tanggal_dibuat', function ($row) {
-                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
-                })
-                ->addColumn('status', function ($row) {
-                    if ($row->is_valid == 0) {
-                        return '<span class="badge badge-danger bg-danger">Belum Divalidasi</span>';
-                    } else {
-                        return '<span class="badge badge-success bg-success">Tervalidasi</span>';
-                    }
-                })
-                ->addColumn('nama_anak', function ($row) {
-                    return $row->anggotaKeluarga->nama_lengkap;
-                })
-                ->addColumn('kategori', function ($row) {
-                    if ($row->kategori == 'Sangat Pendek (Resiko Stunting Tinggi)') {
-                        return '<span class="badge rounded-pill bg-danger">' . $row->kategori . '</span>';
-                    } elseif ($row->kategori == 'Pendek (Resiko Stunting Sedang)') {
-                        return '<span class="badge rounded-pill bg-warning">' . $row->kategori . '</span>';
-                    } elseif ($row->kategori == 'Normal') {
-                        return '<span class="badge rounded-pill bg-success">' . $row->kategori .  ' </span>';
-                    } elseif ($row->kategori == 'Tinggi') {
-                        return '<span class="badge rounded-pill bg-primary">' . $row->kategori . '</span>';
-                    }
-                })
-                ->addColumn('desa_kelurahan', function ($row) {
-                    return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
-                })
-                ->addColumn('bidan', function ($row) {
-                    return $row->bidan->nama_lengkap;
-                })
-                ->addColumn('tanggal_validasi', function ($row) {
-                    if ($row->tanggal_validasi) {
-                        return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>';
+                    })
+                    ->addColumn('nama_anak', function ($row) {
+                        return $row->anggotaKeluarga->nama_lengkap;
+                    })
+                    ->addColumn('kategori', function ($row) {
+                        if ($row->kategori == 'Sangat Pendek (Resiko Stunting Tinggi)') {
+                            return '<span class="badge rounded-pill bg-danger">' . $row->kategori . '</span>';
+                        } elseif ($row->kategori == 'Pendek (Resiko Stunting Sedang)') {
+                            return '<span class="badge rounded-pill bg-warning">' . $row->kategori . '</span>';
+                        } elseif ($row->kategori == 'Normal') {
+                            return '<span class="badge rounded-pill bg-success">' . $row->kategori .  ' </span>';
+                        } elseif ($row->kategori == 'Tinggi') {
+                            return '<span class="badge rounded-pill bg-primary">' . $row->kategori . '</span>';
+                        }
+                    })
+                    ->addColumn('desa_kelurahan', function ($row) {
+                        return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
+                    })
+                    ->addColumn('bidan', function ($row) {
+                        return $row->bidan->nama_lengkap ?? '-';
+                    })
+                    ->addColumn('tanggal_validasi', function ($row) {
+                        if ($row->tanggal_validasi) {
+                            return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
+                        } else {
+                            return '-';
+                        }
+                    })
+                    ->addColumn('action', function ($row) {
+                        $actionBtn = '
+                            <div class="text-center justify-content-center text-white">';
+                        if ($row->is_valid == 0) {
+                            $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white" data-toggle="tooltip" data-placement="top" title="Konfirmasi" value="' . $row->id . '" ><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
+                        } else {
+                            $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" value="' . $row->id . '" ><i class="fas fa-eye"></i></button>';
+                        }
+                        if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
+                            if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
+                                // if($row->is_valid == 1){
+                                //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                // }
 
-                    if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
-                        $actionBtn .= '<a href="' . url('stunting-anak/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
-                    }
+                                if ($row->is_valid != 0) {
+                                    $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                }
+                            }
+                        }
 
-                    return $actionBtn;
-                })
-                ->rawColumns(['tanggal_dibuat', 'status', 'nama_anak', 'kategori', 'desa_kelurahan', 'bidan', 'tanggal_validasi', 'action'])
-                ->make(true);
+                        $actionBtn .= '
+                        </div>';
+                        return $actionBtn;
+                    })
+                    ->rawColumns(['tanggal_dibuat', 'status', 'nama_anak', 'kategori', 'desa_kelurahan', 'bidan', 'tanggal_validasi', 'action'])
+                    ->make(true);
+            }
+            return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.index');
+        } else {
+            $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
+            $stuntingAnak = StuntingAnak::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+                $query->where('kartu_keluarga_id', $kartuKeluarga);
+            })->latest()->get();
+
+            return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.indexKeluarga', compact(['stuntingAnak']));
         }
-        return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.index');
     }
 
     /**
@@ -130,8 +162,24 @@ class StuntingAnakController extends Controller
      */
     public function create()
     {
-        $kartuKeluarga = KartuKeluarga::latest()->get();
-        return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.create', compact('kartuKeluarga'));
+        if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    })->latest()->get();
+            } else if (Auth::user()->role == 'keluarga') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+            }
+
+            return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.create', compact('kartuKeluarga'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -146,7 +194,7 @@ class StuntingAnakController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama_kepala_keluarga' => 'required',
+                'nama_kepala_keluarga' => Auth::user()->role == 'keluarga' ? 'nullable' : 'required',
                 'nama_anak' => 'required',
                 'tinggi_badan' => 'required',
                 'nama_bidan' => Auth::user()->role == "admin" && $request->isMethod('post') ? 'required' : '',
@@ -714,22 +762,28 @@ class StuntingAnakController extends Controller
     public function store(Request $request)
     {
         $kategori = $this->proses($request);
-
         $role = Auth::user()->role;
+
+        if ($role == 'admin') {
+            $bidan_id = $request->nama_bidan;
+        } else if ($role == 'bidan') {
+            $bidan_id = Auth::user()->profil->id;
+        } else if ($role == 'keluarga') {
+            $bidan_id = null;
+        }
 
         $stuntingAnak = new StuntingAnak();
         $stuntingAnak->anggota_keluarga_id = $request->nama_anak;
         $stuntingAnak->tinggi_badan = $request->tinggi_badan;
         $stuntingAnak->zscore = $kategori['zscore'];
         $stuntingAnak->kategori = $kategori['kategori'];
-        if ($role == 'bidan') {
-            $stuntingAnak->bidan_id = Auth::user()->profil->id;
+        $stuntingAnak->bidan_id = $bidan_id;
+
+        if ($role != 'keluarga') {
             $stuntingAnak->tanggal_validasi = Carbon::now();
             $stuntingAnak->is_valid = 1;
-        } else if ($role == 'admin') {
-            $stuntingAnak->bidan_id = $request->nama_bidan;
-            $stuntingAnak->tanggal_validasi = Carbon::now();
-            $stuntingAnak->is_valid = 1;
+        } else {
+            $stuntingAnak->is_valid = 0;
         }
         $stuntingAnak->save();
 
@@ -755,7 +809,7 @@ class StuntingAnakController extends Controller
         $interval = date_diff($datetime1, $datetime2);
         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
 
-        $namaIbu = AnggotaKeluarga::where('kartu_keluarga_id', $stuntingAnak->AnggotaKeluarga->kartu_keluarga_id)->where('status_hubungan_dalam_keluarga', 'ISTRI')->first();
+        $namaIbu = AnggotaKeluarga::where('kartu_keluarga_id', $stuntingAnak->AnggotaKeluarga->kartu_keluarga_id)->where('status_hubungan_dalam_keluarga_id', 3)->first();
         $data = [
             'nama_anak' => $stuntingAnak->AnggotaKeluarga->nama_lengkap,
             'nama_ayah' => $namaIbu->nama_ayah ?? '-',
@@ -766,10 +820,12 @@ class StuntingAnakController extends Controller
             'tinggi_badan' => $stuntingAnak->tinggi_badan,
             'tanggal_validasi' => $tanggalValidasi ?? '-',
             'desa_kelurahan' => $stuntingAnak->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
-            'bidan' => $stuntingAnak->bidan->nama_lengkap,
+            'bidan' => $stuntingAnak->bidan->nama_lengkap ?? '-',
             'kategori' => $stuntingAnak->kategori,
             'zscore' => $stuntingAnak->zscore,
-            'tanggal_proses' => $tanggalProses
+            'tanggal_proses' => $tanggalProses,
+            'is_valid' => $stuntingAnak->is_valid,
+            'bidan_konfirmasi' => $stuntingAnak->anggotaKeluarga->getBidan($stuntingAnak->anggota_keluarga_id)
         ];
 
         return response()->json($data);
@@ -783,8 +839,12 @@ class StuntingAnakController extends Controller
      */
     public function edit(StuntingAnak $stuntingAnak)
     {
-        $kartuKeluarga = KartuKeluarga::latest()->get();
-        return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.edit', compact('kartuKeluarga', 'stuntingAnak'));
+        if ((Auth::user()->profil->id == $stuntingAnak->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $stuntingAnak->anggotaKeluarga->kartu_keluarga_id)) {
+            $kartuKeluarga = KartuKeluarga::latest()->get();
+            return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.edit', compact('kartuKeluarga', 'stuntingAnak'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -802,7 +862,23 @@ class StuntingAnakController extends Controller
         $stuntingAnak->tinggi_badan = $request->tinggi_badan;
         $stuntingAnak->zscore = $kategori['zscore'];
         $stuntingAnak->kategori = $kategori['kategori'];
+
+        if ((Auth::user()->role == 'keluarga') && ($stuntingAnak->is_valid == 2)) {
+            $stuntingAnak->is_valid = 0;
+            $stuntingAnak->bidan_id = null;
+            $stuntingAnak->tanggal_validasi = null;
+            $stuntingAnak->alasan_ditolak = null;
+        }
+
         $stuntingAnak->save();
+
+        $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $stuntingAnak->anggota_keluarga_id)
+            ->where('tentang', 'stunting_anak')
+            ->where('fitur_id', $stuntingAnak->id);
+
+        if ($pemberitahuan) {
+            $pemberitahuan->delete();
+        }
 
         return response()->json(['status' => 'success']);
     }
@@ -815,9 +891,83 @@ class StuntingAnakController extends Controller
      */
     public function destroy(StuntingAnak $stuntingAnak)
     {
-        //
-        $stuntingAnak->delete();
+        if ((Auth::user()->profil->id == $stuntingAnak->bidan_id) || (Auth::user()->role == 'admin')) {
+            $stuntingAnak->delete();
 
-        return response()->json(['status' => 'success']);
+            $pemberitahuan = Pemberitahuan::where('fitur_id', $stuntingAnak->id)
+                ->where('tentang', 'stunting_anak');
+
+            if ($pemberitahuan) {
+                $pemberitahuan->delete();
+            }
+
+            return response()->json(['status' => 'success']);
+        } else {
+            return abort(404);
+        }
+    }
+
+    public function validasi(Request $request, StuntingAnak $stuntingAnak)
+    {
+        $id = $request->id;
+
+        if ($request->konfirmasi == 1) {
+            $alasan_req = '';
+            $alasan = null;
+        } else {
+            $alasan_req = 'required';
+            $alasan = $request->alasan;
+        }
+
+        if (Auth::user()->role == 'admin') {
+            $bidan_id_req = 'required';
+            $bidan_id = $request->bidan_id;
+        } else {
+            $bidan_id_req = '';
+            $bidan_id = Auth::user()->profil->id;
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'bidan_id' => $bidan_id_req,
+                'konfirmasi' => 'required',
+                'alasan' => $alasan_req,
+            ],
+            [
+                'bidan_id.required' => 'Bidan harus diisi',
+                'konfirmasi.required' => 'Konfirmasi harus diisi',
+                'alasan.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $stuntingAnak->is_valid = $request->konfirmasi;
+        $stuntingAnak->bidan_id = $bidan_id;
+        $stuntingAnak->tanggal_validasi = Carbon::now();
+        $stuntingAnak->alasan_ditolak = $alasan;
+        $stuntingAnak->save();
+
+        $namaBidan = Bidan::where('id', $bidan_id)->first();
+
+        $pemberitahuan = new Pemberitahuan();
+        $pemberitahuan->user_id = $stuntingAnak->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id;
+        $pemberitahuan->fitur_id = $stuntingAnak->id;
+        $pemberitahuan->anggota_keluarga_id = $stuntingAnak->anggota_keluarga_id;
+        $pemberitahuan->tentang = 'stunting_anak';
+
+        if ($request->konfirmasi == 1) {
+            $pemberitahuan->judul = 'Selamat, data stunting anak anda telah divalidasi.';
+            $pemberitahuan->isi = 'Data stunting anak anda (' . ucwords(strtolower($stuntingAnak->anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.';
+        } else {
+            $pemberitahuan->judul = 'Maaf, data stunting anak anda' . ' (' . ucwords(strtolower($stuntingAnak->anggotaKeluarga->nama_lengkap)) . ') ditolak.';
+            $pemberitahuan->isi = 'Silahkan perbarui data untuk melihat alasan data stunting anak ditolak dan mengirim ulang data. Terima Kasih.';
+        }
+
+        $pemberitahuan->save();
+        return response()->json(['res' => 'success', 'konfirmasi' => $request->konfirmasi]);
     }
 }

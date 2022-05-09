@@ -4,23 +4,24 @@
         @method('PUT')
     @endif
     <div class="row g-4">
-        <div class="col-sm-12 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                ])
-                @slot('options')
-                    @foreach ($kartuKeluarga as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
-                        </option>
-                    @endforeach
-                @endslot
-
-            @endcomponent
-        </div>
+        @if (Auth::user()->role != 'keluarga')
+            <div class="col-sm-12 col-lg">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Nama Kepala Keluarga / Nomor KK',
+                    'id' => 'nama-kepala-keluarga',
+                    'name' => 'nama_kepala_keluarga',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($kartuKeluarga as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
+                            </option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
+        @endif
         <div class="col-sm-12 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Ibu (Tanggal Lahir)',
@@ -147,7 +148,9 @@
                                 'id' => 'proses-pertumbuhan-anak',
                                 'type' => 'submit',
                                 'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan',
+                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' :
+                                null,
+                                'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -318,7 +321,11 @@
         });
 
         function changeKepalaKeluarga() {
-            var id = $('#nama-kepala-keluarga').val();
+            if ('{{ Auth::user()->role }}' != 'keluarga') {
+                var id = $('#nama-kepala-keluarga').val();
+            } else {
+                var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
+            }
             var id_edit = "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}";
             var selected = '';
             $('#nama-ibu').html('');

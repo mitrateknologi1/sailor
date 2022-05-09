@@ -19,6 +19,12 @@
 
 @section('content')
     <section>
+        @if (isset($deteksiIbuMelahirkanStunting) && $deteksiIbuMelahirkanStunting->is_valid == 2)
+            <div role="alert" class="alert alert-danger mt-2">
+                <h6>Alasan data anda ditolak:</h6>
+                <p class="mb-0">{{ $deteksiIbuMelahirkanStunting->alasan_ditolak }}</p>
+            </div>
+        @endif
         <div class="row justify-content-center">
             <div class="col-lg-12 col-md-12">
                 <div class="card p-0">

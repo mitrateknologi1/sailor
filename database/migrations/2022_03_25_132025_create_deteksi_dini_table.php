@@ -15,12 +15,13 @@ class CreateDeteksiDiniTable extends Migration
     {
         Schema::create('deteksi_dini', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->bigInteger('anggota_keluarga_id');
-            $table->bigInteger('bidan_id');
+            $table->uuid('anggota_keluarga_id');
+            $table->uuid('bidan_id')->nullable();
             $table->integer('skor');
             $table->string('kategori');
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
+            $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
         });
     }
