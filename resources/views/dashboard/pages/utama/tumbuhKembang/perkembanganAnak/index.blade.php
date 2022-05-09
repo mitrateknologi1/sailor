@@ -39,6 +39,10 @@
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
+                            @if (Auth::user()->role == 'bidan')
+                                @component('dashboard.components.info.bidan.fiturUtama')
+                                @endcomponent
+                            @endif
                             <div class="col">
                                 <div class="card fieldset border border-secondary mb-4">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
@@ -70,7 +74,7 @@
                                         'id' => 'table-perkembangan-anak',
                                         'th' => [
                                         'No',
-                                        'Dibuat Tanggal',
+                                        'Tanggal Dibuat',
                                         'Status',
                                         'Nama Anak',
                                         'Nama Ayah',
@@ -330,7 +334,8 @@
                 },
                 {
                     data: 'tanggal_validasi',
-                    name: 'tanggal_validasi'
+                    name: 'tanggal_validasi',
+                    className: 'text-center',
                 },
                 {
                     data: 'action',
@@ -342,11 +347,11 @@
 
             ],
             columnDefs: [{
-                    targets: [4, 5, 6, 7, 8, 13],
+                    targets: [4, 5, 6, 7, 8],
                     visible: false,
                 },
                 {
-                    targets: [1, 7, 13],
+                    targets: [1, 7],
                     render: function(data) {
                         return moment(data).format('LL');
                     }

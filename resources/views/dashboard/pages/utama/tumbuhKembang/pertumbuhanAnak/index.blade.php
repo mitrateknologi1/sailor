@@ -21,7 +21,7 @@
     <section>
         <div class="row mb-4">
             <div class="col">
-                <div class="card ">
+                <div class="card">
                     <div
                         class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Pertumbuhan Anak</h5>
@@ -34,7 +34,11 @@
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
-                            <div class="col">
+                            @if (Auth::user()->role == 'bidan')
+                                @component('dashboard.components.info.bidan.fiturUtama')
+                                @endcomponent
+                            @endif
+                            <div class="col-12">
                                 <div class="card fieldset border border-secondary mb-4">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                     <div class="row">
@@ -355,7 +359,8 @@
                 },
                 {
                     data: 'tanggal_validasi',
-                    name: 'tanggal_validasi'
+                    name: 'tanggal_validasi',
+                    className: 'text-center',
                 },
                 {
                     data: 'action',
@@ -367,13 +372,13 @@
 
             ],
             columnDefs: [{
-                    targets: [1, 7, 13],
+                    targets: [1, 7],
                     render: function(data) {
                         return moment(data).format('LL');
                     }
                 },
                 {
-                    targets: [4, 5, 6, 7, 8, 9, 13],
+                    targets: [4, 5, 6, 7, 8, 9],
                     visible: false,
                 },
             ],

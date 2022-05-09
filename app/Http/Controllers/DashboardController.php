@@ -18,4 +18,6 @@ class DashboardController extends Controller
         }
         return view('dashboard.pages.utama.dashboard.admin');
     }
+
+    
 }

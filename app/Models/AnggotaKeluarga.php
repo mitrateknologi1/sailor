@@ -37,7 +37,7 @@ class AnggotaKeluarga extends Model
     public function wilayahDomisili()
     {
         return $this->hasOne(WilayahDomisili::class)
-        ->withTrashed();
+            ->withTrashed();
     }
 
     public function scopeOfDataSesuaiLokasiTugas($query, $lokasiTugas)
@@ -77,7 +77,7 @@ class AnggotaKeluarga extends Model
         $anggotaKeluarga = AnggotaKeluarga::where('id', $id)
             ->withTrashed()->first();
         $lokasiDomisili = $anggotaKeluarga->wilayahDomisili
-        ->desa_kelurahan_id;
+            ->desa_kelurahan_id;
         $bidan = Bidan::with('lokasiTugas')
             ->whereHas('lokasiTugas', function ($query) use ($lokasiDomisili) {
                 return $query->where('desa_kelurahan_id', $lokasiDomisili);
@@ -90,10 +90,11 @@ class AnggotaKeluarga extends Model
         return $this->belongsTo(StatusHubungan::class, 'status_hubungan_dalam_keluarga_id');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-      
+
     public function scopeOfDataSesuaiKecamatan($query, $kecamatan)
     {
         $query->whereHas('wilayahDomisili', function ($query) use ($kecamatan) {

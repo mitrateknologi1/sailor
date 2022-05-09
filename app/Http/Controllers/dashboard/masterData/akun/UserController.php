@@ -28,38 +28,38 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             $data = User::with('bidan', 'penyuluh', 'admin', 'keluarga')
-            ->orderBy('created_at', 'DESC');
+                ->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('nama_lengkap', function($row){
-                    if($row->role == 'keluarga'){
-                        if($row->role == 'keluarga'){
+                ->addColumn('nama_lengkap', function ($row) {
+                    if ($row->role == 'keluarga') {
+                        if ($row->keluarga) {
                             return $row->keluarga->nama_lengkap;
                         } else {
                             return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
                         }
-                    }
-                    else if($row->role == 'bidan'){
-                        if($row->bidan){
+                        // return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
+                    } else if ($row->role == 'bidan') {
+                        if ($row->bidan) {
                             return $row->bidan->nama_lengkap;
                         } else {
                             return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
                         }
-                    } else if($row->role == 'penyuluh'){
-                        if($row->penyuluh){
+                    } else if ($row->role == 'penyuluh') {
+                        if ($row->penyuluh) {
                             return $row->penyuluh->nama_lengkap;
                         } else {
                             return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
                         }
-                    } else if($row->role == 'admin'){
-                        if(isset($row->admin)){
+                    } else if ($row->role == 'admin') {
+                        if (isset($row->admin)) {
                             return $row->admin->nama_lengkap;
                         } else {
                             return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
                         }
-                    } 
+                    }
                 })
-                
+
                 ->addColumn('status', function ($data) {
                     if ($data->status == 1) {
                         return '<span class="badge rounded-pill bg-success">Aktif</span>';
@@ -71,42 +71,40 @@ class UserController extends Controller
                 ->addColumn('role', function ($data) {
                     if ($data->role == 'admin') {
                         return '<span class="badge rounded-pill bg-danger">Admin</span>';
-                    } 
-                    else if ($data->role == 'bidan'){
+                    } else if ($data->role == 'bidan') {
                         return '<span class="badge rounded-pill bg-primary">Bidan</span>';
-                    }
-                    else if ($data->role == 'penyuluh'){
+                    } else if ($data->role == 'penyuluh') {
                         return '<span class="badge rounded-pill text-white bg-info">Penyuluh KB</span>';
-                    } else{
+                    } else {
                         return '<span class="badge rounded-pill bg-success">Keluarga</span>';
                     }
                 })
-               
-                ->addColumn('action', function ($row) {     
-                        $actionBtn = '
+
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '
                         <div class="text-center justify-content-center text-white">';
-                        if(Auth::user()->id == 1){
+                    if (Auth::user()->id == 1) {
+                        $actionBtn .= '
+                            <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                        if ($row->id != 1) {
                             $actionBtn .= '
-                            <a href="'.route('user.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                            if($row->id != 1){
-                                $actionBtn .= '
                                 <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
-                            }
-                        } else{
-                            if($row->role != 'admin'){
-                                $actionBtn .= '
-                                    <a href="'.route('user.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                $actionBtn .= '
+                        }
+                    } else {
+                        if ($row->role != 'admin') {
+                            $actionBtn .= '
+                                    <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                            $actionBtn .= '
                                     <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
-                            } else{
-                                if(($row->id == Auth::user()->id)){
-                                    $actionBtn .= '
-                                    <a href="'.route('user.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                }                          
+                        } else {
+                            if (($row->id == Auth::user()->id)) {
+                                $actionBtn .= '
+                                    <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
                             }
                         }
-                        
-                        $actionBtn .= '
+                    }
+
+                    $actionBtn .= '
                         </div>';
                     return $actionBtn;
                 })
@@ -117,7 +115,7 @@ class UserController extends Controller
                 //             $query->where("nama_lengkap", "LIKE", "%$request->search%");
                 //         });
                 //     }      
-                                    
+
                 //     // if (!empty($request->role)) {
                 //     //     $query->whereHas('user', function ($query) use ($request) {
                 //     //         $query->where('users.role', $request->role);                       
@@ -156,7 +154,7 @@ class UserController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nomor_hp' => ['required','max:13', Rule::unique('users')->where(function ($query) use($request) {
+                'nomor_hp' => ['required', 'max:13', Rule::unique('users')->where(function ($query) use ($request) {
                     return $query->where('role', $request->role)->whereNull('deleted_at');
                 })],
                 'kata_sandi' => 'required|min:6',
@@ -176,12 +174,12 @@ class UserController extends Controller
                 'status.required' => 'Status tidak boleh kosong',
             ]
         );
-        
+
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
         }
-        
+
         $data = [
             'nomor_hp' => $request->nomor_hp,
             'password' => Hash::make($request->kata_sandi),
@@ -192,7 +190,6 @@ class UserController extends Controller
         User::create($data);
 
         return response()->json(['success' => $data]);
-        
     }
 
     /**
@@ -214,18 +211,17 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if(Auth::user()->id != 1){
-            if($user->role != 'admin'){
+        if (Auth::user()->id != 1) {
+            if ($user->role != 'admin') {
                 return view('dashboard.pages.masterData.akun.edit', compact('user'));
-            } else{
-                if(($user->id == Auth::user()->id)){
+            } else {
+                if (($user->id == Auth::user()->id)) {
                     return view('dashboard.pages.masterData.akun.edit', compact('user'));
-                } else{
+                } else {
                     return abort(403, 'Oops! Access Forbidden');
-
                 }
             }
-        } else{
+        } else {
             return view('dashboard.pages.masterData.akun.edit', compact('user'));
         }
     }
@@ -242,7 +238,7 @@ class UserController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nomor_hp' => ['required','max:13', Rule::unique('users')->where(function ($query) use($user) {
+                'nomor_hp' => ['required', 'max:13', Rule::unique('users')->where(function ($query) use ($user) {
                     return $query->where('role', $user->role)->whereNull('deleted_at');
                 })->ignore($user->id)],
                 // 'kata_sandi' => 'min:6',
@@ -260,7 +256,7 @@ class UserController extends Controller
                 'status.required' => 'Status tidak boleh kosong',
             ]
         );
-        
+
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
@@ -278,19 +274,19 @@ class UserController extends Controller
 
         User::where('id', $user->id)->update($data);
 
-        if($user->role == 'admin'){
+        if ($user->role == 'admin') {
             Admin::where('user_id', $user->id)->update([
                 'nomor_hp' => $request->nomor_hp,
             ]);
-        } else if($user->role == 'bidan'){
+        } else if ($user->role == 'bidan') {
             Bidan::where('user_id', $user->id)->update([
                 'nomor_hp' => $request->nomor_hp,
             ]);
-        } else if($user->role == 'penyuluh'){
+        } else if ($user->role == 'penyuluh') {
             Penyuluh::where('user_id', $user->id)->update([
                 'nomor_hp' => $request->nomor_hp,
             ]);
-        } 
+        }
         return $request;
     }
 
@@ -303,29 +299,27 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        if($user->role == 'bidan'){
-            if($user->bidan){
+        if ($user->role == 'bidan') {
+            if ($user->bidan) {
                 if (Storage::exists('upload/foto_profil/bidan/' . $user->bidan->foto_profil)) {
                     Storage::delete('upload/foto_profil/bidan/' . $user->bidan->foto_profil);
                 }
                 $user->bidan->lokasiTugas()->delete();
                 $user->bidan->delete();
             }
-        } 
-        else if($user->role == 'penyuluh'){
-            if($user->penyuluh){
+        } else if ($user->role == 'penyuluh') {
+            if ($user->penyuluh) {
                 if (Storage::exists('upload/foto_profil/penyuluh/' . $user->penyuluh->foto_profil)) {
                     Storage::delete('upload/foto_profil/penyuluh/' . $user->penyuluh->foto_profil);
                 }
                 $user->penyuluh->lokasiTugas()->delete();
                 $user->penyuluh->delete();
             }
-        }
-        else if($user->role == 'admin'){
+        } else if ($user->role == 'admin') {
             if (Storage::exists('upload/foto_profil/admin/' . $user->admin->foto_profil)) {
                 Storage::delete('upload/foto_profil/admin/' . $user->admin->foto_profil);
             }
-            if($user->admin){
+            if ($user->admin) {
                 $user->admin->delete();
             }
         }

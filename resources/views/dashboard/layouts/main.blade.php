@@ -30,7 +30,6 @@
         href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css" />
 
     <style>
-
         @media only screen and (max-width: 567px) {
             .pulse-ring {
                 left: -2px !important;
@@ -169,6 +168,7 @@
         .file-input input {
             height: 25px !important;
         }
+
     </style>
     @stack('style')
 
@@ -184,25 +184,23 @@
     @include('dashboard.layouts.sidebar')
     <!-- start: body area -->
     <div class="wrapper">
-
         @include('dashboard.layouts.header')
-
         <!-- start: page toolbar -->
         {{-- @if (Auth::user()->role != 'keluarga') --}}
-            <div class="page-toolbar px-xl-0 px-sm-2 px-0 py-3">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        @yield('breadcrumb')
-                    </div>
-                    @if (Auth::user()->role != 'keluarga')
-                        <div class="row align-items-center mt-3">
-                            <div class="col">
-                                <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>                        
-                            </div>
-                        </div>
-                    @endif
+        <div class="page-toolbar px-xl-0 px-sm-2 px-0 py-3">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    @yield('breadcrumb')
                 </div>
+                @if (Auth::user()->role != 'keluarga')
+                    <div class="row align-items-center mt-3">
+                        <div class="col">
+                            <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>
+                        </div>
+                    </div>
+                @endif
             </div>
+        </div>
         {{-- @else
             <div class="mt-4">
                 
@@ -421,7 +419,7 @@
     <script src="{{ asset('assets/dashboard') }}/bundles/owlcarousel.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/js/jquery.mask.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/js/moment/moment.min.js"></script>
-    <script src="{{ asset('assets/dashboard') }}/js/moment/moment-with-locales.min.js"></script>  
+    <script src="{{ asset('assets/dashboard') }}/js/moment/moment-with-locales.min.js"></script>
 
     <script src="{{ asset('assets/dashboard') }}/datatables/dataTables.buttons.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/datatables/jszip.min.js"></script>
@@ -445,7 +443,9 @@
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
 
     <script>
-        
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
         $(function() {
             $('.modal').modal({
                 backdrop: 'static',
@@ -465,14 +465,6 @@
                     .format('YYYY-MM-DD'));
             });
 
-        })
-        $(document).on('click', '.btn-delete-pemberitahuan', function() {
-            alert('test')
-            // let id = $(this).data('test');
-            // var _token = "{{csrf_token()}}";
-            // alert(id)
-            // console.log(id);
-            
         })
 
         // project data table
@@ -506,9 +498,6 @@
         $('.numerik').on('input', function(e) {
             this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
         });
-
-
-        
     </script>
 
     @stack('script')
