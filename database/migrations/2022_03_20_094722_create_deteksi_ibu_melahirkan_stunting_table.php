@@ -15,11 +15,12 @@ class CreateDeteksiIbuMelahirkanStuntingTable extends Migration
     {
         Schema::create('deteksi_ibu_melahirkan_stunting', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->bigInteger('anggota_keluarga_id');
-            $table->bigInteger('bidan_id');
+            $table->uuid('anggota_keluarga_id');
+            $table->uuid('bidan_id')->nullable();
             $table->string('kategori');
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
+            $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
         });
     }

@@ -28,10 +28,13 @@
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Ibu Melahirkan Stunting</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'url' => url('deteksi-ibu-melahirkan-stunting/create'),
-                            ])
-                        @endcomponent
+                        @if (Auth::user()->role != 'penyuluh')
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'url' => url('deteksi-ibu-melahirkan-stunting/create'),
+                                ])
+                            @endcomponent
+                        @endif
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
@@ -39,25 +42,29 @@
                                 <div class="card fieldset border border-secondary mb-4">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                     <div class="row">
+                                        @if (Auth::user()->role != 'penyuluh')
+                                            <div class="col-lg">
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Status',
+                                                        'id' => 'status-validasi',
+                                                        'name' => 'status',
+                                                        'class' => 'filter',
+                                                    ])
+                                                    @slot('options')
+                                                        <option value="Tervalidasi">Tervalidasi</option>
+                                                        <option value="Belum Tervalidasi">Belum Divalidasi</option>
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
+                                        @endif
                                         <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Status',
-                                                'id' => 'status-validasi',
-                                                'name' => 'status',
-                                                'class' => 'filter',
-                                                ])
-                                                @slot('options')
-                                                    <option value="Tervalidasi">Tervalidasi</option>
-                                                    <option value="Belum Tervalidasi">Belum Divalidasi</option>
-                                                @endslot
-                                            @endcomponent
-                                        </div>
-                                        <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori',
-                                                'id' => 'kategori',
-                                                'name' => 'kategori',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori',
+                                                    'id' => 'kategori',
+                                                    'name' => 'kategori',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="beresiko">Beresiko Melahirkan Stunting</option>
@@ -72,10 +79,10 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border border-secondary">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-data',
-                                        'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Kategori', 'Desa / Kelurahan',
-                                        'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-data',
+                                            'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Kategori', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>

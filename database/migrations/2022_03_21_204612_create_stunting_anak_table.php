@@ -14,14 +14,15 @@ class CreateStuntingAnakTable extends Migration
     public function up()
     {
         Schema::create('stunting_anak', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('anggota_keluarga_id');
-            $table->bigInteger('bidan_id');
+            $table->uuid('id')->primary();
+            $table->uuid('anggota_keluarga_id');
+            $table->uuid('bidan_id')->nullable();
             $table->integer('tinggi_badan');
             $table->float('zscore');
             $table->string('kategori');
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
+            $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

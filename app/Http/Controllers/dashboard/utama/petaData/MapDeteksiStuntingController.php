@@ -8,10 +8,16 @@ use App\Models\DeteksiIbuMelahirkanStunting;
 use App\Models\Kecamatan;
 use App\Models\StuntingAnak;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MapDeteksiStuntingController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('bukanKeluarga');
+    }
+
     public function index()
     {
         return view('dashboard.pages.utama.petaData.deteksiStunting.index');

@@ -15,8 +15,8 @@ class CreateRandaKabilasaTable extends Migration
     {
         Schema::create('randa_kabilasa', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->bigInteger('anggota_keluarga_id');
-            $table->bigInteger('bidan_id');
+            $table->uuid('anggota_keluarga_id');
+            $table->uuid('bidan_id')->nullable();
             $table->integer('is_mencegah_malnutrisi')->default(0);
             $table->integer('is_mencegah_pernikahan_dini')->default(0);
             $table->integer('is_meningkatkan_life_skill')->default(0);
@@ -26,8 +26,13 @@ class CreateRandaKabilasaTable extends Migration
             $table->string('kategori_mencegah_malnutrisi')->nullable();
             $table->string('kategori_meningkatkan_life_skill')->nullable();
             $table->string('kategori_mencegah_pernikahan_dini')->nullable();
-            $table->integer('is_valid')->default(0);
+            $table->integer('is_valid_mencegah_malnutrisi')->default(0);
+            $table->integer('is_valid_mencegah_pernikahan_dini')->default(0);
+            $table->integer('is_valid_meningkatkan_life_skill')->default(0);
             $table->date('tanggal_validasi')->nullable();
+            $table->text('alasan_ditolak_mencegah_malnutrisi')->nullable();
+            $table->text('alasan_ditolak_mencegah_pernikahan_dini')->nullable();
+            $table->text('alasan_ditolak_meningkatkan_life_skill')->nullable();
             $table->timestamps();
         });
     }

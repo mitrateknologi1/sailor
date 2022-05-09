@@ -14,13 +14,14 @@ class CreatePerkiraanMelahirkanTable extends Migration
     public function up()
     {
         Schema::create('perkiraan_melahirkan', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('anggota_keluarga_id');
-            $table->bigInteger('bidan_id');
+            $table->uuid('id')->primary();
+            $table->uuid('anggota_keluarga_id');
+            $table->uuid('bidan_id')->nullable();
             $table->date('tanggal_haid_terakhir');
             $table->date('tanggal_perkiraan_lahir');
             $table->integer('is_valid')->default(0);
             $table->date('tanggal_validasi')->nullable();
+            $table->text('alasan_ditolak')->nullable();
             $table->timestamps();
         });
     }

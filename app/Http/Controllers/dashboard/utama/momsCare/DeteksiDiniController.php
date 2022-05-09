@@ -4,10 +4,12 @@ namespace App\Http\Controllers\dashboard\utama\momsCare;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
+use App\Models\Bidan;
 use App\Models\DeteksiDini;
 use App\Models\JawabanDeteksiDini;
 use App\Models\KartuKeluarga;
 use App\Models\LokasiTugas;
+use App\Models\Pemberitahuan;
 use App\Models\SoalDeteksiDini;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -24,96 +26,126 @@ class DeteksiDiniController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-            $data = DeteksiDini::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
-                ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                    if (Auth::user()->role != 'admin') {
-                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
-                    }
-                })
-                ->where(function ($query) use ($request) {
-                    $query->where(function ($query) use ($request) {
-                        if ($request->statusValidasi) {
-                            $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
+        if (in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])) {
+            if ($request->ajax()) {
+                $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+                $data = DeteksiDini::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') {
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                         }
-
-                        if ($request->kategori) {
-                            $kategori = '';
-                            if ($request->kategori == 'resiko_rendah') {
-                                $kategori = 'Kehamilan : KRR (Beresiko Rendah)';
-                            } else if ($request->kategori == 'resiko_tinggi') {
-                                $kategori = 'Kehamilan : KRT (Beresiko TINGGI)';
-                            } else if ($request->kategori == 'resiko_sangat_tinggi') {
-                                $kategori = 'Kehamilan : KRST (Beresiko SANGAT TINGGI)';
+                    })
+                    ->where(function ($query) use ($request) {
+                        $query->where(function ($query) use ($request) {
+                            if ($request->statusValidasi) {
+                                $query->where('is_valid', $request->statusValidasi == 'Tervalidasi' ? 1 : 0);
                             }
-                            $query->where('kategori', $kategori);
+
+                            if (Auth::user()->role == 'penyuluh') {
+                                $query->where('is_valid', 1);
+                            }
+
+                            if ($request->kategori) {
+                                $kategori = '';
+                                if ($request->kategori == 'resiko_rendah') {
+                                    $kategori = 'Kehamilan : KRR (Beresiko Rendah)';
+                                } else if ($request->kategori == 'resiko_tinggi') {
+                                    $kategori = 'Kehamilan : KRT (Beresiko TINGGI)';
+                                } else if ($request->kategori == 'resiko_sangat_tinggi') {
+                                    $kategori = 'Kehamilan : KRST (Beresiko SANGAT TINGGI)';
+                                }
+                                $query->where('kategori', $kategori);
+                            }
+                        });
+
+                        $query->where(function ($query) use ($request) {
+                            if ($request->search) {
+                                $query->whereHas('bidan', function ($query) use ($request) {
+                                    $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                                });
+
+                                $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                    $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                                });
+                            }
+                        });
+                    })
+                    ->orWhere(function ($query) {
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                         }
-                    });
-
-                    $query->where(function ($query) use ($request) {
-                        if ($request->search) {
-                            $query->whereHas('bidan', function ($query) use ($request) {
-                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
-                            });
-
-                            $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
-                                $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
-                            });
+                    })->get();
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        $actionBtn = '
+                            <div class="text-center justify-content-center text-white">';
+                        if ($row->is_valid == 0) {
+                            $actionBtn = '<a href=" ' . url('deteksi-dini' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fa-solid fa-lg fa-clipboard-check"></i></a>';
+                        } else {
+                            $actionBtn = '<a href=" ' . url('deteksi-dini' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a>';
                         }
-                    });
-                })
-                ->orWhere(function ($query) {
-                    if (Auth::user()->role == 'bidan') { // bidan
-                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                    }
-                })->get();
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href=" ' . url('deteksi-dini' . '/' . $row->id) .  ' " class="btn btn-primary btn-sm me-1 text-white"><i class="fas fa-eye"></i></a>';
+                        if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
+                            if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
+                                // if($row->is_valid == 1){
+                                //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                // }
 
-                    if ($row->bidan_id == Auth::user()->profil->id || Auth::user()->role == "admin") {
-                        $actionBtn .= '<a href="' . url('deteksi-dini/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-edit"></i></a><button id="btn-delete" class="btn btn-danger btn-sm me-1 text-white" value="' . $row->id . '" ><i class="fas fa-trash"></i></button>';
-                    }
+                                if ($row->is_valid != 0) {
+                                    $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                }
+                            }
+                        }
 
-                    return $actionBtn;
-                })
-                ->addColumn('status', function ($row) {
-                    if ($row->is_valid == 0) {
-                        return '<span class="badge badge-danger bg-danger">Belum Divalidasi</span>';
-                    } else {
-                        return '<span class="badge badge-success bg-success">Tervalidasi</span>';
-                    }
-                })
-                ->addColumn('nama_ibu', function ($row) {
-                    return $row->anggotaKeluarga->nama_lengkap;
-                })
-                ->addColumn('desa_kelurahan', function ($row) {
-                    return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
-                })
-                ->addColumn('bidan', function ($row) {
-                    return $row->bidan->nama_lengkap;
-                })
-                ->addColumn('tanggal_dibuat', function ($row) {
-                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
-                })
-                ->addColumn('tanggal_validasi', function ($row) {
-                    return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
-                })
-                ->addColumn('kategori', function ($row) {
-                    if ($row->kategori == 'Kehamilan : KRST (Beresiko SANGAT TINGGI)') {
-                        return '<span class="badge badge-danger bg-danger">' . $row->kategori . '</span>';
-                    } else if ($row->kategori == 'Kehamilan : KRT (Beresiko TINGGI)') {
-                        return '<span class="badge badge-warning bg-warning">' . $row->kategori . '</span>';
-                    } else {
-                        return '<span class="badge badge-primary bg-primary">' . $row->kategori . '</span>';
-                    }
-                })
-                ->rawColumns(['action', 'nama_ibu', 'nakes', 'status', 'kategori', 'tanggal_dibuat', 'tanggal_validasi'])
-                ->make(true);
+                        $actionBtn .= '
+                        </div>';
+                        return $actionBtn;
+                    })
+                    ->addColumn('status', function ($row) {
+                        if ($row->is_valid == 0) {
+                            return '<span class="badge badge-danger bg-danger">Belum Divalidasi</span>';
+                        } else if ($row->is_valid == 2) {
+                            return '<span class="badge badge-danger bg-danger">Ditolak</span>';
+                        } else {
+                            return '<span class="badge badge-success bg-success">Tervalidasi</span>';
+                        }
+                    })
+                    ->addColumn('nama_ibu', function ($row) {
+                        return $row->anggotaKeluarga->nama_lengkap;
+                    })
+                    ->addColumn('desa_kelurahan', function ($row) {
+                        return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
+                    })
+                    ->addColumn('bidan', function ($row) {
+                        return $row->bidan->nama_lengkap ?? '-';
+                    })
+                    ->addColumn('tanggal_dibuat', function ($row) {
+                        return Carbon::parse($row->created_at)->translatedFormat('d F Y');
+                    })
+                    ->addColumn('tanggal_validasi', function ($row) {
+                        return Carbon::parse($row->tanggal_validasi)->translatedFormat('d F Y');
+                    })
+                    ->addColumn('kategori', function ($row) {
+                        if ($row->kategori == 'Kehamilan : KRST (Beresiko SANGAT TINGGI)') {
+                            return '<span class="badge badge-danger bg-danger">' . $row->kategori . '</span>';
+                        } else if ($row->kategori == 'Kehamilan : KRT (Beresiko TINGGI)') {
+                            return '<span class="badge badge-warning bg-warning">' . $row->kategori . '</span>';
+                        } else {
+                            return '<span class="badge badge-primary bg-primary">' . $row->kategori . '</span>';
+                        }
+                    })
+                    ->rawColumns(['action', 'nama_ibu', 'nakes', 'status', 'kategori', 'tanggal_dibuat', 'tanggal_validasi'])
+                    ->make(true);
+            }
+            return view('dashboard.pages.utama.momsCare.deteksiDini.index');
+        } else {
+            $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
+            $deteksiDini = DeteksiDini::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+                $query->where('kartu_keluarga_id', $kartuKeluarga);
+            })->latest()->get();
+
+            return view('dashboard.pages.utama.momsCare.deteksiDini.indexKeluarga', compact(['deteksiDini']));
         }
-        return view('dashboard.pages.utama.momsCare.deteksiDini.index');
     }
 
     /**
@@ -123,9 +155,24 @@ class DeteksiDiniController extends Controller
      */
     public function create()
     {
-        $kartuKeluarga = KartuKeluarga::latest()->get();
-        $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
-        return view('dashboard.pages.utama.momsCare.deteksiDini.create', compact('kartuKeluarga', 'daftarSoal'));
+        if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    })->latest()->get();
+            } else if (Auth::user()->role == 'keluarga') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+            }
+            $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
+            return view('dashboard.pages.utama.momsCare.deteksiDini.create', compact('kartuKeluarga', 'daftarSoal'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -140,7 +187,7 @@ class DeteksiDiniController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama_kepala_keluarga' => 'required',
+                'nama_kepala_keluarga' => Auth::user()->role == 'keluarga' ? 'nullable' : 'required',
                 'nama_ibu' => 'required',
                 'nama_bidan' => Auth::user()->role == "admin" && $request->isMethod('post') ? 'required' : '',
             ],
@@ -217,20 +264,27 @@ class DeteksiDiniController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        if ($role == 'admin') {
+            $bidan_id = $request->nama_bidan;
+        } else if ($role == 'bidan') {
+            $bidan_id = Auth::user()->profil->id;
+        } else if ($role == 'keluarga') {
+            $bidan_id = null;
+        }
+
         $deteksiDini = new DeteksiDini();
         $deteksiDini->anggota_keluarga_id = $request->nama_ibu;
-        $deteksiDini->bidan_id = 1;
         $deteksiDini->kategori = $data['kategori'];
         $deteksiDini->skor = $data['total_skor'];
-        if ($role == 'bidan') {
-            $deteksiDini->bidan_id = Auth::user()->profil->id;
+        $deteksiDini->bidan_id = $bidan_id;
+
+        if ($role != 'keluarga') {
             $deteksiDini->tanggal_validasi = Carbon::now();
             $deteksiDini->is_valid = 1;
-        } else if ($role == 'admin') {
-            $deteksiDini->bidan_id = $request->nama_bidan;
-            $deteksiDini->tanggal_validasi = Carbon::now();
-            $deteksiDini->is_valid = 1;
+        } else {
+            $deteksiDini->is_valid = 0;
         }
+
         $deteksiDini->save();
 
         $soal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
@@ -268,17 +322,20 @@ class DeteksiDiniController extends Controller
         $interval = date_diff($datetime1, $datetime2);
         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
 
-        $namaAyah = AnggotaKeluarga::where('kartu_keluarga_id', $deteksiDini->AnggotaKeluarga->kartu_keluarga_id)->where('status_hubungan_dalam_keluarga', 'SUAMI')->first();
+        $namaAyah = AnggotaKeluarga::where('kartu_keluarga_id', $deteksiDini->AnggotaKeluarga->kartu_keluarga_id)->where('status_hubungan_dalam_keluarga_id', 2)->first();
         $data = [
+            'id' => $deteksiDini->id,
             'nama_ibu' => $deteksiDini->anggotaKeluarga->nama_lengkap ?? '-',
             'tanggal_lahir' => $tanggalLahir,
             'usia' => $usia,
             'desa_kelurahan' => $deteksiDini->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama,
-            'bidan' => $deteksiDini->bidan->nama_lengkap,
+            'bidan' => $deteksiDini->bidan->nama_lengkap ?? '-',
             'tanggal_validasi' => $tanggalValidasi ?? '-',
             'kategori' => $deteksiDini->kategori,
             'total_skor' => $deteksiDini->skor,
-            'tanggal_proses' => $tanggalProses
+            'tanggal_proses' => $tanggalProses,
+            'is_valid' => $deteksiDini->is_valid,
+            'bidan_konfirmasi' => $deteksiDini->anggotaKeluarga->getBidan($deteksiDini->anggota_keluarga_id)
         ];
 
         $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
@@ -293,9 +350,13 @@ class DeteksiDiniController extends Controller
      */
     public function edit(DeteksiDini $deteksiDini)
     {
-        $kartuKeluarga = KartuKeluarga::latest()->get();
-        $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
-        return view('dashboard.pages.utama.momsCare.deteksiDini.edit', compact('deteksiDini', 'daftarSoal', 'kartuKeluarga'));
+        if ((Auth::user()->profil->id == $deteksiDini->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $deteksiDini->anggotaKeluarga->kartu_keluarga_id)) {
+            $kartuKeluarga = KartuKeluarga::latest()->get();
+            $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
+            return view('dashboard.pages.utama.momsCare.deteksiDini.edit', compact('deteksiDini', 'daftarSoal', 'kartuKeluarga'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -307,16 +368,18 @@ class DeteksiDiniController extends Controller
      */
     public function update(Request $request, DeteksiDini $deteksiDini)
     {
-        $role = 'Nakes';
         $data = $this->proses($request);
 
         $deteksiDini->anggota_keluarga_id = $request->nama_ibu;
         $deteksiDini->bidan_id = 1;
         $deteksiDini->kategori = $data['kategori'];
         $deteksiDini->skor = $data['total_skor'];
-        if ($role == 'Nakes') {
-            $deteksiDini->is_valid = 1;
-            $deteksiDini->tanggal_validasi = Carbon::now();
+
+        if ((Auth::user()->role == 'keluarga') && ($deteksiDini->is_valid == 2)) {
+            $deteksiDini->is_valid = 0;
+            $deteksiDini->bidan_id = null;
+            $deteksiDini->tanggal_validasi = null;
+            $deteksiDini->alasan_ditolak = null;
         }
         $deteksiDini->save();
 
@@ -333,6 +396,14 @@ class DeteksiDiniController extends Controller
             $jawabanDeteksiDini->save();
         }
 
+        $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $deteksiDini->anggota_keluarga_id)
+            ->where('tentang', 'deteksi_dini')
+            ->where('fitur_id', $deteksiDini->id);
+
+        if ($pemberitahuan) {
+            $pemberitahuan->delete();
+        }
+
         return response()->json([
             'status' => 'success'
         ]);
@@ -346,12 +417,84 @@ class DeteksiDiniController extends Controller
      */
     public function destroy(DeteksiDini $deteksiDini)
     {
-        $deteksiDini->delete();
+        if ((Auth::user()->profil->id == $deteksiDini->bidan_id) || (Auth::user()->role == 'admin')) {
+            $deteksiDini->delete();
 
-        $jawabanDeteksiDini = JawabanDeteksiDini::where('deteksi_dini_id', $deteksiDini->id)->delete();
+            $jawabanDeteksiDini = JawabanDeteksiDini::where('deteksi_dini_id', $deteksiDini->id)->delete();
 
-        return response()->json([
-            'status' => 'success'
-        ]);
+            $pemberitahuan = Pemberitahuan::where('fitur_id', $deteksiDini->id)
+                ->where('tentang', 'deteksi_dini');
+            if ($pemberitahuan) {
+                $pemberitahuan->delete();
+            }
+
+            return response()->json([
+                'status' => 'success'
+            ]);
+        }
+    }
+
+    public function validasi(Request $request, DeteksiDini $deteksiDini)
+    {
+        $id = $request->id;
+
+        if ($request->konfirmasi == 1) {
+            $alasan_req = '';
+            $alasan = null;
+        } else {
+            $alasan_req = 'required';
+            $alasan = $request->alasan;
+        }
+
+        if (Auth::user()->role == 'admin') {
+            $bidan_id_req = 'required';
+            $bidan_id = $request->bidan_id;
+        } else {
+            $bidan_id_req = '';
+            $bidan_id = Auth::user()->profil->id;
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'bidan_id' => $bidan_id_req,
+                'konfirmasi' => 'required',
+                'alasan' => $alasan_req,
+            ],
+            [
+                'bidan_id.required' => 'Bidan harus diisi',
+                'konfirmasi.required' => 'Konfirmasi harus diisi',
+                'alasan.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $deteksiDini->is_valid = $request->konfirmasi;
+        $deteksiDini->bidan_id = $bidan_id;
+        $deteksiDini->tanggal_validasi = Carbon::now();
+        $deteksiDini->alasan_ditolak = $alasan;
+        $deteksiDini->save();
+
+        $namaBidan = Bidan::where('id', $bidan_id)->first();
+
+        $pemberitahuan = new Pemberitahuan();
+        $pemberitahuan->user_id = $deteksiDini->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id;
+        $pemberitahuan->fitur_id = $deteksiDini->id;
+        $pemberitahuan->anggota_keluarga_id = $deteksiDini->anggota_keluarga_id;
+        $pemberitahuan->tentang = 'deteksi_dini';
+
+        if ($request->konfirmasi == 1) {
+            $pemberitahuan->judul = 'Selamat, data deteksi dini anda telah divalidasi.';
+            $pemberitahuan->isi = 'Data deteksi dini anda (' . ucwords(strtolower($deteksiDini->anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.';
+        } else {
+            $pemberitahuan->judul = 'Maaf, data deteksi dini anda' . ' (' . ucwords(strtolower($deteksiDini->anggotaKeluarga->nama_lengkap)) . ') ditolak.';
+            $pemberitahuan->isi = 'Silahkan perbarui data untuk melihat alasan data deteksi dini ditolak dan mengirim ulang data. Terima Kasih.';
+        }
+
+        $pemberitahuan->save();
+        return response()->json(['res' => 'success', 'konfirmasi' => $request->konfirmasi]);
     }
 }

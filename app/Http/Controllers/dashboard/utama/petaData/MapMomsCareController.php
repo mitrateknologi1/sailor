@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class MapMomsCareController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('bukanKeluarga');
+    }
+
     public function index()
     {
         return view('dashboard.pages.utama.petaData.momsCare.index');

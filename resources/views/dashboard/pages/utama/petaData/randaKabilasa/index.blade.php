@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-4 d-none" id="informasi_wilayah">
+        <div class="row mb-4" id="informasi_wilayah">
             <div class="col">
                 <div class="card mb-3 border-dark">
                     <div class="card-header bg-dark border-bottom-0 py-3">
@@ -620,7 +620,6 @@
                     zoomMap: mapOnZoom
                 },
                 success: function(response) {
-                    $('#informasi_wilayah').removeClass('d-none');
                     $('#nama_wilayah').html(response.wilayah.nama);
 
                     $('#hb_normal_pria').html(response.pria.totalHbNormal);

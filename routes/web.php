@@ -41,6 +41,8 @@ use App\Http\Controllers\dashboard\utama\randaKabilasa\MencegahPernikahanDiniCon
 use App\Http\Controllers\dashboard\utama\randaKabilasa\MeningkatkanLifeSkillController;
 use App\Http\Controllers\dashboard\utama\randaKabilasa\RandaKabilasaController;
 use App\Http\Controllers\dashboard\utama\TesMapController;
+use App\Models\Anc;
+use App\Models\PerkiraanMelahirkan;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,11 +74,13 @@ Route::match(array('PUT', 'POST'), 'proses-stunting-anak', [StuntingAnakControll
 // -------------- Start Deteksi Stunting --------------
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('stunting-anak', StuntingAnakController::class);
+Route::put('stunting-anak/validasi/{stunting_anak}', [StuntingAnakController::class, 'validasi']);
 
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('deteksi-ibu-melahirkan-stunting', DeteksiIbuMelahirkanStuntingController::class);
 Route::match(array('PUT', 'POST'), 'proses-deteksi-ibu-melahirkan-stunting', [DeteksiIbuMelahirkanStuntingController::class, 'proses']);
 Route::get('get-ibu', [ListController::class, 'getIbu']);
+Route::put('deteksi-ibu-melahirkan-stunting/validasi/{deteksi_ibu_melahirkan_stunting}', [DeteksiIbuMelahirkanStuntingController::class, 'validasi']);
 // -------------- End Deteksi Stunting --------------
 
 
@@ -85,15 +89,18 @@ Route::get('get-ibu', [ListController::class, 'getIbu']);
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('perkiraan-melahirkan', PerkiraanMelahirkanController::class);
 Route::match(array('PUT', 'POST'), 'proses-perkiraan-melahirkan', [PerkiraanMelahirkanController::class, 'proses']);
+Route::put('perkiraan-melahirkan/validasi/{perkiraan_melahirkan}', [PerkiraanMelahirkanController::class, 'validasi']);
 
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('deteksi-dini', DeteksiDiniController::class);
 Route::match(array('PUT', 'POST'), 'proses-deteksi-dini', [DeteksiDiniController::class, 'proses']);
+Route::put('deteksi-dini/validasi/{deteksi_dini}', [DeteksiDiniController::class, 'validasi']);
 
 // URL resource-nya nanti sesuai url yang sekarang
 Route::resource('anc', AncController::class);
 Route::match(array('PUT', 'POST'), 'proses-anc', [AncController::class, 'proses']);
 Route::get('anc-cek-pemeriksaan', [AncController::class, 'cekPemeriksaan']);
+Route::put('anc/validasi/{anc}', [AncController::class, 'validasi']);
 // ----------------- End Moms Care -----------------
 
 
@@ -127,16 +134,19 @@ Route::put('proses-perkembangan-anak', [PerkembanganAnakController::class, 'pros
 Route::resource('randa-kabilasa', RandaKabilasaController::class);
 Route::resource('mencegah-malnutrisi', MencegahMalnutrisiController::class);
 Route::match(array('PUT', 'POST'), 'proses-mencegah-malnutrisi', [MencegahMalnutrisiController::class, 'proses']);
+Route::put('mencegah-malnutrisi/validasi/{mencegah_malnutrisi}', [MencegahMalnutrisiController::class, 'validasi']);
 
 Route::resource('meningkatkan-life-skill/{randaKabilasa}', MeningkatkanLifeSkillController::class)->parameters([
     '{randaKabilasa}' => 'meningkatkanLifeSkill'
 ]);
 Route::match(array('PUT', 'POST'), 'proses-meningkatkan-life-skill/{randaKabilasa}', [MeningkatkanLifeSkillController::class, 'proses']);
+Route::put('meningkatkan-life-skill/validasi/{randaKabilasa}/{meningkatkanLifeSkill}', [MeningkatkanLifeSkillController::class, 'validasi']);
 
 Route::resource('mencegah-pernikahan-dini/{randaKabilasa}', MencegahPernikahanDiniController::class)->parameters([
     '{randaKabilasa}' => 'meningkatkanLifeSkill'
 ]);
 Route::match(array('PUT', 'POST'), 'proses-mencegah-pernikahan-dini/{randaKabilasa}', [MencegahPernikahanDiniController::class, 'proses']);
+Route::put('mencegah-pernikahan-dini/validasi/{randaKabilasa}/{mencegahPernikahanDini}', [MencegahPernikahanDiniController::class, 'validasi']);
 // ----------------- Start Master -----------------
 Route::resource('masterData/desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
     '{kecamatan}' => 'kelurahan'

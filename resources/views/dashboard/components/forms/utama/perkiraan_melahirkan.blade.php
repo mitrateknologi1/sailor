@@ -4,23 +4,24 @@
         @method('PUT')
     @endif
     <div class="row g-4">
-        <div class="col-sm-12 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                ])
-                @slot('options')
-                    @foreach ($kartuKeluarga as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
-                        </option>
-                    @endforeach
-                @endslot
-
-            @endcomponent
-        </div>
+        @if (Auth::user()->role != 'keluarga')
+            <div class="col-sm-12 col-lg">
+                @component('dashboard.components.formElements.select', [
+                    'label' => 'Nama Kepala Keluarga / Nomor KK',
+                    'id' => 'nama-kepala-keluarga',
+                    'name' => 'nama_kepala_keluarga',
+                    'class' => 'select2',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($kartuKeluarga as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
+                            </option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
+        @endif
         <div class="col-sm-12 col-lg">
             @component('dashboard.components.formElements.select', [
                 'label' => 'Nama Ibu (Tanggal Lahir)',
@@ -128,7 +129,9 @@
                                 'id' => 'proses-pertumbuhan-anak',
                                 'type' => 'submit',
                                 'class' => 'text-white text-uppercase w-100 simpan',
-                                'label' => 'Simpan',
+                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' :
+                                null,
+                                'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -173,16 +176,29 @@
                 changeIbu()
             })
 
+            if ('{{ Auth::user()->role }}' == 'keluarga') {
+                var textConfirm = 'Jika sudah sesuai, maka data akan dikirim untuk dilakukan Validasi'
+                var confirmButtonText = 'Ya, Kirim Data'
+                var titleResult = 'Data berhasil dikirim'
+                var textResult = 'Data berhasil dikirim dan sedang menunggu proses Validasi.'
+            } else {
+                var textConfirm =
+                    'Jika sudah sesuai, maka data akan disimpan dan dapat oleh Penyuluh BKKBN dan Dinas P2KB'
+                var confirmButtonText = 'Ya, Simpan'
+                var titleResult = 'Data berhasil disimpan'
+                var textResult = 'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
+            }
+
             $('#{{ $form_id }}').submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
-                        icon: 'warning',
+                        icon: 'question',
                         title: 'Apakah data sudah sesuai?',
-                        text: 'Jika sudah sesuai, maka data akan disimpan dan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                        text: textConfirm,
                         showCancelButton: true,
-                        confirmButtonText: 'Ya, Simpan',
+                        confirmButtonText: confirmButtonText,
                         cancelButtonText: 'Batal',
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -200,8 +216,8 @@
                                     if (response.status == 'success') {
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Data berhasil disimpan',
-                                            text: 'Data akan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                                            title: titleResult,
+                                            text: textResult,
                                             showConfirmButton: false,
                                             timer: 2000,
                                         }).then((result) => {
@@ -312,7 +328,11 @@
         });
 
         function changeKepalaKeluarga() {
-            var id = $('#nama-kepala-keluarga').val();
+            if ('{{ Auth::user()->role }}' != 'keluarga') {
+                var id = $('#nama-kepala-keluarga').val();
+            } else {
+                var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
+            }
             var id_edit = "{{ isset($dataEdit) ? $dataEdit->anggota_keluarga_id : '' }}";
             var selected = '';
             $('#nama-ibu').html('');
