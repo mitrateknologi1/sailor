@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class MapTumbuhKembangController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('bukanKeluarga');
+    }
+
     public function index()
     {
         // Ini Index

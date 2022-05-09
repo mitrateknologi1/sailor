@@ -4,9 +4,12 @@ namespace App\Http\Controllers\dashboard\utama\randaKabilasa;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
+use App\Models\Bidan;
 use App\Models\JawabanMencegahMalnutrisi;
 use App\Models\KartuKeluarga;
+use App\Models\LokasiTugas;
 use App\Models\MencegahMalnutrisi;
+use App\Models\Pemberitahuan;
 use App\Models\RandaKabilasa;
 use App\Models\SoalMencegahMalnutrisi;
 use Illuminate\Http\Request;
@@ -34,9 +37,24 @@ class MencegahMalnutrisiController extends Controller
      */
     public function create()
     {
-        $kartuKeluarga = KartuKeluarga::latest()->get();
-        $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
-        return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.create', compact('kartuKeluarga', 'daftarSoal'));
+        if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    })->latest()->get();
+            } else if (Auth::user()->role == 'keluarga') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+            }
+            $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
+            return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.create', compact('kartuKeluarga', 'daftarSoal'));
+        } else {
+            return abort(404);
+        }
     }
 
     public function proses(Request $request)
@@ -44,7 +62,7 @@ class MencegahMalnutrisiController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama_kepala_keluarga' => 'required',
+                'nama_kepala_keluarga' => Auth::user()->role == 'keluarga' ? 'nullable' : 'required',
                 'nama_anak' => 'required',
                 'nama_bidan' => Auth::user()->role == "admin" && $request->isMethod('post') ? 'required' : '',
                 'lingkar_lengan_atas' => 'required',
@@ -62,10 +80,20 @@ class MencegahMalnutrisiController extends Controller
         );
 
         if ($request->method() != "PUT") {
-            $randaKabilasa = RandaKabilasa::where('anggota_keluarga_id', $request->nama_anak)->where(function ($row) {
-                $row->where('is_mencegah_pernikahan_dini', 0);
-                $row->orWhere('is_meningkatkan_life_skill', 0);
-            })->count();
+            $randaKabilasa = RandaKabilasa::where('anggota_keluarga_id', $request->nama_anak)
+                ->where(function ($row) {
+                    $row->where('is_mencegah_pernikahan_dini', 0);
+                    $row->orWhere('is_meningkatkan_life_skill', 0);
+                    $row->where('is_valid_mencegah_malnutrisi', 0);
+                    $row->orWhere('is_valid_mencegah_malnutrisi', 2);
+
+                    $row->orWhere('is_valid_mencegah_pernikahan_dini', 0);
+                    $row->orWhere('is_valid_mencegah_pernikahan_dini', 2);
+
+                    $row->orWhere('is_valid_meningkatkan_life_skill', 0);
+                    $row->orWhere('is_valid_meningkatkan_life_skill', 2);
+                })
+                ->count();
 
             if ($randaKabilasa > 0) {
                 return response()->json([
@@ -183,6 +211,14 @@ class MencegahMalnutrisiController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        if ($role == 'admin') {
+            $bidan_id = $request->nama_bidan;
+        } else if ($role == 'bidan') {
+            $bidan_id = Auth::user()->profil->id;
+        } else if ($role == 'keluarga') {
+            $bidan_id = null;
+        }
+
         $randaKabilasa = new RandaKabilasa();
         $randaKabilasa->anggota_keluarga_id = $data['anggota_keluarga_id'];
         $randaKabilasa->is_mencegah_malnutrisi = 1;
@@ -190,14 +226,13 @@ class MencegahMalnutrisiController extends Controller
         $randaKabilasa->kategori_lingkar_lengan_atas = $data['kategori_lingkar_lengan_atas'];
         $randaKabilasa->kategori_imt = $data['kategori_imt'];
         $randaKabilasa->kategori_mencegah_malnutrisi = $data['kategori_mencegah_malnutrisi'];
-        if ($role == 'bidan') {
-            $randaKabilasa->bidan_id = Auth::user()->profil->id;
+        $randaKabilasa->bidan_id = $bidan_id;
+
+        if ($role != 'keluarga') {
             $randaKabilasa->tanggal_validasi = Carbon::now();
-            $randaKabilasa->is_valid = 1;
-        } else if ($role == 'admin') {
-            $randaKabilasa->bidan_id = $request->nama_bidan;
-            $randaKabilasa->tanggal_validasi = Carbon::now();
-            $randaKabilasa->is_valid = 1;
+            $randaKabilasa->is_valid_mencegah_malnutrisi = 1;
+        } else {
+            $randaKabilasa->is_valid_mencegah_malnutrisi = 0;
         }
         $randaKabilasa->save();
 
@@ -251,6 +286,7 @@ class MencegahMalnutrisiController extends Controller
         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
 
         $data = [
+            'id' => $mencegahMalnutrisi->id,
             'nama_anak' => $anak->nama_lengkap,
             'tanggal_lahir' => Carbon::parse($anak->tanggal_lahir)->translatedFormat('d F Y'),
             'usia_tahun' => $usia,
@@ -265,7 +301,9 @@ class MencegahMalnutrisiController extends Controller
             'kategori' => $kategori,
             'tanggal_proses' => Carbon::parse($mencegahMalnutrisi->randaKabilasa->created_at)->translatedFormat('d F Y'),
             'tanggal_validasi' => Carbon::parse($mencegahMalnutrisi->randaKabilasa->tanggal_validasi)->translatedFormat('d F Y'),
-            'bidan' => $mencegahMalnutrisi->randaKabilasa->bidan->nama_lengkap,
+            'bidan' => $mencegahMalnutrisi->randaKabilasa->bidan->nama_lengkap ?? '-',
+            'is_valid_mencegah_malnutrisi' => $randaKabilasa->is_valid_mencegah_malnutrisi,
+            'bidan_konfirmasi' => $randaKabilasa->anggotaKeluarga->getBidan($randaKabilasa->anggota_keluarga_id)
         ];
 
         $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
@@ -281,9 +319,13 @@ class MencegahMalnutrisiController extends Controller
      */
     public function edit(MencegahMalnutrisi $mencegahMalnutrisi)
     {
-        $kartuKeluarga = KartuKeluarga::latest()->get();
-        $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
-        return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.edit', compact('kartuKeluarga', 'daftarSoal', 'mencegahMalnutrisi'));
+        if ((Auth::user()->profil->id == $mencegahMalnutrisi->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $mencegahMalnutrisi->anggotaKeluarga->kartu_keluarga_id)) {
+            $kartuKeluarga = KartuKeluarga::latest()->get();
+            $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
+            return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.edit', compact('kartuKeluarga', 'daftarSoal', 'mencegahMalnutrisi'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -303,6 +345,14 @@ class MencegahMalnutrisiController extends Controller
         $randaKabilasa->kategori_lingkar_lengan_atas = $data['kategori_lingkar_lengan_atas'];
         $randaKabilasa->kategori_imt = $data['kategori_imt'];
         $randaKabilasa->kategori_mencegah_malnutrisi = $data['kategori_mencegah_malnutrisi'];
+
+        if ((Auth::user()->role == 'keluarga') && ($randaKabilasa->is_valid_mencegah_malnutrisi == 2)) {
+            $randaKabilasa->is_valid_mencegah_malnutrisi = 0;
+            $randaKabilasa->bidan_id = null;
+            $randaKabilasa->tanggal_validasi = null;
+            $randaKabilasa->alasan_ditolak_mencegah_malnutrisi = null;
+        }
+
         $randaKabilasa->save();
 
         $mencegahMalnutrisi->randa_kabilasa_id = $mencegahMalnutrisi->randa_kabilasa_id;
@@ -324,7 +374,16 @@ class MencegahMalnutrisiController extends Controller
             $jawabanMencegahMalnutrisi->save();
         }
 
+        $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $mencegahMalnutrisi->randaKabilasa->anggota_keluarga_id)
+            ->where('tentang', 'mencegah_malnutrisi')
+            ->where('fitur_id', $mencegahMalnutrisi->id);
+
+        if ($pemberitahuan) {
+            $pemberitahuan->delete();
+        }
+
         return response()->json([
+            'id' => $mencegahMalnutrisi->id,
             'status' => 'success'
         ]);
     }
@@ -338,5 +397,70 @@ class MencegahMalnutrisiController extends Controller
     public function destroy(MencegahMalnutrisi $mencegahMalnutrisi)
     {
         //
+    }
+
+    public function validasi(Request $request, MencegahMalnutrisi $mencegahMalnutrisi)
+    {
+        $id = $request->id;
+        $randaKabilasa = RandaKabilasa::where('id', $mencegahMalnutrisi->randa_kabilasa_id)->first();
+
+        if ($request->konfirmasi == 1) {
+            $alasan_req = '';
+            $alasan = null;
+        } else {
+            $alasan_req = 'required';
+            $alasan = $request->alasan;
+        }
+
+        if (Auth::user()->role == 'admin') {
+            $bidan_id_req = 'required';
+            $bidan_id = $request->bidan_id;
+        } else {
+            $bidan_id_req = '';
+            $bidan_id = Auth::user()->profil->id;
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'bidan_id' => $bidan_id_req,
+                'konfirmasi' => 'required',
+                'alasan' => $alasan_req,
+            ],
+            [
+                'bidan_id.required' => 'Bidan harus diisi',
+                'konfirmasi.required' => 'Konfirmasi harus diisi',
+                'alasan.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $randaKabilasa->is_valid_mencegah_malnutrisi = $request->konfirmasi;
+        $randaKabilasa->bidan_id = $bidan_id;
+        $randaKabilasa->tanggal_validasi = Carbon::now();
+        $randaKabilasa->alasan_ditolak_mencegah_malnutrisi = $alasan;
+        $randaKabilasa->save();
+
+        $namaBidan = Bidan::where('id', $bidan_id)->first();
+
+        $pemberitahuan = new Pemberitahuan();
+        $pemberitahuan->user_id = $randaKabilasa->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id;
+        $pemberitahuan->fitur_id = $mencegahMalnutrisi->id;
+        $pemberitahuan->anggota_keluarga_id = $randaKabilasa->anggota_keluarga_id;
+        $pemberitahuan->tentang = 'mencegah_malnutrisi';
+
+        if ($request->konfirmasi == 1) {
+            $pemberitahuan->judul = 'Selamat, data asesmen mencegah malnutrisi anda telah divalidasi.';
+            $pemberitahuan->isi = 'Data asesmen mencegah malnutrisi anda (' . ucwords(strtolower($randaKabilasa->anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.';
+        } else {
+            $pemberitahuan->judul = 'Maaf, data asesmen mencegah malnutrisi anda' . ' (' . ucwords(strtolower($randaKabilasa->anggotaKeluarga->nama_lengkap)) . ') ditolak.';
+            $pemberitahuan->isi = 'Silahkan perbarui data untuk melihat alasan data asesmen mencegah malnutrisi ditolak dan mengirim ulang data. Terima Kasih.';
+        }
+
+        $pemberitahuan->save();
+        return response()->json(['res' => 'success', 'konfirmasi' => $request->konfirmasi]);
     }
 }

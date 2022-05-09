@@ -11,4 +11,9 @@ class MencegahPernikahanDini extends Model
     use HasFactory;
     use TraitUuid;
     protected $table = 'mencegah_pernikahan_dini';
+
+    public function randaKabilasa()
+    {
+        return $this->belongsTo(RandaKabilasa::class);
+    }
 }

@@ -5,32 +5,32 @@
     @endif
     <div class="row g-4">
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'type' => 'text',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => '',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Nama Kepala Keluarga / Nomor KK',
-                'attribute' => 'readonly',
-                'value' => $randaKabilasa->anggotaKeluarga->kartuKeluarga->nama_kepala_keluarga . ' / ' .
-                $randaKabilasa->anggotaKeluarga->kartuKeluarga->nomor_kk,
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Nama Kepala Keluarga / Nomor KK',
+                    'type' => 'text',
+                    'id' => 'nama-kepala-keluarga',
+                    'name' => 'nama_kepala_keluarga',
+                    'class' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Nama Kepala Keluarga / Nomor KK',
+                    'attribute' => 'readonly',
+                    'value' => $randaKabilasa->anggotaKeluarga->kartuKeluarga->nama_kepala_keluarga . ' / ' . $randaKabilasa->anggotaKeluarga->kartuKeluarga->nomor_kk,
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Nama Remaja (Tanggal Lahir)',
-                'type' => 'text',
-                'id' => 'nama-remaja',
-                'name' => 'nama_remaja',
-                'class' => '',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Nama Remaja',
-                'attribute' => 'readonly',
-                'value' => $randaKabilasa->anggotaKeluarga->nama_lengkap . ' (' .
-                Carbon\Carbon::parse($randaKabilasa->anggotaKeluarga->tanggal_lahir)->translatedFormat('d F Y') . ')',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Nama Remaja (Tanggal Lahir)',
+                    'type' => 'text',
+                    'id' => 'nama-remaja',
+                    'name' => 'nama_remaja',
+                    'class' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Nama Remaja',
+                    'attribute' => 'readonly',
+                    'value' => $randaKabilasa->anggotaKeluarga->nama_lengkap . ' (' . Carbon\Carbon::parse($randaKabilasa->anggotaKeluarga->tanggal_lahir)->translatedFormat('d F Y') . ')',
                 ])
             @endcomponent
         </div>
@@ -112,9 +112,10 @@
             </div>
         </div>
         <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-pertumbuhan-anak',
-                'type' => 'submit',
+            @component('dashboard.components.buttons.process',
+                [
+                    'id' => 'proses-pertumbuhan-anak',
+                    'type' => 'submit',
                 ])
             @endcomponent
         </div>
@@ -168,11 +169,12 @@
                         </div>
                         <div class="col-sm-6 col-lg-8">
                             {{-- <a href="#" class="btn btn-info text-white text-uppercase w-100" id="simpan-pertumbuhan-anak"><i class="fa-solid fa-floppy-disk"></i> Simpan</a> --}}
-                            @component('dashboard.components.buttons.submit', [
-                                'id' => 'proses-pertumbuhan-anak',
-                                'type' => 'submit',
-                                'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan',
+                            @component('dashboard.components.buttons.submit',
+                                [
+                                    'id' => 'proses-pertumbuhan-anak',
+                                    'type' => 'submit',
+                                    'class' => 'text-white text-uppercase w-100',
+                                    'label' => 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -258,6 +260,7 @@
                                 processData: false,
                                 contentType: false,
                                 success: function(response) {
+                                    console.log(response);
                                     if (response.status == 'success') {
                                         Swal.fire({
                                             icon: 'success',

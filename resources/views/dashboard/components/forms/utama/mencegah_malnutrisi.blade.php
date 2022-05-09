@@ -4,80 +4,87 @@
         @method('PUT')
     @endif
     <div class="row g-4">
+        @if (Auth::user()->role != 'keluarga')
+            <div class="col-sm-12 col-lg">
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Nama Kepala Keluarga / Nomor KK',
+                        'id' => 'nama-kepala-keluarga',
+                        'name' => 'nama_kepala_keluarga',
+                        'class' => 'select2',
+                        'wajib' => '<sup class="text-danger">*</sup>',
+                    ])
+                    @slot('options')
+                        @foreach ($kartuKeluarga as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
+                            </option>
+                        @endforeach
+                    @endslot
+                @endcomponent
+            </div>
+        @endif
         <div class="col-sm-12 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => 'select2',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                ])
-                @slot('options')
-                    @foreach ($kartuKeluarga as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama_kepala_keluarga }} / {{ $item->nomor_kk }}
-                        </option>
-                    @endforeach
-                @endslot
-
-            @endcomponent
-        </div>
-        <div class="col-sm-12 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Anak (Tanggal Lahir)',
-                'id' => 'nama-anak',
-                'name' => 'nama_anak',
-                'class' => 'select2',
-                'attribute' => 'disabled',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Nama Anak (Tanggal Lahir)',
+                    'id' => 'nama-anak',
+                    'name' => 'nama_anak',
+                    'class' => 'select2',
+                    'attribute' => 'disabled',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
         </div>
         @if (Auth::user()->role == 'admin' && $method == 'POST')
             <div class="col-sm-12 col-lg">
-                @component('dashboard.components.formElements.select', [
-                    'label' => 'Bidan sesuai lokasi anak',
-                    'id' => 'nama-bidan',
-                    'name' => 'nama_bidan',
-                    'class' => 'select2',
-                    'attribute' => 'disabled',
-                    'wajib' => '<sup class="text-danger">*</sup>',
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Bidan sesuai lokasi anak',
+                        'id' => 'nama-bidan',
+                        'name' => 'nama_bidan',
+                        'class' => 'select2',
+                        'attribute' => 'disabled',
+                        'wajib' => '<sup class="text-danger">*</sup>',
                     ])
                 @endcomponent
             </div>
         @endif
         <div class="col-sm-12 col-lg-12">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Lingkar Lengan Atas',
-                'type' => 'text',
-                'id' => 'lingkar_lengan_atas',
-                'name' => 'lingkar_lengan_atas',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Lingkar Lengan Atas',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Lingkar Lengan Atas',
+                    'type' => 'text',
+                    'id' => 'lingkar_lengan_atas',
+                    'name' => 'lingkar_lengan_atas',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Lingkar Lengan Atas',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Tinggi Badan (Cm)',
-                'type' => 'text',
-                'id' => 'tinggi_badan',
-                'name' => 'tinggi_badan',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Tinggi Badan',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Tinggi Badan (Cm)',
+                    'type' => 'text',
+                    'id' => 'tinggi_badan',
+                    'name' => 'tinggi_badan',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Tinggi Badan',
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Berat Badan (Kg)',
-                'type' => 'text',
-                'id' => 'berat_badan',
-                'name' => 'berat_badan',
-                'class' => 'numerik',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Masukkan Berat Badan',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Berat Badan (Kg)',
+                    'type' => 'text',
+                    'id' => 'berat_badan',
+                    'name' => 'berat_badan',
+                    'class' => 'numerik',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Berat Badan',
                 ])
             @endcomponent
         </div>
@@ -124,9 +131,10 @@
 
         </div>
         <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-pertumbuhan-anak',
-                'type' => 'submit',
+            @component('dashboard.components.buttons.process',
+                [
+                    'id' => 'proses-pertumbuhan-anak',
+                    'type' => 'submit',
                 ])
             @endcomponent
         </div>
@@ -213,11 +221,12 @@
                         </div>
                         <div class="col-sm-6 col-lg-8">
                             {{-- <a href="#" class="btn btn-info text-white text-uppercase w-100" id="simpan-pertumbuhan-anak"><i class="fa-solid fa-floppy-disk"></i> Simpan</a> --}}
-                            @component('dashboard.components.buttons.submit', [
-                                'id' => 'proses-pertumbuhan-anak',
-                                'type' => 'submit',
-                                'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan',
+                            @component('dashboard.components.buttons.submit',
+                                [
+                                    'id' => 'proses-pertumbuhan-anak',
+                                    'type' => 'submit',
+                                    'class' => 'text-white text-uppercase w-100',
+                                    'label' => 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -434,7 +443,11 @@
         });
 
         function changeKepalaKeluarga() {
-            var id = $('#nama-kepala-keluarga').val();
+            if ('{{ Auth::user()->role }}' != 'keluarga') {
+                var id = $('#nama-kepala-keluarga').val();
+            } else {
+                var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
+            }
             var rentang_umur = 'semua_umur';
             var id_anak = "{{ isset($dataEdit) ? $dataEdit->randaKabilasa->anggota_keluarga_id : '' }}";
             var selected = '';

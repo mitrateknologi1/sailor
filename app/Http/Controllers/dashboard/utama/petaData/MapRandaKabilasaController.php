@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class MapRandaKabilasaController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('bukanKeluarga');
+    }
+
     public function index()
     {
         return view('dashboard.pages.utama.petaData.randaKabilasa.index');
@@ -36,7 +41,9 @@ class MapRandaKabilasaController extends Controller
                         $query->ofDataSesuaiDesa($idWilayah);
                     }
                 })
-                ->where('is_valid', 1)
+                ->where('is_valid_mencegah_malnutrisi', 1)
+                ->where('is_valid_mencegah_pernikahan_dini', 1)
+                ->where('is_valid_meningkatkan_life_skill', 1)
                 ->get();
 
             // Kategori HB
@@ -120,7 +127,9 @@ class MapRandaKabilasaController extends Controller
                 }
                 $query->where('jenis_kelamin', 'LAKI-LAKI');
             })
-            ->where('is_valid', 1)
+            ->where('is_valid_mencegah_malnutrisi', 1)
+            ->where('is_valid_mencegah_pernikahan_dini', 1)
+            ->where('is_valid_meningkatkan_life_skill', 1)
             ->get();
 
         // Kategori HB
@@ -182,7 +191,9 @@ class MapRandaKabilasaController extends Controller
                 }
                 $query->where('jenis_kelamin', 'PEREMPUAN');
             })
-            ->where('is_valid', 1)
+            ->where('is_valid_mencegah_malnutrisi', 1)
+            ->where('is_valid_mencegah_pernikahan_dini', 1)
+            ->where('is_valid_meningkatkan_life_skill', 1)
             ->get();
 
         // Kategori HB

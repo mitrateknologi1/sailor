@@ -4,7 +4,9 @@ namespace App\Http\Controllers\dashboard\utama\randaKabilasa;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
+use App\Models\Bidan;
 use App\Models\MencegahPernikahanDini;
+use App\Models\Pemberitahuan;
 use App\Models\RandaKabilasa;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -31,8 +33,12 @@ class MencegahPernikahanDiniController extends Controller
      */
     public function create(Request $request)
     {
-        $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
-        return view('dashboard.pages.utama.randaKabilasa.mencegahPernikahanDini.create', compact('randaKabilasa'));
+        if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
+            $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
+            return view('dashboard.pages.utama.randaKabilasa.mencegahPernikahanDini.create', compact('randaKabilasa'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -91,11 +97,19 @@ class MencegahPernikahanDiniController extends Controller
 
     public function store(Request $request)
     {
+        $role = Auth::user()->role;
         $data = $this->proses($request);
         $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
 
         $randaKabilasa->is_mencegah_pernikahan_dini = 1;
         $randaKabilasa->kategori_mencegah_pernikahan_dini = $data['kategori'];
+
+        if ($role != 'keluarga') {
+            $randaKabilasa->is_valid_mencegah_pernikahan_dini = 1;
+        } else {
+            $randaKabilasa->is_valid_mencegah_pernikahan_dini = 0;
+        }
+
         $randaKabilasa->save();
 
         $mencegahPernikahanDini = new MencegahPernikahanDini();
@@ -131,6 +145,7 @@ class MencegahPernikahanDiniController extends Controller
         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
 
         $data = [
+            'id' => $randaKabilasa->id,
             'nama_anak' => $anak->nama_lengkap,
             'tanggal_lahir' => Carbon::parse($anak->tanggal_lahir)->translatedFormat('d F Y'),
             'usia_tahun' => $usia,
@@ -139,7 +154,9 @@ class MencegahPernikahanDiniController extends Controller
             'kategori' => $kategori,
             'tanggal_proses' => Carbon::parse($randaKabilasa->created_at)->translatedFormat('d F Y'),
             'tanggal_validasi' => Carbon::parse($randaKabilasa->tanggal_validasi)->translatedFormat('d F Y'),
-            'bidan' => $randaKabilasa->bidan->nama_lengkap,
+            'bidan' => $randaKabilasa->bidan->nama_lengkap ?? '-',
+            'is_valid_mencegah_pernikahan_dini' => $randaKabilasa->is_valid_mencegah_pernikahan_dini,
+            'bidan_konfirmasi' => $randaKabilasa->anggotaKeluarga->getBidan($randaKabilasa->anggota_keluarga_id)
         ];
 
         return view('dashboard.pages.utama.randaKabilasa.mencegahPernikahanDini.show', compact('randaKabilasa', 'data'));
@@ -154,7 +171,11 @@ class MencegahPernikahanDiniController extends Controller
     public function edit(Request $request)
     {
         $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
-        return view('dashboard.pages.utama.randaKabilasa.mencegahPernikahanDini.edit', compact('randaKabilasa'));
+        if ((Auth::user()->profil->id == $randaKabilasa->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $randaKabilasa->anggotaKeluarga->kartu_keluarga_id)) {
+            return view('dashboard.pages.utama.randaKabilasa.mencegahPernikahanDini.edit', compact('randaKabilasa'));
+        } else {
+            return abort(404);
+        }
     }
 
     /**
@@ -170,14 +191,30 @@ class MencegahPernikahanDiniController extends Controller
 
         $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
         $randaKabilasa->kategori_mencegah_pernikahan_dini = $data['kategori'];
+
+        if ((Auth::user()->role == 'keluarga') && ($randaKabilasa->is_valid_mencegah_pernikahan_dini == 2)) {
+            $randaKabilasa->is_valid_mencegah_pernikahan_dini = 0;
+            $randaKabilasa->bidan_id = null;
+            $randaKabilasa->tanggal_validasi = null;
+            $randaKabilasa->alasan_ditolak_mencegah_pernikahan_dini = null;
+        }
+
         $randaKabilasa->save();
 
-        $mencegahPernikahanDini = MencegahPernikahanDini::find($request->randaKabilasa);
-        $mencegahPernikahanDini->randa_kabilasa_id = $request->randaKabilasa;
+        $mencegahPernikahanDini = MencegahPernikahanDini::where('randa_kabilasa_id', $randaKabilasa->id)->first();
+        $mencegahPernikahanDini->randa_kabilasa_id = $randaKabilasa->id;
         $mencegahPernikahanDini->jawaban_1 = $request->jawaban_1[0];
         $mencegahPernikahanDini->jawaban_2 = $request->jawaban_2[0];
         $mencegahPernikahanDini->jawaban_3 = $request->jawaban_3[0];
         $mencegahPernikahanDini->save();
+
+        $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $randaKabilasa->anggota_keluarga_id)
+            ->where('tentang', 'mencegah_pernikahan_dini')
+            ->where('fitur_id', $randaKabilasa->id);
+
+        if ($pemberitahuan) {
+            $pemberitahuan->delete();
+        }
 
         return response()->json([
             'status' => 'success'
@@ -193,14 +230,89 @@ class MencegahPernikahanDiniController extends Controller
     public function destroy(Request $request)
     {
         $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
+        if ((Auth::user()->profil->id == $randaKabilasa->bidan_id) || (Auth::user()->role == 'admin')) {
 
-        $randaKabilasa->is_mencegah_pernikahan_dini = 0;
+            $randaKabilasa->is_mencegah_pernikahan_dini = 0;
+            $randaKabilasa->save();
+
+            $pemberitahuan = Pemberitahuan::where('fitur_id', $randaKabilasa->id)
+                ->where('tentang', 'mencegah_pernikahan_dini');
+
+            if ($pemberitahuan) {
+                $pemberitahuan->delete();
+            }
+
+            $mencegahPernikahanDini = MencegahPernikahanDini::where('randa_kabilasa_id', $request->randaKabilasa)->delete();
+
+            return response()->json([
+                'status' => 'success'
+            ]);
+        } else {
+            return abort(404);
+        }
+    }
+
+    public function validasi(Request $request, RandaKabilasa $randaKabilasa)
+    {
+        $id = $request->id;
+
+        if ($request->konfirmasi == 1) {
+            $alasan_req = '';
+            $alasan = null;
+        } else {
+            $alasan_req = 'required';
+            $alasan = $request->alasan;
+        }
+
+        if (Auth::user()->role == 'admin') {
+            $bidan_id_req = 'required';
+            $bidan_id = $request->bidan_id;
+        } else {
+            $bidan_id_req = '';
+            $bidan_id = Auth::user()->profil->id;
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'bidan_id' => $bidan_id_req,
+                'konfirmasi' => 'required',
+                'alasan' => $alasan_req,
+            ],
+            [
+                'bidan_id.required' => 'Bidan harus diisi',
+                'konfirmasi.required' => 'Konfirmasi harus diisi',
+                'alasan.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $randaKabilasa->is_valid_mencegah_pernikahan_dini = $request->konfirmasi;
+        $randaKabilasa->bidan_id = $bidan_id;
+        $randaKabilasa->tanggal_validasi = Carbon::now();
+        $randaKabilasa->alasan_ditolak_mencegah_pernikahan_dini = $alasan;
         $randaKabilasa->save();
 
-        $mencegahPernikahanDini = MencegahPernikahanDini::where('randa_kabilasa_id', $request->randaKabilasa)->delete();
+        $namaBidan = Bidan::where('id', $bidan_id)->first();
 
-        return response()->json([
-            'status' => 'success'
-        ]);
+        $pemberitahuan = new Pemberitahuan();
+        $pemberitahuan->user_id = $randaKabilasa->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id;
+        $pemberitahuan->fitur_id = $randaKabilasa->id;
+        $pemberitahuan->anggota_keluarga_id = $randaKabilasa->anggota_keluarga_id;
+        $pemberitahuan->tentang = 'mencegah_pernikahan_dini';
+
+        if ($request->konfirmasi == 1) {
+            $pemberitahuan->judul = 'Selamat, data asesmen mencegah pernikahan dini anda telah divalidasi.';
+            $pemberitahuan->isi = 'Data asesmen mencegah pernikahan dini anda (' . ucwords(strtolower($randaKabilasa->anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.';
+        } else {
+            $pemberitahuan->judul = 'Maaf, data asesmen mencegah pernikahan dini anda' . ' (' . ucwords(strtolower($randaKabilasa->anggotaKeluarga->nama_lengkap)) . ') ditolak.';
+            $pemberitahuan->isi = 'Silahkan perbarui data untuk melihat alasan data asesmen mencegah pernikahan dini ditolak dan mengirim ulang data. Terima Kasih.';
+        }
+
+        $pemberitahuan->save();
+        return response()->json(['res' => 'success', 'konfirmasi' => $request->konfirmasi]);
     }
 }

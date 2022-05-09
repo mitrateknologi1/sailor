@@ -28,12 +28,15 @@
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Antenatal Care</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'id' => 'catatan-anc',
-                            'class' => '',
-                            'url' => '/anc/create',
-                            ])
-                        @endcomponent
+                        @if (Auth::user()->role != 'penyuluh')
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'catatan-anc',
+                                    'class' => '',
+                                    'url' => '/anc/create',
+                                ])
+                            @endcomponent
+                        @endif
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
@@ -44,26 +47,32 @@
                             <div class="col">
                                 <div class="card fieldset border-secondary mb-4 border">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
+                                    @if (Auth::user()->role != 'penyuluh')
+                                        <div class="row">
+                                            <div class="col-lg-12 mt-2">
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Status',
+                                                        'id' => 'status-validasi',
+                                                        'name' => 'status',
+                                                        'class' => 'filter',
+                                                    ])
+                                                    @slot('options')
+                                                        <option value="Tervalidasi">Tervalidasi</option>
+                                                        <option value="Belum Tervalidasi">Belum Divalidasi</option>
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="row">
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Status',
-                                                'id' => 'status-validasi',
-                                                'name' => 'status',
-                                                'class' => 'filter',
-                                                ])
-                                                @slot('options')
-                                                    <option value="Tervalidasi">Tervalidasi</option>
-                                                    <option value="Belum Tervalidasi">Belum Divalidasi</option>
-                                                @endslot
-                                            @endcomponent
-                                        </div>
-                                        <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Badan',
-                                                'id' => 'kategori_badan',
-                                                'name' => 'kategori_badan',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Badan',
+                                                    'id' => 'kategori_badan',
+                                                    'name' => 'kategori_badan',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Resiko Tinggi">Resiko Tinggi</option>
@@ -72,11 +81,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Tekanan Darah',
-                                                'id' => 'kategori_tekanan_darah',
-                                                'name' => 'kategori_tekanan_darah',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Tekanan Darah',
+                                                    'id' => 'kategori_tekanan_darah',
+                                                    'name' => 'kategori_tekanan_darah',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Hipotensi">Hipotensi</option>
@@ -87,11 +97,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Lengan Atas',
-                                                'id' => 'kategori_lengan_atas',
-                                                'name' => 'kategori_lengan_atas',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Lengan Atas',
+                                                    'id' => 'kategori_lengan_atas',
+                                                    'name' => 'kategori_lengan_atas',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Kurang Gizi (BBLR)">Kurang Gizi (BBLR)</option>
@@ -100,11 +111,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Denyut Jantung',
-                                                'id' => 'kategori_denyut_jantung',
-                                                'name' => 'kategori_denyut_jantung',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Denyut Jantung',
+                                                    'id' => 'kategori_denyut_jantung',
+                                                    'name' => 'kategori_denyut_jantung',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Normal">Normal</option>
@@ -113,11 +125,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Hemoglobin Darah',
-                                                'id' => 'kategori_hemoglobin_darah',
-                                                'name' => 'kategori_hemoglobin_darah',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Hemoglobin Darah',
+                                                    'id' => 'kategori_hemoglobin_darah',
+                                                    'name' => 'kategori_hemoglobin_darah',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Normal">Normal</option>
@@ -126,11 +139,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Vaksin Tetanus Sebelum Hamil',
-                                                'id' => 'kategori_vaksin_sebelum_hamil',
-                                                'name' => 'kategori_vaksin_sebelum_hamil',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Vaksin Tetanus Sebelum Hamil',
+                                                    'id' => 'kategori_vaksin_sebelum_hamil',
+                                                    'name' => 'kategori_vaksin_sebelum_hamil',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -139,11 +153,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Vaksin Tetanus Sesudah Hamil',
-                                                'id' => 'kategori_vaksin_sesudah_hamil',
-                                                'name' => 'kategori_vaksin_sesudah_hamil',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Vaksin Tetanus Sesudah Hamil',
+                                                    'id' => 'kategori_vaksin_sesudah_hamil',
+                                                    'name' => 'kategori_vaksin_sesudah_hamil',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -152,11 +167,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Posisi Janin',
-                                                'id' => 'kategori_posisi_janin',
-                                                'name' => 'kategori_posisi_janin',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Posisi Janin',
+                                                    'id' => 'kategori_posisi_janin',
+                                                    'name' => 'kategori_posisi_janin',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Normal">Normal</option>
@@ -165,11 +181,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Minum 90 Tablet Penambah Darah',
-                                                'id' => 'kategori_minum_tablet',
-                                                'name' => 'kategori_minum_tablet',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Minum 90 Tablet Penambah Darah',
+                                                    'id' => 'kategori_minum_tablet',
+                                                    'name' => 'kategori_minum_tablet',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -178,11 +195,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Konseling',
-                                                'id' => 'kategori_konseling',
-                                                'name' => 'kategori_konseling',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Konseling',
+                                                    'id' => 'kategori_konseling',
+                                                    'name' => 'kategori_konseling',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -197,45 +215,46 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border-secondary border">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-data',
-                                        'th' => [
-                                        'No',
-                                        'Dibuat Tanggal',
-                                        'Status',
-                                        'Nama Ibu',
-                                        'Pemeriksaan Ke',
-                                        'Tanggal Haid
-                                        Terakhir',
-                                        'Kehamilan Ke',
-                                        'Usia Kehamilan',
-                                        'Tanggal Perkiraan Lahir',
-                                        'Tinggi/Berat
-                                        Badan',
-                                        'Tekanan Darah',
-                                        'Lengan Atas',
-                                        'Tinggi Fundus',
-                                        'Hemoglobin Darah',
-                                        'Denyut
-                                        Jantung',
-                                        'Kategori Badan',
-                                        'Kategori Tekanan Darah',
-                                        'Kategori Lengan Atas',
-                                        'Kategori
-                                        Denyut Jantung',
-                                        'Kategori
-                                        Hemoglobin Darah',
-                                        'Vaksin Tetanus Sebelum Hamil',
-                                        'Vaksin Tetanus Sesudah Hamil',
-                                        'Posisi
-                                        Janin',
-                                        'Minum 90 Tablet Tambah Darah',
-                                        'Konseling',
-                                        'Desa / Kelurahan',
-                                        'Bidan',
-                                        'Tanggal Validasi',
-                                        'Aksi',
-                                        ],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-data',
+                                            'th' => [
+                                                'No',
+                                                'Dibuat Tanggal',
+                                                'Status',
+                                                'Nama Ibu',
+                                                'Pemeriksaan Ke',
+                                                'Tanggal Haid
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Terakhir',
+                                                'Kehamilan Ke',
+                                                'Usia Kehamilan',
+                                                'Tanggal Perkiraan Lahir',
+                                                'Tinggi/Berat
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Badan',
+                                                'Tekanan Darah',
+                                                'Lengan Atas',
+                                                'Tinggi Fundus',
+                                                'Hemoglobin Darah',
+                                                'Denyut
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Jantung',
+                                                'Kategori Badan',
+                                                'Kategori Tekanan Darah',
+                                                'Kategori Lengan Atas',
+                                                'Kategori
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Denyut Jantung',
+                                                'Kategori
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Hemoglobin Darah',
+                                                'Vaksin Tetanus Sebelum Hamil',
+                                                'Vaksin Tetanus Sesudah Hamil',
+                                                'Posisi
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Janin',
+                                                'Minum 90 Tablet Tambah Darah',
+                                                'Konseling',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -343,71 +362,115 @@
                             <ul class="list-unstyled mb-0">
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Badan:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-tinggi-badan"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-tinggi-badan"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Tekanan Darah:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-tekanan-darah"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-tekanan-darah"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Lengan Atas:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-lengan-atas"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-lengan-atas"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Denyut Jantung:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-denyut-jantung"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-denyut-jantung"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Hemoglobin Darah:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-hemoglobin-darah">
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-hemoglobin-darah">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sebelum Hamil:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-vaksin-tetanus-sebelum-hamil">
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-vaksin-tetanus-sebelum-hamil">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sesudah Hamil:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-vaksin-tetanus-sesudah-hamil">
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-vaksin-tetanus-sesudah-hamil">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Posisi Janin:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-posisi-janin">
+                                    <span class="badge float-end text-uppercase kategori-bg" id="modal-posisi-janin">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Minum 90 Tablet Tambah darah:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-minum-tablet">
+                                    <span class="badge float-end text-uppercase kategori-bg" id="modal-minum-tablet">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Konseling:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-konseling">
+                                    <span class="badge float-end text-uppercase kategori-bg" id="modal-konseling">
                                         -
                                     </span>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="row g-2">
+                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                        <div class="col-lg col-sm-12" id="pilih-konfirmasi">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Konfirmasi',
+                                    'id' => 'konfirmasi',
+                                    'name' => 'konfirmasi',
+                                    'class' => 'kosong',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                ])
+                                @slot('options')
+                                    <option value="1">Validasi</option>
+                                    <option value="2">Tolak</option>
+                                @endslot
+                            @endcomponent
+                        </div>
+                        @if (Auth::user()->role == 'admin')
+                            <div class="col-lg col-sm-12" id="pilih-bidan">
+                                @component('dashboard.components.formElements.select',
+                                    [
+                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                        'id' => 'nama-bidan',
+                                        'name' => 'bidan_id',
+                                        'class' => 'bidan_id',
+                                        'wajib' => '<sup class="text-danger">*</sup>',
+                                    ])
+                                @endcomponent
+                            </div>
+                        @endif
+                        <div class="col-12 mt-3 d-none" id="col-alasan">
+                            <label for="textareaInput" class="form-label">Alasan <sup
+                                    class="text-danger">*</sup></label>
+                            <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
+                            <span class="text-danger error-text alasan-error"></span>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-3">
                         <div class="col-sm-6 col-lg-4">
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        <div class="col-sm-6 col-lg-8">
-                            @component('dashboard.components.buttons.edit', [
-                                'id' => 'modal-btn-ubah',
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
+                            @component('dashboard.components.buttons.konfirmasi',
+                                [
+                                    'id' => 'modal-btn-konfirmasi',
                                 ])
                             @endcomponent
                         </div>
@@ -475,6 +538,16 @@
                 type: "GET",
                 url: "{{ url('anc') }}" + '/' + id,
                 success: function(data) {
+                    $('#col-modal-btn-ubah').addClass('d-none');
+                    $('#col-modal-btn-konfirmasi').addClass('d-none');
+                    $('#li-modal-tanggal-konfirmasi').addClass('d-none');
+                    $('#li-modal-oleh-bidan').addClass('d-none');
+                    $('#form-konfirmasi').addClass('d-none');
+                    $('#col-alasan').addClass('d-none');
+                    $('#konfirmasi').val('');
+                    $('#nama-bidan').val('');
+                    $('#alasan').val('');
+
                     $('#modal-lihat').modal('show');
                     $('#tanggal-proses').text('Tanggal : ' + moment().format('LL'))
                     $('#modal-nama-ibu').text(data.nama_ibu);
@@ -616,6 +689,61 @@
                         $('#modal-konseling').addClass('bg-danger');
                     }
 
+                    if (data.is_valid == 0) {
+                        $('#modal-status-konfirmasi').text('Belum Divalidasi');
+                        $('#col-modal-btn-konfirmasi').removeClass('d-none');
+                        $('#form-konfirmasi').removeClass('d-none');
+                        $('#konfirmasi').change(function() {
+                            if ($('#konfirmasi').val() == 1) {
+                                $('#col-alasan').addClass('d-none');
+                            } else {
+                                $('#col-alasan').removeClass('d-none');
+                            }
+                            $('#alasan').val('');
+                        })
+                        if ('{{ Auth::user()->role }}' == 'admin') {
+                            $.each(data.bidan_konfirmasi, function(key, val) {
+                                $('#nama-bidan').html('')
+                                $('#nama-bidan').append(
+                                    '<option value="" selected hidden>- Pilih Salah Satu -</option>'
+                                )
+                                $('#nama-bidan').append(
+                                    `<option value="${val.id}">${val.nama_lengkap}</option>`
+                                );
+                            })
+                        } else if ('{{ Auth::user()->role }}' == 'bidan') {
+                            $('#pilih-bidan').addClass('d-none');
+                        }
+
+                        $('#modal-btn-konfirmasi').val(id)
+
+                    } else {
+                        $('#li-modal-tanggal-konfirmasi').removeClass('d-none');
+                        $('#li-modal-oleh-bidan').removeClass('d-none');
+                        if (data.is_valid == 1) {
+                            $('#modal-status-konfirmasi').text('Tervalidasi');
+                            if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
+                                    '{{ Auth::user()->role }}' == 'admin')) {
+                                $('#col-modal-btn-ubah').removeClass('d-none');
+                                $('#modal-btn-ubah').attr('href', '{{ url('pertumbuhan-anak') }}' +
+                                    '/' + id + '/edit');
+                            } else {
+                                $('#col-modal-btn-ubah').addClass('d-none');
+                            }
+                        } else if (data.is_valid == 2) {
+                            $('#modal-status-konfirmasi').text('Ditolak');
+                        }
+                        $('#modal-tanggal-konfirmasi').text(moment(data.tanggal_validasi).format('LL'));
+                        $('#modal-oleh-bidan').text(data.bidan);
+                    }
+
+                    if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
+                            '{{ Auth::user()->role }}' == 'admin')) {
+                        $('#col-modal-btn-ubah').show();
+                    } else {
+                        $('#col-modal-btn-ubah').hide();
+                    }
+
                     if (("{{ Auth::user()->profil->id }}" == data.bidan_id) || (
                             "{{ Auth::user()->role }}" ==
                             "admin")) {
@@ -629,6 +757,77 @@
                 },
             })
         })
+
+        $(document).on('click', '#modal-btn-konfirmasi', function() {
+            let id = $(this).val();
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Konfirmasi data perkiraan melahirkan ini?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Konfirmasi'
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "PUT",
+                        url: "{{ url('anc/validasi') }}" + '/' + id,
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: id,
+                            bidan_id: '{{ Auth::user()->role }}' == "admin" ? $("#nama-bidan")
+                                .val() : '{{ Auth::user()->profil->id }}',
+                            konfirmasi: $('#konfirmasi').val(),
+                            alasan: $('#alasan').val()
+                        },
+                        success: function(response) {
+                            if ($.isEmptyObject(response.error)) {
+                                if (response.res == 'success') {
+                                    if (response.konfirmasi == 1) {
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil divalidasi.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+                                        })
+                                    } else {
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil ditolak.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+
+                                        })
+                                    }
+                                }
+                            } else {
+                                $('#overlay').hide();
+                                printErrorMsg(response.error);
+
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                            }
+                        }
+                    })
+                }
+            })
+        })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
     </script>
 
     <script>

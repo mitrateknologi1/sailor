@@ -28,59 +28,67 @@
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Perkiraan Melahirkan</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'id' => 'catatan-perkiraan-melahirkan',
-                            'class' => '',
-                            'url' => '/perkiraan-melahirkan/create',
-                            ])
-                        @endcomponent
+                        @if (Auth::user()->role != 'penyuluh')
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'catatan-perkiraan-melahirkan',
+                                    'class' => '',
+                                    'url' => '/perkiraan-melahirkan/create',
+                                ])
+                            @endcomponent
+                        @endif
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
                             @if (Auth::user()->role == 'bidan')
                                 @component('dashboard.components.info.bidan.fiturUtama')
                                 @endcomponent
-                            @endif
-                            <div class="col">
-                                <div class="card fieldset border border-secondary mb-4">
-                                    <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
-                                    <div class="row">
-                                        <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Status',
-                                                'id' => 'status-validasi',
-                                                'name' => 'status',
-                                                'class' => 'filter',
-                                                ])
-                                                @slot('options')
-                                                    <option value="Tervalidasi">Tervalidasi</option>
-                                                    <option value="Belum Tervalidasi">Belum Divalidasi</option>
-                                                @endslot
-                                            @endcomponent
+                            @endif             
+                            @if (Auth::user()->role != 'penyuluh')
+                                <div class="col">
+                                    <div class="card fieldset border border-secondary mb-4">
+                                        <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
+                                        <div class="row">
+                                            <div class="col-lg">
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Status',
+                                                        'id' => 'status-validasi',
+                                                        'name' => 'status',
+                                                        'class' => 'filter',
+                                                    ])
+                                                    @slot('options')
+                                                        <option value="Tervalidasi">Tervalidasi</option>
+                                                        <option value="Belum Tervalidasi">Belum Divalidasi</option>
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
+
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border border-secondary">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-data',
-                                        'th' => [
-                                        'No',
-                                        'Tanggal Dibuat',
-                                        'Status',
-                                        'Nama Ibu',
-                                        'Tanggal Haid Terakhir',
-                                        'Tanggal
-                                        Perkiraan Lahir',
-                                        'Usia Kehamilan',
-                                        'Desa / Kelurahan',
-                                        'Bidan',
-                                        'Tanggal Validasi',
-                                        'Aksi',
-                                        ],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-data',
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Status',
+                                                'Nama Ibu',
+                                                'Tanggal Haid Terakhir',
+                                                'Tanggal
+                                                                                                                                                    Perkiraan Lahir',
+                                                'Usia Kehamilan',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -138,17 +146,69 @@
                                     <span class="badge bg-info float-end text-uppercase" id="modal-selisih-hari"> -
                                     </span>
                                 </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="bi bi-calendar2-event-fill"></i> Tanggal diperiksa/validasi</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-diperiksa-divalidasi"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between">
+                                    <label><i class="fa-solid fa-map-location-dot"></i> Oleh Bidan</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-nama-bidan"> - </span>
+                                </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="row g-2">
+                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                        <div class="col-lg col-sm-12" id="pilih-konfirmasi">
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Konfirmasi',
+                                    'id' => 'konfirmasi',
+                                    'name' => 'konfirmasi',
+                                    'class' => 'kosong',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                ])
+                                @slot('options')
+                                    <option value="1">Validasi</option>
+                                    <option value="2">Tolak</option>
+                                @endslot
+                            @endcomponent
+                        </div>
+                        @if (Auth::user()->role == 'admin')
+                            <div class="col-lg col-sm-12" id="pilih-bidan">
+                                @component('dashboard.components.formElements.select',
+                                    [
+                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                        'id' => 'nama-bidan',
+                                        'name' => 'bidan_id',
+                                        'class' => 'bidan_id filter',
+                                        'wajib' => '<sup class="text-danger">*</sup>',
+                                    ])
+                                @endcomponent
+                            </div>
+                        @endif
+                        <div class="col-12 mt-3 d-none" id="col-alasan">
+                            <label for="textareaInput" class="form-label">Alasan <sup
+                                    class="text-danger">*</sup></label>
+                            <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
+                            <span class="text-danger error-text alasan-error"></span>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-3">
                         <div class="col-sm-6 col-lg-4">
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        <div class="col-sm-6 col-lg-8">
+                        {{-- <div class="col-sm-6 col-lg-8">
                             @component('dashboard.components.buttons.edit', [
-                                'id' => 'modal-btn-ubah',
+    'id' => 'modal-btn-ubah',
+])
+                            @endcomponent
+                        </div> --}}
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
+                            @component('dashboard.components.buttons.konfirmasi',
+                                [
+                                    'id' => 'modal-btn-konfirmasi',
                                 ])
                             @endcomponent
                         </div>
@@ -216,6 +276,16 @@
                 type: "GET",
                 url: "{{ url('perkiraan-melahirkan') }}" + '/' + id,
                 success: function(data) {
+                    $('#col-modal-btn-ubah').addClass('d-none');
+                    $('#col-modal-btn-konfirmasi').addClass('d-none');
+                    $('#li-modal-tanggal-konfirmasi').addClass('d-none');
+                    $('#li-modal-oleh-bidan').addClass('d-none');
+                    $('#form-konfirmasi').addClass('d-none');
+                    $('#col-alasan').addClass('d-none');
+                    $('#konfirmasi').val('');
+                    $('#nama-bidan').val('');
+                    $('#alasan').val('');
+
                     $('#modal-lihat').modal('show');
                     $('#tanggal-proses').text('Tanggal : ' + moment().format('LL'))
                     $('#modal-nama-ibu').text(data.nama_ibu);
@@ -226,20 +296,139 @@
                         data.tanggal_perkiraan_lahir);
                     $('#modal-tanggal-haid-terakhir').text(data
                         .tanggal_haid_terakhir);
+                    $('#modal-diperiksa-divalidasi').text(data.tanggal_validasi);
+                    $('#modal-nama-bidan').text(data.bidan);
                     $('#modal-selisih-hari').text(data
                         .selisih_hari);
-                    if (("{{ Auth::user()->profil->id }}" == data.bidan_id) || (
-                            "{{ Auth::user()->role }}" ==
-                            "admin")) {
-                        $('#modal-btn-ubah').attr('href', "{{ url('perkiraan-melahirkan') }}" + '/' +
-                            id + '/edit');
-                        $('#modal-btn-ubah').show();
+
+                    if (data.is_valid == 0) {
+                        $('#modal-status-konfirmasi').text('Belum Divalidasi');
+                        $('#col-modal-btn-konfirmasi').removeClass('d-none');
+                        $('#form-konfirmasi').removeClass('d-none');
+                        $('#konfirmasi').change(function() {
+                            if ($('#konfirmasi').val() == 1) {
+                                $('#col-alasan').addClass('d-none');
+                            } else {
+                                $('#col-alasan').removeClass('d-none');
+                            }
+                            $('#alasan').val('');
+                        })
+                        if ('{{ Auth::user()->role }}' == 'admin') {
+                            $.each(data.bidan_konfirmasi, function(key, val) {
+                                $('#nama-bidan').html('')
+                                $('#nama-bidan').append(
+                                    '<option value="" selected hidden>- Pilih Salah Satu -</option>'
+                                )
+                                $('#nama-bidan').append(
+                                    `<option value="${val.id}">${val.nama_lengkap}</option>`
+                                );
+                            })
+                        } else if ('{{ Auth::user()->role }}' == 'bidan') {
+                            $('#pilih-bidan').addClass('d-none');
+                        }
+
+                        $('#modal-btn-konfirmasi').val(id)
+
                     } else {
-                        $('#modal-btn-ubah').hide();
+                        $('#li-modal-tanggal-konfirmasi').removeClass('d-none');
+                        $('#li-modal-oleh-bidan').removeClass('d-none');
+                        if (data.is_valid == 1) {
+                            $('#modal-status-konfirmasi').text('Tervalidasi');
+                            if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
+                                    '{{ Auth::user()->role }}' == 'admin')) {
+                                $('#col-modal-btn-ubah').removeClass('d-none');
+                                $('#modal-btn-ubah').attr('href', '{{ url('pertumbuhan-anak') }}' +
+                                    '/' + id + '/edit');
+                            } else {
+                                $('#col-modal-btn-ubah').addClass('d-none');
+                            }
+                        } else if (data.is_valid == 2) {
+                            $('#modal-status-konfirmasi').text('Ditolak');
+                        }
+                        $('#modal-tanggal-konfirmasi').text(moment(data.tanggal_validasi).format('LL'));
+                        $('#modal-oleh-bidan').text(data.bidan);
+                    }
+
+                    if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
+                            '{{ Auth::user()->role }}' == 'admin')) {
+                        $('#col-modal-btn-ubah').show();
+                    } else {
+                        $('#col-modal-btn-ubah').hide();
                     }
                 },
             })
         })
+
+        $(document).on('click', '#modal-btn-konfirmasi', function() {
+            let id = $(this).val();
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Konfirmasi data perkiraan melahirkan ini?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Konfirmasi'
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "PUT",
+                        url: "{{ url('perkiraan-melahirkan/validasi') }}" + '/' + id,
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: id,
+                            bidan_id: '{{ Auth::user()->role }}' == "admin" ? $("#nama-bidan")
+                                .val() : '{{ Auth::user()->profil->id }}',
+                            konfirmasi: $('#konfirmasi').val(),
+                            alasan: $('#alasan').val()
+                        },
+                        success: function(response) {
+                            if ($.isEmptyObject(response.error)) {
+                                if (response.res == 'success') {
+                                    if (response.konfirmasi == 1) {
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil divalidasi.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+                                        })
+                                    } else {
+                                        Swal.fire(
+                                            'Berhasil!',
+                                            'Data berhasil ditolak.',
+                                            'success'
+                                        ).then(function() {
+                                            table.draw();
+                                            $('#modal-lihat').modal('hide');
+
+                                        })
+                                    }
+                                }
+                            } else {
+                                $('#overlay').hide();
+                                printErrorMsg(response.error);
+
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                            }
+                        }
+                    })
+                }
+            })
+        })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
     </script>
 
     <script>
