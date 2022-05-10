@@ -54,7 +54,7 @@ class AnggotaKeluargaController extends Controller
 
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga')->where('kartu_keluarga_id', $request->keluarga);
+                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan')->where('kartu_keluarga_id', $request->keluarga);
                 if (Auth::user()->role != 'admin') {
                     $data->where(function (Builder $query) use ($lokasiTugas) {
                         $query->whereIn('is_valid', [1, 2]);
@@ -64,6 +64,29 @@ class AnggotaKeluargaController extends Controller
                         });
                     });
                 }
+
+                // Filter
+                $data->where(function ($query) use ($request) {
+                    if ($request->statusValidasi) {
+                        if ($request->statusValidasi == 'Tervalidasi') {
+                            $query->where('is_valid', 1);
+                        } else if ($request->statusValidasi == 'Belum Tervalidasi') {
+                            $query->where('is_valid', 0);
+                        } else if ($request->statusValidasi == 'Ditolak') {
+                            $query->where('is_valid', 2);
+                        }
+                    }
+                });
+
+                $data->where(function ($query) use ($request) {
+                    if ($request->search) {
+                        $query->whereHas('bidan', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+
+                        $query->orWhere('nama_lengkap', 'like', '%' . $request->search . '%');
+                    }
+                });
 
                 $data->orderBy('status_hubungan_dalam_keluarga_id', 'asc');
                 return DataTables::of($data)
@@ -152,11 +175,11 @@ class AnggotaKeluargaController extends Controller
                             $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" data-anggota-keluarga=' . $data->id . ' data-kartu-keluarga=' . $data->kartu_keluarga_id . '><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
                         } else {
                             $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" data-anggota-keluarga=' . $data->id . ' data-kartu-keluarga=' . $data->kartu_keluarga_id . '><i class="fas fa-eye"></i></button>';
-                            if ($data->status_hubungan_dalam_keluarga_id != 1) {
-                                if (($data->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                    // if ($data->is_valid == 1) {
-                                    //     $actionBtn .= '<a href="' . url('anggota-keluarga/' . $data->kartu_keluarga_id . '/' . $data->id) . '/edit" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                    // }
+                            if (($data->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
+                                if ($data->is_valid == 1) {
+                                    $actionBtn .= '<a href="' . url('anggota-keluarga/' . $data->kartu_keluarga_id . '/' . $data->id) . '/edit" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                }
+                                if ($data->status_hubungan_dalam_keluarga_id != 1) {
                                     if ($data->is_valid != 0) {
                                         $actionBtn .= '
                                             <button id="btn-delete" data-anggota-keluarga=' . $data->id . ' data-kartu-keluarga=' . $data->kartu_keluarga_id . ' class="btn btn-danger btn-sm mr-1 my-1 shadow" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
@@ -215,9 +238,6 @@ class AnggotaKeluargaController extends Controller
             'kecamatanKK' => $keluarga->kecamatan_id,
             'desaKelurahanKK' => $keluarga->desa_kelurahan_id,
             'alamatKK' => $keluarga->alamat,
-
-
-
         ];
         return view('dashboard.pages.masterData.profil.keluarga.anggotaKeluarga.create', $data);
     }
@@ -760,25 +780,25 @@ class AnggotaKeluargaController extends Controller
      */
     public function destroy(KartuKeluarga $keluarga, AnggotaKeluarga $anggotaKeluarga)
     {
-        // if ((Auth::user()->profil->id == $anggotaKeluarga->bidan_id) || (Auth::user()->role == 'admin')) {
-        // if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
-        //     Storage::delete('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil);
-        // }
+        if ((Auth::user()->profil->id == $anggotaKeluarga->bidan_id) || (Auth::user()->role == 'admin')) {
+            if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
+                Storage::delete('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil);
+            }
 
-        if (Storage::exists('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili)) {
-            Storage::delete('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili);
+            if (Storage::exists('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili)) {
+                Storage::delete('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili);
+            }
+
+            $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id);
+
+            if ($pemberitahuan) {
+                $pemberitahuan->delete();
+            }
+            $anggotaKeluarga->wilayahDomisili->delete();
+            $anggotaKeluarga->delete();
+            return response()->json(['res' => 'success']);
+        } else {
+            return abort(404);
         }
-
-        $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id);
-
-        if ($pemberitahuan) {
-            $pemberitahuan->delete();
-        }
-        $anggotaKeluarga->wilayahDomisili->delete();
-        $anggotaKeluarga->delete();
-        return response()->json(['res' => 'success']);
-        // } else {
-        //     return abort(404);
-        // }
     }
 }

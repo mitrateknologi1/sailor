@@ -194,8 +194,8 @@
                 </div>
                 @if (Auth::user()->role != 'keluarga')
                     <div class="row align-items-center mt-3">
-                        <div class="col">
-                            <h1 class="fs-4 color-900 mt-2 mb-0">@yield('title')</h1>
+                        <div class="col-12">
+                            <h4 class="color-900 mt-2 mb-0">@yield('title') @yield('tombol_kembali')</h4>
                         </div>
                     </div>
                 @endif

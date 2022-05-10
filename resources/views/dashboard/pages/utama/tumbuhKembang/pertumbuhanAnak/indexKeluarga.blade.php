@@ -49,13 +49,12 @@
                                                     $interval = date_diff($datetime1, $datetime2);
                                                     $usia = $interval->format('%y Tahun %m Bulan %d Hari');
                                                 @endphp
-                                                {{-- @if ($item->is_valid == 1) --}}
                                                 <div class="owl-item active" style="width: 206.8px; margin-right: 10px;">
                                                     <div class="item card ribbon fieldset border border-info">
                                                         <div class="card-body p-0">
                                                             <div class="row justify-content-center">
                                                                 <div class="avatar xl rounded-circle no-thumbnail mb-3">
-                                                                    <img src="{{ isset($item->anggotaKeluarga) && $item->anggotaKeluarga->foto_profil != null? asset('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                                                    <img src="{{ isset($item->anggotaKeluarga) &&$item->anggotaKeluarga->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil)? asset('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
                                                                         alt="Avatar"
                                                                         class="rounded-circle avatar xl shadow img-thumbnail">
                                                                 </div>
@@ -127,8 +126,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                {{-- @endif --}}
                                             @endforeach
                                             <div class="owl-item active"
                                                 style="width: 206.8px; margin-right: 10px; height: 328.5px;">

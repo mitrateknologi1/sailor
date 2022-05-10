@@ -42,22 +42,22 @@
                                 <div class="card fieldset border border-secondary mb-4">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                     <div class="row">
-                                        <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Status',
-                                                'id' => 'status-filter',
-                                                'name' => 'status',
-                                                'class' => 'filter',
-                                                ])
-                                                @slot('options')
-                                                    @if (Auth::user()->role != 'penyuluh')
+                                        @if (Auth::user()->role != 'penyuluh')
+                                            <div class="col-lg">
+                                                @component('dashboard.components.formElements.select', [
+                                                    'label' => 'Status',
+                                                    'id' => 'status-filter',
+                                                    'name' => 'status',
+                                                    'class' => 'filter',
+                                                    ])
+                                                    @slot('options')
                                                         <option value="Tervalidasi">Tervalidasi</option>
                                                         <option value="Belum Tervalidasi">Belum Divalidasi</option>
                                                         <option value="Ditolak">Ditolak</option>
-                                                    @endif
-                                                @endslot
-                                            @endcomponent
-                                        </div>
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
+                                        @endif
                                         <div class="col-lg">
                                             @component('dashboard.components.formElements.select', [
                                                 'label' => 'Kategori',
@@ -235,12 +235,12 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        {{-- <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
                             @component('dashboard.components.buttons.edit', [
-    'id' => 'modal-btn-ubah',
-])      
+                                'id' => 'modal-btn-ubah',
+                                ])
                             @endcomponent
-                        </div> --}}
+                        </div>
                         <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
                             @component('dashboard.components.buttons.konfirmasi', [
                                 'id' => 'modal-btn-konfirmasi',
