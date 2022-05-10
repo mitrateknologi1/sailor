@@ -135,7 +135,7 @@
                 @endif
 
             </ul>
-            @if (Auth::user()->role == 'admin')
+            @if (in_array(Auth::user()->role, ['admin', 'bidan']))
                 <ul class="menu-list">
                     <li class="divider py-2 lh-sm"><span class="small">MASTER DATA</span><br></li>
                     <li class="collapsed">

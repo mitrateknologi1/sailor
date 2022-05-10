@@ -761,9 +761,9 @@ class AnggotaKeluargaController extends Controller
     public function destroy(KartuKeluarga $keluarga, AnggotaKeluarga $anggotaKeluarga)
     {
         // if ((Auth::user()->profil->id == $anggotaKeluarga->bidan_id) || (Auth::user()->role == 'admin')) {
-        if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
-            Storage::delete('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil);
-        }
+        // if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
+        //     Storage::delete('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil);
+        // }
 
         if (Storage::exists('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili)) {
             Storage::delete('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili);
