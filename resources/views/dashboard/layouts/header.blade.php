@@ -85,14 +85,19 @@
                     <div class="dropdown morphing scale-left user-profile mx-lg-3 mx-2">
                         <a class="nav-link dropdown-toggle rounded-circle after-none p-0" href="#" role="button"
                             data-bs-toggle="dropdown">
+                            {{-- <img class="avatar img-thumbnail rounded-circle shadow"
+                                src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt=""> --}}
                             <img class="avatar img-thumbnail rounded-circle shadow"
-                                src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt="">
+                                src="
+                                {{ Auth::user()->profil->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil)? asset('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                alt="Avatar" class="rounded-circle avatar xl shadow img-thumbnail">
                         </a>
                         <div class="dropdown-menu border-0 rounded-4 shadow p-0">
                             <div class="card border-0 w240">
                                 <div class="card-body border-bottom d-flex">
                                     <img class="avatar rounded-circle"
-                                        src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt="">
+                                        src="{{ Auth::user()->profil->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil)? asset('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                        alt="Avatar" class="rounded-circle avatar xl shadow img-thumbnail">
                                     <div class="flex-fill ms-3">
                                         <h6 class="card-title mb-0">{{ Auth::user()->profil->nama_lengkap }}</h6>
                                         <span

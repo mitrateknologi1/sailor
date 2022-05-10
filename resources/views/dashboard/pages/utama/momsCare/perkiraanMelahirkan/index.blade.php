@@ -29,11 +29,10 @@
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Perkiraan Melahirkan</h5>
                         @if (Auth::user()->role != 'penyuluh')
-                            @component('dashboard.components.buttons.add',
-                                [
-                                    'id' => 'catatan-perkiraan-melahirkan',
-                                    'class' => '',
-                                    'url' => '/perkiraan-melahirkan/create',
+                            @component('dashboard.components.buttons.add', [
+                                'id' => 'catatan-perkiraan-melahirkan',
+                                'class' => '',
+                                'url' => '/perkiraan-melahirkan/create',
                                 ])
                             @endcomponent
                         @endif
@@ -43,19 +42,18 @@
                             @if (Auth::user()->role == 'bidan')
                                 @component('dashboard.components.info.bidan.fiturUtama')
                                 @endcomponent
-                            @endif             
+                            @endif
                             @if (Auth::user()->role != 'penyuluh')
                                 <div class="col">
                                     <div class="card fieldset border border-secondary mb-4">
                                         <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                         <div class="row">
                                             <div class="col-lg">
-                                                @component('dashboard.components.formElements.select',
-                                                    [
-                                                        'label' => 'Status',
-                                                        'id' => 'status-validasi',
-                                                        'name' => 'status',
-                                                        'class' => 'filter',
+                                                @component('dashboard.components.formElements.select', [
+                                                    'label' => 'Status',
+                                                    'id' => 'status-validasi',
+                                                    'name' => 'status',
+                                                    'class' => 'filter',
                                                     ])
                                                     @slot('options')
                                                         <option value="Tervalidasi">Tervalidasi</option>
@@ -72,23 +70,22 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border border-secondary">
-                                    @component('dashboard.components.dataTables.index',
-                                        [
-                                            'id' => 'table-data',
-                                            'th' => [
-                                                'No',
-                                                'Tanggal Dibuat',
-                                                'Status',
-                                                'Nama Ibu',
-                                                'Tanggal Haid Terakhir',
-                                                'Tanggal
-                                                                                                                                                    Perkiraan Lahir',
-                                                'Usia Kehamilan',
-                                                'Desa / Kelurahan',
-                                                'Bidan',
-                                                'Tanggal Validasi',
-                                                'Aksi',
-                                            ],
+                                    @component('dashboard.components.dataTables.index', [
+                                        'id' => 'table-data',
+                                        'th' => [
+                                        'No',
+                                        'Tanggal Dibuat',
+                                        'Status',
+                                        'Nama Ibu',
+                                        'Tanggal Haid Terakhir',
+                                        'Tanggal
+                                        Perkiraan Lahir',
+                                        'Usia Kehamilan',
+                                        'Desa / Kelurahan',
+                                        'Bidan',
+                                        'Tanggal Validasi',
+                                        'Aksi',
+                                        ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -160,13 +157,12 @@
                     </div>
                     <div class="row g-3 align-items-end" id="form-konfirmasi">
                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
-                            @component('dashboard.components.formElements.select',
-                                [
-                                    'label' => 'Konfirmasi',
-                                    'id' => 'konfirmasi',
-                                    'name' => 'konfirmasi',
-                                    'class' => 'kosong',
-                                    'wajib' => '<sup class="text-danger">*</sup>',
+                            @component('dashboard.components.formElements.select', [
+                                'label' => 'Konfirmasi',
+                                'id' => 'konfirmasi',
+                                'name' => 'konfirmasi',
+                                'class' => 'kosong',
+                                'wajib' => '<sup class="text-danger">*</sup>',
                                 ])
                                 @slot('options')
                                     <option value="1">Validasi</option>
@@ -176,13 +172,12 @@
                         </div>
                         @if (Auth::user()->role == 'admin')
                             <div class="col-lg col-sm-12" id="pilih-bidan">
-                                @component('dashboard.components.formElements.select',
-                                    [
-                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
-                                        'id' => 'nama-bidan',
-                                        'name' => 'bidan_id',
-                                        'class' => 'bidan_id filter',
-                                        'wajib' => '<sup class="text-danger">*</sup>',
+                                @component('dashboard.components.formElements.select', [
+                                    'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                    'id' => 'nama-bidan',
+                                    'name' => 'bidan_id',
+                                    'class' => 'bidan_id filter',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
                                     ])
                                 @endcomponent
                             </div>
@@ -199,16 +194,15 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        {{-- <div class="col-sm-6 col-lg-8">
+                        <div class="col-sm-6 col-lg-8">
                             @component('dashboard.components.buttons.edit', [
-    'id' => 'modal-btn-ubah',
-])
+                                'id' => 'modal-btn-ubah',
+                                ])
                             @endcomponent
-                        </div> --}}
+                        </div>
                         <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
-                            @component('dashboard.components.buttons.konfirmasi',
-                                [
-                                    'id' => 'modal-btn-konfirmasi',
+                            @component('dashboard.components.buttons.konfirmasi', [
+                                'id' => 'modal-btn-konfirmasi',
                                 ])
                             @endcomponent
                         </div>

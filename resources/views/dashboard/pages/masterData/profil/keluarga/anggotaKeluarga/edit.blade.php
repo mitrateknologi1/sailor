@@ -4,6 +4,12 @@
     Ubah Anggota Keluarga
 @endsection
 
+@section('tombol_kembali')
+    <a href="{{ url('anggota-keluarga/' . $anggotaKeluarga->kartu_keluarga_id) }}"
+        class="btn btn-sm btn-primary float-md-end"><i class="fa-solid fa-arrow-left"></i> Data Anggota
+        Keluarga ({{ $anggotaKeluarga->kartuKeluarga->nama_kepala_keluarga }})</a>
+@endsection
+
 @push('style')
     <style>
         input {
