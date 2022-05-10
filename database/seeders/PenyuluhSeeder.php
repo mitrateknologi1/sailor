@@ -19,7 +19,7 @@ class PenyuluhSeeder extends Seeder
                 'id' => '13c1ca42-c4a7-11ec-9d64-0242ac120002', //1
                 'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e85',
                 'nik' => 6543211234567891,
-                'nama_lengkap' => 'SITI',
+                'nama_lengkap' => 'TIKA',
                 'jenis_kelamin' => 'PEREMPUAN',
                 'tempat_lahir' => 'TONDO',
                 'tanggal_lahir' => '1996-01-01',
@@ -55,7 +55,7 @@ class PenyuluhSeeder extends Seeder
                 'foto_profil' => NULL,
                 'created_at' => now(),
             ],
-           
+
         ];
         DB::table('penyuluh')->insert($data);
     }

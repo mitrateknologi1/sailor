@@ -43,11 +43,11 @@
                                 @component('dashboard.components.info.bidan.masterDataAnggotaKeluarga')
                                 @endcomponent
                             @endif
-                            <div class="col">
-                                <div class="card fieldset border border-secondary mb-4">
-                                    <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
-                                    <div class="row">
-                                        @if (Auth::user()->role != 'penyuluh')
+                            @if (Auth::user()->role != 'penyuluh')
+                                <div class="col">
+                                    <div class="card fieldset border border-secondary mb-4">
+                                        <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
+                                        <div class="row">
                                             <div class="col-lg">
                                                 @component('dashboard.components.formElements.select', [
                                                     'label' => 'Status',
@@ -62,10 +62,10 @@
                                                     @endslot
                                                 @endcomponent
                                             </div>
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                         <div class="row">
                             <div class="col">
