@@ -172,7 +172,7 @@ class PertumbuhanAnakController extends Controller
                         }
                         if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                             if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                if (($row->is_valid == 1) && (Auth::user()->role == 'admin') && ($row->anggotaKeluarga->deleted_at == null)) {
+                                if ($row->is_valid == 1) {
                                     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
                                 }
 

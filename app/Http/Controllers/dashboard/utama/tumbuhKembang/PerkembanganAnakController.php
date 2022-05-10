@@ -140,10 +140,9 @@ class PerkembanganAnakController extends Controller
                         }
                         if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                             if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                if (($row->is_valid == 1) && (Auth::user()->role == 'admin') && ($row->anggotaKeluarga->deleted_at == null)) {
+                                if ($row->is_valid == 1) {
                                     $actionBtn .= '<a href="' . route('perkembangan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
                                 }
-
                                 if ($row->is_valid != 0) {
                                     $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
                                 }
@@ -246,7 +245,7 @@ class PerkembanganAnakController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        $anak = AnggotaKeluarga::find($request->nama_anak);
+        $anak = AnggotaKeluarga::withTrashed()->find($request->nama_anak);
         $tanggalLahir = $anak->tanggal_lahir;
 
         $tanggalProses = $request->tanggal_proses;
