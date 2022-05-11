@@ -108,6 +108,17 @@
         $('#ms-link-deteksi-dini').addClass('active')
     </script>
 
+    @if (Session::has('error'))
+        <script>
+            console.log('ada');
+            Swal.fire(
+                'Terjadi Kesalahan!',
+                'Daftar Soal Deteksi Dini Tidak Ada, Anda Tidak Bisa Menambahkan Deteksi Dini, Silahkan Hubungi Admin Untuk Menambahkan Soal',
+                'error'
+            )
+        </script>
+    @endif
+
     <script>
         $(document).on('click', '#btn-delete', function() {
             let id = $(this).val();

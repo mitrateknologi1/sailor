@@ -98,7 +98,7 @@
                                                 'Tinggi Badan',
                                                 'Kategori',
                                                 'Desa
-                                                                                                                                                                                        / Kelurahan',
+                                                                                                                                                                                                                                                                / Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Validasi',
                                                 'Aksi',
@@ -186,7 +186,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                    <div class="row g-3 align-items-end mb-3" id="form-konfirmasi">
                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
                             @component('dashboard.components.formElements.select',
                                 [
@@ -227,7 +227,7 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
+                        <div class="col" id="col-modal-btn-konfirmasi">
                             @component('dashboard.components.buttons.konfirmasi',
                                 [
                                     'id' => 'modal-btn-konfirmasi',

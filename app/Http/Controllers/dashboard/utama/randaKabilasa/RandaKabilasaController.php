@@ -122,7 +122,9 @@ class RandaKabilasaController extends Controller
                         }
                     })
                     ->addColumn('status_mencegah_pernikahan_dini', function ($row) {
-                        if ($row->is_valid_mencegah_pernikahan_dini == 0) {
+                        if ($row->is_valid_mencegah_pernikahan_dini == 0 && $row->is_mencegah_pernikahan_dini == 0) {
+                            return '<span class="badge badge-danger bg-danger">Belum Melakukan Asesmen</span>';
+                        } else if ($row->is_valid_mencegah_pernikahan_dini == 0) {
                             return '<span class="badge badge-danger bg-warning">Belum Divalidasi</span>';
                         } else if ($row->is_valid_mencegah_pernikahan_dini == 2) {
                             return '<span class="badge badge-danger bg-danger">Ditolak</span>';
@@ -131,7 +133,9 @@ class RandaKabilasaController extends Controller
                         }
                     })
                     ->addColumn('status_meningkatkan_life_skill', function ($row) {
-                        if ($row->is_valid_meningkatkan_life_skill == 0) {
+                        if ($row->is_valid_meningkatkan_life_skill == 0 && $row->is_meningkatkan_life_skill == 0) {
+                            return '<span class="badge badge-danger bg-danger">Belum Melakukan Asesmen</span>';
+                        } else if ($row->is_valid_meningkatkan_life_skill == 0) {
                             return '<span class="badge badge-danger bg-warning">Belum Divalidasi</span>';
                         } else if ($row->is_valid_meningkatkan_life_skill == 2) {
                             return '<span class="badge badge-danger bg-danger">Ditolak</span>';

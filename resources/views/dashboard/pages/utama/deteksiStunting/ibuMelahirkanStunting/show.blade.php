@@ -35,6 +35,7 @@
                                     </div>
                                 </div>
                                 @php
+                                    $looping = 1;
                                     if ($deteksiIbuMelahirkanStunting->kategori == 'Beresiko Melahirkan Stunting') {
                                         $classKategoriEmot = 'fa-solid fa-face-frown';
                                         $classKategoriAlert = 'alert-danger';
@@ -128,36 +129,42 @@
                                             }
                                         }
                                     @endphp
-                                    <input type="text" value="{{ $soal->id }}" hidden name="soal_id[]">
-                                    <div class="card fieldset border border-secondary bg-white p-0">
-                                        <div class="card-body">
-                                            <p>{{ $loop->iteration }}. {{ $soal->soal }}</p>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">Ya</label>
-                                                <input class="form-check-input" type="radio"
-                                                    id="jawaban-{{ $loop->iteration }}"
-                                                    name="jawaban-{{ $loop->iteration }}[]" value="Ya"
-                                                    {{ $checkedYa }} disabled>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">Tidak</label>
-                                                <input class="form-check-input" type="radio"
-                                                    id="jawaban-{{ $loop->iteration }}"
-                                                    name="jawaban-{{ $loop->iteration }}[]" value="Tidak"
-                                                    {{ $checkedTidak }} disabled>
+                                    @if ($jawabanSoal)
+                                        <input type="text" value="{{ $soal->id }}" hidden name="soal_id[]">
+                                        <div class="card fieldset border border-secondary bg-white p-0">
+                                            <div class="card-body">
+                                                <p>{{ $looping }}. {{ $soal->soal }}</p>
+                                                <div class="form-check form-check-inline">
+                                                    <label class="form-check-label">Ya</label>
+                                                    <input class="form-check-input" type="radio"
+                                                        id="jawaban-{{ $looping }}"
+                                                        name="jawaban-{{ $looping }}[]" value="Ya"
+                                                        {{ $checkedYa }} disabled>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <label class="form-check-label">Tidak</label>
+                                                    <input class="form-check-input" type="radio"
+                                                        id="jawaban-{{ $loop->iteration }}"
+                                                        name="jawaban-{{ $loop->iteration }}[]" value="Tidak"
+                                                        {{ $checkedTidak }} disabled>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        @php
+                                            $looping++;
+                                        @endphp
+                                    @endif
                                 @endforeach
                                 @if ($data['is_valid'] == 0)
-                                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                                    <div class="row g-3 align-items-end mt-1" id="form-konfirmasi">
                                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Konfirmasi',
-                                                'id' => 'konfirmasi',
-                                                'name' => 'konfirmasi',
-                                                'class' => 'kosong',
-                                                'wajib' => '<sup class="text-danger">*</sup>',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Konfirmasi',
+                                                    'id' => 'konfirmasi',
+                                                    'name' => 'konfirmasi',
+                                                    'class' => 'kosong',
+                                                    'wajib' => '<sup class="text-danger">*</sup>',
                                                 ])
                                                 @slot('options')
                                                     <option value="1">Validasi</option>
@@ -167,12 +174,13 @@
                                         </div>
                                         @if (Auth::user()->role == 'admin')
                                             <div class="col-lg col-sm-12" id="pilih-bidan">
-                                                @component('dashboard.components.formElements.select', [
-                                                    'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
-                                                    'id' => 'nama-bidan',
-                                                    'name' => 'bidan_id',
-                                                    'class' => 'bidan_id filter',
-                                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                                        'id' => 'nama-bidan',
+                                                        'name' => 'bidan_id',
+                                                        'class' => 'bidan_id filter',
+                                                        'wajib' => '<sup class="text-danger">*</sup>',
                                                     ])
                                                     @slot('options')
                                                         @foreach ($data['bidan_konfirmasi'] as $bidan)
@@ -193,15 +201,17 @@
                                 @endif
                                 <div class="row g-2 mt-2">
                                     <div class="col-sm-6 col-lg">
-                                        @component('dashboard.components.buttons.back', [
-                                            'url' => url('deteksi-ibu-melahirkan-stunting'),
+                                        @component('dashboard.components.buttons.back',
+                                            [
+                                                'url' => url('deteksi-ibu-melahirkan-stunting'),
                                             ])
                                         @endcomponent
                                     </div>
                                     @if ($data['is_valid'] == 0)
                                         <div class="col-sm-12 col-lg" id="col-modal-btn-konfirmasi">
-                                            @component('dashboard.components.buttons.konfirmasi', [
-                                                'id' => 'modal-btn-konfirmasi',
+                                            @component('dashboard.components.buttons.konfirmasi',
+                                                [
+                                                    'id' => 'modal-btn-konfirmasi',
                                                 ])
                                             @endcomponent
                                         </div>

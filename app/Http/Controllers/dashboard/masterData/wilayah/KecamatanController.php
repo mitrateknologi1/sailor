@@ -183,7 +183,7 @@ class KecamatanController extends Controller
         } else {
             $kecamatan = Kecamatan::whereNotNull('polygon')->where('kabupaten_kota_id', $request->kabupatenKota)->where(function ($query) use ($request) {
                 if ($request->kecamatanId) {
-                    $query->where('id', '!=', $request->kecamatanId);
+                    $query->where('id', '==', $request->kecamatanId);
                 }
             })->orderBy('id', 'desc')->get();
         }

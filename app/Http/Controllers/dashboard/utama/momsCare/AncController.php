@@ -142,10 +142,10 @@ class AncController extends Controller
                         }
                     })
                     ->addColumn('nama_ibu', function ($row) {
-                        return $row->anggotaKeluarga->nama_lengkap;
+                        return $row->anggotaKeluarga->nama_lengkap ?? '-';
                     })
                     ->addColumn('tanggal_haid_terakhir', function ($row) {
-                        return Carbon::parse($row->tanggal_haid_terakhir)->translatedFormat('d F Y');
+                        return Carbon::parse($row->pemeriksaanAnc->tanggal_haid_terakhir)->translatedFormat('d F Y');
                     })
                     ->addColumn('kehamilan_ke', function ($row) {
                         return $row->pemeriksaanAnc->kehamilan_ke;
@@ -154,7 +154,7 @@ class AncController extends Controller
                         return $row->pemeriksaanAnc->usia_kehamilan . ' Minggu Lagi';
                     })
                     ->addColumn('tanggal_perkiraan_lahir', function ($row) {
-                        return Carbon::parse($row->tanggal_perkiraan_lahir)->translatedFormat('d F Y');
+                        return Carbon::parse($row->pemeriksaanAnc->tanggal_perkiraan_lahir)->translatedFormat('d F Y');
                     })
                     ->addColumn('lengan_atas', function ($row) {
                         return $row->pemeriksaanAnc->lengan_atas;
@@ -506,6 +506,10 @@ class AncController extends Controller
 
         $role = Auth::user()->role;
 
+        $terdapatDataBelumValidasi = Anc::where('anggota_keluarga_id', $request->nama_ibu)->where('is_valid', '!=', 1);
+
+        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -533,8 +537,20 @@ class AncController extends Controller
         if ($role != 'keluarga') {
             $anc->tanggal_validasi = Carbon::now();
             $anc->is_valid = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan anc ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
             $anc->is_valid = 0;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim anc ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
         }
 
         $anc->save();
@@ -567,7 +583,7 @@ class AncController extends Controller
     public function show(Anc $anc)
     {
         $namaKepalaKeluarga = $anc->nama_kepala_keluarga;
-        $namaIbu = AnggotaKeluarga::where('id', $anc->anggota_keluarga_id)->first()->nama_lengkap;
+        $namaIbu = $anc->anggotaKeluarga->nama_lengkap;
         $pemeriksaanKe = $anc->pemeriksaan_ke;
         $vaksinTetanusSebelumHamil = $anc->vaksin_tetanus_sebelum_hamil;
         $vaksinTetanusSesudahHamil = $anc->vaksin_tetanus_sesudah_hamil;

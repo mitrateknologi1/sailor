@@ -88,7 +88,7 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
                         }
                     })
                     ->addColumn('nama_ibu', function ($row) {
-                        return $row->anggotaKeluarga->nama_lengkap;
+                        return $row->anggotaKeluarga->nama_lengkap ?? '-';
                     })
                     ->addColumn('kategori', function ($row) {
                         if ($row->kategori == 'Tidak Beresiko Melahirkan Stunting') {
@@ -165,7 +165,11 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
             $daftarSoal = SoalIbuMelahirkanStunting::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.deteksiStunting.ibuMelahirkanStunting.create', compact('kartuKeluarga', 'daftarSoal'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.deteksiStunting.ibuMelahirkanStunting.create', compact('kartuKeluarga', 'daftarSoal'));
+            } else {
+                return redirect(url('deteksi-ibu-melahirkan-stunting'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -253,6 +257,9 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        $terdapatDataBelumValidasi = DeteksiIbuMelahirkanStunting::where('anggota_keluarga_id', $request->nama_ibu)->where('is_valid', '!=', 1);
+        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -268,8 +275,20 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
         if ($role != 'keluarga') {
             $deteksiIbuMelahirkanStunting->tanggal_validasi = Carbon::now();
             $deteksiIbuMelahirkanStunting->is_valid = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan deteksi ibu melahirkan stunting ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
             $deteksiIbuMelahirkanStunting->is_valid = 0;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim deteksi ibu melahirkan stunting ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
         }
 
         $deteksiIbuMelahirkanStunting->save();
@@ -322,7 +341,7 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
             'bidan_konfirmasi' => $deteksiIbuMelahirkanStunting->anggotaKeluarga->getBidan($deteksiIbuMelahirkanStunting->anggota_keluarga_id)
         ];
 
-        $daftarSoal = SoalIbuMelahirkanStunting::orderBy('urutan', 'asc')->get();
+        $daftarSoal = SoalIbuMelahirkanStunting::orderBy('urutan', 'asc')->withTrashed()->get();
         return view('dashboard.pages.utama.deteksiStunting.ibuMelahirkanStunting.show', compact('deteksiIbuMelahirkanStunting', 'data', 'daftarSoal'));
     }
 
@@ -337,7 +356,11 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
         if ((Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $deteksiIbuMelahirkanStunting->anggotaKeluarga->kartu_keluarga_id)) {
             $kartuKeluarga = KartuKeluarga::latest()->get();
             $daftarSoal = SoalIbuMelahirkanStunting::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.deteksiStunting.ibuMelahirkanStunting.edit', compact('kartuKeluarga', 'daftarSoal', 'deteksiIbuMelahirkanStunting'));
+            if ($daftarSoal) {
+                return view('dashboard.pages.utama.deteksiStunting.ibuMelahirkanStunting.edit', compact('kartuKeluarga', 'daftarSoal', 'deteksiIbuMelahirkanStunting'));
+            } else {
+                return redirect(url('deteksi-ibu-melahirkan-stunting'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }

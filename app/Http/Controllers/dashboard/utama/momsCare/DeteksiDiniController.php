@@ -111,7 +111,7 @@ class DeteksiDiniController extends Controller
                         }
                     })
                     ->addColumn('nama_ibu', function ($row) {
-                        return $row->anggotaKeluarga->nama_lengkap;
+                        return $row->anggotaKeluarga->nama_lengkap ?? '-';
                     })
                     ->addColumn('desa_kelurahan', function ($row) {
                         return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
@@ -169,7 +169,11 @@ class DeteksiDiniController extends Controller
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
             $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.momsCare.deteksiDini.create', compact('kartuKeluarga', 'daftarSoal'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.momsCare.deteksiDini.create', compact('kartuKeluarga', 'daftarSoal'));
+            } else {
+                return redirect(url('deteksi-dini'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -264,6 +268,10 @@ class DeteksiDiniController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        $terdapatDataBelumValidasi = DeteksiDini::where('anggota_keluarga_id', $request->nama_ibu)->where('is_valid', '!=', 1);
+
+        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -281,8 +289,20 @@ class DeteksiDiniController extends Controller
         if ($role != 'keluarga') {
             $deteksiDini->tanggal_validasi = Carbon::now();
             $deteksiDini->is_valid = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan deteksi dini ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
             $deteksiDini->is_valid = 0;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim deteksi dini ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
         }
 
         $deteksiDini->save();
@@ -338,7 +358,7 @@ class DeteksiDiniController extends Controller
             'bidan_konfirmasi' => $deteksiDini->anggotaKeluarga->getBidan($deteksiDini->anggota_keluarga_id)
         ];
 
-        $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
+        $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->withTrashed()->get();
         return view('dashboard.pages.utama.momsCare.deteksiDini.show', compact('deteksiDini', 'data', 'daftarSoal'));
     }
 

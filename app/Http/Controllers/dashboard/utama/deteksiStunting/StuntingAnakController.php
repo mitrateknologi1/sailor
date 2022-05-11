@@ -764,6 +764,9 @@ class StuntingAnakController extends Controller
         $kategori = $this->proses($request);
         $role = Auth::user()->role;
 
+        $terdapatDataBelumValidasi = StuntingAnak::where('anggota_keluarga_id', $request->nama_anak)->where('is_valid', '!=', 1);
+        $anak = AnggotaKeluarga::find($request->nama_anak);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -782,7 +785,19 @@ class StuntingAnakController extends Controller
         if ($role != 'keluarga') {
             $stuntingAnak->tanggal_validasi = Carbon::now();
             $stuntingAnak->is_valid = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan data stunting anak ' . $anak->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim data stunting anak ' . $anak->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
             $stuntingAnak->is_valid = 0;
         }
         $stuntingAnak->save();

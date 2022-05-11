@@ -77,7 +77,7 @@ class PerkiraanMelahirkanController extends Controller
                         }
                     })
                     ->addColumn('nama_ibu', function ($row) {
-                        return $row->anggotaKeluarga->nama_lengkap;
+                        return $row->anggotaKeluarga->nama_lengkap ?? '-';
                     })
                     ->addColumn('tanggal_haid_terakhir', function ($row) {
                         return Carbon::parse($row->tanggal_haid_terakhir)->translatedFormat('d F Y');
@@ -238,6 +238,10 @@ class PerkiraanMelahirkanController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        $terdapatDataBelumValidasi = PerkiraanMelahirkan::where('anggota_keluarga_id', $request->nama_ibu)->where('is_valid', '!=', 1);
+
+        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -255,8 +259,20 @@ class PerkiraanMelahirkanController extends Controller
         if ($role != 'keluarga') {
             $perkiraanMelahirkan->tanggal_validasi = Carbon::now();
             $perkiraanMelahirkan->is_valid = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan perkiraan melahirkan ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
             $perkiraanMelahirkan->is_valid = 0;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim perkiraan melahirkan ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
         }
         $perkiraanMelahirkan->save();
 
@@ -276,7 +292,7 @@ class PerkiraanMelahirkanController extends Controller
 
         $selisihHari = date_diff(Carbon::parse($perkiraanMelahirkan->created_at), Carbon::parse($perkiraanMelahirkan->tanggal_perkiraan_lahir));
         $selisihHariSebut = $selisihHari->y . ' Tahun ' . $selisihHari->m . ' Bulan ' . $selisihHari->d . ' Hari';
-        $ibu = AnggotaKeluarga::find($perkiraanMelahirkan->anggota_keluarga_id);
+        $ibu = AnggotaKeluarga::where('id', $perkiraanMelahirkan->anggota_keluarga_id)->withTrashed()->first();
 
         $data = [
             'nama_ibu' => $ibu->nama_lengkap,
