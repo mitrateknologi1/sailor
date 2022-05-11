@@ -20,43 +20,49 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TraitUuid;
 
     protected $guarded = ['id'];
-    
-    public function profil(){
-        if(Auth::user()->role == 'bidan'){
+
+    public function profil()
+    {
+        if (Auth::user()->role == 'bidan') {
             return $this->hasOne(Bidan::class, 'user_id', 'id');
-        } else if(Auth::user()->role == 'penyuluh'){
+        } else if (Auth::user()->role == 'penyuluh') {
             return $this->hasOne(Penyuluh::class, 'user_id', 'id');
-        } else if(Auth::user()->role == 'admin'){
+        } else if (Auth::user()->role == 'admin') {
             return $this->hasOne(Admin::class, 'user_id', 'id');
-        } else if(Auth::user()->role == 'keluarga'){
+        } else if (Auth::user()->role == 'keluarga') {
             return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
         }
     }
 
-    
-    public function keluarga(){
+
+    public function keluarga()
+    {
         return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
     }
 
-    public function bidan(){
+    public function bidan()
+    {
         return $this->hasOne(Bidan::class, 'user_id', 'id');
     }
 
-    public function penyuluh(){
+    public function penyuluh()
+    {
         return $this->hasOne(Penyuluh::class, 'user_id', 'id');
     }
 
-    public function admin(){
+    public function admin()
+    {
         return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 
     // lokasi tugas if role != admin
-    public function lokasiTugas(){
+    public function lokasiTugas()
+    {
         $profil = $this->profil;
-        
     }
 
-    public function pemberitahuan(){
+    public function pemberitahuan()
+    {
         return $this->hasMany(Pemberitahuan::class)->latest();
     }
 

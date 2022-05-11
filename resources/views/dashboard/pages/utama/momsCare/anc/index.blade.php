@@ -225,29 +225,29 @@
                                                 'Nama Ibu',
                                                 'Pemeriksaan Ke',
                                                 'Tanggal Haid
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Terakhir',
+                                                                                                                Terakhir',
                                                 'Kehamilan Ke',
                                                 'Usia Kehamilan',
                                                 'Tanggal Perkiraan Lahir',
                                                 'Tinggi/Berat
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Badan',
+                                                                                                                Badan',
                                                 'Tekanan Darah',
                                                 'Lengan Atas',
                                                 'Tinggi Fundus',
                                                 'Hemoglobin Darah',
                                                 'Denyut
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Jantung',
+                                                                                                                Jantung',
                                                 'Kategori Badan',
                                                 'Kategori Tekanan Darah',
                                                 'Kategori Lengan Atas',
                                                 'Kategori
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Denyut Jantung',
+                                                                                                                Denyut Jantung',
                                                 'Kategori
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Hemoglobin Darah',
+                                                                                                                Hemoglobin Darah',
                                                 'Vaksin Tetanus Sebelum Hamil',
                                                 'Vaksin Tetanus Sesudah Hamil',
                                                 'Posisi
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Janin',
+                                                                                                                Janin',
                                                 'Minum 90 Tablet Tambah Darah',
                                                 'Konseling',
                                                 'Desa / Kelurahan',
@@ -467,7 +467,14 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        <div class="col" id="col-modal-btn-konfirmasi">
+                        <div class="col-sm-6 col-lg-8">
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
+                                ])
+                            @endcomponent
+                        </div>
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
                             @component('dashboard.components.buttons.konfirmasi',
                                 [
                                     'id' => 'modal-btn-konfirmasi',

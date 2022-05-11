@@ -11,7 +11,7 @@
                     <div class="card ribbon mb-3 p-3">
                         <span class="d-flex mb-1">
                             <img class="avatar rounded-circle"
-                                src="{{ isset($item->anggotaKeluarga) && $item->anggotaKeluarga->foto_profil != null? asset('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                src="{{ isset($item->anggotaKeluarga) &&$item->anggotaKeluarga->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil)? asset('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
                                 alt="">
                             <div class="flex-fill ms-3">
                                 <p class="d-flex justify-content-between mb-0 align-items-center">

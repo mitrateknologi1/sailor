@@ -98,7 +98,7 @@
                                                 'Tinggi Badan',
                                                 'Kategori',
                                                 'Desa
-                                                                                                                                                                                                                                                                / Kelurahan',
+                                                                                                                                                    / Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Validasi',
                                                 'Aksi',
@@ -227,7 +227,14 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        <div class="col" id="col-modal-btn-konfirmasi">
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
+                                ])
+                            @endcomponent
+                        </div>
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
                             @component('dashboard.components.buttons.konfirmasi',
                                 [
                                     'id' => 'modal-btn-konfirmasi',

@@ -82,7 +82,7 @@
                                                 'Nama Ibu',
                                                 'Tanggal Haid Terakhir',
                                                 'Tanggal
-                                                                                                                                                                                        Perkiraan Lahir',
+                                                                            Perkiraan Lahir',
                                                 'Usia Kehamilan',
                                                 'Desa / Kelurahan',
                                                 'Bidan',
@@ -199,13 +199,14 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        {{-- <div class="col-sm-6 col-lg-8">
-                            @component('dashboard.components.buttons.edit', [
-    'id' => 'modal-btn-ubah',
-])
+                        <div class="col-sm-6 col-lg-8">
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
+                                ])
                             @endcomponent
-                        </div> --}}
-                        <div class="col" id="col-modal-btn-konfirmasi">
+                        </div>
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
                             @component('dashboard.components.buttons.konfirmasi',
                                 [
                                     'id' => 'modal-btn-konfirmasi',
