@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\dashboard\utama\petaData;
 
+use App\Exports\RandaKabilasaExport;
 use App\Http\Controllers\Controller;
 use App\Models\DesaKelurahan;
 use App\Models\Kecamatan;
+use App\Models\Provinsi;
 use App\Models\RandaKabilasa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MapRandaKabilasaController extends Controller
 {
@@ -17,7 +22,8 @@ class MapRandaKabilasaController extends Controller
 
     public function index()
     {
-        return view('dashboard.pages.utama.petaData.randaKabilasa.index');
+        $provinsi = Provinsi::all();
+        return view('dashboard.pages.utama.petaData.randaKabilasa.index', compact(['provinsi']));
     }
 
     public function getMapDataRandaKabilasa(Request $request)
@@ -25,9 +31,11 @@ class MapRandaKabilasaController extends Controller
         $zoomMap = $request->zoomMap;
         $mapDataArray = array();
         if ($zoomMap <= 11) {
-            $daftarWilayah = Kecamatan::whereNotNull('polygon')->get();
+            $daftarWilayah = Kecamatan::whereNotNull('polygon')->where('kabupaten_kota_id', $request->kabupaten)->get();
         } else {
-            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->get();
+            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->whereHas('kecamatan', function ($query) use ($request) {
+                return $query->where('kabupaten_kota_id', $request->kabupaten);
+            })->get();
         }
         foreach ($daftarWilayah as $wilayah) {
             $idWilayah = $wilayah->id;
@@ -248,5 +256,33 @@ class MapRandaKabilasaController extends Controller
             'pria' => $mapDataArrayPria,
             'wanita' => $mapDataArrayWanita
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'provinsi' => 'required',
+                'kabupaten' => 'required',
+            ],
+            [
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'kabupaten.required' => 'Kabupaten tidak boleh kosong',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect(url('map-moms-care'))
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $provinsi = $request->provinsi;
+        $kabupaten = $request->kabupaten;
+        $zoomMap = $request->zoomMap;
+        $hariIni = Carbon::now()->translatedFormat('d F Y');
+
+        return Excel::download(new RandaKabilasaExport($provinsi, $kabupaten, $hariIni, $zoomMap), 'Data-Randa-Kabilasa-' . $hariIni . '-' . rand(1000, 9999) . '.xlsx');
     }
 }

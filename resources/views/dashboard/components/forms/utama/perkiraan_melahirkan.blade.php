@@ -6,12 +6,13 @@
     <div class="row g-4">
         @if (Auth::user()->role != 'keluarga')
             <div class="col-sm-12 col-lg">
-                @component('dashboard.components.formElements.select', [
-                    'label' => 'Nama Kepala Keluarga / Nomor KK',
-                    'id' => 'nama-kepala-keluarga',
-                    'name' => 'nama_kepala_keluarga',
-                    'class' => 'select2',
-                    'wajib' => '<sup class="text-danger">*</sup>',
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Nama Kepala Keluarga / Nomor KK',
+                        'id' => 'nama-kepala-keluarga',
+                        'name' => 'nama_kepala_keluarga',
+                        'class' => 'select2',
+                        'wajib' => '<sup class="text-danger">*</sup>',
                     ])
                     @slot('options')
                         @foreach ($kartuKeluarga as $item)
@@ -23,45 +24,49 @@
             </div>
         @endif
         <div class="col-sm-12 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Ibu (Tanggal Lahir)',
-                'id' => 'nama-ibu',
-                'name' => 'nama_ibu',
-                'class' => 'select2',
-                'attribute' => 'disabled',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Nama Ibu (Tanggal Lahir)',
+                    'id' => 'nama-ibu',
+                    'name' => 'nama_ibu',
+                    'class' => 'select2',
+                    'attribute' => 'disabled',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
         </div>
         @if (Auth::user()->role == 'admin' && $method == 'POST')
             <div class="col-sm-12 col-lg">
-                @component('dashboard.components.formElements.select', [
-                    'label' => 'Bidan sesuai lokasi anak',
-                    'id' => 'nama-bidan',
-                    'name' => 'nama_bidan',
-                    'class' => 'select2',
-                    'attribute' => 'disabled',
-                    'wajib' => '<sup class="text-danger">*</sup>',
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Bidan sesuai lokasi anak',
+                        'id' => 'nama-bidan',
+                        'name' => 'nama_bidan',
+                        'class' => 'select2',
+                        'attribute' => 'disabled',
+                        'wajib' => '<sup class="text-danger">*</sup>',
                     ])
                 @endcomponent
             </div>
         @endif
         <div class="col-sm-12 col-lg-12">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Tanggal Haid Terakhir (31-12-2022)',
-                'type' => 'text',
-                'id' => 'tanggal_haid_terakhir',
-                'name' => 'tanggal_haid_terakhir',
-                'class' => 'tanggal',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'attribute' => 'placeholder=31-12-2022',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Tanggal Haid Terakhir (31-12-2022)',
+                    'type' => 'text',
+                    'id' => 'tanggal_haid_terakhir',
+                    'name' => 'tanggal_haid_terakhir',
+                    'class' => 'tanggal_haid',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Masukkan Tanggal Haid Terakhir',
                 ])
             @endcomponent
         </div>
         <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-stunting-anak',
-                'type' => 'submit',
+            @component('dashboard.components.buttons.process',
+                [
+                    'id' => 'proses-stunting-anak',
+                    'type' => 'submit',
                 ])
             @endcomponent
         </div>
@@ -125,13 +130,13 @@
                         </div>
                         <div class="col-sm-6 col-lg-8">
                             {{-- <a href="#" class="btn btn-info text-white text-uppercase w-100" id="simpan-pertumbuhan-anak"><i class="fa-solid fa-floppy-disk"></i> Simpan</a> --}}
-                            @component('dashboard.components.buttons.submit', [
-                                'id' => 'proses-pertumbuhan-anak',
-                                'type' => 'submit',
-                                'class' => 'text-white text-uppercase w-100 simpan',
-                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' :
-                                null,
-                                'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
+                            @component('dashboard.components.buttons.submit',
+                                [
+                                    'id' => 'proses-pertumbuhan-anak',
+                                    'type' => 'submit',
+                                    'class' => 'text-white text-uppercase w-100 simpan',
+                                    'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' : null,
+                                    'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -225,6 +230,14 @@
                                             window.location.href =
                                                 "{{ $back_url }}";
                                         })
+                                    } else if (response.res ==
+                                        'sudah_ada_tapi_belum_divalidasi') {
+                                        Swal.fire(
+                                            'Terjadi kesalahan',
+                                            response.mes,
+                                            'error',
+                                        )
+                                        $('#modal-hasil').modal('hide')
                                     } else {
                                         Swal.fire({
                                             icon: 'error',

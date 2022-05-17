@@ -57,8 +57,9 @@
                                                 <textarea name="polygon" cols="30" rows="5" class="form-control" id="polygon">{!! $data->polygon ?? '' !!}</textarea>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end mt-3">
-                                                @component('dashboard.components.buttons.submit', [
-                                                    'label' => 'Simpan',
+                                                @component('dashboard.components.buttons.submit',
+                                                    [
+                                                        'label' => 'Simpan',
                                                     ])
                                                 @endcomponent
                                             </div>
@@ -176,13 +177,13 @@
                 var type = e.layerType,
                     layer = e.layer;
                 drawnItems.addLayer(layer);
-                drawControl.removeFrom(map);
+                drawControl.remove(map);
                 drawControlEdit.addTo(map);
                 $("#polygon").val(JSON.stringify(layer._latlngs));
             });
 
             map.on("draw:deleted", function(e) {
-                drawControlEdit.removeFrom(map);
+                drawControlEdit.remove(map);
                 drawControl.addTo(map);
                 $("#polygon").val("");
             });

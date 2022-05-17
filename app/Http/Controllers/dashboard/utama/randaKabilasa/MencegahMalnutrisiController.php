@@ -54,7 +54,11 @@ class MencegahMalnutrisiController extends Controller
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
             $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.create', compact('kartuKeluarga', 'daftarSoal'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.create', compact('kartuKeluarga', 'daftarSoal'));
+            } else {
+                return redirect(url('randa-kabilasa'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -81,33 +85,6 @@ class MencegahMalnutrisiController extends Controller
                 'berat_badan.required' => 'Berat Badan Tidak Boleh Kosong',
             ]
         );
-
-        if ($request->method() != "PUT") {
-            $randaKabilasa = RandaKabilasa::where('anggota_keluarga_id', $request->nama_anak)
-                ->where(function ($row) {
-                    $row->where('is_mencegah_pernikahan_dini', 0);
-                    $row->orWhere('is_meningkatkan_life_skill', 0);
-                    $row->where('is_valid_mencegah_malnutrisi', 0);
-                    $row->orWhere('is_valid_mencegah_malnutrisi', 2);
-
-                    $row->orWhere('is_valid_mencegah_pernikahan_dini', 0);
-                    $row->orWhere('is_valid_mencegah_pernikahan_dini', 2);
-
-                    $row->orWhere('is_valid_meningkatkan_life_skill', 0);
-                    $row->orWhere('is_valid_meningkatkan_life_skill', 2);
-                })
-                ->count();
-
-            if ($randaKabilasa > 0) {
-                return response()->json([
-                    'error' => [
-                        'nama_anak' => [
-                            'Harap Selesaikan Seluruh Asesmen Sebelumnya Terlebih Dahulu'
-                        ]
-                    ]
-                ]);
-            }
-        }
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
@@ -214,6 +191,21 @@ class MencegahMalnutrisiController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        $terdapatDataBelumValidasi = RandaKabilasa::where('anggota_keluarga_id', $request->nama_anak)
+            ->where(function ($row) {
+                $row->where('is_mencegah_pernikahan_dini', 0);
+                $row->orWhere('is_meningkatkan_life_skill', 0);
+                $row->where('is_valid_mencegah_malnutrisi', 0);
+                $row->orWhere('is_valid_mencegah_malnutrisi', 2);
+
+                $row->orWhere('is_valid_mencegah_pernikahan_dini', 0);
+                $row->orWhere('is_valid_mencegah_pernikahan_dini', 2);
+
+                $row->orWhere('is_valid_meningkatkan_life_skill', 0);
+                $row->orWhere('is_valid_meningkatkan_life_skill', 2);
+            });
+        $anak = AnggotaKeluarga::find($request->nama_anak);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -234,8 +226,20 @@ class MencegahMalnutrisiController extends Controller
         if ($role != 'keluarga') {
             $randaKabilasa->tanggal_validasi = Carbon::now();
             $randaKabilasa->is_valid_mencegah_malnutrisi = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan mencegah malnutrisi ' . $anak->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
             $randaKabilasa->is_valid_mencegah_malnutrisi = 0;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim mencegah malnutrisi ' . $anak->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
         }
         $randaKabilasa->save();
 
@@ -309,7 +313,7 @@ class MencegahMalnutrisiController extends Controller
             'bidan_konfirmasi' => $randaKabilasa->anggotaKeluarga->getBidan($randaKabilasa->anggota_keluarga_id)
         ];
 
-        $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
+        $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->withTrashed()->get();
 
         return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.show', compact('mencegahMalnutrisi', 'data', 'daftarSoal'));
     }
@@ -322,10 +326,14 @@ class MencegahMalnutrisiController extends Controller
      */
     public function edit(MencegahMalnutrisi $mencegahMalnutrisi)
     {
-        if ((Auth::user()->profil->id == $mencegahMalnutrisi->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $mencegahMalnutrisi->anggotaKeluarga->kartu_keluarga_id)) {
+        if ((Auth::user()->profil->id == $mencegahMalnutrisi->randaKabilasa->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $mencegahMalnutrisi->randaKabilasa->anggotaKeluarga->kartu_keluarga_id)) {
             $kartuKeluarga = KartuKeluarga::latest()->get();
             $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.edit', compact('kartuKeluarga', 'daftarSoal', 'mencegahMalnutrisi'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.edit', compact('kartuKeluarga', 'daftarSoal', 'mencegahMalnutrisi'));
+            } else {
+                return redirect(url('randa-kabilasa'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -344,6 +352,7 @@ class MencegahMalnutrisiController extends Controller
         $data = $this->proses($request);
 
         $randaKabilasa = RandaKabilasa::where('id', $mencegahMalnutrisi->randa_kabilasa_id)->first();
+        $randaKabilasa->anggota_keluarga_id = $data['anggota_keluarga_id'];
         $randaKabilasa->kategori_hb = $data['kategori_hemoglobin'];
         $randaKabilasa->kategori_lingkar_lengan_atas = $data['kategori_lingkar_lengan_atas'];
         $randaKabilasa->kategori_imt = $data['kategori_imt'];

@@ -79,8 +79,7 @@
                                                 'Status',
                                                 'Nama Ibu',
                                                 'Tanggal Haid Terakhir',
-                                                'Tanggal
-                                                                                                                                                    Perkiraan Lahir',
+                                                'Tanggal Perkiraan Lahir',
                                                 'Usia Kehamilan',
                                                 'Desa / Kelurahan',
                                                 'Bidan',
@@ -193,7 +192,7 @@
                         </div>
                     </div>
                     <div class="row g-2 mt-3">
-                        <div class="col-sm-6 col-lg-4">
+                        <div class="col">
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
@@ -336,7 +335,8 @@
                             if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
                                     '{{ Auth::user()->role }}' == 'admin')) {
                                 $('#col-modal-btn-ubah').removeClass('d-none');
-                                $('#modal-btn-ubah').attr('href', '{{ url('pertumbuhan-anak') }}' +
+                                $('#modal-btn-ubah').attr('href',
+                                    '{{ url('perkiraan-melahirkan') }}' +
                                     '/' + id + '/edit');
                             } else {
                                 $('#col-modal-btn-ubah').addClass('d-none');

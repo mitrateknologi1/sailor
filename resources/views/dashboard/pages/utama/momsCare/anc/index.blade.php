@@ -461,7 +461,7 @@
                         </div>
                     </div>
                     <div class="row g-2 mt-3">
-                        <div class="col-sm-6 col-lg-4">
+                        <div class="col">
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>

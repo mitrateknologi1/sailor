@@ -228,6 +228,7 @@ Route::get('/kecamatan', [ListController::class, 'listKecamatan'])->name('listKe
 Route::get('/desa-kelurahan', [ListController::class, 'listDesaKelurahan'])->name('listDesaKelurahan');
 
 Route::get('/map-deteksi-stunting', [MapDeteksiStuntingController::class, 'index']);
+Route::post('/map-deteksi-stunting/export', [MapDeteksiStuntingController::class, 'export']);
 Route::get('/petaData/stuntingAnak', [MapDeteksiStuntingController::class, 'getMapDataStuntingAnak']);
 Route::get('/petaData/deteksiIbuMelahirkanStunting', [MapDeteksiStuntingController::class, 'getMapDataDeteksiIbuMelahirkanStunting']);
 Route::get('/petaData/detailStuntingAnak', [MapDeteksiStuntingController::class, 'getDetailDataStuntingAnak']);
@@ -238,14 +239,17 @@ Route::get('/petaData/deteksiDini', [MapMomsCareController::class, 'getMapDataDe
 Route::get('/petaData/anc', [MapMomsCareController::class, 'getMapDataAnc']);
 Route::get('/petaData/detailDeteksiDini', [MapMomsCareController::class, 'getDetailDataDeteksiDini']);
 Route::get('/petaData/detailAnc', [MapMomsCareController::class, 'getDetailDataAnc']);
+Route::post('/map-moms-care/export', [MapMomsCareController::class, 'export']);
 
 Route::get('/map-randa-kabilasa', [MapRandaKabilasaController::class, 'index']);
 Route::get('/petaData/randaKabilasa', [MapRandaKabilasaController::class, 'getMapDataRandaKabilasa']);
 Route::get('/petaData/detailRandaKabilasa', [MapRandaKabilasaController::class, 'getDetailDataRandaKabilasa']);
+Route::post('/map-randa-kabilasa/export', [MapRandaKabilasaController::class, 'export']);
 
 Route::get('/map-tumbuh-kembang', [MapTumbuhKembangController::class, 'index']);
 Route::get('/petaData/pertumbuhanAnak', [MapTumbuhKembangController::class, 'getMapDataPertumbuhanAnak']);
 Route::get('/petaData/detailPertumbuhanAnak', [MapTumbuhKembangController::class, 'getDetailDataPertumbuhanAnak']);
+Route::post('/map-tumbuh-kembang/export', [MapTumbuhKembangController::class, 'export']);
 
 Route::resource('pemberitahuan', PemberitahuanController::class);
 Route::post('pemberitahuan/destroy-all', [PemberitahuanController::class, 'destroyAll'])->name('destroyAllPemberitahuan');

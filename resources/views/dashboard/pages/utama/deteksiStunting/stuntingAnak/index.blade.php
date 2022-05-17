@@ -95,8 +95,7 @@
                                                 'Nama Anak',
                                                 'Tinggi Badan',
                                                 'Kategori',
-                                                'Desa
-                                                                            / Kelurahan',
+                                                'Desa / Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Validasi',
                                                 'Aksi',
@@ -184,7 +183,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                    <div class="row g-3 align-items-end mb-3" id="form-konfirmasi">
                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
                             @component('dashboard.components.formElements.select',
                                 [
@@ -402,7 +401,7 @@
                             if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
                                     '{{ Auth::user()->role }}' == 'admin')) {
                                 $('#col-modal-btn-ubah').removeClass('d-none');
-                                $('#modal-btn-ubah').attr('href', '{{ url('pertumbuhan-anak') }}' +
+                                $('#modal-btn-ubah').attr('href', '{{ url('stunting-anak') }}' +
                                     '/' + id + '/edit');
                             } else {
                                 $('#col-modal-btn-ubah').addClass('d-none');

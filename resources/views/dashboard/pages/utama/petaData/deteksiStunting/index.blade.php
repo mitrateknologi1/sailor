@@ -47,12 +47,20 @@
                         </ul>
                     </div>
                     <div class="card-body pt-2">
-                        <div class="row px-3 mt-2">
-                            <div id="map"></div>
-                        </div>
+                        @component('dashboard.components.forms.petaData.export',
+                            [
+                                'tab' => 'stunting_anak',
+                                'provinsi' => $provinsi,
+                                'action' => url('map-deteksi-stunting/export'),
+                            ])
+                        @endcomponent
+                    </div>
+                    <div class="row px-3 mt-3">
+                        <div id="map"></div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <div class="row mb-4" id="informasi_wilayah_ibu_melahirkan_stunting">
@@ -242,6 +250,7 @@
             map.on("zoomend", function(e) {
 
                 mapOnZoom = map.getZoom();
+                $('#zoomMap').val(mapOnZoom);
                 centerMap = map.getCenter();
 
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
@@ -266,10 +275,12 @@
             initializeMap(mapOnZoom, centerMap);
             if (tab == 'stunting_anak') {
                 stuntingAnak(mapOnZoom);
+                $('#tab').val('stunting_anak');
                 $("#informasi_wilayah_stunting_anak").show();
                 $("#informasi_wilayah_ibu_melahirkan_stunting").hide();
             } else if (tab == 'ibu_melahirkan_stunting') {
                 ibuMelahirkanStunting(mapOnZoom);
+                $('#tab').val('ibu_melahirkan_stunting');
                 $("#informasi_wilayah_stunting_anak").hide();
                 $("#informasi_wilayah_ibu_melahirkan_stunting").show();
             }
@@ -282,7 +293,8 @@
                 url: "{{ url('/petaData/stuntingAnak') }}",
                 type: "GET",
                 data: {
-                    zoomMap: zoomMap
+                    zoomMap: zoomMap,
+                    kabupaten: $('#kabupaten-kota').val(),
                 },
                 success: function(response) {
                     if (response.length > 0) {
@@ -329,7 +341,8 @@
                 url: "{{ url('/petaData/deteksiIbuMelahirkanStunting') }}",
                 type: "GET",
                 data: {
-                    zoomMap: zoomMap
+                    zoomMap: zoomMap,
+                    kabupaten: $('#kabupaten-kota').val(),
                 },
                 success: function(response) {
                     if (response.length > 0) {
@@ -402,7 +415,6 @@
                     zoomMap: mapOnZoom
                 },
                 success: function(response) {
-                    console.log(response);
                     $('#nama_wilayah_ibu_melahirkan_stunting').html(response.wilayah.nama);
 
                     $('#beresiko_melahirkan_stunting').html(response.data.totalBeresikoMelahirkanStunting);
@@ -410,6 +422,15 @@
                         .totalTidakBeresikoMelahirkanStunting);
                 },
             })
+        }
+
+        function initializeFilter() {
+            initializeMap(mapOnZoom, centerMap);
+            if (tab == 'stunting_anak') {
+                stuntingAnak(mapOnZoom);
+            } else if (tab == 'ibu_melahirkan_stunting') {
+                ibuMelahirkanStunting(mapOnZoom);
+            }
         }
     </script>
 

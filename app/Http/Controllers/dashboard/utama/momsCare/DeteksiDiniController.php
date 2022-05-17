@@ -30,9 +30,18 @@ class DeteksiDiniController extends Controller
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
                 $data = DeteksiDini::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
-                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                        if (Auth::user()->role != 'admin') {
-                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    ->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->valid();
                         }
                     })
                     ->where(function ($query) use ($request) {
@@ -70,11 +79,8 @@ class DeteksiDiniController extends Controller
                             }
                         });
                     })
-                    ->orWhere(function ($query) {
-                        if (Auth::user()->role == 'bidan') { // bidan
-                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                        }
-                    })->get();
+
+                    ->get();
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
@@ -87,9 +93,9 @@ class DeteksiDiniController extends Controller
                         }
                         if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                             if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                // if($row->is_valid == 1){
-                                //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                // }
+                                if ($row->is_valid == 1) {
+                                    $actionBtn .= '<a href="' . url('deteksi-dini/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                }
 
                                 if ($row->is_valid != 0) {
                                     $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
@@ -111,7 +117,7 @@ class DeteksiDiniController extends Controller
                         }
                     })
                     ->addColumn('nama_ibu', function ($row) {
-                        return $row->anggotaKeluarga->nama_lengkap;
+                        return $row->anggotaKeluarga->nama_lengkap ?? '-';
                     })
                     ->addColumn('desa_kelurahan', function ($row) {
                         return $row->anggotaKeluarga->wilayahDomisili->desaKelurahan->nama;
@@ -175,7 +181,11 @@ class DeteksiDiniController extends Controller
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
             $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.momsCare.deteksiDini.create', compact('kartuKeluarga', 'daftarSoal'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.momsCare.deteksiDini.create', compact('kartuKeluarga', 'daftarSoal'));
+            } else {
+                return redirect(url('deteksi-dini'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -270,6 +280,10 @@ class DeteksiDiniController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        $terdapatDataBelumValidasi = DeteksiDini::where('anggota_keluarga_id', $request->nama_ibu)->where('is_valid', '!=', 1);
+
+        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -287,8 +301,20 @@ class DeteksiDiniController extends Controller
         if ($role != 'keluarga') {
             $deteksiDini->tanggal_validasi = Carbon::now();
             $deteksiDini->is_valid = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan deteksi dini ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
             $deteksiDini->is_valid = 0;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim deteksi dini ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
         }
 
         $deteksiDini->save();
@@ -344,7 +370,7 @@ class DeteksiDiniController extends Controller
             'bidan_konfirmasi' => $deteksiDini->anggotaKeluarga->getBidan($deteksiDini->anggota_keluarga_id)
         ];
 
-        $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
+        $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->withTrashed()->get();
         return view('dashboard.pages.utama.momsCare.deteksiDini.show', compact('deteksiDini', 'data', 'daftarSoal'));
     }
 
@@ -362,7 +388,11 @@ class DeteksiDiniController extends Controller
         if ((Auth::user()->profil->id == $deteksiDini->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $deteksiDini->anggotaKeluarga->kartu_keluarga_id)) {
             $kartuKeluarga = KartuKeluarga::latest()->get();
             $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.momsCare.deteksiDini.edit', compact('deteksiDini', 'daftarSoal', 'kartuKeluarga'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.momsCare.deteksiDini.edit', compact('deteksiDini', 'daftarSoal', 'kartuKeluarga'));
+            } else {
+                return redirect(url('deteksi-dini'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -380,7 +410,7 @@ class DeteksiDiniController extends Controller
         $data = $this->proses($request);
 
         $deteksiDini->anggota_keluarga_id = $request->nama_ibu;
-        $deteksiDini->bidan_id = 1;
+        $deteksiDini->bidan_id = $deteksiDini->bidan_id;
         $deteksiDini->kategori = $data['kategori'];
         $deteksiDini->skor = $data['total_skor'];
 

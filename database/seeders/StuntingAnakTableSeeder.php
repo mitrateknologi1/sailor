@@ -22,7 +22,7 @@ class StuntingAnakTableSeeder extends Seeder
             0 =>
             array(
                 'id' => 1,
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120004',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'tinggi_badan' => 20,
                 'zscore' => -19.32,
@@ -36,7 +36,7 @@ class StuntingAnakTableSeeder extends Seeder
             1 =>
             array(
                 'id' => 2,
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120005',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'tinggi_badan' => 85,
                 'zscore' => -2.32,
@@ -78,7 +78,7 @@ class StuntingAnakTableSeeder extends Seeder
             4 =>
             array(
                 'id' => 5,
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000b',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'tinggi_badan' => 10,
                 'zscore' => -22.09,
@@ -92,7 +92,7 @@ class StuntingAnakTableSeeder extends Seeder
             5 =>
             array(
                 'id' => 6,
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000c',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000d',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'tinggi_badan' => 95,
                 'zscore' => -2.41,

@@ -41,6 +41,13 @@
                         </ul>
                     </div>
                     <div class="card-body pt-2">
+                        @component('dashboard.components.forms.petaData.export',
+                            [
+                                'tab' => 'stunting_anak',
+                                'provinsi' => $provinsi,
+                                'action' => url('map-tumbuh-kembang/export'),
+                            ])
+                        @endcomponent
                         <div class="row px-3 mt-2">
                             <div id="map"></div>
                         </div>
@@ -212,7 +219,7 @@
         var boolKecamatan = true;
         var boolDesa = false;
         var centerMap = [-1.1786786, 119.9906707];
-        var tab = 'stunting_anak';
+        var tab = 'pertumbuhan_anak';
         $(document).ready(function() {
             initializeMap(9, centerMap);
             pertumbuhanAnak(9);
@@ -237,17 +244,18 @@
 
                 mapOnZoom = map.getZoom();
                 centerMap = map.getCenter();
+                $('#zoomMap').val(mapOnZoom);
 
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
                     boolKecamatan = true;
                     boolDesa = false;
                     initializeMap(mapOnZoom, centerMap);
-                    tab == 'stunting_anak' ? pertumbuhanAnak(mapOnZoom) : ibuMelahirkanStunting(mapOnZoom);
+                    pertumbuhanAnak(mapOnZoom);
                 } else if (mapOnZoom >= 12 && boolDesa == false) {
                     boolDesa = true;
                     boolKecamatan = false;
                     initializeMap(mapOnZoom, centerMap);
-                    tab == 'stunting_anak' ? pertumbuhanAnak(mapOnZoom) : ibuMelahirkanStunting(mapOnZoom);
+                    pertumbuhanAnak(mapOnZoom);
                 }
 
             });
@@ -258,15 +266,8 @@
         $('.tab-map').on('click', function() {
             tab = $(this).attr('value');
             initializeMap(mapOnZoom, centerMap);
-            if (tab == 'pertumbuhan_anak') {
-                pertumbuhanAnak(mapOnZoom);
-                $("#informasi_wilayah_stunting_anak").show();
-                $("#informasi_wilayah_ibu_melahirkan_stunting").hide();
-            } else if (tab == 'ibu_melahirkan_stunting') {
-                ibuMelahirkanStunting(mapOnZoom);
-                $("#informasi_wilayah_stunting_anak").hide();
-                $("#informasi_wilayah_ibu_melahirkan_stunting").show();
-            }
+            pertumbuhanAnak(mapOnZoom);
+            $("#informasi_wilayah_stunting_anak").show();
         })
     </script>
 
@@ -276,7 +277,8 @@
                 url: "{{ url('/petaData/pertumbuhanAnak') }}",
                 type: "GET",
                 data: {
-                    zoomMap: zoomMap
+                    zoomMap: zoomMap,
+                    kabupaten: $('#kabupaten-kota').val(),
                 },
                 success: function(response) {
                     if (response.length > 0) {
@@ -327,7 +329,6 @@
                     zoomMap: mapOnZoom
                 },
                 success: function(response) {
-                    console.log(response.pria);
                     $('#nama_wilayah').html(response.wilayah.nama);
                     $("#gizi_buruk_pria").html(response.pria.totalGiziBuruk);
                     $("#gizi_buruk_wanita").html(response.wanita.totalGiziBuruk);
@@ -344,23 +345,9 @@
             })
         }
 
-        function getDetailIbuMelahirkanStunting(id) {
-            $.ajax({
-                url: "{{ url('/petaData/detailIbuMelahirkanStunting') }}",
-                type: "GET",
-                data: {
-                    id: id,
-                    zoomMap: mapOnZoom
-                },
-                success: function(response) {
-                    console.log(response);
-                    $('#nama_wilayah_ibu_melahirkan_stunting').html(response.wilayah.nama);
-
-                    $('#beresiko_melahirkan_stunting').html(response.data.totalBeresikoMelahirkanStunting);
-                    $('#tidak_beresiko_melahirkan_stunting').html(response.data
-                        .totalTidakBeresikoMelahirkanStunting);
-                },
-            })
+        function initializeFilter() {
+            initializeMap(mapOnZoom, centerMap);
+            pertumbuhanAnak(mapOnZoom);
         }
     </script>
 

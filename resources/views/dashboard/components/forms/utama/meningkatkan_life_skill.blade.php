@@ -5,32 +5,32 @@
     @endif
     <div class="row g-4">
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Nama Kepala Keluarga / Nomor KK',
-                'type' => 'text',
-                'id' => 'nama-kepala-keluarga',
-                'name' => 'nama_kepala_keluarga',
-                'class' => '',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Nama Kepala Keluarga / Nomor KK',
-                'attribute' => 'readonly',
-                'value' => $randaKabilasa->anggotaKeluarga->kartuKeluarga->nama_kepala_keluarga . ' / ' .
-                $randaKabilasa->anggotaKeluarga->kartuKeluarga->nomor_kk,
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Nama Kepala Keluarga / Nomor KK',
+                    'type' => 'text',
+                    'id' => 'nama-kepala-keluarga',
+                    'name' => 'nama_kepala_keluarga',
+                    'class' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Nama Kepala Keluarga / Nomor KK',
+                    'attribute' => 'readonly',
+                    'value' => $randaKabilasa->anggotaKeluarga->kartuKeluarga->nama_kepala_keluarga . ' / ' . $randaKabilasa->anggotaKeluarga->kartuKeluarga->nomor_kk,
                 ])
             @endcomponent
         </div>
         <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input', [
-                'label' => 'Nama Remaja (Tanggal Lahir)',
-                'type' => 'text',
-                'id' => 'nama-remaja',
-                'name' => 'nama_remaja',
-                'class' => '',
-                'wajib' => '<sup class="text-danger">*</sup>',
-                'placeholder' => 'Nama Remaja',
-                'attribute' => 'readonly',
-                'value' => $randaKabilasa->anggotaKeluarga->nama_lengkap . ' (' .
-                Carbon\Carbon::parse($randaKabilasa->anggotaKeluarga->tanggal_lahir)->translatedFormat('d F Y') . ')',
+            @component('dashboard.components.formElements.input',
+                [
+                    'label' => 'Nama Remaja (Tanggal Lahir)',
+                    'type' => 'text',
+                    'id' => 'nama-remaja',
+                    'name' => 'nama_remaja',
+                    'class' => '',
+                    'wajib' => '<sup class="text-danger">*</sup>',
+                    'placeholder' => 'Nama Remaja',
+                    'attribute' => 'readonly',
+                    'value' => $randaKabilasa->anggotaKeluarga->nama_lengkap . ' (' . Carbon\Carbon::parse($randaKabilasa->anggotaKeluarga->tanggal_lahir)->translatedFormat('d F Y') . ')',
                 ])
             @endcomponent
         </div>
@@ -74,9 +74,10 @@
             @endforeach
         </div>
         <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-pertumbuhan-anak',
-                'type' => 'submit',
+            @component('dashboard.components.buttons.process',
+                [
+                    'id' => 'proses-pertumbuhan-anak',
+                    'type' => 'submit',
                 ])
             @endcomponent
         </div>
@@ -130,11 +131,12 @@
                         </div>
                         <div class="col-sm-6 col-lg-8">
                             {{-- <a href="#" class="btn btn-info text-white text-uppercase w-100" id="simpan-pertumbuhan-anak"><i class="fa-solid fa-floppy-disk"></i> Simpan</a> --}}
-                            @component('dashboard.components.buttons.submit', [
-                                'id' => 'proses-pertumbuhan-anak',
-                                'type' => 'submit',
-                                'class' => 'text-white text-uppercase w-100',
-                                'label' => 'Simpan',
+                            @component('dashboard.components.buttons.submit',
+                                [
+                                    'id' => 'proses-pertumbuhan-anak',
+                                    'type' => 'submit',
+                                    'class' => 'text-white text-uppercase w-100',
+                                    'label' => 'Simpan',
                                 ])
                             @endcomponent
                         </div>
@@ -162,16 +164,29 @@
                 keyboard: false
             })
 
+            if ('{{ Auth::user()->role }}' == 'keluarga') {
+                var textConfirm = 'Jika sudah sesuai, maka data akan dikirim untuk dilakukan Validasi'
+                var confirmButtonText = 'Ya, Kirim Data'
+                var titleResult = 'Data berhasil dikirim'
+                var textResult = 'Data berhasil dikirim dan sedang menunggu proses Validasi.'
+            } else {
+                var textConfirm =
+                    'Jika sudah sesuai, maka data akan disimpan dan dapat oleh Penyuluh BKKBN dan Dinas P2KB'
+                var confirmButtonText = 'Ya, Simpan'
+                var titleResult = 'Data berhasil disimpan'
+                var textResult = 'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
+            }
+
             $('#{{ $form_id }}').submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
-                        icon: 'warning',
+                        icon: 'question',
                         title: 'Apakah data sudah sesuai?',
-                        text: 'Jika sudah sesuai, maka data akan disimpan dan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                        text: textConfirm,
                         showCancelButton: true,
-                        confirmButtonText: 'Ya, Simpan',
+                        confirmButtonText: confirmButtonText,
                         cancelButtonText: 'Batal',
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -189,8 +204,8 @@
                                     if (response.status == 'success') {
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Data berhasil disimpan',
-                                            text: 'Data akan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                                            title: titleResult,
+                                            text: textResult,
                                             showConfirmButton: false,
                                             timer: 2000,
                                         }).then((result) => {

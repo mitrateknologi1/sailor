@@ -28,9 +28,18 @@ class PerkiraanMelahirkanController extends Controller
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
                 $data = PerkiraanMelahirkan::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
-                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                        if (Auth::user()->role != 'admin') {
-                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    ->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->valid();
                         }
                     })
                     ->where(function ($query) use ($request) {
@@ -56,11 +65,7 @@ class PerkiraanMelahirkanController extends Controller
                             }
                         });
                     })
-                    ->orWhere(function ($query) {
-                        if (Auth::user()->role == 'bidan') { // bidan
-                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                        }
-                    })->get();
+                    ->get();
 
                 return DataTables::of($data)
                     ->addIndexColumn()
@@ -77,7 +82,7 @@ class PerkiraanMelahirkanController extends Controller
                         }
                     })
                     ->addColumn('nama_ibu', function ($row) {
-                        return $row->anggotaKeluarga->nama_lengkap;
+                        return $row->anggotaKeluarga->nama_lengkap ?? '-';
                     })
                     ->addColumn('tanggal_haid_terakhir', function ($row) {
                         return Carbon::parse($row->tanggal_haid_terakhir)->translatedFormat('d F Y');
@@ -113,9 +118,9 @@ class PerkiraanMelahirkanController extends Controller
                         }
                         if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                             if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                // if($row->is_valid == 1){
-                                //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                // }
+                                if ($row->is_valid == 1) {
+                                    $actionBtn .= '<a href="' . url('perkiraan-melahirkan/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                }
 
                                 if ($row->is_valid != 0) {
                                     $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
@@ -244,6 +249,10 @@ class PerkiraanMelahirkanController extends Controller
         $role = Auth::user()->role;
         $data = $this->proses($request);
 
+        $terdapatDataBelumValidasi = PerkiraanMelahirkan::where('anggota_keluarga_id', $request->nama_ibu)->where('is_valid', '!=', 1);
+
+        $ibu = AnggotaKeluarga::find($request->nama_ibu);
+
         if ($role == 'admin') {
             $bidan_id = $request->nama_bidan;
         } else if ($role == 'bidan') {
@@ -261,8 +270,20 @@ class PerkiraanMelahirkanController extends Controller
         if ($role != 'keluarga') {
             $perkiraanMelahirkan->tanggal_validasi = Carbon::now();
             $perkiraanMelahirkan->is_valid = 1;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat menambahkan perkiraan melahirkan ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak.',
+                ]);
+            }
         } else {
             $perkiraanMelahirkan->is_valid = 0;
+            if ($terdapatDataBelumValidasi->count() > 0) {
+                return response()->json([
+                    'res' => 'sudah_ada_tapi_belum_divalidasi',
+                    'mes' => 'Maaf, tidak dapat mengirim perkiraan melahirkan ' . $ibu->nama_lengkap . ', dikarenakan masih terdapat data yang berstatus belum divalidasi/ditolak. Silahkan Perbarui Data tersebut apabila statusnya ditolak.',
+                ]);
+            }
         }
         $perkiraanMelahirkan->save();
 
@@ -282,7 +303,7 @@ class PerkiraanMelahirkanController extends Controller
 
         $selisihHari = date_diff(Carbon::parse($perkiraanMelahirkan->created_at), Carbon::parse($perkiraanMelahirkan->tanggal_perkiraan_lahir));
         $selisihHariSebut = $selisihHari->y . ' Tahun ' . $selisihHari->m . ' Bulan ' . $selisihHari->d . ' Hari';
-        $ibu = AnggotaKeluarga::find($perkiraanMelahirkan->anggota_keluarga_id);
+        $ibu = AnggotaKeluarga::where('id', $perkiraanMelahirkan->anggota_keluarga_id)->withTrashed()->first();
 
         $data = [
             'nama_ibu' => $ibu->nama_lengkap,
