@@ -85,30 +85,40 @@
                     <div class="dropdown morphing scale-left user-profile mx-lg-3 mx-2">
                         <a class="nav-link dropdown-toggle rounded-circle after-none p-0" href="#" role="button"
                             data-bs-toggle="dropdown">
-                            {{-- <img class="avatar img-thumbnail rounded-circle shadow"
-                                src="{{ asset('assets/dashboard') }}/images/profile_av.png" alt=""> --}}
                             <img class="avatar img-thumbnail rounded-circle shadow"
-                                src="
-                                {{ Auth::user()->profil->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil)? asset('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                src="{{ Auth::user()->profil->foto_profil != null && Storage::exists('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) ? asset('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
                                 alt="Avatar" class="rounded-circle avatar xl shadow img-thumbnail">
                         </a>
                         <div class="dropdown-menu border-0 rounded-4 shadow p-0">
                             <div class="card border-0 w240">
                                 <div class="card-body border-bottom d-flex">
                                     <img class="avatar rounded-circle"
-                                        src="{{ Auth::user()->profil->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil)? asset('upload/foto_profil/keluarga/' . Auth::user()->profil->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                        src="{{ Auth::user()->profil->foto_profil != null && Storage::exists('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) ? asset('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
                                         alt="Avatar" class="rounded-circle avatar xl shadow img-thumbnail">
                                     <div class="flex-fill ms-3">
                                         <h6 class="card-title mb-0">{{ Auth::user()->profil->nama_lengkap }}</h6>
-                                        <span
-                                            class="text-muted">{{ Auth::user()->role == 'bidan' || Auth::user()->role == 'penyuluh'? Auth::user()->profil->lokasiTugas->pluck('desaKelurahan.nama')->implode(', '): '' }}</span>
-                                        </span>
+
+                                        @if (Auth::user()->role != 'keluarga')
+                                            <span class="text-muted">{{ ucfirst(Auth::user()->role) }}</span>
+                                            @if (Auth::user()->role == 'bidan' || Auth::user()->role == 'penyuluh')
+                                                <span
+                                                    class="text-muted d-block">({{ ucwords(strtolower(Auth::user()->profil->lokasiTugas->pluck('desaKelurahan.nama')->implode(', '))) }})</span>
+                                            @endif
+                                        @elseif(Auth::user()->role == 'keluarga')
+                                            @if (Auth::user()->is_remaja == 0)
+                                                <span class="text-muted">Kepala Keluarga</span>
+                                            @else
+                                                <span class="text-muted">Remaja</span>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="list-group m-2 mb-3">
-                                    <a class="list-group-item list-group-item-action border-0 test" href="#" id=""><i
-                                            class="w30 fa fa-user"></i>Profile &
-                                        account</a>
+                                    <a class="list-group-item list-group-item-action border-0 test"
+                                        href="{{ route('profilDanAkun') }}" id=""><i class="w30 fa fa-user"></i>Ubah
+                                        Profil
+                                        &
+                                        Akun</a>
                                     <a class="list-group-item list-group-item-action border-0"
                                         href="account-settings.html"><i class="w30 fa fa-gear"></i>Settings</a>
                                 </div>

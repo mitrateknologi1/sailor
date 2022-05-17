@@ -19,14 +19,14 @@ class BidanSeeder extends Seeder
             [
                 'id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002', //1
                 'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e81',
-                'nik' => 1234567890123456,
+                'nik' => 1234567890123452,
                 'nama_lengkap' => 'YUNI',
                 'jenis_kelamin' => 'PEREMPUAN',
                 'tempat_lahir' => 'SILAE',
                 'tanggal_lahir' => '1996-01-01',
                 'agama_id' => 1,
                 'tujuh_angka_terakhir_str' => '1234567',
-                'nomor_hp' => '08123456789',
+                'nomor_hp' => '081234567892',
                 'email' => 'test@email.com',
                 'alamat' => 'Jl. Mangga',
                 'desa_kelurahan_id' => 7210120004,
@@ -39,14 +39,14 @@ class BidanSeeder extends Seeder
             [
                 'id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003', //2
                 'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e82',
-                'nik' => 6543211234567891,
+                'nik' => 1234567890123453,
                 'nama_lengkap' => 'IIN',
                 'jenis_kelamin' => 'PEREMPUAN',
                 'tempat_lahir' => 'TONDO',
                 'tanggal_lahir' => '1996-01-01',
                 'agama_id' => 1,
                 'tujuh_angka_terakhir_str' => '1234567',
-                'nomor_hp' => '08123456789',
+                'nomor_hp' => '081234567893',
                 'email' => 'test@email.com',
                 'alamat' => 'Jl. Mangga',
                 'desa_kelurahan_id' => 7210120004,

@@ -15,224 +15,207 @@
 @endsection
 
 @section('content')
-<section>      
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card ">
-                <div class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
-                    <h5 class="card-title mb-0">Data Penyuluh KB</h5>
-                    @component('dashboard.components.buttons.add',[
-                        'id' => 'catatan-pertumbuhan-anak',
-                        'class' => '',
-                        'url' => route('penyuluh.create'),
-                    ])        
-                    @endcomponent
-                </div>
-                <div class="card-body pt-2">
-                    <div class="row mb-0">
-                        <div class="col">
-                            <div class="card fieldset border border-secondary mb-4">
-                                <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
-                                <div class="row">
-                                    <div class="col-lg">
-                                        @component('dashboard.components.formElements.select', [
-                                            'label' => 'Status',
-                                            'id' => 'status',
-                                            'name' => 'status',
-                                            'class' => 'filter',
-                                            ])         
-                                            @slot('options')
-                                                <option value="1">Aktif</option>
-                                                <option value="0">Tidak Aktif</option>
-                                            @endslot
-                                        @endcomponent
-                                    </div>
-                                    <div class="col-lg">
-                                        @component('dashboard.components.formElements.select', [
-                                            'label' => 'Kategori Gizi',
-                                            'id' => 'kategori-gizi',
-                                            'name' => 'kategori_gizi',
-                                            'class' => 'filter',
-                                            ])         
-                                            @slot('options')
-                                                <option>Mustard</option>
-                                                <option>Ketchup</option>
-                                                <option>Relish</option>
-                                            @endslot
-                                        @endcomponent
+    <section>
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card ">
+                    <div
+                        class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
+                        <h5 class="card-title mb-0">Data Penyuluh</h5>
+                        @if (Auth::user()->role == 'admin')
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'catatan-pertumbuhan-anak',
+                                    'class' => '',
+                                    'url' => route('penyuluh.create'),
+                                ])
+                            @endcomponent
+                        @endif
+                    </div>
+                    <div class="card-body pt-2">
+                        <div class="row mb-0">
+                            @component('dashboard.components.info.masterData.penyuluh')
+                            @endcomponent
+                            <div class="col">
+                                <div class="card fieldset border border-secondary mb-4">
+                                    <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
+                                    <div class="row">
+                                        <div class="col-lg">
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Lokasi Tugas',
+                                                    'id' => 'lokasi-tugas',
+                                                    'name' => 'lokasi_tugas',
+                                                    'class' => 'select2 filter',
+                                                ])
+                                                @slot('options')
+                                                    @foreach ($lokasiTugas as $item)
+                                                        <option value="{{ $item->desa_kelurahan_id }}">
+                                                            {{ $item->desaKelurahan->nama }}
+                                                        </option>
+                                                    @endforeach
+                                                @endslot
+                                            @endcomponent
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="card fieldset border border-secondary">
-                                @component('dashboard.components.dataTables.index', [
-                                    'id' => 'table-bidan',
-                                    'th' => [
-                                        'No',
-                                        'NIK',
-                                        'Nama Lengkap',
-                                        'Jenis Kelamin',
-                                        'Tempat Lahir',
-                                        'Tanggal Lahir',
-                                        'Agama',
-                                        '7 Angka Terakhir STR',
-                                        'Nomor HP',
-                                        'Email',
-                                        'Alamat',
-                                        'Desa/Kelurahan',
-                                        'Kecamatan',
-                                        'Kabupaten/Kota',
-                                        'Provinsi',
-                                        'Dibuat Tanggal',
-                                        'Lokasi Tugas',
-                                        'Aksi',
-                                    ],
-                                ])
-                                @endcomponent
+                        <div class="row">
+                            <div class="col">
+                                <div class="card fieldset border border-secondary">
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-bidan',
+                                            'th' => ['No', 'NIK', 'Nama Lengkap', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Agama', '7 Angka Terakhir STR', 'Nomor HP', 'Email', 'Alamat', 'Desa/Kelurahan', 'Kecamatan', 'Kabupaten/Kota', 'Provinsi', 'Dibuat Tanggal', 'Lokasi Tugas', 'Aksi'],
+                                        ])
+                                    @endcomponent
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<div class="modal fade" id="modal-lihat" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-body custom_scroll p-lg-4 pb-3">
-                <div class="d-flex w-100 justify-content-between mb-1">
-                    <div class="w-100">
-                        <h5>Detail Penyuluh</h5>
-                    </div>
-                    
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="row">
-                    <div class="col-6"> 
-                        <p class="text-muted mb-0" id="">Dibuat: </p>
-                        <p class="text-muted" id="modal-created-at">-</p>
-                    </div>
-                    <div class="col-6 float-end text-end">
-                        <p class="text-muted mb-0" id="">Terakhir Diperbarui: </p>
-                        <p class="text-muted" id="modal-updated-at">-</p>
-                    </div>
-                </div>
+    </section>
+    <div class="modal fade" id="modal-lihat" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body custom_scroll p-lg-4 pb-3">
+                    <div class="d-flex w-100 justify-content-between mb-1">
+                        <div class="w-100">
+                            <h5>Detail Penyuluh</h5>
+                        </div>
 
-                <div class="alert kategori-alert alert-primary rounded-4 mb-0">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light mx-1"><i class="fa-solid fa-map-location-dot"></i></div>
-                        <div class="d-flex w-100 justify-content-between align-items-center" style="font-size: 0.9em">
-                            <div class="" style="" id="">Lokasi Tugas:</div>
-                            <div class="float-end" id="modal-lokasi-tugas"></div>
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="text-muted mb-0" id="">Dibuat: </p>
+                            <p class="text-muted" id="modal-created-at">-</p>
+                        </div>
+                        <div class="col-6 float-end text-end">
+                            <p class="text-muted mb-0" id="">Terakhir Diperbarui: </p>
+                            <p class="text-muted" id="modal-updated-at">-</p>
                         </div>
                     </div>
-                </div>
-                <div class="card fieldset border border-dark my-4">
-                    <span class="fieldset-tile text-dark ml-5 bg-white">Info Penyuluh:</span>
-                    <div class="card-body p-0 py-1 px-1">
-                        <ul class="list-unstyled mb-0">
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-person fa-lg"></i> Nama Penyuluh</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-nama-penyuluh"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-id-card"></i> NIK</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-nik"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-map-location-dot"></i> Tempat Lahir</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-tempat-lahir"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-hands-praying"></i> Agama</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-agama"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-id-card"></i> 7 Angka Terakhir STR</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-str"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-phone"></i> Nomor HP</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-nomor-hp"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-at"></i> Email</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-email"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-road"></i> Alamat</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-alamat"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-location-dot"></i> Desa/Kelurahan</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-desa-kelurahan"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-location-dot"></i> Kecamatan</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-kecamatan"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-location-dot"></i> Kabupaten/Kota</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-kabupaten-kota"> - </span>
-                            </li>
-                            <li class="justify-content-between mb-2">
-                                <label><i class="fa-solid fa-location-dot"></i> Provinsi</label>
-                                <span class="badge bg-info float-end text-uppercase" id="modal-provinsi"> - </span>
-                            </li>
-                            <li class="justify-content-between">
-                                <label><i class="fa-solid fa-image"></i> Foto Profil</label>
-                                <span class="float-end" id="modal-foto-profil">
 
-                                </span>
-                                
-                            </li>
-                        </ul>
+                    <div class="alert kategori-alert alert-primary rounded-4 mb-0">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light mx-1"><i
+                                    class="fa-solid fa-map-location-dot"></i></div>
+                            <div class="d-flex w-100 justify-content-between align-items-center" style="font-size: 0.9em">
+                                <div class="" style="" id="">Lokasi Tugas:</div>
+                                <div class="float-end" id="modal-lokasi-tugas"></div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="card fieldset border border-dark my-4">
+                        <span class="fieldset-tile text-dark ml-5 bg-white">Info Penyuluh:</span>
+                        <div class="card-body p-0 py-1 px-1">
+                            <ul class="list-unstyled mb-0">
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-person fa-lg"></i> Nama Penyuluh</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-nama-penyuluh"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-id-card"></i> NIK</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-nik"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-map-location-dot"></i> Tempat Lahir</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tempat-lahir"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-hands-praying"></i> Agama</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-agama"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-id-card"></i> 7 Angka Terakhir STR</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-str"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-phone"></i> Nomor HP</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-nomor-hp"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-at"></i> Email</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-email"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-road"></i> Alamat</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-alamat"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-location-dot"></i> Desa/Kelurahan</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-desa-kelurahan"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-location-dot"></i> Kecamatan</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-kecamatan"> - </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-location-dot"></i> Kabupaten/Kota</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-kabupaten-kota"> -
+                                    </span>
+                                </li>
+                                <li class="justify-content-between mb-2">
+                                    <label><i class="fa-solid fa-location-dot"></i> Provinsi</label>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-provinsi"> - </span>
+                                </li>
+                                <li class="justify-content-between">
+                                    <label><i class="fa-solid fa-image"></i> Foto Profil</label>
+                                    <span class="float-end" id="modal-foto-profil">
+
+                                    </span>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col">
+                            <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
+                                aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
+                        </div>
+                        <div class="col-sm-6 col-lg-8" id="col-modal-btn-ubah">
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
+                                ])
+                            @endcomponent
+                        </div>
+                    </div>
+
                 </div>
-                <div class="row g-2">
-                    <div class="col">
-                        <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-circle"></i>  Tutup</button>
-                    </div>
-                    <div class="col-sm-6 col-lg-8" id="col-modal-btn-ubah">
-                        @component('dashboard.components.buttons.edit', [
-                            'id' => 'modal-btn-ubah',
-                        ])      
-                        @endcomponent
-                    </div>
-                </div>
-                
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('script')
     <script>
         $('#m-link-profil').addClass('active');
         $('#menu-profil').addClass('collapse show')
-        $('#ms-link-master-data-profil-penyuluh').addClass('active') 
-        
+        $('#ms-link-master-data-profil-penyuluh').addClass('active')
+
         var table = $('#table-bidan').removeAttr('width').DataTable({
             processing: true,
             serverSide: true,
             dom: 'lBfrtip',
-            buttons : [
-                {
+            buttons: [{
                     extend: 'excel',
-                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',                        
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
                     text: '<i class="bi bi-file-earmark-arrow-down"></i> Ekspor Data',
                     exportOptions: {
                         modifier: {
@@ -245,19 +228,19 @@
                 },
                 {
                     extend: 'colvis',
-                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',                        
+                    className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
                     text: '<i class="bi bi-eye-fill"></i> Tampil/Sembunyi Kolom',
-                }                   
-            ],  
+                }
+            ],
             lengthMenu: [
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
-            ],  
+            ],
             ajax: {
                 url: "{{ route('penyuluh.index') }}",
-                data: function(d){
-                    // d.role = $('#role-filter').val();                    
-                    // d.search = $('input[type="search"]').val();
+                data: function(d) {
+                    d.lokasiTugas = $('#lokasi-tugas').val();
+                    d.search = $('input[type="search"]').val();
                 }
             },
             columns: [{
@@ -343,15 +326,14 @@
                     orderable: true,
                     searchable: true
                 },
-                
-            ],  
-            columnDefs: [
-                {
-                    targets: [3,4,5,6,7,9,10,11,12,13,14,15],
+
+            ],
+            columnDefs: [{
+                    targets: [3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15],
                     visible: false,
                 },
                 {
-                    targets: [5,15],
+                    targets: [5, 15],
                     render: function(data) {
                         return moment(data).format('LL');
                     }
@@ -359,19 +341,24 @@
                 {
                     targets: 16,
                     className: 'text-center',
-                    render: function (data, type, full, meta) {
-                        return "<div style='white-space: normal;width: 180px;'>" + data + "</div>";
-                    },
+                    // render: function(data, type, full, meta) {
+                    //     return "<div style='white-space: normal;width: 180px;'>" + data + "</div>";
+                    // },
                 },
-            ],        
+            ],
         });
 
-        function hapus(id) {
-            var _token = "{{csrf_token()}}";
+        $('.filter').change(function() {
+            table.draw();
+        })
+
+        $(document).on('click', '#btn-delete', function() {
+            let id = $(this).val();
+            var _token = "{{ csrf_token() }}";
             Swal.fire({
-                title : 'Apakah anda yakin?',
-                text : "Data bidan yang dipilih akan dihapus!",
-                icon : 'warning',
+                title: 'Apakah anda yakin?',
+                text: "Data bidan yang dipilih akan dihapus!",
+                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -381,7 +368,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "DELETE",
-                        url: "{{url('penyuluh')}}" + '/' + id,
+                        url: "{{ url('penyuluh') }}" + '/' + id,
                         data: {
                             _token: _token
                         },
@@ -403,28 +390,30 @@
                             }
                         }
                     })
-                } 
+                }
             })
-        }
+        })
 
-        function modalLihat(id){
+        $(document).on('click', '#btn-lihat', function() {
+            var penyuluh = $(this).val();
             $('#modal-lihat').modal('show');
-            var penyuluh = id;
             $.ajax({
                 type: "GET",
-                url: "{{url('penyuluh')}}" + '/' + penyuluh,
-                success: function (data) {
+                url: "{{ url('penyuluh') }}" + '/' + penyuluh,
+                success: function(data) {
                     $('#modal-lihat').modal('show');
                     $('#modal-created-at').html(moment(data.created_at).format('LL'));
-                    if(data.updated_at != null){
+                    if (data.updated_at != null) {
                         $('#modal-updated-at').html(moment(data.updated_at).format('LL'));
-                    } else{
+                    } else {
                         $('#modal-updated-at').html(moment(data.created_at).format('LL'));
                     }
-                    if(data.lokasiTugas != ""){
+                    if (data.lokasiTugas != "") {
                         $('#modal-lokasi-tugas').html(data.lokasiTugas);
-                    } else{
-                        $('#modal-lokasi-tugas').html('<span class="badge rounded-pill bg-danger">Belum Ada Lokasi Tugas</span>');
+                    } else {
+                        $('#modal-lokasi-tugas').html(
+                            '<span class="badge rounded-pill bg-danger">Lokasi Tugas Belum Ditentukan</span>'
+                        );
                     }
                     $('#modal-nama-penyuluh').html(data.nama_lengkap);
                     $('#modal-nik').html(data.nik);
@@ -440,15 +429,29 @@
                     $('#modal-kecamatan').html(data.kecamatan_nama);
                     $('#modal-kabupaten-kota').html(data.kabupaten_kota_nama);
                     $('#modal-provinsi').html(data.provinsi_nama);
-                    if(data.foto_profil != null){
-                        $('#modal-foto-profil').html('<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/penyuluh/'+data.foto_profil+')"> <div class="avatar-wrapper rounded-4" style="background-image: url(upload/foto_profil/penyuluh/'+data.foto_profil+')"></div><div class="file-input"><input type="file" class="form-control" name="file-input" id="file-input"><label for="file-input" class="fa fa-pencil shadow text-muted"></label></div></div>')
-                    } else{
-                        $('#modal-foto-profil').html('<span class="badge bg-info text-uppercase">-</span>')
+                    if (data.foto_profil != null) {
+                        $('#modal-foto-profil').html(
+                            '<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/penyuluh/' +
+                            data.foto_profil + ')">')
+                    } else {
+                        $('#modal-foto-profil').html(
+                            '<span class="badge bg-info text-uppercase">-</span>')
                     }
-                    $('#modal-btn-ubah').attr('href', '{{url('penyuluh')}}' + '/' + penyuluh + '/edit');
+
+                    if (('{{ Auth::user()->role }}' == 'admin')) {
+                        $('#col-modal-btn-ubah').removeClass('d-none');
+                        $('#modal-btn-ubah').attr('href', '{{ url('penyuluh') }}' + '/' +
+                            penyuluh +
+                            '/edit');
+
+                    } else {
+                        $('#col-modal-btn-ubah').addClass('d-none');
+                    }
+
                 },
             })
 
-        }
+        })
+        $('.select2').select2()
     </script>
 @endpush

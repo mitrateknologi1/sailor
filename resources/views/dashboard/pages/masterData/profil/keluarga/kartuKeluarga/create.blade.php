@@ -91,12 +91,12 @@
                                                             @slot('kecamatanKK', isset($kecamatanKK) ? $kecamatanKK : null)
                                                             @slot('kabupatenKotaKK', isset($kabupatenKotaKK) ? $kabupatenKotaKK : null)
                                                             @slot('provinsiKK', isset($provinsiKK) ? $provinsiKK : null)
-                                                            @slot('agama', $agama)')
-                                                            @slot('pendidikan', $pendidikan)')
-                                                            @slot('pekerjaan', $pekerjaan)')
-                                                            @slot('golonganDarah', $golonganDarah)')
-                                                            @slot('statusPerkawinan', $statusPerkawinan)')
-                                                            @slot('statusHubungan', $statusHubungan)')
+                                                            @slot('agama', $agama)
+                                                            @slot('pendidikan', $pendidikan)
+                                                            @slot('pekerjaan', $pekerjaan)
+                                                            @slot('golonganDarah', $golonganDarah)
+                                                            @slot('statusPerkawinan', $statusPerkawinan)
+                                                            @slot('statusHubungan', $statusHubungan)
                                                             @slot('action', route('bidan.store'))
                                                             @slot('method', 'POST')
                                                             @slot('back_url', route('bidan.index'))
@@ -112,37 +112,40 @@
                                                             <span class="fieldset-tile text-info bg-white">Input Akun</span>
                                                             <div class="row g-3">
                                                                 <div class="col-lg-4 col-md-4">
-                                                                    @component('dashboard.components.formElements.input', [
-                                                                        'label' => 'Nomor HP',
-                                                                        'type' => 'text',
-                                                                        'id' => 'nomor-hp',
-                                                                        'name' => 'nomor_hp',
-                                                                        'class' => 'angka',
-                                                                        'value' => $anggotaKeluarga->user->nomor_hp ?? null,
-                                                                        'wajib' => '<sup class="text-danger">*</sup>',
+                                                                    @component('dashboard.components.formElements.input',
+                                                                        [
+                                                                            'label' => 'Nomor HP',
+                                                                            'type' => 'text',
+                                                                            'id' => 'nomor-hp',
+                                                                            'name' => 'nomor_hp',
+                                                                            'class' => 'angka',
+                                                                            'value' => $anggotaKeluarga->user->nomor_hp ?? null,
+                                                                            'wajib' => '<sup class="text-danger">*</sup>',
                                                                         ])
                                                                     @endcomponent
                                                                     {{-- <small class="d-block" class="text-muted" style="font-style: italic;">Pastikan nomor HP yang anda masukkan aktif, untuk menerima sms notifikasi.</small> --}}
                                                                 </div>
                                                                 <div class="col-lg-4 col-md-4">
-                                                                    @component('dashboard.components.formElements.input', [
-                                                                        'label' => 'Kata Sandi',
-                                                                        'type' => 'password',
-                                                                        'id' => 'kata-sandi',
-                                                                        'name' => 'kata_sandi',
-                                                                        'class' => '',
-                                                                        'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
+                                                                    @component('dashboard.components.formElements.input',
+                                                                        [
+                                                                            'label' => 'Kata Sandi',
+                                                                            'type' => 'password',
+                                                                            'id' => 'kata-sandi',
+                                                                            'name' => 'kata_sandi',
+                                                                            'class' => '',
+                                                                            'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
                                                                         ])
                                                                     @endcomponent
                                                                 </div>
                                                                 <div class="col-lg-4 col-md-4">
-                                                                    @component('dashboard.components.formElements.input', [
-                                                                        'label' => 'Ulangi Kata Sandi',
-                                                                        'type' => 'password',
-                                                                        'id' => 'ulangi-kata-sandi',
-                                                                        'name' => 'ulangi_kata_sandi',
-                                                                        'class' => '',
-                                                                        'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
+                                                                    @component('dashboard.components.formElements.input',
+                                                                        [
+                                                                            'label' => 'Ulangi Kata Sandi',
+                                                                            'type' => 'password',
+                                                                            'id' => 'ulangi-kata-sandi',
+                                                                            'name' => 'ulangi_kata_sandi',
+                                                                            'class' => '',
+                                                                            'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
                                                                         ])
                                                                     @endcomponent
                                                                 </div>
@@ -153,24 +156,26 @@
                                             @endif
                                             @if (Auth::user()->role == 'admin')
                                                 <div class="col-12 col-lg mt-3">
-                                                    @component('dashboard.components.formElements.select', [
-                                                        'label' => 'Bidan sesuai lokasi domisili',
-                                                        'id' => 'nama-bidan',
-                                                        'name' => 'nama_bidan',
-                                                        'class' => 'select2',
-                                                        'attribute' => 'disabled',
-                                                        'wajib' => '<sup class="text-danger">*</sup>',
+                                                    @component('dashboard.components.formElements.select',
+                                                        [
+                                                            'label' => 'Bidan sesuai lokasi domisili',
+                                                            'id' => 'nama-bidan',
+                                                            'name' => 'nama_bidan',
+                                                            'class' => 'select2',
+                                                            'attribute' => 'disabled',
+                                                            'wajib' => '<sup class="text-danger">*</sup>',
                                                         ])
                                                     @endcomponent
                                                 </div>
                                             @endif
 
                                             <div class="col-12 mt-3 text-end">
-                                                @component('dashboard.components.buttons.submit', [
-                                                    'id' => 'proses-pertumbuhan-anak',
-                                                    'type' => 'submit',
-                                                    'class' => 'text-white text-uppercase',
-                                                    'label' => 'Simpan',
+                                                @component('dashboard.components.buttons.submit',
+                                                    [
+                                                        'id' => 'proses-pertumbuhan-anak',
+                                                        'type' => 'submit',
+                                                        'class' => 'text-white text-uppercase',
+                                                        'label' => 'Simpan',
                                                     ])
                                                 @endcomponent
                                             </div>

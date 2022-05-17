@@ -200,6 +200,9 @@ class PertumbuhanAnakController extends Controller
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
         } // else keluarga
         else {
+            if (Auth::user()->is_remaja == 1) {
+                abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+            }
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
             $pertumbuhanAnak = PertumbuhanAnak::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
@@ -220,6 +223,9 @@ class PertumbuhanAnakController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
@@ -241,7 +247,7 @@ class PertumbuhanAnakController extends Controller
 
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.create', $data);
         } else {
-            abort(404);
+            abort(403);
         }
     }
 
@@ -930,6 +936,9 @@ class PertumbuhanAnakController extends Controller
      */
     public function edit(PertumbuhanAnak $pertumbuhanAnak)
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $pertumbuhanAnak->anggotaKeluarga->kartu_keluarga_id)) {
             $data = [
                 'anak' => PertumbuhanAnak::where('id', $pertumbuhanAnak->id)->first(),
@@ -937,7 +946,7 @@ class PertumbuhanAnakController extends Controller
             ];
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.edit', $data);
         } else {
-            return abort(404);
+            return abort(403);
         }
     }
 
@@ -1076,7 +1085,7 @@ class PertumbuhanAnakController extends Controller
                 'res' => 'success'
             ]);
         } else {
-            return abort(404);
+            return abort(403);
         }
     }
 }

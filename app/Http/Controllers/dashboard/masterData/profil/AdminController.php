@@ -4,12 +4,14 @@ namespace App\Http\Controllers\dashboard\masterData\profil;
 
 use App\Models\User;
 use App\Models\Admin;
+use App\Models\Agama;
 use App\Models\Bidan;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
 use Illuminate\Http\Request;
 use App\Models\DesaKelurahan;
 use App\Models\KabupatenKota;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +19,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreAdminRequest;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\UpdateAdminRequest;
-use App\Models\Agama;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    // function __construct()
+    // {
+    //     $this->middleware('admin');
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +34,7 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::user()->id != 1){
+        if (Auth::user()->id != '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
             abort(403, 'Oops! Access Forbidden');
         }
         if ($request->ajax()) {
@@ -37,35 +42,34 @@ class AdminController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
 
-                ->addColumn('desa_kelurahan', function ($row) {     
+                ->addColumn('desa_kelurahan', function ($row) {
                     return $row->desaKelurahan->nama;
                 })
 
-                ->addColumn('kecamatan', function ($row) {     
+                ->addColumn('kecamatan', function ($row) {
                     return $row->kecamatan->nama;
                 })
 
-                ->addColumn('kabupaten_kota', function ($row) {     
+                ->addColumn('kabupaten_kota', function ($row) {
                     return $row->kabupatenKota->nama;
                 })
 
-                ->addColumn('provinsi', function ($row) {     
+                ->addColumn('provinsi', function ($row) {
                     return $row->provinsi->nama;
                 })
 
-                ->addColumn('agama', function ($row) {     
+                ->addColumn('agama', function ($row) {
                     return $row->agama->agama;
                 })
 
-                ->addColumn('action', function ($row) {     
-                        $actionBtn = '
-                        <div class="text-center justify-content-center text-white">';
-                        $actionBtn .= '
-                            <button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.')><i class="fas fa-eye"></i></button>
-                            <a href="'.route('lokasiTugasBidan', $row->id).'" id="btn-edit" class="btn btn-primary btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lokasi Tugas"><i class="fa-solid fa-map-location-dot"></i></a>
-                            <a href="'.route('admin.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
-                            <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
-                        </div>';
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="text-center justify-content-center text-white">';
+                    $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" value="' . $row->id . '"><i class="fas fa-eye"></i></button>';
+                    $actionBtn .= '<a href="' . route('admin.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> ';
+                    if ($row->user->id != Auth::user()->id) {
+                        $actionBtn .= '<button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                    }
+                    $actionBtn .= '</div>';
                     return $actionBtn;
                 })
 
@@ -75,7 +79,7 @@ class AdminController extends Controller
                 //             $query->where("nama_lengkap", "LIKE", "%$request->search%");
                 //         });
                 //     }      
-                                    
+
                 //     // if (!empty($request->role)) {
                 //     //     $query->whereHas('user', function ($query) use ($request) {
                 //     //         $query->where('users.role', $request->role);                       
@@ -89,8 +93,8 @@ class AdminController extends Controller
                     'kabupaten_kota',
                     'provinsi',
                     'lokasi_tugas',
-                
-                
+
+
                 ])
                 ->make(true);
         }
@@ -104,13 +108,13 @@ class AdminController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->id != 1){
+        if (Auth::user()->id != '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
             abort(403, 'Oops! Access Forbidden');
         }
         $data = [
             'users' => User::with('admin')->where('role', 'admin')
-            ->whereDoesntHave('admin')
-            ->get(),
+                ->whereDoesntHave('admin')
+                ->get(),
             'agama' => Agama::all(),
             'provinsi' => Provinsi::all(),
         ];
@@ -135,8 +139,6 @@ class AdminController extends Controller
                 'tempat_lahir' => 'required',
                 'tanggal_lahir' => 'required',
                 'agama' => 'required',
-                'nomor_hp' => 'required',
-                // 'email' => 'required',
                 'alamat' => 'required',
                 'provinsi' => 'required',
                 'kabupaten_kota' => 'required',
@@ -155,16 +157,14 @@ class AdminController extends Controller
                 'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
                 'agama.required' => 'Agama tidak boleh kosong',
                 'nomor_hp.required' => 'Nomor HP tidak boleh kosong',
-                // 'email.required' => 'Email tidak boleh kosong',
                 'alamat.required' => 'Alamat tidak boleh kosong',
                 'provinsi.required' => 'Provinsi tidak boleh kosong',
                 'kabupaten_kota.required' => 'Kabupaten/Kota tidak boleh kosong',
                 'kecamatan.required' => 'Kecamatan tidak boleh kosong',
                 'desa_kelurahan.required' => 'Desa/Kelurahan tidak boleh kosong',
-                // 'foto_profil.required' => 'Foto profil tidak boleh kosong',
                 'foto_profil.image' => 'Foto profil harus berupa gambar',
                 'foto_profil.max' => 'Foto profil tidak boleh lebih dari 3MB',
-            
+
             ]
         );
 
@@ -172,7 +172,8 @@ class AdminController extends Controller
             return response()->json(['error' => $validator->errors()]);
         }
 
-        
+        $user = User::find($request->user_id);
+
         $data = [
             'user_id' => $request->user_id,
             'nik' => $request->nik,
@@ -181,7 +182,7 @@ class AdminController extends Controller
             'tempat_lahir' => strtoupper($request->tempat_lahir),
             'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
             'agama_id' => strtoupper($request->agama),
-            'nomor_hp' => $request->nomor_hp,
+            'nomor_hp' => $user->nomor_hp,
             'email' => $request->email,
             'alamat' => strtoupper($request->alamat),
             'provinsi_id' => $request->provinsi,
@@ -190,7 +191,7 @@ class AdminController extends Controller
             'desa_kelurahan_id' => $request->desa_kelurahan,
         ];
 
-        if($request->file('foto_profil')){
+        if ($request->file('foto_profil')) {
             $request->file('foto_profil')->storeAs(
                 'upload/foto_profil/admin/',
                 $request->nik .
@@ -201,10 +202,9 @@ class AdminController extends Controller
         }
 
         Admin::create($data);
-
         User::where('id', $request->user_id)->update([
             'nik' => $request->nik,
-            'nomor_hp' => $request->nomor_hp,
+            'nomor_hp' => $user->nomor_hp,
         ]);
 
         return response()->json(['success' => 'Berhasil']);
@@ -235,13 +235,16 @@ class AdminController extends Controller
      */
     public function edit(Admin $admin)
     {
+        if (Auth::user()->id != '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
+            abort(403, 'Oops! Access Forbidden');
+        }
         $data = [
             'admin' => Admin::select('*', DB::raw('DATE_FORMAT(tanggal_lahir, "%d/%m/%Y") AS tanggal_lahir'))
                 ->where('id', $admin->id)
                 ->first(),
             'users' => User::with('admin')->where('role', 'admin')
-            ->whereDoesntHave('admin')
-            ->get(),
+                ->whereDoesntHave('admin')
+                ->get(),
             'agama' => Agama::all(),
             'provinsi' => Provinsi::all(),
             'kabupatenKota' => KabupatenKota::where('provinsi_id', $admin->provinsi_id)->get(),
@@ -261,12 +264,12 @@ class AdminController extends Controller
     public function update(Request $request, Admin $admin)
     {
         $validateFotoProfil = '';
-        if($request->file('foto_profil')){
+        if ($request->file('foto_profil')) {
             $fileName = $request->file('foto_profil');
-            if($fileName != $admin->foto_profil){
+            if ($fileName != $admin->foto_profil) {
                 $validateFotoProfil = 'required|image|file|max:3072';
-            } 
-        } 
+            }
+        }
 
         $validator = Validator::make(
             $request->all(),
@@ -278,7 +281,9 @@ class AdminController extends Controller
                 'tempat_lahir' => 'required',
                 'tanggal_lahir' => 'required',
                 'agama' => 'required',
-                'nomor_hp' => 'required',
+                'nomor_hp' => ['required', 'max:13', Rule::unique('users')->where(function ($query) use ($admin) {
+                    return $query->where('role', 'admin')->whereNull('deleted_at');
+                })->ignore($admin->user->id)],
                 // 'email' => 'required',
                 'alamat' => 'required',
                 'provinsi' => 'required',
@@ -298,6 +303,8 @@ class AdminController extends Controller
                 'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
                 'agama.required' => 'Agama tidak boleh kosong',
                 'nomor_hp.required' => 'Nomor HP tidak boleh kosong',
+                'nomor_hp.max' => 'Nomor HP maksimal 13 digit',
+                'nomor_hp.unique' => 'Nomor HP sudah terdaftar',
                 // 'email.required' => 'Email tidak boleh kosong',
                 'alamat.required' => 'Alamat tidak boleh kosong',
                 'provinsi.required' => 'Provinsi tidak boleh kosong',
@@ -307,7 +314,7 @@ class AdminController extends Controller
                 'foto_profil.required' => 'Foto profil tidak boleh kosong',
                 'foto_profil.image' => 'Foto profil harus berupa gambar',
                 'foto_profil.max' => 'Foto profil tidak boleh lebih dari 3MB',
-            
+
             ]
         );
 
@@ -323,7 +330,7 @@ class AdminController extends Controller
             'tempat_lahir' => strtoupper($request->tempat_lahir),
             'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
             'agama_id' => strtoupper($request->agama),
-            'nomor_hp' => strtoupper($request->nomor_hp),
+            'nomor_hp' => $request->nomor_hp,
             'email' => $request->email,
             'alamat' => strtoupper($request->alamat),
             'provinsi_id' => $request->provinsi,
@@ -333,7 +340,7 @@ class AdminController extends Controller
             // 'foto_profil' => $request->nik . '.' . $request->file('foto_profil')->extension(),
         ];
 
-        if($request->file('foto_profil')){
+        if ($request->file('foto_profil')) {
             if (Storage::exists('upload/foto_profil/admin/' . $admin->foto_profil)) {
                 Storage::delete('upload/foto_profil/admin/' . $admin->foto_profil);
             }
@@ -346,7 +353,6 @@ class AdminController extends Controller
         }
 
         $admin->update($data);
-
         User::where('id', $admin->user_id)->update([
             'nik' => $request->nik,
             'nomor_hp' => $request->nomor_hp,
@@ -363,6 +369,9 @@ class AdminController extends Controller
      */
     public function destroy(Admin $admin)
     {
+        if (Auth::user()->id != '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
+            return abort(403, 'Oops! Access Forbidden');
+        }
         if (Storage::exists('upload/foto_profil/admin/' . $admin->foto_profil)) {
             Storage::delete('upload/foto_profil/admin/' . $admin->foto_profil);
         }

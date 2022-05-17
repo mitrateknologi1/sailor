@@ -150,6 +150,9 @@ class StuntingAnakController extends Controller
             }
             return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.index');
         } else {
+            if (Auth::user()->is_remaja == 1) {
+                abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+            }
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
             $stuntingAnak = StuntingAnak::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
@@ -166,6 +169,9 @@ class StuntingAnakController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
@@ -858,6 +864,9 @@ class StuntingAnakController extends Controller
      */
     public function edit(StuntingAnak $stuntingAnak)
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if ((Auth::user()->profil->id == $stuntingAnak->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $stuntingAnak->anggotaKeluarga->kartu_keluarga_id)) {
             $kartuKeluarga = KartuKeluarga::latest()->get();
             return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.edit', compact('kartuKeluarga', 'stuntingAnak'));

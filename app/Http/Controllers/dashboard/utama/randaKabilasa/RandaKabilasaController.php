@@ -321,11 +321,13 @@ class RandaKabilasaController extends Controller
             }
             return view('dashboard.pages.utama.randaKabilasa.index');
         } else {
+            if (Auth::user()->is_remaja == 0) {
+                abort(403, 'Maaf, halaman ini hanya untuk Remaja');
+            }
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
             $randaKabilasa = RandaKabilasa::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
             })->latest()->get();
-
             return view('dashboard.pages.utama.randaKabilasa.indexKeluarga', compact(['randaKabilasa']));
         }
     }

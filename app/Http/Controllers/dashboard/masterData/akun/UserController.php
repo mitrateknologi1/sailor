@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Bidan;
 use App\Models\Penyuluh;
 use Illuminate\Http\Request;
+use App\Models\Pemberitahuan;
 use App\Models\AnggotaKeluarga;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
@@ -26,9 +27,66 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->ajax()) {
             $data = User::with('bidan', 'penyuluh', 'admin', 'keluarga')
-                ->orderBy('created_at', 'DESC');
+                ->where(function ($query) use ($request) {
+                    if (Auth::user()->role == 'bidan') {
+                        $query->where('role', 'keluarga');
+                    }
+                });
+
+            // Filter
+            $data->where(function ($query) use ($request) {
+                if ($request->status) {
+                    $query->where('status', $request->status == 'aktif' ? 1 : 0);
+                }
+            });
+
+            $data->where(function ($query) use ($request) {
+
+                if ($request->role) {
+                    $role = $request->role;
+                    if (($request->role == 'kepala_keluarga') || ($request->role == 'remaja')) {
+                        $role = 'keluarga';
+                        if ($request->role == 'kepala_keluarga') {
+                            $is_remaja = 0;
+                        } else {
+                            $is_remaja = 1;
+                        }
+                    } else {
+                        $is_remaja = 0;
+                    }
+
+                    $query->where('role', $role)->where('is_remaja', $is_remaja);
+                }
+            });
+
+            $data->where(function ($query) use ($request, $data) {
+                if ($request->search) {
+                    if (Auth::user()->role == 'admin') {
+                        $query->whereHas('bidan', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+                        $query->orWhereHas('penyuluh', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+                        $query->orWhereHas('admin', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+                        $query->orWhereHas('keluarga', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+                    } else {
+                        $query->whereHas('keluarga', function ($query) use ($request) {
+                            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                        });
+                    }
+                    $query->orWhere('nomor_hp', 'like', '%' . $request->search . '%');
+                }
+            });
+
+            $data->orderBy('created_at', 'DESC');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_lengkap', function ($row) {
@@ -38,7 +96,6 @@ class UserController extends Controller
                         } else {
                             return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
                         }
-                        // return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
                     } else if ($row->role == 'bidan') {
                         if ($row->bidan) {
                             return $row->bidan->nama_lengkap;
@@ -52,7 +109,7 @@ class UserController extends Controller
                             return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
                         }
                     } else if ($row->role == 'admin') {
-                        if (isset($row->admin)) {
+                        if ($row->admin) {
                             return $row->admin->nama_lengkap;
                         } else {
                             return '<span class="badge rounded-pill bg-danger">Belum Ada Profil</span>';
@@ -70,32 +127,59 @@ class UserController extends Controller
 
                 ->addColumn('role', function ($data) {
                     if ($data->role == 'admin') {
-                        return '<span class="badge rounded-pill bg-danger">Admin</span>';
+                        return '<span class="badge rounded-pill bg-warning">Admin</span>';
                     } else if ($data->role == 'bidan') {
                         return '<span class="badge rounded-pill bg-primary">Bidan</span>';
                     } else if ($data->role == 'penyuluh') {
-                        return '<span class="badge rounded-pill text-white bg-info">Penyuluh KB</span>';
+                        return '<span class="badge rounded-pill text-white bg-info">Penyuluh</span>';
+                    } else if ($data->role == 'keluarga') {
+                        if ($data->is_remaja == 0) {
+                            return '<span class="badge rounded-pill bg-success">Kepala Keluarga</span>';
+                        } else {
+                            return '<span class="badge rounded-pill bg-success">Remaja</span>';
+                        }
+                    }
+                })
+
+                ->addColumn('bidan', function ($data) {
+                    if ($data->role == 'keluarga') {
+                        if ($data->keluarga->bidan) {
+                            return $data->keluarga->bidan->nama_lengkap;
+                        } else {
+                            return '<span class="badge rounded-pill bg-danger">Profil Belum Dikonfirmasi</span>';
+                        }
                     } else {
-                        return '<span class="badge rounded-pill bg-success">Keluarga</span>';
+                        return '-';
                     }
                 })
 
                 ->addColumn('action', function ($row) {
                     $actionBtn = '
                         <div class="text-center justify-content-center text-white">';
-                    if (Auth::user()->id == 1) {
+                    if (Auth::user()->id == '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
                         $actionBtn .= '
                             <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                        if ($row->id != 1) {
+                        if ($row->id != '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
                             $actionBtn .= '
                                 <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
                         }
                     } else {
                         if ($row->role != 'admin') {
-                            $actionBtn .= '
-                                    <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                            $actionBtn .= '
-                                    <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                            if (Auth::user()->role == 'bidan') {
+                                if ($row->role == 'keluarga') {
+                                    if ($row->keluarga->bidan_id == Auth::user()->bidan->id) {
+                                        $actionBtn .= '
+                                        <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                        $actionBtn .= '
+                                        <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                    }
+                                }
+                            } else {
+                                $actionBtn .= '
+                                        <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                $actionBtn .= '
+                                        <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                            }
                         } else {
                             if (($row->id == Auth::user()->id)) {
                                 $actionBtn .= '
@@ -108,24 +192,11 @@ class UserController extends Controller
                         </div>';
                     return $actionBtn;
                 })
-
-                // ->filter(function ($query) use ($request) {    
-                //     if ($request->search != '') {
-                //         $query->whereHas('anggotaKeluarga', function ($query) use ($request) {
-                //             $query->where("nama_lengkap", "LIKE", "%$request->search%");
-                //         });
-                //     }      
-
-                //     // if (!empty($request->role)) {
-                //     //     $query->whereHas('user', function ($query) use ($request) {
-                //     //         $query->where('users.role', $request->role);                       
-                //     //     });
-                //     // }
-                // })
                 ->rawColumns([
                     'nama_lengkap',
                     'status',
                     'role',
+                    'bidan',
                     'action'
                 ])
                 ->make(true);
@@ -140,6 +211,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->role != 'admin') {
+            abort(403, 'Oops! Anda tidak memiliki hak akses');
+        }
         return view('dashboard.pages.masterData.akun.create');
     }
 
@@ -211,14 +285,17 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if (Auth::user()->id != 1) {
+        if (Auth::user()->id != '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
             if ($user->role != 'admin') {
+                if ($user->role != 'keluarga') {
+                    abort(403, 'Oops! Anda tidak memiliki hak akses');
+                }
                 return view('dashboard.pages.masterData.akun.edit', compact('user'));
             } else {
                 if (($user->id == Auth::user()->id)) {
                     return view('dashboard.pages.masterData.akun.edit', compact('user'));
                 } else {
-                    return abort(403, 'Oops! Access Forbidden');
+                    return abort(403);
                 }
             }
         } else {
@@ -298,7 +375,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
         if ($user->role == 'bidan') {
             if ($user->bidan) {
                 if (Storage::exists('upload/foto_profil/bidan/' . $user->bidan->foto_profil)) {
@@ -307,6 +383,7 @@ class UserController extends Controller
                 $user->bidan->lokasiTugas()->delete();
                 $user->bidan->delete();
             }
+            $user->delete();
         } else if ($user->role == 'penyuluh') {
             if ($user->penyuluh) {
                 if (Storage::exists('upload/foto_profil/penyuluh/' . $user->penyuluh->foto_profil)) {
@@ -315,14 +392,56 @@ class UserController extends Controller
                 $user->penyuluh->lokasiTugas()->delete();
                 $user->penyuluh->delete();
             }
+            $user->delete();
         } else if ($user->role == 'admin') {
-            if (Storage::exists('upload/foto_profil/admin/' . $user->admin->foto_profil)) {
-                Storage::delete('upload/foto_profil/admin/' . $user->admin->foto_profil);
-            }
             if ($user->admin) {
+                if (Storage::exists('upload/foto_profil/admin/' . $user->admin->foto_profil)) {
+                    Storage::delete('upload/foto_profil/admin/' . $user->admin->foto_profil);
+                }
                 $user->admin->delete();
             }
+            $user->delete();
+        } else if ($user->role == 'keluarga') {
+            if ($user->is_remaja == 0) { //kepala keluarga\
+                if (Storage::exists('upload/kartu_keluarga/' . $user->kepalaKeluarga->kartuKeluarga->file_kk)) {
+                    Storage::delete('upload/kartu_keluarga/' . $user->kepalaKeluarga->kartuKeluarga->file_kk);
+                }
+
+                foreach ($user->kepalaKeluarga->kartuKeluarga->anggotaKeluarga as $anggota) {
+                    if (Storage::exists('upload/foto_profil/keluarga/' . $anggota->foto_profil)) {
+                        Storage::delete('upload/foto_profil/keluarga/' . $anggota->foto_profil);
+                    }
+                    if (Storage::exists('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili)) {
+                        Storage::delete('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili);
+                    }
+
+                    $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
+
+                    if ($anggota->wilayahDomisili) {
+                        $anggota->wilayahDomisili->delete();
+                    }
+
+                    if ($anggota->user) {
+                        $anggota->user->delete();
+                    }
+
+                    if ($pemberitahuan) {
+                        $pemberitahuan->delete();
+                    }
+
+
+                    $anggota->delete();
+                }
+
+                $user->kepalaKeluarga->kartuKeluarga->delete();
+            } else if ($user->is_remaja == 1) { //remaja
+
+            }
         }
+
+
+
+
 
 
 

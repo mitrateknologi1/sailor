@@ -42,6 +42,7 @@ use App\Http\Controllers\dashboard\utama\randaKabilasa\MeningkatkanLifeSkillCont
 use App\Http\Controllers\dashboard\utama\randaKabilasa\RandaKabilasaController;
 use App\Http\Controllers\dashboard\utama\TesMapController;
 use App\Http\Controllers\PemberitahuanController;
+use App\Http\Controllers\PersonalController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Models\Anc;
 use App\Models\PerkiraanMelahirkan;
@@ -57,98 +58,146 @@ use App\Models\PerkiraanMelahirkan;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.pages.login');
-})->middleware('guest');
-
-Route::get('/lengkapi-profil', [AuthController::class, 'lengkapiProfil'])->name('lengkapiProfil');
-
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::post('/cekLogin', [AuthController::class, 'cekLogin']);
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', function () {
+        return view('landingPage.pages.home');
+    });
 
-// URL resource-nya nanti sesuai url yang sekarang
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::match(array('PUT', 'POST'), 'proses-stunting-anak', [StuntingAnakController::class, 'proses']);
+    Route::get('/login', function () {
+        return view('dashboard.pages.login');
+    })->name('login');
 
+    Route::post('/cekLogin', [AuthController::class, 'cekLogin']);
+    Route::get('/lengkapi-profil', [AuthController::class, 'lengkapiProfil'])->name('lengkapiProfil');
 
-// -------------- Start Deteksi Stunting --------------
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('stunting-anak', StuntingAnakController::class);
-Route::put('stunting-anak/validasi/{stunting_anak}', [StuntingAnakController::class, 'validasi']);
-
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('deteksi-ibu-melahirkan-stunting', DeteksiIbuMelahirkanStuntingController::class);
-Route::match(array('PUT', 'POST'), 'proses-deteksi-ibu-melahirkan-stunting', [DeteksiIbuMelahirkanStuntingController::class, 'proses']);
-Route::get('get-ibu', [ListController::class, 'getIbu']);
-Route::put('deteksi-ibu-melahirkan-stunting/validasi/{deteksi_ibu_melahirkan_stunting}', [DeteksiIbuMelahirkanStuntingController::class, 'validasi']);
-// -------------- End Deteksi Stunting --------------
-
+    Route::get('registrasi', [AuthController::class, 'registrasi'])->name('registrasi');
+    Route::get('registrasi-ulang/{keluarga}', [AuthController::class, 'registrasiUlang']);
+    Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
+    Route::put('registrasi-ulang/{keluarga}', [AuthController::class, 'updateRegistrasi'])->name('updateRegistrasi');
+});
 
 
-// ----------------- Start Moms Care -----------------
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('perkiraan-melahirkan', PerkiraanMelahirkanController::class);
-Route::match(array('PUT', 'POST'), 'proses-perkiraan-melahirkan', [PerkiraanMelahirkanController::class, 'proses']);
-Route::put('perkiraan-melahirkan/validasi/{perkiraan_melahirkan}', [PerkiraanMelahirkanController::class, 'validasi']);
-
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('deteksi-dini', DeteksiDiniController::class);
-Route::match(array('PUT', 'POST'), 'proses-deteksi-dini', [DeteksiDiniController::class, 'proses']);
-Route::put('deteksi-dini/validasi/{deteksi_dini}', [DeteksiDiniController::class, 'validasi']);
-
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('anc', AncController::class);
-Route::match(array('PUT', 'POST'), 'proses-anc', [AncController::class, 'proses']);
-Route::get('anc-cek-pemeriksaan', [AncController::class, 'cekPemeriksaan']);
-Route::put('anc/validasi/{anc}', [AncController::class, 'validasi']);
-// ----------------- End Moms Care -----------------
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profil-dan-akun', [PersonalController::class, 'index'])->name('profilDanAkun');
+    Route::put('/perbarui-akun', [PersonalController::class, 'perbaruiAkun'])->name('perbaruiAkun');
+    Route::put('/perbarui-profil', [PersonalController::class, 'perbaruiProfil'])->name('perbaruiProfil');
+    Route::get('/profil-anggota-keluarga', [PersonalController::class, 'profilAnggotaKeluarga'])->name('profilAnggotaKeluarga');
 
 
+    // -------------- Start Deteksi Stunting --------------
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('stunting-anak', StuntingAnakController::class);
+    Route::match(array('PUT', 'POST'), 'proses-stunting-anak', [StuntingAnakController::class, 'proses']);
+    Route::put('stunting-anak/validasi/{stunting_anak}', [StuntingAnakController::class, 'validasi']);
 
-// ----------------- Start Tumbuh Kembang -----------------
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
-Route::put('pertumbuhan-anak/validasi/{pertumbuhan_anak}', [PertumbuhanAnakController::class, 'validasi'])->name('validasiPertumbuhanAnak');
-Route::post('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
-Route::put('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
-Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');
-Route::get('get-bidan', [ListController::class, 'getBidan'])->name('getBidan');
-Route::get('get-bidan-anggota-keluarga', [ListController::class, 'getBidanAnggotaKeluarga'])->name('getBidanAnggotaKeluarga');
-// Route::get('pertumbuhan-anak', function () {
-//     return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.index');
-// });
-
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('perkembangan-anak', PerkembanganAnakController::class);
-Route::put('perkembangan-anak/validasi/{perkembangan_anak}', [PerkembanganAnakController::class, 'validasi'])->name('validasiPerkembanganAnak');
-Route::post('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
-Route::put('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('deteksi-ibu-melahirkan-stunting', DeteksiIbuMelahirkanStuntingController::class);
+    Route::match(array('PUT', 'POST'), 'proses-deteksi-ibu-melahirkan-stunting', [DeteksiIbuMelahirkanStuntingController::class, 'proses']);
+    Route::get('get-ibu', [ListController::class, 'getIbu']);
+    Route::put('deteksi-ibu-melahirkan-stunting/validasi/{deteksi_ibu_melahirkan_stunting}', [DeteksiIbuMelahirkanStuntingController::class, 'validasi']);
+    // -------------- End Deteksi Stunting --------------
 
 
-// ----------------- End Tumbuh Kembang -----------------
+    // ----------------- Start Moms Care -----------------
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('perkiraan-melahirkan', PerkiraanMelahirkanController::class);
+    Route::match(array('PUT', 'POST'), 'proses-perkiraan-melahirkan', [PerkiraanMelahirkanController::class, 'proses']);
+    Route::put('perkiraan-melahirkan/validasi/{perkiraan_melahirkan}', [PerkiraanMelahirkanController::class, 'validasi']);
+
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('deteksi-dini', DeteksiDiniController::class);
+    Route::match(array('PUT', 'POST'), 'proses-deteksi-dini', [DeteksiDiniController::class, 'proses']);
+    Route::put('deteksi-dini/validasi/{deteksi_dini}', [DeteksiDiniController::class, 'validasi']);
+
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('anc', AncController::class);
+    Route::match(array('PUT', 'POST'), 'proses-anc', [AncController::class, 'proses']);
+    Route::get('anc-cek-pemeriksaan', [AncController::class, 'cekPemeriksaan']);
+    Route::put('anc/validasi/{anc}', [AncController::class, 'validasi']);
+    // ----------------- End Moms Care -----------------
+
+
+    // ----------------- Start Tumbuh Kembang -----------------
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('pertumbuhan-anak', PertumbuhanAnakController::class);
+    Route::put('pertumbuhan-anak/validasi/{pertumbuhan_anak}', [PertumbuhanAnakController::class, 'validasi'])->name('validasiPertumbuhanAnak');
+    Route::post('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
+    Route::put('proses-pertumbuhan-anak', [PertumbuhanAnakController::class, 'proses'])->name('proses-pertumbuhan-anak');
+    Route::get('get-anak', [ListController::class, 'getAnak'])->name('getAnak');
+    Route::get('get-bidan', [ListController::class, 'getBidan'])->name('getBidan');
+    Route::get('get-bidan-anggota-keluarga', [ListController::class, 'getBidanAnggotaKeluarga'])->name('getBidanAnggotaKeluarga');
+
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('perkembangan-anak', PerkembanganAnakController::class);
+    Route::put('perkembangan-anak/validasi/{perkembangan_anak}', [PerkembanganAnakController::class, 'validasi'])->name('validasiPerkembanganAnak');
+    Route::post('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
+    Route::put('proses-perkembangan-anak', [PerkembanganAnakController::class, 'proses'])->name('proses-perkembangan-anak');
+    // ----------------- End Tumbuh Kembang -----------------
+
+
+    // ----------------- Start Randa Kabilasa -----------------
+    // URL resource-nya nanti sesuai url yang sekarang
+    Route::resource('randa-kabilasa', RandaKabilasaController::class);
+    Route::resource('mencegah-malnutrisi', MencegahMalnutrisiController::class);
+    Route::match(array('PUT', 'POST'), 'proses-mencegah-malnutrisi', [MencegahMalnutrisiController::class, 'proses']);
+    Route::put('mencegah-malnutrisi/validasi/{mencegah_malnutrisi}', [MencegahMalnutrisiController::class, 'validasi']);
+
+    Route::resource('meningkatkan-life-skill/{randaKabilasa}', MeningkatkanLifeSkillController::class)->parameters([
+        '{randaKabilasa}' => 'meningkatkanLifeSkill'
+    ]);
+    Route::match(array('PUT', 'POST'), 'proses-meningkatkan-life-skill/{randaKabilasa}', [MeningkatkanLifeSkillController::class, 'proses']);
+    Route::put('meningkatkan-life-skill/validasi/{randaKabilasa}/{meningkatkanLifeSkill}', [MeningkatkanLifeSkillController::class, 'validasi']);
+
+    Route::resource('mencegah-pernikahan-dini/{randaKabilasa}', MencegahPernikahanDiniController::class)->parameters([
+        '{randaKabilasa}' => 'meningkatkanLifeSkill'
+    ]);
+    Route::match(array('PUT', 'POST'), 'proses-mencegah-pernikahan-dini/{randaKabilasa}', [MencegahPernikahanDiniController::class, 'proses']);
+    Route::put('mencegah-pernikahan-dini/validasi/{randaKabilasa}/{mencegahPernikahanDini}', [MencegahPernikahanDiniController::class, 'validasi']);
+    // ----------------- End Randa Kabilasa -----------------
+
+
+    // ----------------- Start Master Soal -----------------
+    Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
+    Route::resource('/masterData/soal-deteksi-dini', SoalDeteksiDiniController::class);
+    Route::resource('/masterData/soal-mencegah-malnutrisi', SoalMencegahMalnutrisiController::class);
+    Route::resource('/masterData/soal-meningkatkan-life-skill', SoalMeningkatkanLifeSkillController::class);
+    // ----------------- End Master Soal -----------------
+
+
+    // ----------------- Start Master Profil -----------------
+    Route::resource('keluarga', KartuKeluargaController::class);
+    Route::put('keluarga/validasi/{keluarga}', [KartuKeluargaController::class, 'validasi'])->name('validasiKartuKeluarga');
+    Route::resource('anggota-keluarga/{keluarga}', AnggotaKeluargaController::class)->parameters([
+        '{keluarga}' => 'anggotaKeluarga'
+    ]);
+    Route::get('cek-bidan-domisili/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'cekBidanDomisili']);
+    Route::put('anggota-keluarga/validasi/{keluarga}/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'validasi']);
+
+    Route::resource('bidan', BidanController::class);
+    Route::get('lokasi-tugas-bidan/{bidan}', [BidanController::class, 'getLokasiTugasBidan'])->name('lokasiTugasBidan');
+    Route::put('update-lokasi-tugas-bidan/{bidan}', [BidanController::class, 'updateLokasiTugasBidan'])->name('updateLokasiTugasBidan');
+
+    Route::resource('penyuluh', PenyuluhController::class);
+    Route::get('lokasi-tugas-penyuluh/{penyuluh}', [PenyuluhController::class, 'getLokasiTugasPenyuluh'])->name('lokasiTugasPenyuluh');
+    Route::put('update-lokasi-tugas-penyuluh/{penyuluh}', [PenyuluhController::class, 'updateLokasiTugasPenyuluh'])->name('updateLokasiTugasPenyuluh');
+
+    Route::resource('admin', AdminController::class)->middleware('admin');
+    // ----------------- End Master Profil -----------------
+
+
+    // ----------------- Start Master Akun -----------------
+    Route::resource('user', UserController::class);
+    // ----------------- End Master Akun -----------------
+});
 
 
 
-// ----------------- Start Randa Kabilasa -----------------
-// URL resource-nya nanti sesuai url yang sekarang
-Route::resource('randa-kabilasa', RandaKabilasaController::class);
-Route::resource('mencegah-malnutrisi', MencegahMalnutrisiController::class);
-Route::match(array('PUT', 'POST'), 'proses-mencegah-malnutrisi', [MencegahMalnutrisiController::class, 'proses']);
-Route::put('mencegah-malnutrisi/validasi/{mencegah_malnutrisi}', [MencegahMalnutrisiController::class, 'validasi']);
 
-Route::resource('meningkatkan-life-skill/{randaKabilasa}', MeningkatkanLifeSkillController::class)->parameters([
-    '{randaKabilasa}' => 'meningkatkanLifeSkill'
-]);
-Route::match(array('PUT', 'POST'), 'proses-meningkatkan-life-skill/{randaKabilasa}', [MeningkatkanLifeSkillController::class, 'proses']);
-Route::put('meningkatkan-life-skill/validasi/{randaKabilasa}/{meningkatkanLifeSkill}', [MeningkatkanLifeSkillController::class, 'validasi']);
 
-Route::resource('mencegah-pernikahan-dini/{randaKabilasa}', MencegahPernikahanDiniController::class)->parameters([
-    '{randaKabilasa}' => 'meningkatkanLifeSkill'
-]);
-Route::match(array('PUT', 'POST'), 'proses-mencegah-pernikahan-dini/{randaKabilasa}', [MencegahPernikahanDiniController::class, 'proses']);
-Route::put('mencegah-pernikahan-dini/validasi/{randaKabilasa}/{mencegahPernikahanDini}', [MencegahPernikahanDiniController::class, 'validasi']);
 // ----------------- Start Master -----------------
 Route::resource('masterData/desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
     '{kecamatan}' => 'kelurahan'
@@ -165,50 +214,14 @@ Route::resource('masterData/kecamatan/{kabupatenKota}', KecamatanController::cla
 Route::resource('masterData/desaKelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
     '{kecamatan}' => 'desaKelurahan'
 ]);
-Route::resource('/masterData/provinsi', ProvinsiController::class);
-Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
-Route::resource('/masterData/soal-deteksi-dini', SoalDeteksiDiniController::class);
 
-Route::resource('/masterData/soal-mencegah-malnutrisi', SoalMencegahMalnutrisiController::class);
-Route::resource('/masterData/soal-meningkatkan-life-skill', SoalMeningkatkanLifeSkillController::class);
+Route::resource('/masterData/provinsi', ProvinsiController::class);
 
 Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
 Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);
-Route::resource('provinsi', ProvinsiController::class);
-
-Route::get('lokasi-tugas-bidan/{bidan}', [BidanController::class, 'getLokasiTugasBidan'])->name('lokasiTugasBidan');
-Route::put('update-lokasi-tugas-bidan/{bidan}', [BidanController::class, 'updateLokasiTugasBidan'])->name('updateLokasiTugasBidan');
-
-Route::get('lokasi-tugas-penyuluh/{penyuluh}', [PenyuluhController::class, 'getLokasiTugasPenyuluh'])->name('lokasiTugasPenyuluh');
-Route::put('update-lokasi-tugas-penyuluh/{penyuluh}', [PenyuluhController::class, 'updateLokasiTugasPenyuluh'])->name('updateLokasiTugasPenyuluh');
-
-Route::resource('bidan', BidanController::class);
-Route::resource('penyuluh', PenyuluhController::class);
-Route::resource('admin', AdminController::class);
-Route::resource('keluarga', KartuKeluargaController::class);
-Route::put('keluarga/validasi/{keluarga}', [KartuKeluargaController::class, 'validasi'])->name('validasiKartuKeluarga');
-
-Route::resource('anggota-keluarga/{keluarga}', AnggotaKeluargaController::class)->parameters([
-    '{keluarga}' => 'anggotaKeluarga'
-]);
-
-Route::get('cek-bidan-domisili/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'cekBidanDomisili']);
-
-
-Route::put('anggota-keluarga/validasi/{keluarga}/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'validasi']);
-
-
-
-
-Route::resource('user', UserController::class);
-
-Route::get('registrasi', [AuthController::class, 'registrasi'])->name('registrasi');
-Route::get('registrasi-ulang/{keluarga}', [AuthController::class, 'registrasiUlang']);
-Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
-Route::put('registrasi-ulang/{keluarga}', [AuthController::class, 'updateRegistrasi'])->name('updateRegistrasi');
-
 
 // Wilayah
+Route::resource('provinsi', ProvinsiController::class);
 Route::get('/provinsi', [ListController::class, 'listProvinsi'])->name('listProvinsi');
 Route::get('/kabupaten-kota', [ListController::class, 'listKabupatenKota'])->name('listKabupatenKota');
 Route::get('/kecamatan', [ListController::class, 'listKecamatan'])->name('listKecamatan');

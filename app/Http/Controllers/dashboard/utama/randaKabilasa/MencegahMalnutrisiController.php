@@ -48,6 +48,9 @@ class MencegahMalnutrisiController extends Controller
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                     })->latest()->get();
             } else if (Auth::user()->role == 'keluarga') {
+                if (Auth::user()->is_remaja == 0) {
+                    abort(403, 'Maaf, halaman ini hanya untuk Remaja');
+                }
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
             $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();

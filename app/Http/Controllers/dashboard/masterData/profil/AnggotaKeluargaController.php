@@ -54,7 +54,7 @@ class AnggotaKeluargaController extends Controller
 
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan')->where('kartu_keluarga_id', $request->keluarga);
+                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili')->where('kartu_keluarga_id', $request->keluarga);
                 if (Auth::user()->role != 'admin') {
                     $data->where(function (Builder $query) use ($lokasiTugas) {
                         $query->whereIn('is_valid', [1, 2]);
@@ -63,6 +63,10 @@ class AnggotaKeluargaController extends Controller
                             $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                         });
                     });
+                }
+
+                if (Auth::user()->role == 'penyuluh') {
+                    $data->where('is_valid', 1);
                 }
 
                 // Filter
@@ -75,6 +79,14 @@ class AnggotaKeluargaController extends Controller
                         } else if ($request->statusValidasi == 'Ditolak') {
                             $query->where('is_valid', 2);
                         }
+                    }
+                });
+
+                $data->where(function ($query) use ($request) {
+                    if ($request->desaKelurahanDomisili) {
+                        $query->whereHas('wilayahDomisili', function ($query) use ($request) {
+                            $query->where('desa_kelurahan_id', $request->desaKelurahanDomisili);
+                        });
                     }
                 });
 
@@ -175,14 +187,16 @@ class AnggotaKeluargaController extends Controller
                             $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Konfirmasi" data-anggota-keluarga=' . $data->id . ' data-kartu-keluarga=' . $data->kartu_keluarga_id . '><i class="fa-solid fa-lg fa-clipboard-check"></i></button>';
                         } else {
                             $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" data-anggota-keluarga=' . $data->id . ' data-kartu-keluarga=' . $data->kartu_keluarga_id . '><i class="fas fa-eye"></i></button>';
-                            if (($data->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                if ($data->is_valid == 1) {
-                                    $actionBtn .= '<a href="' . url('anggota-keluarga/' . $data->kartu_keluarga_id . '/' . $data->id) . '/edit" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                }
-                                if ($data->status_hubungan_dalam_keluarga_id != 1) {
-                                    if ($data->is_valid != 0) {
-                                        $actionBtn .= '
-                                            <button id="btn-delete" data-anggota-keluarga=' . $data->id . ' data-kartu-keluarga=' . $data->kartu_keluarga_id . ' class="btn btn-danger btn-sm mr-1 my-1 shadow" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                            if (Auth::user()->role != 'penyuluh') {
+                                if (($data->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
+                                    if ($data->is_valid == 1) {
+                                        $actionBtn .= '<a href="' . url('anggota-keluarga/' . $data->kartu_keluarga_id . '/' . $data->id) . '/edit" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                    }
+                                    if ($data->status_hubungan_dalam_keluarga_id != 1) {
+                                        if ($data->is_valid != 0) {
+                                            $actionBtn .= '
+                                                <button id="btn-delete" data-anggota-keluarga=' . $data->id . ' data-kartu-keluarga=' . $data->kartu_keluarga_id . ' class="btn btn-danger btn-sm mr-1 my-1 shadow" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                        }
                                     }
                                 }
                             }
@@ -196,7 +210,16 @@ class AnggotaKeluargaController extends Controller
             }
 
             $kartuKeluarga = KartuKeluarga::find($request->keluarga);
-            return view('dashboard.pages.masterData.profil.keluarga.anggotaKeluarga.index', compact('kartuKeluarga'));
+            $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id)->get();
+            $wilayahDomisili = WilayahDomisili::with('desaKelurahan')
+                ->whereIn('anggota_keluarga_id', $anggotaKeluarga
+                    ->pluck('id')->toArray())
+                ->groupBy('desa_kelurahan_id')->get();
+            $data = [
+                'kartuKeluarga' => $kartuKeluarga,
+                'wilayahDomisili' => $wilayahDomisili
+            ];
+            return view('dashboard.pages.masterData.profil.keluarga.anggotaKeluarga.index', $data);
         } else {
             $data = [
                 'keluarga' => AnggotaKeluarga::with('statusHubunganDalamKeluarga')
@@ -215,31 +238,35 @@ class AnggotaKeluargaController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->role == 'keluarga') {
-            $idKeluarga = \Request::segment(2);
-            if ($idKeluarga != Auth::user()->profil->kartu_keluarga_id) {
-                abort(404);
+        if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
+            if (Auth::user()->role == 'keluarga') {
+                $idKeluarga = \Request::segment(2);
+                if ($idKeluarga != Auth::user()->profil->kartu_keluarga_id) {
+                    abort(403);
+                }
             }
-        }
 
-        $idKeluarga = \Request::segment(2);
-        $keluarga = KartuKeluarga::find($idKeluarga);
-        $data = [
-            'kartu_keluarga_id' => $idKeluarga,
-            'agama' => Agama::all(),
-            'pendidikan' => Pendidikan::all(),
-            'pekerjaan' => Pekerjaan::all(),
-            'golonganDarah' => GolonganDarah::all(),
-            'statusPerkawinan' => StatusPerkawinan::all(),
-            'provinsi' => Provinsi::all(),
-            'statusHubungan' => StatusHubungan::all()->skip(1),
-            'provinsiKK' => $keluarga->provinsi_id,
-            'kabupatenKotaKK' => $keluarga->kabupaten_kota_id,
-            'kecamatanKK' => $keluarga->kecamatan_id,
-            'desaKelurahanKK' => $keluarga->desa_kelurahan_id,
-            'alamatKK' => $keluarga->alamat,
-        ];
-        return view('dashboard.pages.masterData.profil.keluarga.anggotaKeluarga.create', $data);
+            $idKeluarga = \Request::segment(2);
+            $keluarga = KartuKeluarga::find($idKeluarga);
+            $data = [
+                'kartu_keluarga_id' => $idKeluarga,
+                'agama' => Agama::all(),
+                'pendidikan' => Pendidikan::all(),
+                'pekerjaan' => Pekerjaan::all(),
+                'golonganDarah' => GolonganDarah::all(),
+                'statusPerkawinan' => StatusPerkawinan::all(),
+                'provinsi' => Provinsi::all(),
+                'statusHubungan' => StatusHubungan::all()->skip(1),
+                'provinsiKK' => $keluarga->provinsi_id,
+                'kabupatenKotaKK' => $keluarga->kabupaten_kota_id,
+                'kecamatanKK' => $keluarga->kecamatan_id,
+                'desaKelurahanKK' => $keluarga->desa_kelurahan_id,
+                'alamatKK' => $keluarga->alamat,
+            ];
+            return view('dashboard.pages.masterData.profil.keluarga.anggotaKeluarga.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -471,10 +498,10 @@ class AnggotaKeluargaController extends Controller
             if (Auth::user()->role == 'keluarga') {
                 $idKeluarga = \Request::segment(2);
                 if ($idKeluarga != Auth::user()->profil->kartu_keluarga_id) {
-                    return abort(404);
+                    return abort(403);
                 }
                 if ($anggotaKeluarga->is_valid != 2) {
-                    return abort(404);
+                    return abort(403);
                 }
             }
             $data = [
@@ -502,8 +529,8 @@ class AnggotaKeluargaController extends Controller
             }
             return view('dashboard.pages.masterData.profil.keluarga.anggotaKeluarga.edit', $data);
         } else {
-            // 404
-            return abort(404);
+            // 403
+            return abort(403);
         }
     }
 
@@ -798,7 +825,7 @@ class AnggotaKeluargaController extends Controller
             $anggotaKeluarga->delete();
             return response()->json(['res' => 'success']);
         } else {
-            return abort(404);
+            return abort(403);
         }
     }
 }

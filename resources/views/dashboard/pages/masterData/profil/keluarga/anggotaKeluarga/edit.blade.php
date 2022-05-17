@@ -59,125 +59,124 @@
                                 autocomplete="off">
                                 @csrf
                                 @method('PUT')
-                                @component('dashboard.components.forms.masterData.anggotaKeluarga')
-                                    @slot('anggotaKeluarga', isset($anggotaKeluarga) ? $anggotaKeluarga : null)
-                                    @slot('provinsi', $provinsi)
-                                    @slot('kabupatenKotaDomisili', isset($kabupatenKotaDomisili) ? $kabupatenKotaDomisili :
-                                        null)
-                                        @slot('kecamatanDomisili', isset($kecamatanDomisili) ? $kecamatanDomisili : null)
-                                        @slot('desaKelurahanDomisili', isset($desaKelurahanDomisili) ? $desaKelurahanDomisili :
-                                            null)
-                                            @slot('desaKelurahanKK', isset($desaKelurahanKK) ? $desaKelurahanKK : null)
-                                            @slot('kecamatanKK', isset($kecamatanKK) ? $kecamatanKK : null)
-                                            @slot('kabupatenKotaKK', isset($kabupatenKotaKK) ? $kabupatenKotaKK : null)
-                                            @slot('provinsiKK', isset($provinsiKK) ? $provinsiKK : null)
-                                            @slot('alamatKK', isset($alamatKK) ? $alamatKK : null)
-                                            @slot('agama', $agama)')
-                                            @slot('pendidikan', $pendidikan)')
-                                            @slot('pekerjaan', $pekerjaan)')
-                                            @slot('golonganDarah', $golonganDarah)')
-                                            @slot('statusPerkawinan', $statusPerkawinan)')
-                                            @slot('statusHubungan', $statusHubungan)')
-                                        @endcomponent
-                                        <div class="col-12 mt-3 text-end">
-                                            @component('dashboard.components.buttons.submit', [
-                                                'id' => '',
-                                                'type' => 'submit',
-                                                'class' => 'text-white text-uppercase',
-                                                'label' => 'Simpan',
-                                                ])
-                                            @endcomponent
-                                        </div>
-                                    </form>
+                                @component('dashboard.components.forms.masterData.anggotaKeluarga',
+                                    [
+                                        'anggotaKeluarga' => isset($anggotaKeluarga) ? $anggotaKeluarga : null,
+                                        'provinsi' => $provinsi,
+                                        'kabupatenKotaDomisili' => isset($kabupatenKotaDomisili) ? $kabupatenKotaDomisili : null,
+                                        'kecamatanDomisili' => isset($kecamatanDomisili) ? $kecamatanDomisili : null,
+                                        'desaKelurahanDomisili' => isset($desaKelurahanDomisili) ? $desaKelurahanDomisili : null,
+                                        'desaKelurahanKK' => isset($desaKelurahanKK) ? $desaKelurahanKK : null,
+                                        'kecamatanKK' => isset($kecamatanKK) ? $kecamatanKK : null,
+                                        'kabupatenKotaKK' => isset($kabupatenKotaKK) ? $kabupatenKotaKK : null,
+                                        'provinsiKK' => isset($provinsiKK) ? $provinsiKK : null,
+                                        'alamatKK' => isset($alamatKK) ? $alamatKK : null,
+                                        'agama' => $agama,
+                                        'pendidikan' => $pendidikan,
+                                        'pekerjaan' => $pekerjaan,
+                                        'golonganDarah' => $golonganDarah,
+                                        'statusPerkawinan' => $statusPerkawinan,
+                                        'statusHubungan' => $statusHubungan,
+                                    ])
+                                @endcomponent
+                                <div class="col-12 mt-3 text-end">
+                                    @component('dashboard.components.buttons.submit',
+                                        [
+                                            'id' => '',
+                                            'type' => 'submit',
+                                            'class' => 'text-white text-uppercase',
+                                            'label' => 'Simpan',
+                                        ])
+                                    @endcomponent
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </section>
-        @endsection
+            </div>
+        </div>
+    </section>
+@endsection
 
 
-        @push('script')
-            <script>
-                if ("{{ Auth::user()->role }}" == "keluarga") {
-                    $('#m-link-anggota-keluarga').addClass('active');
-                } else {
-                    $('#m-link-profil').addClass('active');
-                    $('#menu-profil').addClass('collapse show')
-                    $('#ms-link-master-data-profil-keluarga').addClass('active')
-                }
+@push('script')
+    <script>
+        if ("{{ Auth::user()->role }}" == "keluarga") {
+            $('#m-link-anggota-keluarga').addClass('active');
+        } else {
+            $('#m-link-profil').addClass('active');
+            $('#menu-profil').addClass('collapse show')
+            $('#ms-link-master-data-profil-keluarga').addClass('active')
+        }
 
-                var alamatKK = '{{ $alamatKK }}'
-                var provinsiKK = '{{ $provinsiKK }}'
-                var kabupatenKotaKK = '{{ $kabupatenKotaKK }}'
-                var kecamatanKK = '{{ $kecamatanKK }}'
-                var desaKelurahanKK = '{{ $desaKelurahanKK }}';
+        var alamatKK = '{{ $alamatKK }}'
+        var provinsiKK = '{{ $provinsiKK }}'
+        var kabupatenKotaKK = '{{ $kabupatenKotaKK }}'
+        var kecamatanKK = '{{ $kecamatanKK }}'
+        var desaKelurahanKK = '{{ $desaKelurahanKK }}';
 
-                if ('{{ $anggotaKeluarga->status_hubungan_dalam_keluarga_id }}' == 1) {
-                    $('#status-hubungan').attr('disabled', true);
-                }
+        if ('{{ $anggotaKeluarga->status_hubungan_dalam_keluarga_id }}' == 1) {
+            $('#status-hubungan').attr('disabled', true);
+        }
 
-                $('#update-anggota-keluarga').submit(function(e) {
-                    e.preventDefault();
-                    var formData = new FormData(this);
-                    Swal.fire({
-                        title: 'Perbarui Data?',
-                        text: "Apakah anda yakin ingin memperbarui data ini?",
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        cancelButtonText: 'Batal',
-                        confirmButtonText: 'Ya, Perbarui'
-                    }).then((result) => {
-                        if (result.value) {
-                            $('.error-text').text('');
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ url('anggota-keluarga' . '/' . $keluarga->id . '/' . $anggotaKeluarga->id) }}",
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                },
-                                data: formData,
-                                cache: false,
-                                processData: false,
-                                contentType: false,
-                                success: function(data) {
-                                    $("#overlay").fadeOut(100);
-                                    if ($.isEmptyObject(data.error)) {
-                                        Swal.fire({
-                                                icon: 'success',
-                                                title: 'Berhasil',
-                                                text: 'Data berhasil diperbarui.',
-                                                showConfirmButton: false,
-                                                timer: 3000,
-                                            })
-                                            .then((result) => {
-                                                window.location.href = "{{ url()->previous() }}";
-                                            })
-                                    } else {
-                                        Swal.fire(
-                                            'Terjadi Kesalahan!',
-                                            'Periksa kembali data yang anda masukkan',
-                                            'error'
-                                        )
-                                        printErrorMsg(data.error);
-                                    }
-                                },
-                                error: function(data) {
-                                    alert(data.responseJSON.message)
-                                },
+        $('#update-anggota-keluarga').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            Swal.fire({
+                title: 'Perbarui Data?',
+                text: "Apakah anda yakin ingin memperbarui data ini?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Perbarui'
+            }).then((result) => {
+                if (result.value) {
+                    $('.error-text').text('');
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('anggota-keluarga' . '/' . $keluarga->id . '/' . $anggotaKeluarga->id) }}",
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        data: formData,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            $("#overlay").fadeOut(100);
+                            if ($.isEmptyObject(data.error)) {
+                                Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil',
+                                        text: 'Data berhasil diperbarui.',
+                                    })
+                                    .then((result) => {
+                                        window.location.href = "{{ url()->previous() }}";
+                                    })
+                            } else {
+                                Swal.fire(
+                                    'Terjadi Kesalahan!',
+                                    'Periksa kembali data yang anda masukkan',
+                                    'error'
+                                )
+                                printErrorMsg(data.error);
+                            }
+                        },
+                        error: function(data) {
+                            alert(data.responseJSON.message)
+                        },
 
-                            });
-                        }
-                    })
-                })
-
-                const printErrorMsg = (msg) => {
-                    $.each(msg, function(key, value) {
-                        $('.' + key + '-error').text(value);
                     });
                 }
-            </script>
-        @endpush
+            })
+        })
+
+        const printErrorMsg = (msg) => {
+            $.each(msg, function(key, value) {
+                $('.' + key + '-error').text(value);
+            });
+        }
+    </script>
+@endpush

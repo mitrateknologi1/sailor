@@ -163,13 +163,25 @@ class WilayahDomisiliSeeder extends Seeder
                 'id' => 14,
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000f',
                 'alamat' => 'Jl. Raya',
-                'desa_kelurahan_id' => 7210110011,
-                'kecamatan_id' => 7210110,
+                'desa_kelurahan_id' => 7210120004,
+                'kecamatan_id' => 7210120,
                 'kabupaten_kota_id' => 7210,
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
             ],
+            [ // Remaja
+                'id' => 15,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120044',
+                'alamat' => 'Jl. Raya',
+                'desa_kelurahan_id' => 7210120004,
+                'kecamatan_id' => 7210120,
+                'kabupaten_kota_id' => 7210,
+                'provinsi_id' => 72,
+                'file_ket_domisili' => null,
+                'created_at' => now(),
+            ],
+
 
 
         ];
