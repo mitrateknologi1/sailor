@@ -111,7 +111,7 @@
             console.log('ada');
             Swal.fire(
                 'Terjadi Kesalahan!',
-                'Daftar Soal Deteksi Ibu Melahirkan Stunting Tidak Ada, Anda Tidak Bisa Menambahkan Deteksi Ibu Melahirkan Stunting, Silahkan Hubungi Admin Untuk Menambahkan Soal',
+                'Daftar Soal Deteksi Ibu Melahirkan Stunting Tidak Ada, Anda Tidak Bisa Menambahkan/Mengubah Deteksi Ibu Melahirkan Stunting, Silahkan Hubungi Admin Untuk Menambahkan Soal',
                 'error'
             )
         </script>

@@ -46,7 +46,7 @@ class DeteksiDiniTableSeeder extends Seeder
             2 =>
             array(
                 'id' => 'aed7298a-7e85-4f8f-b4db-5a8e0fcf8c0a',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120009',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'skor' => 2,
                 'kategori' => 'Kehamilan : KRR (Beresiko Rendah)',
@@ -58,7 +58,7 @@ class DeteksiDiniTableSeeder extends Seeder
             3 =>
             array(
                 'id' => 'db33f765-0417-406b-9a93-6c3979ce9f0c',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120008',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120003',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'skor' => 10,
                 'kategori' => 'Kehamilan : KRT (Beresiko TINGGI)',

@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Pertumbuhan Anak
+    Ubah Pertumbuhan Anak
 @endsection
 
 @push('style')
@@ -13,7 +13,7 @@
             <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Tumbuh Kembang</li>
             <li class="breadcrumb-item active" aria-current="page">Pertumbuhan Anak</li>
-            <li class="breadcrumb-item active" aria-current="page">Tambah Pertumbuhan Anak</li>
+            <li class="breadcrumb-item active" aria-current="page">Ubah Pertumbuhan Anak</li>
         </ol>
     </div>
 @endsection

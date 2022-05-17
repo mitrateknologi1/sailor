@@ -46,6 +46,13 @@
                         </ul>
                     </div>
                     <div class="card-body pt-2">
+                        @component('dashboard.components.forms.petaData.export',
+                            [
+                                'tab' => 'deteksi_dini',
+                                'provinsi' => $provinsi,
+                                'action' => url('map-moms-care/export'),
+                            ])
+                        @endcomponent
                         <div class="row px-3 mt-2">
                             <div id="map"></div>
                         </div>
@@ -462,6 +469,7 @@
 
                 mapOnZoom = map.getZoom();
                 centerMap = map.getCenter();
+                $('#zoomMap').val(mapOnZoom);
 
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
                     boolKecamatan = true;
@@ -487,10 +495,12 @@
                 deteksiDini(mapOnZoom);
                 $("#informasi_wilayah_deteksi_dini").show();
                 $("#informasi_wilayah_anc").hide();
+                $('#tab').val('deteksi_dini');
             } else if (tab == 'anc') {
                 anc(mapOnZoom);
                 $("#informasi_wilayah_deteksi_dini").hide();
                 $("#informasi_wilayah_anc").show();
+                $('#tab').val('anc');
             }
         })
     </script>
@@ -501,7 +511,8 @@
                 url: "{{ url('/petaData/deteksiDini') }}",
                 type: "GET",
                 data: {
-                    zoomMap: zoomMap
+                    zoomMap: zoomMap,
+                    kabupaten: $('#kabupaten-kota').val(),
                 },
                 success: function(response) {
                     if (response.length > 0) {
@@ -545,7 +556,8 @@
                 url: "{{ url('/petaData/anc') }}",
                 type: "GET",
                 data: {
-                    zoomMap: zoomMap
+                    zoomMap: zoomMap,
+                    kabupaten: $('#kabupaten-kota').val(),
                 },
                 success: function(response) {
                     if (response.length > 0) {
@@ -624,7 +636,6 @@
                     zoomMap: mapOnZoom
                 },
                 success: function(response) {
-                    console.log(response);
                     $('#nama_wilayah_deteksi_dini').html(response.wilayah.nama);
                     $('#resiko_rendah').html(response.data.totalResikoRendah);
                     $('#resiko_tinggi').html(response.data.totalResikoTinggi);
@@ -642,7 +653,6 @@
                     zoomMap: mapOnZoom
                 },
                 success: function(response) {
-                    console.log(response);
                     $('#nama_wilayah_anc').html(response.wilayah.nama);
                     $('#badan_normal').html(response.data.totalBadanNormal);
                     $('#badan_resiko_tinggi').html(response.data.totalBadanResikoTinggi);
@@ -677,6 +687,15 @@
                     $('#konseling_belum').html(response.data.totalKonselingBelum);
                 },
             })
+        }
+
+        function initializeFilter() {
+            initializeMap(mapOnZoom, centerMap);
+            if (tab == 'deteksi_dini') {
+                deteksiDini(mapOnZoom);
+            } else if (tab == 'anc') {
+                anc(mapOnZoom);
+            }
         }
     </script>
 

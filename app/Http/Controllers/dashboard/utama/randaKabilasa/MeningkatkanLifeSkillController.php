@@ -191,7 +191,11 @@ class MeningkatkanLifeSkillController extends Controller
         $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
         if ((Auth::user()->profil->id == $randaKabilasa->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $randaKabilasa->anggotaKeluarga->kartu_keluarga_id)) {
             $daftarSoal = SoalMeningkatkanLifeSkill::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.edit', compact('randaKabilasa', 'daftarSoal'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.edit', compact('randaKabilasa', 'daftarSoal'));
+            } else {
+                return redirect(url('randa-kabilasa'))->with('error_life_skill', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }

@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\dashboard\utama\petaData;
 
+use App\Exports\DeteksiStuntingExport;
 use App\Http\Controllers\Controller;
 use App\Models\DesaKelurahan;
 use App\Models\DeteksiIbuMelahirkanStunting;
 use App\Models\Kecamatan;
+use App\Models\Provinsi;
 use App\Models\StuntingAnak;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class MapDeteksiStuntingController extends Controller
 {
@@ -20,7 +25,8 @@ class MapDeteksiStuntingController extends Controller
 
     public function index()
     {
-        return view('dashboard.pages.utama.petaData.deteksiStunting.index');
+        $provinsi = Provinsi::all();
+        return view('dashboard.pages.utama.petaData.deteksiStunting.index', compact(['provinsi']));
     }
 
     public function getMapDataStuntingAnak(Request $request)
@@ -28,9 +34,11 @@ class MapDeteksiStuntingController extends Controller
         $zoomMap = $request->zoomMap;
         $mapDataArray = array();
         if ($zoomMap <= 11) {
-            $daftarWilayah = Kecamatan::whereNotNull('polygon')->get();
+            $daftarWilayah = Kecamatan::whereNotNull('polygon')->where('kabupaten_kota_id', $request->kabupaten)->get();
         } else {
-            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->get();
+            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->whereHas('kecamatan', function ($query) use ($request) {
+                return $query->where('kabupaten_kota_id', $request->kabupaten);
+            })->get();
         }
         foreach ($daftarWilayah as $wilayah) {
             $idWilayah = $wilayah->id;
@@ -71,9 +79,11 @@ class MapDeteksiStuntingController extends Controller
         $zoomMap = $request->zoomMap;
         $mapDataArray = array();
         if ($zoomMap <= 11) {
-            $daftarWilayah = Kecamatan::whereNotNull('polygon')->get();
+            $daftarWilayah = Kecamatan::whereNotNull('polygon')->where('kabupaten_kota_id', $request->kabupaten)->get();
         } else {
-            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->get();
+            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->whereHas('kecamatan', function ($query) use ($request) {
+                return $query->where('kabupaten_kota_id', $request->kabupaten);
+            })->get();
         }
         foreach ($daftarWilayah as $wilayah) {
             $idWilayah = $wilayah->id;
@@ -222,5 +232,36 @@ class MapDeteksiStuntingController extends Controller
             'wilayah' => $mapDataWilayah,
             'data' => $mapDataArray
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'provinsi' => 'required',
+                'kabupaten' => 'required',
+            ],
+            [
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'kabupaten.required' => 'Kabupaten tidak boleh kosong',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect(url('map-deteksi-stunting'))
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $tab = $request->tab;
+        $provinsi = $request->provinsi;
+        $kabupaten = $request->kabupaten;
+        $zoomMap = $request->zoomMap;
+        $hariIni = Carbon::now()->translatedFormat('d F Y');
+
+        $judulExport = $tab == 'stunting_anak' ? "Data-Stunting-Anak" : "Data-Deteksi-Ibu-Melahirkan-Stunting";
+
+        return Excel::download(new DeteksiStuntingExport($tab, $provinsi, $kabupaten, $hariIni, $zoomMap), $judulExport . '-' . $hariIni . '-' . rand(1000, 9999) . '.xlsx');
     }
 }

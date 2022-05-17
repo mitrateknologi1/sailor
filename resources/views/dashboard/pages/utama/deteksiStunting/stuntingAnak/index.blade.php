@@ -98,7 +98,7 @@
                                                 'Tinggi Badan',
                                                 'Kategori',
                                                 'Desa
-                                                                                                                                                    / Kelurahan',
+                                                                                                                                                                                                                            / Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Validasi',
                                                 'Aksi',
@@ -404,7 +404,7 @@
                             if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
                                     '{{ Auth::user()->role }}' == 'admin')) {
                                 $('#col-modal-btn-ubah').removeClass('d-none');
-                                $('#modal-btn-ubah').attr('href', '{{ url('pertumbuhan-anak') }}' +
+                                $('#modal-btn-ubah').attr('href', '{{ url('stunting-anak') }}' +
                                     '/' + id + '/edit');
                             } else {
                                 $('#col-modal-btn-ubah').addClass('d-none');

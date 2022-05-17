@@ -18,4 +18,9 @@ class DesaKelurahan extends Model
     {
         return json_decode($this->polygon);
     }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
+    }
 }

@@ -230,7 +230,7 @@
                                                 'Asesmen Meningkatkan Life Skill',
                                                 'Asesmen Mencegah Pernikahan Dini',
                                                 'Desa /
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Kelurahan',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Validasi',
                                                 'Aksi',
@@ -324,7 +324,7 @@
         <script>
             Swal.fire(
                 'Terjadi Kesalahan!',
-                'Daftar Soal Mencegah Malnutrisi Tidak Ada, Anda Tidak Bisa Melakukan Asesmen Randa Kabilasa, Silahkan Hubungi Admin Untuk Menambahkan Soal',
+                'Daftar Soal Mencegah Malnutrisi Tidak Ada, Anda Tidak Bisa Membuat/Mengubah Asesmen Randa Kabilasa, Silahkan Hubungi Admin Untuk Menambahkan Soal',
                 'error'
             )
         </script>
@@ -334,7 +334,7 @@
         <script>
             Swal.fire(
                 'Terjadi Kesalahan!',
-                'Daftar Soal Asesmen Meningkatkan Life Skill Tidak Ada, Anda Tidak Bisa Melakukan Asesmen Meningkatkan Life Skill, Silahkan Hubungi Admin Untuk Menambahkan Soal',
+                'Daftar Soal Asesmen Meningkatkan Life Skill Tidak Ada, Anda Tidak Bisa Membuat/Mengubah Asesmen Meningkatkan Life Skill, Silahkan Hubungi Admin Untuk Menambahkan Soal',
                 'error'
             )
         </script>

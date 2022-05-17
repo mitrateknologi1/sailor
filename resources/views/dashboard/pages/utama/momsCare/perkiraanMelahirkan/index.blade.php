@@ -82,7 +82,7 @@
                                                 'Nama Ibu',
                                                 'Tanggal Haid Terakhir',
                                                 'Tanggal
-                                                                            Perkiraan Lahir',
+                                                                                                                Perkiraan Lahir',
                                                 'Usia Kehamilan',
                                                 'Desa / Kelurahan',
                                                 'Bidan',
@@ -338,7 +338,8 @@
                             if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
                                     '{{ Auth::user()->role }}' == 'admin')) {
                                 $('#col-modal-btn-ubah').removeClass('d-none');
-                                $('#modal-btn-ubah').attr('href', '{{ url('pertumbuhan-anak') }}' +
+                                $('#modal-btn-ubah').attr('href',
+                                    '{{ url('perkiraan-melahirkan') }}' +
                                     '/' + id + '/edit');
                             } else {
                                 $('#col-modal-btn-ubah').addClass('d-none');

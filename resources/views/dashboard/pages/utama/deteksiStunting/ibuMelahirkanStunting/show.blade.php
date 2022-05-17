@@ -217,15 +217,16 @@
                                         </div>
                                     @endif
 
-                                    {{-- @if (Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id || Auth::user()->role == 'admin')
+                                    @if (Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id || Auth::user()->role == 'admin')
                                         <div class="col-sm-6 col-lg">
-                                            @component('dashboard.components.buttons.edit', [
-    'id' => 'modal-btn-ubah',
-    'url' => url('deteksi-ibu-melahirkan-stunting' . '/' . $deteksiIbuMelahirkanStunting->id . '/edit'),
-])
+                                            @component('dashboard.components.buttons.edit',
+                                                [
+                                                    'id' => 'modal-btn-ubah',
+                                                    'url' => url('deteksi-ibu-melahirkan-stunting' . '/' . $deteksiIbuMelahirkanStunting->id . '/edit'),
+                                                ])
                                             @endcomponent
                                         </div>
-                                    @endif --}}
+                                    @endif
                                 </div>
                             </div>
                         </div>

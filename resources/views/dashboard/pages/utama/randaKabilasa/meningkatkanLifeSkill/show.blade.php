@@ -212,20 +212,21 @@
                                             ])
                                         @endcomponent
                                     </div>
-                                    {{-- @if (Auth::user()->profil->id == $randaKabilasa->bidan_id || Auth::user()->role == 'admin')
-                                        <div class="col-sm-6 col-lg">
-                                            @component('dashboard.components.buttons.edit', [
-    'id' => 'modal-btn-ubah',
-    'url' => url('meningkatkan-life-skill' . '/' . $randaKabilasa->id . '/' . $randaKabilasa->id . '/edit'),
-])
-                                            @endcomponent
-                                        </div>
-                                    @endif --}}
                                     @if ($data['is_valid_meningkatkan_life_skill'] == 0)
                                         <div class="col-sm-12 col-lg" id="col-modal-btn-konfirmasi">
                                             @component('dashboard.components.buttons.konfirmasi',
                                                 [
                                                     'id' => 'modal-btn-konfirmasi',
+                                                ])
+                                            @endcomponent
+                                        </div>
+                                    @endif
+                                    @if (Auth::user()->profil->id == $randaKabilasa->bidan_id || Auth::user()->role == 'admin')
+                                        <div class="col-sm-6 col-lg">
+                                            @component('dashboard.components.buttons.edit',
+                                                [
+                                                    'id' => 'modal-btn-ubah',
+                                                    'url' => url('meningkatkan-life-skill' . '/' . $randaKabilasa->id . '/' . $randaKabilasa->id . '/edit'),
                                                 ])
                                             @endcomponent
                                         </div>

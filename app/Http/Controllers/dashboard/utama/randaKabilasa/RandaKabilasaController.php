@@ -27,9 +27,20 @@ class RandaKabilasaController extends Controller
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
                 $data = RandaKabilasa::with('anggotaKeluarga', 'bidan', 'mencegahMalnutrisi')->orderBy('created_at', 'DESC')
-                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                        if (Auth::user()->role != 'admin') {
-                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    ->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->where('is_valid_mencegah_malnutrisi', 1);
+                            $query->where('is_valid_mencegah_pernikahan_dini', 1);
+                            $query->where('is_valid_meningkatkan_life_skill', 1);
                         }
                     })
                     ->where(function ($query) use ($request) {
@@ -101,11 +112,7 @@ class RandaKabilasaController extends Controller
                             }
                         });
                     })
-                    ->orWhere(function ($query) {
-                        if (Auth::user()->role == 'bidan') { // bidan
-                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                        }
-                    })->get();
+                    ->get();
 
                 return DataTables::of($data)
                     ->addIndexColumn()
@@ -205,12 +212,13 @@ class RandaKabilasaController extends Controller
                         }
                         if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                             if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                // if($row->is_valid == 1){
-                                //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                // }
+                                if ($row->is_valid_mencegah_malnutrisi == 1) {
+                                    $actionBtn .= '<a href="' . url('mencegah-malnutrisi/' . $row->mencegahMalnutrisi->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                }
 
                                 if ($row->is_valid_mencegah_malnutrisi != 0) {
-                                    $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                    // $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                    $actionBtn .= '';
                                 }
                             }
                         }
@@ -238,12 +246,12 @@ class RandaKabilasaController extends Controller
                             }
                             if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                                 if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                    // if($row->is_valid == 1){
-                                    //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                    // }
+                                    if ($row->is_valid_meningkatkan_life_skill == 1) {
+                                        $actionBtn .= '<a href="' . url('meningkatkan-life-skill/' . $row->id . '/' . $row->id . '/edit') . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                    }
 
                                     if ($row->is_valid_meningkatkan_life_skill != 0) {
-                                        $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                        $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . url('meningkatkan-life-skill/' . $row->id . '/' . $row->id)  . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
                                     }
                                 }
                             }
@@ -272,12 +280,12 @@ class RandaKabilasaController extends Controller
                             }
                             if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                                 if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                    // if($row->is_valid == 1){
-                                    //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                    // }
+                                    if ($row->is_valid_mencegah_pernikahan_dini == 1) {
+                                        $actionBtn .= '<a href="' . url('mencegah-pernikahan-dini' . '/' . $row->id . '/' . $row->id . '/edit')  . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                    }
 
                                     if ($row->is_valid_mencegah_pernikahan_dini != 0) {
-                                        $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
+                                        $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . url('mencegah-pernikahan-dini/' . $row->id . '/' . $row->id)  . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';
                                     }
                                 }
                             }

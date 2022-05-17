@@ -33,6 +33,13 @@
                         <h5 class="card-title mb-0">Peta</h5>
                     </div>
                     <div class="card-body pt-2">
+                        @component('dashboard.components.forms.petaData.export',
+                            [
+                                'tab' => 'randa_kabilasa',
+                                'provinsi' => $provinsi,
+                                'action' => url('map-randa-kabilasa/export'),
+                            ])
+                        @endcomponent
                         <div class="row px-3 mt-2">
                             <div id="map"></div>
                         </div>
@@ -511,6 +518,7 @@
 
                 mapOnZoom = map.getZoom();
                 centerMap = map.getCenter();
+                $('#zoomMap').val(mapOnZoom);
 
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
                     boolKecamatan = true;
@@ -534,7 +542,8 @@
                 url: "{{ url('/petaData/randaKabilasa') }}",
                 type: "GET",
                 data: {
-                    zoomMap: zoomMap
+                    zoomMap: zoomMap,
+                    kabupaten: $('#kabupaten-kota').val(),
                 },
                 success: function(response) {
                     if (response.length > 0) {
@@ -664,6 +673,11 @@
                         .totalTidakMencegahPernikahanDini);
                 },
             })
+        }
+
+        function initializeFilter() {
+            initializeMap(mapOnZoom, centerMap);
+            randaKabilasa(mapOnZoom);
         }
     </script>
 

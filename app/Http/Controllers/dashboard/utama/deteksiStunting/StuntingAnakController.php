@@ -28,9 +28,18 @@ class StuntingAnakController extends Controller
             if ($request->ajax()) {
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
                 $data = StuntingAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
-                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                        if (Auth::user()->role != 'admin') {
-                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    ->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->valid();
                         }
                     })
                     ->where(function ($query) use ($request) {
@@ -69,11 +78,6 @@ class StuntingAnakController extends Controller
                                 });
                             }
                         });
-                    })
-                    ->orWhere(function ($query) {
-                        if (Auth::user()->role == 'bidan') { // bidan
-                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                        }
                     })
                     ->get();
                 return DataTables::of($data)
@@ -127,9 +131,9 @@ class StuntingAnakController extends Controller
                         }
                         if (in_array(Auth::user()->role, ['bidan', 'admin'])) {
                             if (($row->bidan_id == Auth::user()->profil->id) || (Auth::user()->role == 'admin')) {
-                                // if($row->is_valid == 1){
-                                //     $actionBtn .= '<a href="' . route('pertumbuhan-anak.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
-                                // }
+                                if ($row->is_valid == 1) {
+                                    $actionBtn .= '<a href="' . url('stunting-anak/' . $row->id . "/edit") . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
+                                }
 
                                 if ($row->is_valid != 0) {
                                     $actionBtn .= ' <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>';

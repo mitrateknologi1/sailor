@@ -323,10 +323,14 @@ class MencegahMalnutrisiController extends Controller
      */
     public function edit(MencegahMalnutrisi $mencegahMalnutrisi)
     {
-        if ((Auth::user()->profil->id == $mencegahMalnutrisi->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $mencegahMalnutrisi->anggotaKeluarga->kartu_keluarga_id)) {
+        if ((Auth::user()->profil->id == $mencegahMalnutrisi->randaKabilasa->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $mencegahMalnutrisi->randaKabilasa->anggotaKeluarga->kartu_keluarga_id)) {
             $kartuKeluarga = KartuKeluarga::latest()->get();
             $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.edit', compact('kartuKeluarga', 'daftarSoal', 'mencegahMalnutrisi'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.edit', compact('kartuKeluarga', 'daftarSoal', 'mencegahMalnutrisi'));
+            } else {
+                return redirect(url('randa-kabilasa'))->with('error', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -345,6 +349,7 @@ class MencegahMalnutrisiController extends Controller
         $data = $this->proses($request);
 
         $randaKabilasa = RandaKabilasa::where('id', $mencegahMalnutrisi->randa_kabilasa_id)->first();
+        $randaKabilasa->anggota_keluarga_id = $data['anggota_keluarga_id'];
         $randaKabilasa->kategori_hb = $data['kategori_hemoglobin'];
         $randaKabilasa->kategori_lingkar_lengan_atas = $data['kategori_lingkar_lengan_atas'];
         $randaKabilasa->kategori_imt = $data['kategori_imt'];

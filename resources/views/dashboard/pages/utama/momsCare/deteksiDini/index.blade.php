@@ -113,7 +113,7 @@
             console.log('ada');
             Swal.fire(
                 'Terjadi Kesalahan!',
-                'Daftar Soal Deteksi Dini Tidak Ada, Anda Tidak Bisa Menambahkan Deteksi Dini, Silahkan Hubungi Admin Untuk Menambahkan Soal',
+                'Daftar Soal Deteksi Dini Tidak Ada, Anda Tidak Bisa Menambahkan/Mengubah Deteksi Dini, Silahkan Hubungi Admin Untuk Menambahkan Soal',
                 'error'
             )
         </script>

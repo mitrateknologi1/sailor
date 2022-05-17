@@ -220,6 +220,17 @@
                                             @endcomponent
                                         </div>
                                     @endif
+
+                                    @if (Auth::user()->profil->id == $deteksiDini->bidan_id || Auth::user()->role == 'admin')
+                                        <div class="col-sm-6 col-lg">
+                                            @component('dashboard.components.buttons.edit',
+                                                [
+                                                    'id' => 'modal-btn-ubah',
+                                                    'url' => url('deteksi-dini' . '/' . $deteksiDini->id . '/edit'),
+                                                ])
+                                            @endcomponent
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

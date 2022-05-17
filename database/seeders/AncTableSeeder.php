@@ -43,7 +43,7 @@ class AncTableSeeder extends Seeder
             1 =>
             array(
                 'id' => '5ccf390e-c741-4bf2-8ae5-deb286e68e44',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120003',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'pemeriksaan_ke' => 1,
                 'kategori_badan' => 'Resiko Tinggi',
@@ -64,7 +64,7 @@ class AncTableSeeder extends Seeder
             2 =>
             array(
                 'id' => 'cd8ed0dc-fb33-49fd-99a6-571fa7ba06f1',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120008',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120009',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'pemeriksaan_ke' => 1,
                 'kategori_badan' => 'Normal',
