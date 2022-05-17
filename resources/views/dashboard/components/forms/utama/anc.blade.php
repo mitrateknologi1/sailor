@@ -58,9 +58,9 @@
                     'type' => 'text',
                     'id' => 'tanggal_haid_terakhir',
                     'name' => 'tanggal_haid_terakhir',
-                    'class' => 'tanggal',
+                    'class' => 'tanggal_haid',
                     'wajib' => '<sup class="text-danger">*</sup>',
-                    'placeholder' => '31-12-2022',
+                    'placeholder' => 'Masukkan Tanggal Haid Terakhir',
                 ])
             @endcomponent
         </div>
@@ -513,16 +513,29 @@
                 changeIbu()
             })
 
+            if ('{{ Auth::user()->role }}' == 'keluarga') {
+                var textConfirm = 'Jika sudah sesuai, maka data akan dikirim untuk dilakukan Validasi'
+                var confirmButtonText = 'Ya, Kirim Data'
+                var titleResult = 'Data berhasil dikirim'
+                var textResult = 'Data berhasil dikirim dan sedang menunggu proses Validasi.'
+            } else {
+                var textConfirm =
+                    'Jika sudah sesuai, maka data akan disimpan dan dapat oleh Penyuluh BKKBN dan Dinas P2KB'
+                var confirmButtonText = 'Ya, Simpan'
+                var titleResult = 'Data berhasil disimpan'
+                var textResult = 'Data berhasil disimpan dan dapat dilihat oleh Penyuluh BKKBN dan Dinas P2KB.'
+            }
+
             $('#{{ $form_id }}').submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
                 if ($('#modal-hasil').hasClass('show')) {
                     Swal.fire({
-                        icon: 'warning',
+                        icon: 'question',
                         title: 'Apakah data sudah sesuai?',
-                        text: 'Jika sudah sesuai, maka data akan disimpan dan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                        text: textConfirm,
                         showCancelButton: true,
-                        confirmButtonText: 'Ya, Simpan',
+                        confirmButtonText: confirmButtonText,
                         cancelButtonText: 'Batal',
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -540,8 +553,8 @@
                                     if (response.status == 'success') {
                                         Swal.fire({
                                             icon: 'success',
-                                            title: 'Data berhasil disimpan',
-                                            text: 'Data akan dilihat oleh Penyuluh BKKBN dan Dinas P2KB',
+                                            title: titleResult,
+                                            text: textResult,
                                             showConfirmButton: false,
                                             timer: 2000,
                                         }).then((result) => {
@@ -549,6 +562,14 @@
                                             window.location.href =
                                                 "{{ $back_url }}";
                                         })
+                                    } else if (response.res ==
+                                        'sudah_ada_tapi_belum_divalidasi') {
+                                        Swal.fire(
+                                            'Terjadi kesalahan',
+                                            response.mes,
+                                            'error',
+                                        )
+                                        $('#modal-hasil').modal('hide')
                                     } else {
                                         Swal.fire({
                                             icon: 'error',

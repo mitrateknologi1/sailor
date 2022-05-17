@@ -36,7 +36,11 @@ class MeningkatkanLifeSkillController extends Controller
         if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
             $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
             $daftarSoal = SoalMeningkatkanLifeSkill::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.create', compact('randaKabilasa', 'daftarSoal'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.create', compact('randaKabilasa', 'daftarSoal'));
+            } else {
+                return redirect(url('randa-kabilasa'))->with('error_life_skill', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }
@@ -148,7 +152,7 @@ class MeningkatkanLifeSkillController extends Controller
     {
         $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
 
-        $daftarSoal = SoalMeningkatkanLifeSkill::orderBy('urutan', 'asc')->get();
+        $daftarSoal = SoalMeningkatkanLifeSkill::orderBy('urutan', 'asc')->withTrashed()->get();
         $kategori = $randaKabilasa->kategori_meningkatkan_life_skill;
 
         $anak = AnggotaKeluarga::where('id', $randaKabilasa->anggota_keluarga_id)->withTrashed()->first();
@@ -187,7 +191,11 @@ class MeningkatkanLifeSkillController extends Controller
         $randaKabilasa = RandaKabilasa::find($request->randaKabilasa);
         if ((Auth::user()->profil->id == $randaKabilasa->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $randaKabilasa->anggotaKeluarga->kartu_keluarga_id)) {
             $daftarSoal = SoalMeningkatkanLifeSkill::orderBy('urutan', 'asc')->get();
-            return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.edit', compact('randaKabilasa', 'daftarSoal'));
+            if (count($daftarSoal) > 0) {
+                return view('dashboard.pages.utama.randaKabilasa.meningkatkanLifeSkill.edit', compact('randaKabilasa', 'daftarSoal'));
+            } else {
+                return redirect(url('randa-kabilasa'))->with('error_life_skill', 'soal_tidak_ada');
+            }
         } else {
             return abort(404);
         }

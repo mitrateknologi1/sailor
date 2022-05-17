@@ -29,10 +29,11 @@
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Stunting Anak</h5>
                         @if (Auth::user()->role != 'penyuluh')
-                            @component('dashboard.components.buttons.add', [
-                                'id' => 'catatan-pertumbuhan-anak',
-                                'class' => '',
-                                'url' => '/stunting-anak/create',
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'catatan-pertumbuhan-anak',
+                                    'class' => '',
+                                    'url' => '/stunting-anak/create',
                                 ])
                             @endcomponent
                         @endif
@@ -49,11 +50,12 @@
                                     <div class="row">
                                         @if (Auth::user()->role != 'penyuluh')
                                             <div class="col-lg">
-                                                @component('dashboard.components.formElements.select', [
-                                                    'label' => 'Status',
-                                                    'id' => 'status-validasi',
-                                                    'name' => 'status',
-                                                    'class' => 'filter',
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Status',
+                                                        'id' => 'status-validasi',
+                                                        'name' => 'status',
+                                                        'class' => 'filter',
                                                     ])
                                                     @slot('options')
                                                         <option value="Tervalidasi">Tervalidasi</option>
@@ -63,11 +65,12 @@
                                             </div>
                                         @endif
                                         <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori',
-                                                'id' => 'kategori',
-                                                'name' => 'kategori',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori',
+                                                    'id' => 'kategori',
+                                                    'name' => 'kategori',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="sangat_pendek">Sangat Pendek (Resiko Stunting Tinggi)</option>
@@ -84,21 +87,22 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border border-secondary">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-data',
-                                        'th' => [
-                                        'No',
-                                        'Tanggal Dibuat',
-                                        'Status',
-                                        'Nama Anak',
-                                        'Tinggi Badan',
-                                        'Kategori',
-                                        'Desa
-                                        / Kelurahan',
-                                        'Bidan',
-                                        'Tanggal Validasi',
-                                        'Aksi',
-                                        ],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-data',
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Status',
+                                                'Nama Anak',
+                                                'Tinggi Badan',
+                                                'Kategori',
+                                                'Desa
+                                                                                                                                                                                                                            / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -182,14 +186,15 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="row g-3 align-items-end" id="form-konfirmasi">
+                    <div class="row g-3 align-items-end mb-3" id="form-konfirmasi">
                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
-                            @component('dashboard.components.formElements.select', [
-                                'label' => 'Konfirmasi',
-                                'id' => 'konfirmasi',
-                                'name' => 'konfirmasi',
-                                'class' => 'kosong',
-                                'wajib' => '<sup class="text-danger">*</sup>',
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Konfirmasi',
+                                    'id' => 'konfirmasi',
+                                    'name' => 'konfirmasi',
+                                    'class' => 'kosong',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
                                 ])
                                 @slot('options')
                                     <option value="1">Validasi</option>
@@ -199,12 +204,13 @@
                         </div>
                         @if (Auth::user()->role == 'admin')
                             <div class="col-lg col-sm-12" id="pilih-bidan">
-                                @component('dashboard.components.formElements.select', [
-                                    'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
-                                    'id' => 'nama-bidan',
-                                    'name' => 'bidan_id',
-                                    'class' => 'bidan_id filter',
-                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                @component('dashboard.components.formElements.select',
+                                    [
+                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                        'id' => 'nama-bidan',
+                                        'name' => 'bidan_id',
+                                        'class' => 'bidan_id filter',
+                                        'wajib' => '<sup class="text-danger">*</sup>',
                                     ])
                                 @endcomponent
                             </div>
@@ -222,14 +228,16 @@
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
                         <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
-                            @component('dashboard.components.buttons.edit', [
-                                'id' => 'modal-btn-ubah',
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
                                 ])
                             @endcomponent
                         </div>
                         <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
-                            @component('dashboard.components.buttons.konfirmasi', [
-                                'id' => 'modal-btn-konfirmasi',
+                            @component('dashboard.components.buttons.konfirmasi',
+                                [
+                                    'id' => 'modal-btn-konfirmasi',
                                 ])
                             @endcomponent
                         </div>
@@ -396,7 +404,7 @@
                             if (('{{ Auth::user()->profil->nama_lengkap }}' == data.bidan) || (
                                     '{{ Auth::user()->role }}' == 'admin')) {
                                 $('#col-modal-btn-ubah').removeClass('d-none');
-                                $('#modal-btn-ubah').attr('href', '{{ url('pertumbuhan-anak') }}' +
+                                $('#modal-btn-ubah').attr('href', '{{ url('stunting-anak') }}' +
                                     '/' + id + '/edit');
                             } else {
                                 $('#col-modal-btn-ubah').addClass('d-none');

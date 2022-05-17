@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\dashboard\utama\petaData;
 
+use App\Exports\MomsCareExport;
 use App\Http\Controllers\Controller;
 use App\Models\Anc;
 use App\Models\DesaKelurahan;
 use App\Models\DeteksiDini;
 use App\Models\Kecamatan;
+use App\Models\Provinsi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MapMomsCareController extends Controller
 {
@@ -18,7 +23,8 @@ class MapMomsCareController extends Controller
 
     public function index()
     {
-        return view('dashboard.pages.utama.petaData.momsCare.index');
+        $provinsi = Provinsi::all();
+        return view('dashboard.pages.utama.petaData.momsCare.index', compact(['provinsi']));
     }
 
     public function getMapDataDeteksiDini(Request $request)
@@ -26,9 +32,11 @@ class MapMomsCareController extends Controller
         $zoomMap = $request->zoomMap;
         $mapDataArray = array();
         if ($zoomMap <= 11) {
-            $daftarWilayah = Kecamatan::whereNotNull('polygon')->get();
+            $daftarWilayah = Kecamatan::whereNotNull('polygon')->where('kabupaten_kota_id', $request->kabupaten)->get();
         } else {
-            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->get();
+            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->whereHas('kecamatan', function ($query) use ($request) {
+                return $query->where('kabupaten_kota_id', $request->kabupaten);
+            })->get();
         }
         foreach ($daftarWilayah as $wilayah) {
             $idWilayah = $wilayah->id;
@@ -67,9 +75,11 @@ class MapMomsCareController extends Controller
         $zoomMap = $request->zoomMap;
         $mapDataArray = array();
         if ($zoomMap <= 11) {
-            $daftarWilayah = Kecamatan::whereNotNull('polygon')->get();
+            $daftarWilayah = Kecamatan::whereNotNull('polygon')->where('kabupaten_kota_id', $request->kabupaten)->get();
         } else {
-            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->get();
+            $daftarWilayah = DesaKelurahan::whereNotNull('polygon')->whereHas('kecamatan', function ($query) use ($request) {
+                return $query->where('kabupaten_kota_id', $request->kabupaten);
+            })->get();
         }
         foreach ($daftarWilayah as $wilayah) {
             $idWilayah = $wilayah->id;
@@ -275,5 +285,36 @@ class MapMomsCareController extends Controller
             'wilayah' => $mapDataWilayah,
             'data' => $mapDataArray
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'provinsi' => 'required',
+                'kabupaten' => 'required',
+            ],
+            [
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'kabupaten.required' => 'Kabupaten tidak boleh kosong',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect(url('map-moms-care'))
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $tab = $request->tab;
+        $provinsi = $request->provinsi;
+        $kabupaten = $request->kabupaten;
+        $zoomMap = $request->zoomMap;
+        $hariIni = Carbon::now()->translatedFormat('d F Y');
+
+        $judulExport = $tab == 'deteksi_dini' ? "Data-Deteksi-Dini" : "Data-ANC";
+
+        return Excel::download(new MomsCareExport($tab, $provinsi, $kabupaten, $hariIni, $zoomMap), $judulExport . '-' . $hariIni . '-' . rand(1000, 9999) . '.xlsx');
     }
 }

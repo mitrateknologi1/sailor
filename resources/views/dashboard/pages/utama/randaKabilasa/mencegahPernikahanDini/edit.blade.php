@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Mencegah Pernikahan Dini
+    Ubah Mencegah Pernikahan Dini
 @endsection
 
 @push('style')

@@ -19,12 +19,13 @@
 @endsection
 
 @section('content')
-    @component('dashboard.components.forms.masterData.wilayah', [
-        'idForm' => 'form-edit',
-        'title' => 'Edit Desa/Kelurahan',
-        'data' => $desaKelurahan,
-        'method' => 'PUT',
-        'url' => url('/map/desaKelurahan'),
+    @component('dashboard.components.forms.masterData.wilayah',
+        [
+            'idForm' => 'form-edit',
+            'title' => 'Edit Desa/Kelurahan',
+            'data' => $desaKelurahan,
+            'method' => 'PUT',
+            'url' => url('/map/desaKelurahan'),
         ])
     @endcomponent
 @endsection
@@ -50,7 +51,7 @@
                             function() {
                                 $(location).attr('href',
                                     "{{ url('masterData/desaKelurahan' . '/' . $kecamatan->id) }}"
-                                    );
+                                );
                             }, 2000
                         );
                     } else {
@@ -74,7 +75,8 @@
                 url: "{{ url('/map/desaKelurahan') }}",
                 type: "GET",
                 data: {
-                    kecamatan: "{{ $kecamatan->id }}"
+                    kecamatan: "{{ $kecamatan->id }}",
+                    desaKelurahanId: "{{ $desaKelurahan->id }}"
                 },
                 success: function(response) {
                     if (response.status == 'success') {

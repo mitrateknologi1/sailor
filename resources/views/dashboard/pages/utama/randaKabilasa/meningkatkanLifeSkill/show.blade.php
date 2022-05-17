@@ -35,6 +35,7 @@
                                     </div>
                                 </div>
                                 @php
+                                    $looping = 1;
                                     if ($data['kategori'] == 'Tidak Berpartisipasi Mencegah Stunting') {
                                         $classKategoriEmot = 'fa-solid fa-face-frown';
                                         $classKategoriAlert = 'alert-danger';
@@ -133,26 +134,31 @@
                                             }
                                         }
                                     @endphp
-                                    <input type="text" value="{{ $soal->id }}" hidden name="soal_id[]">
-                                    <div class="card my-3 p-0">
-                                        <div class="card-body">
-                                            <p>{{ $loop->iteration }}. {{ $soal->soal }}</p>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">Ya</label>
-                                                <input class="form-check-input" type="radio"
-                                                    id="jawaban-{{ $loop->iteration }}"
-                                                    name="jawaban-{{ $loop->iteration }}[]" value="Ya"
-                                                    {{ $checkedYa }} disabled>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <label class="form-check-label">Tidak</label>
-                                                <input class="form-check-input" type="radio"
-                                                    id="jawaban-{{ $loop->iteration }}"
-                                                    name="jawaban-{{ $loop->iteration }}[]" value="Tidak"
-                                                    {{ $checkedTidak }} disabled>
+                                    @if ($jawabanSoal)
+                                        <input type="text" value="{{ $soal->id }}" hidden name="soal_id[]">
+                                        <div class="card my-3 p-0">
+                                            <div class="card-body">
+                                                <p>{{ $looping }}. {{ $soal->soal }}</p>
+                                                <div class="form-check form-check-inline">
+                                                    <label class="form-check-label">Ya</label>
+                                                    <input class="form-check-input" type="radio"
+                                                        id="jawaban-{{ $looping }}"
+                                                        name="jawaban-{{ $looping }}[]" value="Ya"
+                                                        {{ $checkedYa }} disabled>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <label class="form-check-label">Tidak</label>
+                                                    <input class="form-check-input" type="radio"
+                                                        id="jawaban-{{ $looping }}"
+                                                        name="jawaban-{{ $looping }}[]" value="Tidak"
+                                                        {{ $checkedTidak }} disabled>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        @php
+                                            $looping++;
+                                        @endphp
+                                    @endif
                                 @endforeach
                                 @if ($data['is_valid_meningkatkan_life_skill'] == 0)
                                     <div class="row g-3 align-items-end" id="form-konfirmasi">
@@ -206,20 +212,21 @@
                                             ])
                                         @endcomponent
                                     </div>
-                                    {{-- @if (Auth::user()->profil->id == $randaKabilasa->bidan_id || Auth::user()->role == 'admin')
-                                        <div class="col-sm-6 col-lg">
-                                            @component('dashboard.components.buttons.edit', [
-    'id' => 'modal-btn-ubah',
-    'url' => url('meningkatkan-life-skill' . '/' . $randaKabilasa->id . '/' . $randaKabilasa->id . '/edit'),
-])
-                                            @endcomponent
-                                        </div>
-                                    @endif --}}
                                     @if ($data['is_valid_meningkatkan_life_skill'] == 0)
                                         <div class="col-sm-12 col-lg" id="col-modal-btn-konfirmasi">
                                             @component('dashboard.components.buttons.konfirmasi',
                                                 [
                                                     'id' => 'modal-btn-konfirmasi',
+                                                ])
+                                            @endcomponent
+                                        </div>
+                                    @endif
+                                    @if (Auth::user()->profil->id == $randaKabilasa->bidan_id || Auth::user()->role == 'admin')
+                                        <div class="col-sm-6 col-lg">
+                                            @component('dashboard.components.buttons.edit',
+                                                [
+                                                    'id' => 'modal-btn-ubah',
+                                                    'url' => url('meningkatkan-life-skill' . '/' . $randaKabilasa->id . '/' . $randaKabilasa->id . '/edit'),
                                                 ])
                                             @endcomponent
                                         </div>

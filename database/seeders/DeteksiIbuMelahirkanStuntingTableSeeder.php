@@ -44,7 +44,7 @@ class DeteksiIbuMelahirkanStuntingTableSeeder extends Seeder
             2 =>
             array(
                 'id' => 'c8f84825-3600-4d6d-b59e-07419f2eabcd',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120009',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'kategori' => 'Tidak Beresiko Melahirkan Stunting',
                 'is_valid' => 1,
@@ -55,7 +55,7 @@ class DeteksiIbuMelahirkanStuntingTableSeeder extends Seeder
             3 =>
             array(
                 'id' => 'f0d7b4a0-dabc-4d4d-ae26-c04d12502bd5',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120008',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120003',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'kategori' => 'Beresiko Melahirkan Stunting',
                 'is_valid' => 1,

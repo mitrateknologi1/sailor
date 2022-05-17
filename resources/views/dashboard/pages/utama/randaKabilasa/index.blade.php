@@ -230,7 +230,7 @@
                                                 'Asesmen Meningkatkan Life Skill',
                                                 'Asesmen Mencegah Pernikahan Dini',
                                                 'Desa /
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Kelurahan',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Validasi',
                                                 'Aksi',
@@ -319,6 +319,26 @@
     <script>
         $('#m-link-randa-kabilasa').addClass('active');
     </script>
+
+    @if (Session::has('error'))
+        <script>
+            Swal.fire(
+                'Terjadi Kesalahan!',
+                'Daftar Soal Mencegah Malnutrisi Tidak Ada, Anda Tidak Bisa Membuat/Mengubah Asesmen Randa Kabilasa, Silahkan Hubungi Admin Untuk Menambahkan Soal',
+                'error'
+            )
+        </script>
+    @endif
+
+    @if (Session::has('error_life_skill'))
+        <script>
+            Swal.fire(
+                'Terjadi Kesalahan!',
+                'Daftar Soal Asesmen Meningkatkan Life Skill Tidak Ada, Anda Tidak Bisa Membuat/Mengubah Asesmen Meningkatkan Life Skill, Silahkan Hubungi Admin Untuk Menambahkan Soal',
+                'error'
+            )
+        </script>
+    @endif
 
     <script>
         $(document).on('click', '#btn-delete', function() {

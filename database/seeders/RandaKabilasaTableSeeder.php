@@ -22,7 +22,7 @@ class RandaKabilasaTableSeeder extends Seeder
             0 =>
             array(
                 'id' => '05c81592-c703-47a7-afa5-1d6cb4fe7d96',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -43,7 +43,7 @@ class RandaKabilasaTableSeeder extends Seeder
             1 =>
             array(
                 'id' => '1709b6a1-de97-49d2-9a6e-2869ec5344a7',
-                'anggota_keluarga_id' => 5,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -64,7 +64,7 @@ class RandaKabilasaTableSeeder extends Seeder
             2 =>
             array(
                 'id' => '44b98ef8-f702-4fcd-a87b-f1bf0bd960a6',
-                'anggota_keluarga_id' => 6,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -85,7 +85,7 @@ class RandaKabilasaTableSeeder extends Seeder
             3 =>
             array(
                 'id' => '4dbaff89-0515-4c26-875c-87e083513add',
-                'anggota_keluarga_id' => 9,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac12000a',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -106,7 +106,7 @@ class RandaKabilasaTableSeeder extends Seeder
             4 =>
             array(
                 'id' => '6eb6f3bf-69cf-499c-bc08-ac0b2f6388b1',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -127,7 +127,7 @@ class RandaKabilasaTableSeeder extends Seeder
             5 =>
             array(
                 'id' => '91a495b6-05a7-4d85-97ed-db43aa569dd8',
-                'anggota_keluarga_id' => 4,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120007',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -148,7 +148,7 @@ class RandaKabilasaTableSeeder extends Seeder
             6 =>
             array(
                 'id' => '9b73f115-d9cb-48dd-a834-96dec3cffb0a',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -169,7 +169,7 @@ class RandaKabilasaTableSeeder extends Seeder
             7 =>
             array(
                 'id' => 'ceead75b-7e43-42ae-8244-e05348f51f32',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120002',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,
@@ -190,7 +190,7 @@ class RandaKabilasaTableSeeder extends Seeder
             8 =>
             array(
                 'id' => 'f9296b8e-98c3-4d73-971c-85c1d8260b8a',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120004',
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120006',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'is_mencegah_malnutrisi' => 1,
                 'is_mencegah_pernikahan_dini' => 1,

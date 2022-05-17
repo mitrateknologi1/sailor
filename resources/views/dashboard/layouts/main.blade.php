@@ -20,6 +20,7 @@
 
     <!-- project css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/luno.style.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/bootstrap-datepicker.css">
 
     {{-- Leaflet --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
@@ -30,6 +31,12 @@
         href="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css" />
 
     <style>
+        /* .dropdown-menu.datepicker td,
+        .dropdown-menu.datepicker th {
+            width: 28px;
+            height: 28px;
+        } */
+
         @media only screen and (max-width: 567px) {
             .pulse-ring {
                 left: -2px !important;
@@ -203,7 +210,7 @@
         </div>
         {{-- @else
             <div class="mt-4">
-                
+
             </div>
         @endif --}}
 
@@ -417,6 +424,7 @@
     <script src="{{ asset('assets/dashboard') }}/bundles/select2.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/sweetalert2.bundle.js"></script>
     <script src="{{ asset('assets/dashboard') }}/bundles/owlcarousel.bundle.js"></script>
+    <script src="{{ asset('assets/dashboard') }}/js/bootstrap-datepicker.js"></script>
     <script src="{{ asset('assets/dashboard') }}/js/jquery.mask.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/js/moment/moment.min.js"></script>
     <script src="{{ asset('assets/dashboard') }}/js/moment/moment-with-locales.min.js"></script>
@@ -443,9 +451,17 @@
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
 
     <script>
+        $('.tanggal_haid').datepicker({
+            format: "dd-mm-yyyy",
+            language: "id",
+            endDate: '0',
+        });
+
+
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();
         });
+
         $(function() {
             $('.modal').modal({
                 backdrop: 'static',
