@@ -478,6 +478,7 @@
                 info: false,
             });
 
+
         $('.select2').select2({
             placeholder: "- Pilih Salah Satu -",
         })

@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Kartu Keluarga
+    Keluarga
 @endsection
 
 @section('breadcrumb')
@@ -21,44 +21,57 @@
                 <div class="card ">
                     <div
                         class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
-                        <h5 class="card-title mb-0">Data Kartu Keluarga</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'id' => 'kartu-keluarga-add',
-                            'class' => '',
-                            'url' => route('keluarga.create'),
-                            ])
-                        @endcomponent
+                        <h5 class="card-title mb-0">Data Keluarga</h5>
+                        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'bidan')
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'kartu-keluarga-add',
+                                    'class' => '',
+                                    'url' => route('keluarga.create'),
+                                ])
+                            @endcomponent
+                        @endif
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
+                            @component('dashboard.components.info.masterData.keluarga')
+                            @endcomponent
                             <div class="col">
                                 <div class="card fieldset border border-secondary mb-4">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                     <div class="row">
+                                        @if (Auth::user()->role != 'penyuluh')
+                                            <div class="col-lg">
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Status',
+                                                        'id' => 'status-filter',
+                                                        'name' => 'status',
+                                                        'class' => 'filter',
+                                                    ])
+                                                    @slot('options')
+                                                        <option value="Tervalidasi">Tervalidasi</option>
+                                                        <option value="Belum Tervalidasi">Belum Divalidasi</option>
+                                                        <option value="Ditolak">Ditolak</option>
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
+                                        @endif
+
                                         <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Status',
-                                                'id' => 'status',
-                                                'name' => 'status',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Desa/Kelurahan Domisili',
+                                                    'id' => 'desa-kelurahan-domisili',
+                                                    'name' => 'desa-kelurahan-domisili',
+                                                    'class' => 'select2 filter',
                                                 ])
                                                 @slot('options')
-                                                    <option value="1">Aktif</option>
-                                                    <option value="0">Tidak Aktif</option>
-                                                @endslot
-                                            @endcomponent
-                                        </div>
-                                        <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Gizi',
-                                                'id' => 'kategori-gizi',
-                                                'name' => 'kategori_gizi',
-                                                'class' => 'filter',
-                                                ])
-                                                @slot('options')
-                                                    <option>Mustard</option>
-                                                    <option>Ketchup</option>
-                                                    <option>Relish</option>
+                                                    @foreach ($wilayahDomisili as $item)
+                                                        <option value="{{ $item->desa_kelurahan_id }}">
+                                                            {{ $item->desaKelurahan->nama }}
+                                                        </option>
+                                                    @endforeach
                                                 @endslot
                                             @endcomponent
                                         </div>
@@ -69,28 +82,10 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border border-secondary">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-keluarga',
-                                        'th' => [
-                                        'No',
-                                        'Dibuat Tanggal',
-                                        'Status',
-                                        'Nomor Kartu Keluarga',
-                                        'Nama Kepala
-                                        Keluarga',
-                                        'Anggota',
-                                        'Alamat',
-                                        'RT',
-                                        'RW',
-                                        'Kode Pos',
-                                        'Desa/Kelurahan',
-                                        'Kecamatan',
-                                        'Kabupaten/Kota',
-                                        'Provinsi',
-                                        'Domisili Kepala Keluarga',
-                                        'Bidan',
-                                        'Aksi',
-                                        ],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-keluarga',
+                                            'th' => ['No', 'Dibuat Tanggal', 'Status', 'Nomor Kartu Keluarga', 'Nama Kepala Keluarga', 'Anggota', 'Alamat', 'RT', 'RW', 'Kode Pos', 'Desa/Kelurahan', 'Kecamatan', 'Kabupaten/Kota', 'Provinsi', 'Desa/Kelurahan Domisili', 'Bidan', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -374,12 +369,13 @@
                     </div>
                     <div class="row d-none align-items-end" id="form-konfirmasi">
                         <div class="col" id="pilih-konfirmasi">
-                            @component('dashboard.components.formElements.select', [
-                                'label' => 'Konfirmasi',
-                                'id' => 'konfirmasi',
-                                'name' => 'konfirmasi',
-                                'class' => 'kosong',
-                                'wajib' => '<sup class="text-danger">*</sup>',
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Konfirmasi',
+                                    'id' => 'konfirmasi',
+                                    'name' => 'konfirmasi',
+                                    'class' => 'kosong',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
                                 ])
                                 @slot('options')
                                     <option value="1">Setujui</option>
@@ -389,12 +385,13 @@
                         </div>
                         @if (Auth::user()->role == 'admin')
                             <div class="col" id="pilih-bidan">
-                                @component('dashboard.components.formElements.select', [
-                                    'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
-                                    'id' => 'nama-bidan',
-                                    'name' => 'bidan_id',
-                                    'class' => 'bidan_id filter',
-                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                @component('dashboard.components.formElements.select',
+                                    [
+                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                        'id' => 'nama-bidan',
+                                        'name' => 'bidan_id',
+                                        'class' => 'bidan_id filter',
+                                        'wajib' => '<sup class="text-danger">*</sup>',
                                     ])
                                 @endcomponent
                             </div>
@@ -413,8 +410,9 @@
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
                         <div class="col-sm-6 col-lg-8 d-none" id="col-btn-validasi">
-                            @component('dashboard.components.buttons.konfirmasi', [
-                                'id' => 'modal-btn-validasi',
+                            @component('dashboard.components.buttons.konfirmasi',
+                                [
+                                    'id' => 'modal-btn-validasi',
                                 ])
                             @endcomponent
                         </div>
@@ -547,14 +545,14 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        {{-- <div class="col-sm-6 col-lg-8 d-none" id="col-modal-btn-ubah">
-                            @component('dashboard.components.buttons.edit', [
-    'id' => 'modal-btn-ubah',
-])
+                        <div class="col-sm-6 col-lg-8 d-none" id="col-modal-btn-ubah">
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
+                                ])
                             @endcomponent
-                        </div> --}}
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -564,41 +562,6 @@
 
 @push('script')
     <script>
-        $(function() {
-            /* copy loaded thumbnails into carousel */
-            $('.row .thumbnail').on('load', function() {
-
-            }).each(function(i) {
-                // if(this.complete) {
-                var item = $('<div class="carousel-item"></div>');
-                var itemDiv = $(this).parents('div');
-
-                $(itemDiv.html()).appendTo(item);
-                item.appendTo('.carousel-inner');
-                if (i == 0) { // set first item active
-                    item.addClass('active');
-                    // }
-                }
-            });
-
-            /* activate the carousel */
-            $('#modalCarousel').carousel({
-                interval: false
-            });
-
-            /* when clicking a thumbnail */
-            $('.row .thumbnail').click(function() {
-                var idx = $(this).parents('div').index();
-                var id = parseInt(idx);
-                $('#myModalGallery').modal('show'); // show the modal
-            });
-        })
-
-        $('.btn-minimize').click(function() {
-            $('#myModalGallery').modal('hide');
-        })
-
-
         $('#m-link-profil').addClass('active');
         $('#menu-profil').addClass('collapse show')
         $('#ms-link-master-data-profil-keluarga').addClass('active')
@@ -633,8 +596,10 @@
             ajax: {
                 url: "{{ route('keluarga.index') }}",
                 data: function(d) {
-                    // d.role = $('#role-filter').val();                    
-                    // d.search = $('input[type="search"]').val();
+                    d.statusValidasi = $('#status-filter').val();
+                    d.desaKelurahanDomisili = $('#desa-kelurahan-domisili').val();
+                    d.search = $('input[type="search"]').val();
+
                 }
             },
             columns: [{
@@ -713,7 +678,6 @@
                     orderable: true,
                     searchable: true
                 },
-
             ],
             columnDefs: [{
                     targets: [1, 5, 6, 7, 8, 9, 10, 11, 12, 13],
@@ -736,11 +700,15 @@
             ],
         });
 
+        $('.filter').change(function() {
+            table.draw();
+        })
+
         $(document).on('click', '#btn-delete', function() {
             let id = $(this).val();
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: "Data keluarga akan dihapus, termasuk data anggota keluarganya!",
+                text: "Data keluarga akan dihapus, termasuk data anggota keluarganya dan juga akunnya!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -1014,6 +982,8 @@
                 url: "{{ url('keluarga') }}" + '/' + keluarga,
                 success: function(data) {
                     $('#modal-lihat').modal('show');
+                    $('#col-modal-btn-ubah').addClass('d-none');
+                    $('#col-modal-btn-konfirmasi').addClass('d-none');
                     $('#modal-created-at2').html(moment(data.created_at).format('LL'));
                     if (data.updated_at != null) {
                         $('#modal-updated-at2').html(moment(data.updated_at).format('LL'));
@@ -1033,6 +1003,8 @@
                     $('#modal-kecamatan2').html(data.kecamatan_nama);
                     $('#modal-kabupaten-kota2').html(data.kabupaten_kota_nama);
                     $('#modal-provinsi2').html(data.provinsi_nama);
+                    $('#modal-tanggal-konfirmasi2').html(moment(data.tanggal_validasi).format('LL'));
+
 
                     if (data.file_kk) {
                         $('#file-kartu-keluarga2').removeClass('d-none');
@@ -1046,27 +1018,31 @@
                     }
 
                     if (data.is_valid == 1) {
-                        $('#modal-status-konfirmasi2').html('Valid');
-                    } else {
-                        $('#modal-status-konfirmasi2').html('Tidak Valid');
-                    }
+                        $('#modal-status-konfirmasi2').html('Tervalidasi');
+                        if (('{{ Auth::user()->profil->nama_lengkap }}' == data.nama_bidan) ||
+                            ('{{ Auth::user()->role }}' == 'admin')) {
+                            $('#col-modal-btn-ubah').removeClass('d-none');
+                            $('#modal-btn-ubah').attr('href', '{{ url('keluarga') }}' + '/' + data
+                                .id +
+                                '/edit');
+                        } else {
+                            $('#col-modal-btn-ubah').addClass('d-none');
+                        }
 
-                    $('#modal-tanggal-konfirmasi2').html(moment(data.tanggal_validasi).format('LL'));
+                    } else {
+                        $('#col-modal-btn-ubah').addClass('d-none');
+                        $('#modal-status-konfirmasi2').html('Ditolak');
+                    }
 
                     if (data.nama_bidan != null) {
                         $('#modal-oleh-bidan2').html(data.nama_bidan);
                     } else {
                         $('#modal-oleh-bidan2').html('-');
                     }
-
-                    if (data.is_valid == 1) {
-                        $('#col-modal-btn-ubah').removeClass('d-none');
-                        $('#modal-btn-ubah').attr('href', '{{ url('keluarga') }}' + '/' + data.id +
-                            '/edit');
-
-                    }
                 },
             })
         })
+
+        $('.select2').select2()
     </script>
 @endpush

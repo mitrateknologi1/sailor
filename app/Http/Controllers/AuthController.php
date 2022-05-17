@@ -54,17 +54,29 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials) || Auth::attempt($credentials2)) {
-            if (Auth::user()->status == 1) {
-                if (Auth::user()->role == 'keluarga') {
-                    if (Auth::user()->profil->kartuKeluarga->is_valid == 0) {
-                        Auth::logout();
-                        return response()->json([
-                            'res' => 'tidak_valid',
-                            'mes' => 'Mohon maaf, data anda masih menunggu proses Validasi, silahkan coba lagi nanti. Terima Kasih.',
-                        ]);
-                    }
+            if (Auth::user()->role == 'keluarga') {
+                if (Auth::user()->profil->kartuKeluarga->is_valid == 0) {
+                    Auth::logout();
+                    return response()->json([
+                        'res' => 'tidak_valid',
+                        'mes' => 'Mohon maaf, data anda masih menunggu proses Validasi, silahkan coba lagi nanti. Terima Kasih.',
+                    ]);
                 }
+                if (Auth::user()->profil->kartuKeluarga->is_valid == 2) {
+                    $id = Auth::user()->profil->kartuKeluarga->id;
+                    Auth::logout();
+                    return response()->json([
+                        'res' => 'ditolak',
+                        'id' => $id,
+                        'mes' => 'Mohon maaf data anda ditolak, silahkan klik tombol "Perbarui Data" untuk melihat alasan data anda ditolak dan mengirim ulang data. Terima Kasih.',
+                    ]);
+                }
+            }
+
+            if (Auth::user()->status == 1) {
                 if (!Auth::user()->profil) {
+                    Auth::logout();
+
                     return response()->json([
                         'res' => 'tidak_ada_profil',
                     ]);
@@ -74,25 +86,6 @@ class AuthController extends Controller
                     'res' => 'berhasil',
                 ]);
             } else {
-                if (Auth::user()->role == 'keluarga') {
-                    if (Auth::user()->profil->kartuKeluarga->is_valid == 0) {
-                        Auth::logout();
-                        return response()->json([
-                            'res' => 'tidak_valid',
-                            'mes' => 'Mohon maaf, data anda masih menunggu proses Validasi, silahkan coba lagi nanti. Terima Kasih.',
-                        ]);
-                    }
-                    if (Auth::user()->profil->kartuKeluarga->is_valid == 2) {
-                        $id = Auth::user()->profil->kartuKeluarga->id;
-                        Auth::logout();
-                        return response()->json([
-                            'res' => 'ditolak',
-                            'id' => $id,
-                            'mes' => 'Mohon maaf data anda ditolak, silahkan klik tombol "Perbarui Data" untuk melihat alasan data anda ditolak dan mengirim ulang data. Terima Kasih.',
-                        ]);
-                    }
-                }
-
                 Auth::logout();
                 return response()->json([
                     'res' => 'tidak_aktif',
@@ -102,7 +95,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'res' => 'gagal',
-            'mes' => 'Nomor HP dan kata sandi ' . $request->role . ' tidak ditemukan. Silahkan cek kembali inputan anda.',
+            'mes' => 'Nomor HP beserta kata sandi yang dimasukkan tidak cocok. Silahkan cek kembali inputan anda atau klik Lupa Kata Sandi, apabila lupa kata sandi anda.',
             'data' => $credentials,
         ]);
     }
@@ -117,11 +110,11 @@ class AuthController extends Controller
 
     public function lengkapiProfil()
     {
-        if (!Auth::user()->profil) {
-            return view('dashboard.pages.masterData.profil.lengkapiProfil.index');
-        } else {
-            abort(404);
-        }
+        // if (!Auth::user()->profil) {
+        return view('dashboard.pages.masterData.profil.lengkapiProfil.index');
+        // } else {
+        //     abort(404);
+        // }
     }
 
     public function registrasi()

@@ -139,6 +139,9 @@ class DeteksiDiniController extends Controller
             }
             return view('dashboard.pages.utama.momsCare.deteksiDini.index');
         } else {
+            if (Auth::user()->is_remaja == 1) {
+                abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+            }
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
             $deteksiDini = DeteksiDini::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
@@ -155,6 +158,9 @@ class DeteksiDiniController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
@@ -350,6 +356,9 @@ class DeteksiDiniController extends Controller
      */
     public function edit(DeteksiDini $deteksiDini)
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if ((Auth::user()->profil->id == $deteksiDini->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $deteksiDini->anggotaKeluarga->kartu_keluarga_id)) {
             $kartuKeluarga = KartuKeluarga::latest()->get();
             $daftarSoal = SoalDeteksiDini::orderBy('urutan', 'asc')->get();

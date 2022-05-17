@@ -38,10 +38,8 @@
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
-                            @if (Auth::user()->role == 'bidan')
-                                @component('dashboard.components.info.bidan.fiturUtama')
-                                @endcomponent
-                            @endif
+                            @component('dashboard.components.info.fiturUtama')
+                            @endcomponent
                             <div class="col">
                                 <div class="card fieldset border border-secondary mb-4">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
@@ -230,7 +228,7 @@
                                                 'Asesmen Meningkatkan Life Skill',
                                                 'Asesmen Mencegah Pernikahan Dini',
                                                 'Desa /
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    Kelurahan',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Kelurahan',
                                                 'Bidan',
                                                 'Tanggal Validasi',
                                                 'Aksi',

@@ -34,6 +34,19 @@ class User extends Authenticatable
         }
     }
 
+    public function scopeProfilAkun($query, $role)
+    {
+        if ($role == 'bidan') {
+            return $query->hasOne(Bidan::class, 'user_id', 'id');
+        } else if ($role == 'penyuluh') {
+            return $query->hasOne(Penyuluh::class, 'user_id', 'id');
+        } else if ($role == 'admin') {
+            return $query->hasOne(Admin::class, 'user_id', 'id');
+        } else if ($role == 'keluarga') {
+            return $query->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
+        }
+    }
+
 
     public function keluarga()
     {
@@ -53,6 +66,11 @@ class User extends Authenticatable
     public function admin()
     {
         return $this->hasOne(Admin::class, 'user_id', 'id');
+    }
+
+    public function kepalaKeluarga()
+    {
+        return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
     }
 
     // lokasi tugas if role != admin

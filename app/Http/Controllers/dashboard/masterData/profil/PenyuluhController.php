@@ -11,8 +11,10 @@ use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use App\Models\DesaKelurahan;
 use App\Models\KabupatenKota;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -28,77 +30,96 @@ class PenyuluhController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Penyuluh::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama')->orderBy('created_at', 'DESC');
-            return DataTables::of($data)
-                ->addIndexColumn()
+        if (in_array(Auth::user()->role, ['admin', 'bidan', 'penyuluh'])) {
+            if ($request->ajax()) {
+                $data = Penyuluh::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
 
-                ->addColumn('desa_kelurahan', function ($row) {     
-                    return $row->desaKelurahan->nama;
-                })
-
-                ->addColumn('kecamatan', function ($row) {     
-                    return $row->kecamatan->nama;
-                })
-
-                ->addColumn('kabupaten_kota', function ($row) {     
-                    return $row->kabupatenKota->nama;
-                })
-
-                ->addColumn('provinsi', function ($row) {     
-                    return $row->provinsi->nama;
-                })
-
-                ->addColumn('agama', function ($row) {     
-                    return $row->agama->agama;
-                })
-
-                ->addColumn('lokasi_tugas', function ($row) { 
-                    if($row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') == null){ 
-                        return '<a href="'.route('lokasiTugasPenyuluh', $row->id).'" class="btn btn-sm btn-primary text-white shadow"><i class="fa-solid fa-map-location-dot"></i> Tentukan Lokasi Tugas</a>';
-                    } else {
-                        return $row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
+                // Filter
+                $data->where(function ($query) use ($request) {
+                    if ($request->lokasiTugas) {
+                        $query->whereHas('lokasiTugas', function ($query) use ($request) {
+                            $query->where('jenis_profil', 'penyuluh');
+                            $query->where('desa_kelurahan_id', $request->lokasiTugas);
+                        });
                     }
-                })
-               
-                ->addColumn('action', function ($row) {     
-                        $actionBtn = '
-                        <div class="text-center justify-content-center text-white">';
-                        $actionBtn .= '
-                            <button class="btn btn-info btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" onclick=modalLihat('.$row->id.')><i class="fas fa-eye"></i></button>
-                            <a href="'.route('lokasiTugasPenyuluh', $row->id).'" id="btn-edit" class="btn btn-primary btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lokasi Tugas"><i class="fa-solid fa-map-location-dot"></i></a>
-                            <a href="'.route('penyuluh.edit', $row->id).'" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>
-                            <button id="btn-delete" onclick="hapus(' . $row->id . ')" class="btn btn-danger btn-sm mr-1 my-1 shadow" value="' . $row->id . '" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="fas fa-trash"></i></button>
-                        </div>';
-                    return $actionBtn;
-                })
+                });
 
-                // ->filter(function ($query) use ($request) {    
-                //     if ($request->search != '') {
-                //         $query->whereHas('anggotaKeluarga', function ($query) use ($request) {
-                //             $query->where("nama_lengkap", "LIKE", "%$request->search%");
-                //         });
-                //     }      
-                                    
-                //     // if (!empty($request->role)) {
-                //     //     $query->whereHas('user', function ($query) use ($request) {
-                //     //         $query->where('users.role', $request->role);                       
-                //     //     });
-                //     // }
-                // })
-                ->rawColumns([
-                    'action',
-                    'desa_kelurahan',
-                    'kecamatan',
-                    'kabupaten_kota',
-                    'provinsi',
-                    'lokasi_tugas',
-                
-                
-                ])
-                ->make(true);
+                $data->where(function ($query) use ($request) {
+                    if ($request->search) {
+                        $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
+                    }
+                });
+
+                $data->orderBy('created_at', 'DESC');
+                return DataTables::of($data)
+                    ->addIndexColumn()
+
+                    ->addColumn('desa_kelurahan', function ($row) {
+                        return $row->desaKelurahan->nama;
+                    })
+
+                    ->addColumn('kecamatan', function ($row) {
+                        return $row->kecamatan->nama;
+                    })
+
+                    ->addColumn('kabupaten_kota', function ($row) {
+                        return $row->kabupatenKota->nama;
+                    })
+
+                    ->addColumn('provinsi', function ($row) {
+                        return $row->provinsi->nama;
+                    })
+
+                    ->addColumn('agama', function ($row) {
+                        return $row->agama->agama;
+                    })
+
+                    ->addColumn('lokasi_tugas', function ($row) {
+                        if ($row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') == null) {
+                            if (Auth::user()->role == 'admin') {
+                                return '<a href="' . route('lokasiTugasBidan', $row->id) . '" class="btn btn-sm btn-primary text-white shadow"><i class="fa-solid fa-map-location-dot"></i> Tentukan Lokasi Tugas</a>';
+                            } else {
+                                return '<span class="badge rounded bg-danger">Lokasi Tugas Belum Ditentukan</span';
+                            }
+                        } else {
+                            return $row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ');
+                        }
+                    })
+
+                    ->addColumn('action', function ($row) {
+                        $actionBtn = '<div class="text-center justify-content-center text-white">';
+                        $actionBtn .= '<button id="btn-lihat" class="btn btn-primary btn-sm me-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lihat" value="' . $row->id . '"><i class="fas fa-eye"></i></button>';
+                        if (Auth::user()->role == 'admin') {
+                            $actionBtn .= '<a href="' . route('lokasiTugasPenyuluh', $row->id) . '" id="btn-edit" class="btn btn-primary btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Lokasi Tugas"><i class="fa-solid fa-map-location-dot"></i></a> <a href="' . route('penyuluh.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a> <button id="btn-delete" class="btn btn-danger btn-sm mr-1 my-1 shadow" data-toggle="tooltip" data-placement="top" title="Hapus" value="' . $row->id . '"><i class="fas fa-trash"></i></button>';
+                        }
+                        $actionBtn .= '</div>';
+                        return $actionBtn;
+                    })
+
+                    ->rawColumns([
+                        'action',
+                        'desa_kelurahan',
+                        'kecamatan',
+                        'kabupaten_kota',
+                        'provinsi',
+                        'lokasi_tugas',
+
+
+                    ])
+                    ->make(true);
+            }
+
+            $dataFilter = [
+                'lokasiTugas' => LokasiTugas::with('desaKelurahan')
+                    ->where('jenis_profil', 'penyuluh')
+                    ->groupBy('desa_kelurahan_id')
+                    ->get(),
+            ];
+
+            return view('dashboard.pages.masterData.profil.penyuluh.index', $dataFilter);
+        } else {
+            abort(403, 'Anda tidak memiliki akses');
         }
-        return view('dashboard.pages.masterData.profil.penyuluh.index');
     }
 
     /**
@@ -108,12 +129,15 @@ class PenyuluhController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->role != 'admin') {
+            abort(403, 'Anda tidak memiliki akses');
+        }
+
         $data = [
             'users' => User::with('penyuluh', 'penyuluh')->where('role', 'penyuluh')
-                    ->whereDoesntHave('penyuluh')
-                    ->get(),
+                ->whereDoesntHave('penyuluh')
+                ->get(),
             'agama' => Agama::all(),
-            'new_penyuluh_id' => Penyuluh::max('id') + 1,
             'provinsi' => Provinsi::all(),
         ];
         return view('dashboard.pages.masterData.profil.penyuluh.create', $data);
@@ -138,8 +162,6 @@ class PenyuluhController extends Controller
                 'tanggal_lahir' => 'required',
                 'agama' => 'required',
                 'tujuh_angka_terakhir_str' => 'required|min:7',
-                'nomor_hp' => 'required',
-                // 'email' => 'required',
                 'alamat' => 'required',
                 'provinsi' => 'required',
                 'kabupaten_kota' => 'required',
@@ -157,25 +179,27 @@ class PenyuluhController extends Controller
                 'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
                 'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
                 'agama.required' => 'Agama tidak boleh kosong',
-                'tujuh_angka_terakhir_str.required' => 'Tujuh angka terakhir tidak boleh kosong',
+                'tujuh_angka_terakhir_str.required' => 'Tujuh angka terakhir STR tidak boleh kosong',
                 'tujuh_angka_terakhir_str.min' => 'Tujuh angka terakhir STR tidak boleh kurang dari 7 digit',
                 'nomor_hp.required' => 'Nomor HP tidak boleh kosong',
-                // 'email.required' => 'Email tidak boleh kosong',
+                'nomor_hp.unique' => 'Nomor HP sudah terdaftar',
+                'nomor_hp.max' => 'Nomor HP tidak boleh lebih dari 13 digit',
                 'alamat.required' => 'Alamat tidak boleh kosong',
                 'provinsi.required' => 'Provinsi tidak boleh kosong',
                 'kabupaten_kota.required' => 'Kabupaten/Kota tidak boleh kosong',
                 'kecamatan.required' => 'Kecamatan tidak boleh kosong',
                 'desa_kelurahan.required' => 'Desa/Kelurahan tidak boleh kosong',
-                // 'foto_profil.required' => 'Foto profil tidak boleh kosong',
                 'foto_profil.image' => 'Foto profil harus berupa gambar',
                 'foto_profil.max' => 'Foto profil tidak boleh lebih dari 3MB',
-            
+
             ]
         );
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()]);
         }
+
+        $user = User::find($request->user_id);
 
         $data = [
             'user_id' => $request->user_id,
@@ -186,17 +210,16 @@ class PenyuluhController extends Controller
             'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
             'agama_id' => $request->agama,
             'tujuh_angka_terakhir_str' => $request->tujuh_angka_terakhir_str,
-            'nomor_hp' => $request->nomor_hp,
+            'nomor_hp' => $user->nomor_hp,
             'email' => $request->email,
             'alamat' => strtoupper($request->alamat),
             'provinsi_id' => $request->provinsi,
             'kabupaten_kota_id' => $request->kabupaten_kota,
             'kecamatan_id' => $request->kecamatan,
             'desa_kelurahan_id' => $request->desa_kelurahan,
-            // 'foto_profil' => $request->nik . '.' . $request->file('foto_profil')->extension(),
         ];
 
-        if($request->file('foto_profil')){
+        if ($request->file('foto_profil')) {
             $request->file('foto_profil')->storeAs(
                 'upload/foto_profil/penyuluh/',
                 $request->nik .
@@ -210,15 +233,19 @@ class PenyuluhController extends Controller
 
         User::where('id', $request->user_id)->update([
             'nik' => $request->nik,
-            'nomor_hp' => $request->nomor_hp,
+            'nomor_hp' => $user->nomor_hp,
         ]);
 
-        $new_penyuluh_id = Penyuluh::max('id');
+        $new_penyuluh_id = Penyuluh::latest()->first()->id;
         return response()->json(['success' => 'Berhasil', 'new_penyuluh_id' => $new_penyuluh_id]);
     }
 
     public function getLokasiTugasPenyuluh(Penyuluh $penyuluh)
     {
+        if (Auth::user()->role != 'admin') {
+            abort(403, 'Anda tidak memiliki akses');
+        }
+
         $listProvinsi = $penyuluh->lokasiTugas()->get()->pluck('provinsi_id');
         $listKecamatan = $penyuluh->lokasiTugas()->get()->pluck('kabupaten_kota_id');
         $listDesaKelurahan = $penyuluh->lokasiTugas()->get()->pluck('kecamatan_id');
@@ -234,13 +261,13 @@ class PenyuluhController extends Controller
 
     public function updateLokasiTugasPenyuluh(Request $request, Penyuluh $penyuluh)
     {
-        if($request->provinsi){
-            if(in_array(null, $request->provinsi) || in_array(null, $request->kabupaten_kota) || in_array(null, $request->kecamatan) || in_array(null, $request->desa_kelurahan)){
+        if ($request->provinsi) {
+            if (in_array(null, $request->provinsi) || in_array(null, $request->kabupaten_kota) || in_array(null, $request->kecamatan) || in_array(null, $request->desa_kelurahan)) {
                 return response()->json([
                     'res' => 'Tidak Lengkap',
                     'msg' => 'Terdapat lokasi tugas yang tidak terisi lengkap. Silahkan lengkapi terlebih dahulu atau hapus lokasi tugas tersebut.'
                 ]);
-            } else{
+            } else {
                 $penyuluh->lokasiTugas()->delete();
                 foreach ($request->provinsi as $key => $value) {
                     $data = [
@@ -253,15 +280,13 @@ class PenyuluhController extends Controller
                     ];
 
                     LokasiTugas::create($data);
-                    
                 }
                 return response()->json([
                     'res' => 'Berhasil',
                     'msg' => 'Lokasi tugas berhasil disimpan.'
                 ]);
             }
-        } 
-        else{
+        } else {
             $penyuluh->lokasiTugas()->delete();
 
             return response()->json([
@@ -298,19 +323,22 @@ class PenyuluhController extends Controller
      */
     public function edit(Penyuluh $penyuluh)
     {
+        if (Auth::user()->role != 'admin') {
+            abort(403, 'Anda tidak memiliki akses');
+        }
+
         $data = [
             'penyuluh' => Penyuluh::select('*', DB::raw('DATE_FORMAT(tanggal_lahir, "%d/%m/%Y") AS tanggal_lahir'))
                 ->where('id', $penyuluh->id)
                 ->first(),
             'users' => User::with('penyuluh')->where('role', 'penyuluh')
-            ->whereDoesntHave('penyuluh')
-            ->get(),
-            'new_penyuluh_id' => Penyuluh::max('id') + 1,
+                ->whereDoesntHave('penyuluh')
+                ->get(),
+            'agama' => Agama::all(),
             'provinsi' => Provinsi::all(),
             'kabupatenKota' => KabupatenKota::where('provinsi_id', $penyuluh->provinsi_id)->get(),
             'kecamatan' => Kecamatan::where('kabupaten_kota_id', $penyuluh->kabupaten_kota_id)->get(),
             'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $penyuluh->kecamatan_id)->get(),
-            'agama' => Agama::all(),
         ];
         return view('dashboard.pages.masterData.profil.penyuluh.edit', $data);
     }
@@ -325,12 +353,12 @@ class PenyuluhController extends Controller
     public function update(Request $request, Penyuluh $penyuluh)
     {
         $validateFotoProfil = '';
-        if($request->file('foto_profil')){
+        if ($request->file('foto_profil')) {
             $fileName = $request->file('foto_profil');
-            if($fileName != $penyuluh->foto_profil){
+            if ($fileName != $penyuluh->foto_profil) {
                 $validateFotoProfil = 'required|image|file|max:3072';
-            } 
-        } 
+            }
+        }
 
         $validator = Validator::make(
             $request->all(),
@@ -343,7 +371,9 @@ class PenyuluhController extends Controller
                 'tanggal_lahir' => 'required',
                 'agama' => 'required',
                 'tujuh_angka_terakhir_str' => 'required|min:7',
-                'nomor_hp' => 'required',
+                'nomor_hp' => ['required', 'max:13', Rule::unique('users')->where(function ($query) use ($penyuluh) {
+                    return $query->where('role', 'penyuluh')->whereNull('deleted_at');
+                })->ignore($penyuluh->user->id)],
                 // 'email' => 'required',
                 'alamat' => 'required',
                 'provinsi' => 'required',
@@ -362,9 +392,11 @@ class PenyuluhController extends Controller
                 'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
                 'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
                 'agama.required' => 'Agama tidak boleh kosong',
-                'tujuh_angka_terakhir_str.required' => 'Tujuh angka terakhir tidak boleh kosong',
+                'tujuh_angka_terakhir_str.required' => 'Tujuh angka terakhir STR tidak boleh kosong',
                 'tujuh_angka_terakhir_str.min' => 'Tujuh angka terakhir STR tidak boleh kurang dari 7 digit',
                 'nomor_hp.required' => 'Nomor HP tidak boleh kosong',
+                'nomor_hp.max' => 'Nomor HP tidak boleh lebih dari 13 digit',
+                'nomor_hp.unique' => 'Nomor HP sudah terdaftar',
                 // 'email.required' => 'Email tidak boleh kosong',
                 'alamat.required' => 'Alamat tidak boleh kosong',
                 'provinsi.required' => 'Provinsi tidak boleh kosong',
@@ -374,7 +406,7 @@ class PenyuluhController extends Controller
                 'foto_profil.required' => 'Foto profil tidak boleh kosong',
                 'foto_profil.image' => 'Foto profil harus berupa gambar',
                 'foto_profil.max' => 'Foto profil tidak boleh lebih dari 3MB',
-            
+
             ]
         );
 
@@ -401,7 +433,7 @@ class PenyuluhController extends Controller
             // 'foto_profil' => $request->nik . '.' . $request->file('foto_profil')->extension(),
         ];
 
-        if($request->file('foto_profil')){
+        if ($request->file('foto_profil')) {
             if (Storage::exists('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil)) {
                 Storage::delete('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil);
             }
@@ -414,14 +446,13 @@ class PenyuluhController extends Controller
         }
 
         $penyuluh->update($data);
-        $new_penyuluh_id = penyuluh::max('id');
 
         User::where('id', $penyuluh->user_id)->update([
             'nik' => $request->nik,
             'nomor_hp' => $request->nomor_hp,
         ]);
 
-        return response()->json(['success' => 'Berhasil', 'new_penyuluh_id' => $new_penyuluh_id]);
+        return response()->json(['success' => 'Berhasil']);
     }
 
     /**
@@ -432,6 +463,10 @@ class PenyuluhController extends Controller
      */
     public function destroy(Penyuluh $penyuluh)
     {
+        if (Auth::user()->role != 'admin') {
+            return abort(403, 'Anda tidak memiliki akses');
+        }
+
         if (Storage::exists('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil)) {
             Storage::delete('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil);
         }

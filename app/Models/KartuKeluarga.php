@@ -14,7 +14,7 @@ use App\Models\WilayahDomisiliKK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Support\Facades\Auth;
 
 class KartuKeluarga extends Model
 {
@@ -55,13 +55,22 @@ class KartuKeluarga extends Model
         return $this->hasOne(AnggotaKeluarga::class)->where('status_hubungan_dalam_keluarga_id', 1);
     }
 
-    public function bidan(){
+    public function bidan()
+    {
         return $this->belongsTo(Bidan::class)->withTrashed();
     }
-    
+
     public function wilayahDomisili()
     {
-        return $this->hasOne(WilayahDomisili::class);
+        return $this->hasOne(WilayahDomisili::class)
+            ->withTrashed();
+    }
+
+    public function scopeOfDataSesuaiLokasiTugas($query, $lokasiTugas)
+    {
+        $query->whereHas('wilayahDomisili', function ($query) use ($lokasiTugas) {
+            return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
+        });
     }
 
     public function getBidan($id)

@@ -290,6 +290,9 @@ class AncController extends Controller
             }
             return view('dashboard.pages.utama.momsCare.anc.index');
         } else {
+            if (Auth::user()->is_remaja == 1) {
+                abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+            }
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
             $anc = Anc::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
@@ -306,6 +309,9 @@ class AncController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if (in_array(Auth::user()->role, ['admin', 'bidan', 'keluarga'])) {
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
@@ -679,6 +685,9 @@ class AncController extends Controller
      */
     public function edit(Anc $anc)
     {
+        if (Auth::user()->is_remaja == 1) {
+            abort(403, 'Maaf, halaman ini bukan untuk Remaja');
+        }
         if ((Auth::user()->profil->id == $anc->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $anc->anggotaKeluarga->kartu_keluarga_id)) {
             $kartuKeluarga = KartuKeluarga::latest()->get();
             return view('dashboard.pages.utama.momsCare.anc.edit', compact('anc', 'kartuKeluarga'));

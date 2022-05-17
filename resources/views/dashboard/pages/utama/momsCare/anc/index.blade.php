@@ -29,31 +29,31 @@
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Antenatal Care</h5>
                         @if (Auth::user()->role != 'penyuluh')
-                            @component('dashboard.components.buttons.add', [
-                                'id' => 'catatan-anc',
-                                'class' => '',
-                                'url' => '/anc/create',
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'catatan-anc',
+                                    'class' => '',
+                                    'url' => '/anc/create',
                                 ])
                             @endcomponent
                         @endif
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
-                            @if (Auth::user()->role == 'bidan')
-                                @component('dashboard.components.info.bidan.fiturUtama')
-                                @endcomponent
-                            @endif
+                            @component('dashboard.components.info.fiturUtama')
+                            @endcomponent
                             <div class="col">
                                 <div class="card fieldset border-secondary mb-4 border">
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                     @if (Auth::user()->role != 'penyuluh')
                                         <div class="row">
                                             <div class="col-lg-12 mt-2">
-                                                @component('dashboard.components.formElements.select', [
-                                                    'label' => 'Status',
-                                                    'id' => 'status-validasi',
-                                                    'name' => 'status',
-                                                    'class' => 'filter',
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Status',
+                                                        'id' => 'status-validasi',
+                                                        'name' => 'status',
+                                                        'class' => 'filter',
                                                     ])
                                                     @slot('options')
                                                         <option value="Tervalidasi">Tervalidasi</option>
@@ -65,11 +65,12 @@
                                     @endif
                                     <div class="row">
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Badan',
-                                                'id' => 'kategori_badan',
-                                                'name' => 'kategori_badan',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Badan',
+                                                    'id' => 'kategori_badan',
+                                                    'name' => 'kategori_badan',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Resiko Tinggi">Resiko Tinggi</option>
@@ -78,11 +79,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Tekanan Darah',
-                                                'id' => 'kategori_tekanan_darah',
-                                                'name' => 'kategori_tekanan_darah',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Tekanan Darah',
+                                                    'id' => 'kategori_tekanan_darah',
+                                                    'name' => 'kategori_tekanan_darah',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Hipotensi">Hipotensi</option>
@@ -93,11 +95,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Lengan Atas',
-                                                'id' => 'kategori_lengan_atas',
-                                                'name' => 'kategori_lengan_atas',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Lengan Atas',
+                                                    'id' => 'kategori_lengan_atas',
+                                                    'name' => 'kategori_lengan_atas',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Kurang Gizi (BBLR)">Kurang Gizi (BBLR)</option>
@@ -106,11 +109,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Denyut Jantung',
-                                                'id' => 'kategori_denyut_jantung',
-                                                'name' => 'kategori_denyut_jantung',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Denyut Jantung',
+                                                    'id' => 'kategori_denyut_jantung',
+                                                    'name' => 'kategori_denyut_jantung',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Normal">Normal</option>
@@ -119,11 +123,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Hemoglobin Darah',
-                                                'id' => 'kategori_hemoglobin_darah',
-                                                'name' => 'kategori_hemoglobin_darah',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Hemoglobin Darah',
+                                                    'id' => 'kategori_hemoglobin_darah',
+                                                    'name' => 'kategori_hemoglobin_darah',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Normal">Normal</option>
@@ -132,11 +137,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Vaksin Tetanus Sebelum Hamil',
-                                                'id' => 'kategori_vaksin_sebelum_hamil',
-                                                'name' => 'kategori_vaksin_sebelum_hamil',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Vaksin Tetanus Sebelum Hamil',
+                                                    'id' => 'kategori_vaksin_sebelum_hamil',
+                                                    'name' => 'kategori_vaksin_sebelum_hamil',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -145,11 +151,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Vaksin Tetanus Sesudah Hamil',
-                                                'id' => 'kategori_vaksin_sesudah_hamil',
-                                                'name' => 'kategori_vaksin_sesudah_hamil',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Vaksin Tetanus Sesudah Hamil',
+                                                    'id' => 'kategori_vaksin_sesudah_hamil',
+                                                    'name' => 'kategori_vaksin_sesudah_hamil',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -158,11 +165,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Posisi Janin',
-                                                'id' => 'kategori_posisi_janin',
-                                                'name' => 'kategori_posisi_janin',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Posisi Janin',
+                                                    'id' => 'kategori_posisi_janin',
+                                                    'name' => 'kategori_posisi_janin',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Normal">Normal</option>
@@ -171,11 +179,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Minum 90 Tablet Penambah Darah',
-                                                'id' => 'kategori_minum_tablet',
-                                                'name' => 'kategori_minum_tablet',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Minum 90 Tablet Penambah Darah',
+                                                    'id' => 'kategori_minum_tablet',
+                                                    'name' => 'kategori_minum_tablet',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -184,11 +193,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg-4 mt-2">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Konseling',
-                                                'id' => 'kategori_konseling',
-                                                'name' => 'kategori_konseling',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Konseling',
+                                                    'id' => 'kategori_konseling',
+                                                    'name' => 'kategori_konseling',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="Sudah">Sudah</option>
@@ -203,45 +213,46 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border-secondary border">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-data',
-                                        'th' => [
-                                        'No',
-                                        'Dibuat Tanggal',
-                                        'Status',
-                                        'Nama Ibu',
-                                        'Pemeriksaan Ke',
-                                        'Tanggal Haid
-                                        Terakhir',
-                                        'Kehamilan Ke',
-                                        'Usia Kehamilan',
-                                        'Tanggal Perkiraan Lahir',
-                                        'Tinggi/Berat
-                                        Badan',
-                                        'Tekanan Darah',
-                                        'Lengan Atas',
-                                        'Tinggi Fundus',
-                                        'Hemoglobin Darah',
-                                        'Denyut
-                                        Jantung',
-                                        'Kategori Badan',
-                                        'Kategori Tekanan Darah',
-                                        'Kategori Lengan Atas',
-                                        'Kategori
-                                        Denyut Jantung',
-                                        'Kategori
-                                        Hemoglobin Darah',
-                                        'Vaksin Tetanus Sebelum Hamil',
-                                        'Vaksin Tetanus Sesudah Hamil',
-                                        'Posisi
-                                        Janin',
-                                        'Minum 90 Tablet Tambah Darah',
-                                        'Konseling',
-                                        'Desa / Kelurahan',
-                                        'Bidan',
-                                        'Tanggal Validasi',
-                                        'Aksi',
-                                        ],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-data',
+                                            'th' => [
+                                                'No',
+                                                'Dibuat Tanggal',
+                                                'Status',
+                                                'Nama Ibu',
+                                                'Pemeriksaan Ke',
+                                                'Tanggal Haid
+                                                                                                                Terakhir',
+                                                'Kehamilan Ke',
+                                                'Usia Kehamilan',
+                                                'Tanggal Perkiraan Lahir',
+                                                'Tinggi/Berat
+                                                                                                                Badan',
+                                                'Tekanan Darah',
+                                                'Lengan Atas',
+                                                'Tinggi Fundus',
+                                                'Hemoglobin Darah',
+                                                'Denyut
+                                                                                                                Jantung',
+                                                'Kategori Badan',
+                                                'Kategori Tekanan Darah',
+                                                'Kategori Lengan Atas',
+                                                'Kategori
+                                                                                                                Denyut Jantung',
+                                                'Kategori
+                                                                                                                Hemoglobin Darah',
+                                                'Vaksin Tetanus Sebelum Hamil',
+                                                'Vaksin Tetanus Sesudah Hamil',
+                                                'Posisi
+                                                                                                                Janin',
+                                                'Minum 90 Tablet Tambah Darah',
+                                                'Konseling',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -415,12 +426,13 @@
                     </div>
                     <div class="row g-3 align-items-end" id="form-konfirmasi">
                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
-                            @component('dashboard.components.formElements.select', [
-                                'label' => 'Konfirmasi',
-                                'id' => 'konfirmasi',
-                                'name' => 'konfirmasi',
-                                'class' => 'kosong',
-                                'wajib' => '<sup class="text-danger">*</sup>',
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Konfirmasi',
+                                    'id' => 'konfirmasi',
+                                    'name' => 'konfirmasi',
+                                    'class' => 'kosong',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
                                 ])
                                 @slot('options')
                                     <option value="1">Validasi</option>
@@ -430,12 +442,13 @@
                         </div>
                         @if (Auth::user()->role == 'admin')
                             <div class="col-lg col-sm-12" id="pilih-bidan">
-                                @component('dashboard.components.formElements.select', [
-                                    'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
-                                    'id' => 'nama-bidan',
-                                    'name' => 'bidan_id',
-                                    'class' => 'bidan_id',
-                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                @component('dashboard.components.formElements.select',
+                                    [
+                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                        'id' => 'nama-bidan',
+                                        'name' => 'bidan_id',
+                                        'class' => 'bidan_id',
+                                        'wajib' => '<sup class="text-danger">*</sup>',
                                     ])
                                 @endcomponent
                             </div>
@@ -453,14 +466,16 @@
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
                         <div class="col-sm-6 col-lg-8">
-                            @component('dashboard.components.buttons.edit', [
-                                'id' => 'modal-btn-ubah',
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
                                 ])
                             @endcomponent
                         </div>
                         <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
-                            @component('dashboard.components.buttons.konfirmasi', [
-                                'id' => 'modal-btn-konfirmasi',
+                            @component('dashboard.components.buttons.konfirmasi',
+                                [
+                                    'id' => 'modal-btn-konfirmasi',
                                 ])
                             @endcomponent
                         </div>
