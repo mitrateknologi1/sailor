@@ -14,7 +14,7 @@
                         {{-- <small class="text-muted">Unique dashboard designs </small> --}}
                     </li>
                     <li>
-                        <a class="m-link" id="m-link-dashboard" href="{{ url('/') }}">
+                        <a class="m-link" id="m-link-dashboard" href="{{ url('/dashboard') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor"
                                 class="bi bi-speedometer2" viewBox="0 0 16 16">
                                 <path

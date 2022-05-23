@@ -81,7 +81,7 @@
                             <div class="card border-0 w240">
                                 <div class="card-body border-bottom d-flex">
                                     <img class="avatar rounded-circle"
-                                        src="{{ Auth::user()->profil->foto_profil != null && Storage::exists('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) ? asset('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
+                                        src="{{ Auth::user()->profil->foto_profil != null && Storage::exists('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) ? Storage::url('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
                                         alt="Avatar" class="rounded-circle avatar xl shadow img-thumbnail">
                                     <div class="flex-fill ms-3">
                                         <h6 class="card-title mb-0">{{ Auth::user()->profil->nama_lengkap }}</h6>

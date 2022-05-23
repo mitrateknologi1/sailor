@@ -477,7 +477,7 @@
                         if (data.surat_keterangan_domisili) {
                             $('#file-surat-keterangan-domisili').removeClass('d-none');
                             $('#file-surat-keterangan-domisili').attr('href',
-                                '{{ asset('upload/surat_keterangan_domisili') }}/' + data
+                                '{{ Storage::url('upload/surat_keterangan_domisili') }}/' + data
                                 .surat_keterangan_domisili);
                         } else {
                             $('#modal-file-surat-keterangan-domisili').removeClass('d-none')
@@ -486,7 +486,7 @@
 
                     if (data.foto_profil != null) {
                         $('#modal-foto-profil').html(
-                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url(../upload/foto_profil/keluarga/' +
+                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url({{ Storage::url('/upload/foto_profil/keluarga/') }}/' +
                             data.foto_profil + ')">')
                     } else {
                         $('#modal-foto-profil').html(
