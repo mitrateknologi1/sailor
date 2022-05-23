@@ -24,6 +24,11 @@ class DeteksiDiniController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
     public function index(Request $request)
     {
         if (in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])) {
@@ -109,7 +114,7 @@ class DeteksiDiniController extends Controller
                     })
                     ->addColumn('status', function ($row) {
                         if ($row->is_valid == 0) {
-                            return '<span class="badge badge-danger bg-danger">Belum Divalidasi</span>';
+                            return '<span class="badge badge-warning bg-warning">Belum Divalidasi</span>';
                         } else if ($row->is_valid == 2) {
                             return '<span class="badge badge-danger bg-danger">Ditolak</span>';
                         } else {

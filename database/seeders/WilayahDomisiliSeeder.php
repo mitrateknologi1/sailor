@@ -25,6 +25,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 2,
@@ -36,6 +37,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 3,
@@ -47,6 +49,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 4,
@@ -58,6 +61,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 5,
@@ -69,6 +73,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 6,
@@ -80,6 +85,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             /////////////////////////
             [
@@ -92,6 +98,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 8,
@@ -103,6 +110,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 9,
@@ -114,6 +122,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 10,
@@ -125,6 +134,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 11,
@@ -136,6 +146,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 12,
@@ -147,6 +158,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 13,
@@ -158,6 +170,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'id' => 14,
@@ -169,6 +182,7 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
             ],
             [ // Remaja
                 'id' => 15,
@@ -180,6 +194,46 @@ class WilayahDomisiliSeeder extends Seeder
                 'provinsi_id' => 72,
                 'file_ket_domisili' => null,
                 'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [ // Remaja
+                'id' => 16,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120011',
+                'alamat' => 'Jl. Raya',
+                'desa_kelurahan_id' => 7210110011,
+                'kecamatan_id' => 7210110,
+                'kabupaten_kota_id' => 7210,
+                'provinsi_id' => 72,
+                'file_ket_domisili' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [ // Remaja
+                'id' => 17,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120012',
+                'alamat' => 'Jl. Raya',
+                'desa_kelurahan_id' => 7210110011,
+                'kecamatan_id' => 7210110,
+                'kabupaten_kota_id' => 7210,
+                'provinsi_id' => 72,
+                'file_ket_domisili' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
+
+            [
+                'id' => 18,
+                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120045',
+                'alamat' => 'Jl. Raya',
+                'desa_kelurahan_id' => 7210110011,
+                'kecamatan_id' => 7210110,
+                'kabupaten_kota_id' => 7210,
+                'provinsi_id' => 72,
+                'file_ket_domisili' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
 
 

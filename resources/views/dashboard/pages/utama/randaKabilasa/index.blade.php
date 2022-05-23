@@ -38,7 +38,7 @@
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
-                            @component('dashboard.components.info.fiturUtama')
+                            @component('dashboard.components.info.utama.randaKabilasa')
                             @endcomponent
                             <div class="col">
                                 <div class="card fieldset border border-secondary mb-4">
@@ -213,25 +213,7 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => [
-                                                'No',
-                                                'Tanggal Dibuat',
-                                                'Status Validasi Asesmen Mencegah Malnutrisi',
-                                                'Status Validasi Asesmen Mencegah Pernikahan Dini',
-                                                'Status Validasi Asesmen Meningkatkan Life Skill',
-                                                'Status Asesmen',
-                                                'Nama Remaja',
-                                                'Kategori HB',
-                                                'Kategori Lingkar Lengan Atas',
-                                                'Kategori Indeks Masa Tubuh',
-                                                'Asesmen Mencegah Malnutrisi',
-                                                'Asesmen Meningkatkan Life Skill',
-                                                'Asesmen Mencegah Pernikahan Dini',
-                                                'Desa / Kelurahan',
-                                                'Bidan',
-                                                'Tanggal Validasi',
-                                                'Aksi',
-                                            ],
+                                            'th' => ['No', 'Tanggal Dibuat', 'Status Validasi Asesmen Mencegah Malnutrisi', 'Status Validasi Asesmen Mencegah Pernikahan Dini', 'Status Validasi Asesmen Meningkatkan Life Skill', 'Status Asesmen', 'Nama Remaja', 'Kategori HB', 'Kategori Lingkar Lengan Atas', 'Kategori Indeks Masa Tubuh', 'Asesmen Mencegah Malnutrisi', 'Asesmen Meningkatkan Life Skill', 'Asesmen Mencegah Pernikahan Dini', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>

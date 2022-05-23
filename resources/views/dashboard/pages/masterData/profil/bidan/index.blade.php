@@ -49,7 +49,7 @@
                                                     'class' => 'select2 filter',
                                                 ])
                                                 @slot('options')
-                                                    <option value="">Belum Memiliki Lokasi Tugas</option>
+                                                    <option value="-">Belum Memiliki Lokasi Tugas</option>
                                                     @foreach ($lokasiTugas as $item)
                                                         <option value="{{ $item->desa_kelurahan_id }}">
                                                             {{ $item->desaKelurahan->nama }}

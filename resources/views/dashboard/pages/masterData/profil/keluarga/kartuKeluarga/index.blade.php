@@ -44,7 +44,7 @@
                                             <div class="col-lg">
                                                 @component('dashboard.components.formElements.select',
                                                     [
-                                                        'label' => 'Status',
+                                                        'label' => 'Status Kartu Keluarga',
                                                         'id' => 'status-filter',
                                                         'name' => 'status',
                                                         'class' => 'filter',
@@ -53,6 +53,19 @@
                                                         <option value="Tervalidasi">Tervalidasi</option>
                                                         <option value="Belum Tervalidasi">Belum Divalidasi</option>
                                                         <option value="Ditolak">Ditolak</option>
+                                                    @endslot
+                                                @endcomponent
+                                            </div>
+                                            <div class="col-lg">
+                                                @component('dashboard.components.formElements.select',
+                                                    [
+                                                        'label' => 'Status Anggota Keluarga',
+                                                        'id' => 'status-anggota-filter',
+                                                        'name' => 'status_anggota',
+                                                        'class' => 'filter',
+                                                    ])
+                                                    @slot('options')
+                                                        <option value="Belum Tervalidasi">Belum Divalidasi</option>
                                                     @endslot
                                                 @endcomponent
                                             </div>
@@ -85,7 +98,7 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-keluarga',
-                                            'th' => ['No', 'Dibuat Tanggal', 'Status', 'Nomor Kartu Keluarga', 'Nama Kepala Keluarga', 'Anggota', 'Alamat', 'RT', 'RW', 'Kode Pos', 'Desa/Kelurahan', 'Kecamatan', 'Kabupaten/Kota', 'Provinsi', 'Desa/Kelurahan Domisili', 'Bidan', 'Aksi'],
+                                            'th' => ['No', 'Dibuat Tanggal', 'Status Kartu Keluarga', 'Nomor Kartu Keluarga', 'Nama Kepala Keluarga', 'Anggota', 'Alamat', 'RT', 'RW', 'Kode Pos', 'Desa/Kelurahan', 'Kecamatan', 'Kabupaten/Kota', 'Provinsi', 'Desa/Kelurahan Domisili', 'Bidan', 'Status Anggota Keluarga', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -180,14 +193,6 @@
                                             <span class="badge bg-info float-end text-uppercase" id="modal-provinsi"> -
                                             </span>
                                         </li>
-                                        {{-- <li class="justify-content-between">
-                                        <label><i class="fa-solid fa-image"></i> Kartu Keluarga</label>
-                                        <div class="card img-hover p-1 mt-2">
-                                            <div class="row g-1 d-flex justify-content-center">
-                                                <div class="d-flex justify-content-center"><a title="Image 1" href="#"><img class="thumbnail rounded img-fluid" src="{{ asset('assets/dashboard') }}/images/gallery/1.jpg"></a>
-                                            </div>
-                                        </div>
-                                    </li> --}}
                                         <li class="justify-content-between">
                                             <label><i class="fa-solid fa-file"></i> Kartu Keluarga</label>
                                             <a href="#" id="file-kartu-keluarga" target="_blank"><span
@@ -198,22 +203,6 @@
                                         </li>
 
                                     </ul>
-                                    {{-- <!-- Gallery: carousel popups -->
-                                <div class="modal fade modal-foto" id="myModalGallery" tabindex="-1">
-                                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Foto Kartu Keluarga</h5>
-                                                <button type="button text-muted" class="btn btn-minimize" aria-label="Close"><i class="fa-solid fa-xmark fa-lg text-muted"></i></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="modalCarousel" class="carousel slide carousel-fade" data-ride="carousel">
-                                                    <div class="carousel-inner"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
                                 </div>
                             </div>
 
@@ -244,7 +233,8 @@
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> -
+                                            <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir">
+                                                -
                                             </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
@@ -378,7 +368,7 @@
                                     'wajib' => '<sup class="text-danger">*</sup>',
                                 ])
                                 @slot('options')
-                                    <option value="1">Setujui</option>
+                                    <option value="1">Validasi</option>
                                     <option value="2">Tolak</option>
                                 @endslot
                             @endcomponent
@@ -597,6 +587,7 @@
                 url: "{{ route('keluarga.index') }}",
                 data: function(d) {
                     d.statusValidasi = $('#status-filter').val();
+                    d.statusValidasiAnggota = $('#status-anggota-filter').val();
                     d.desaKelurahanDomisili = $('#desa-kelurahan-domisili').val();
                     d.search = $('input[type="search"]').val();
 
@@ -669,9 +660,15 @@
                 },
                 {
                     data: 'bidan',
-                    name: 'bidan'
+                    name: 'bidan',
+                    className: 'text-center',
                 },
                 {
+                    data: 'jumlah_anggota_belum_divalidasi',
+                    name: 'jumlah_anggota_belum_divalidasi',
+                    className: 'text-center',
+                    visible: '{{ Auth::user()->role != 'penyuluh' ? true : false }}'
+                }, {
                     data: 'action',
                     name: 'action',
                     className: 'text-center',
@@ -680,7 +677,7 @@
                 },
             ],
             columnDefs: [{
-                    targets: [1, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                    targets: [1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13],
                     visible: false,
                 },
                 {

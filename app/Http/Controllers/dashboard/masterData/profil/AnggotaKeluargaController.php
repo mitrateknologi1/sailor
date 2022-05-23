@@ -36,6 +36,12 @@ class AnggotaKeluargaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
+
     public function index(Request $request)
     {
         if (Auth::user()->role == 'keluarga') {
@@ -698,7 +704,9 @@ class AnggotaKeluargaController extends Controller
             $dataWilayahDomisili['file_ket_domisili'] = $request->nik . '.' . $request->file('file_domisili')->extension();
         }
 
-        $anggotaKeluarga->wilayahDomisili->update($dataWilayahDomisili);
+        if (($anggotaKeluarga->wilayahDomisili->desa_kelurahan_id != $request->desa_kelurahan_domisili) || ($request->file('file_domisili'))) {
+            $anggotaKeluarga->wilayahDomisili->update($dataWilayahDomisili);
+        }
 
         $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id)
             ->where('tentang', 'anggota_keluarga')

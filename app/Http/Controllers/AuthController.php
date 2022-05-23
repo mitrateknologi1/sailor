@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Agama;
+use App\Models\Bidan;
+use App\Models\Penyuluh;
 use App\Models\Provinsi;
 use App\Models\Kecamatan;
 use App\Models\Pekerjaan;
@@ -75,8 +78,6 @@ class AuthController extends Controller
 
             if (Auth::user()->status == 1) {
                 if (!Auth::user()->profil) {
-                    Auth::logout();
-
                     return response()->json([
                         'res' => 'tidak_ada_profil',
                     ]);
@@ -95,7 +96,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'res' => 'gagal',
-            'mes' => 'Nomor HP beserta kata sandi yang dimasukkan tidak cocok. Silahkan cek kembali inputan anda atau klik Lupa Kata Sandi, apabila lupa kata sandi anda.',
+            'mes' => 'Nomor HP / NIK beserta kata sandi yang dimasukkan tidak cocok. Silahkan cek kembali inputan anda atau klik Lupa Kata Sandi, apabila lupa kata sandi anda.',
             'data' => $credentials,
         ]);
     }
@@ -108,13 +109,150 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+    public function cekRemaja()
+    {
+        $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
+            ->where('tanggal_lahir', '<', Carbon::now()->subYears(10))
+            ->whereDoesntHave('user')
+            ->get();
+
+        foreach ($remaja as $r) {
+            $user = User::create([
+                'nik' => $r->nik,
+                'password' => Hash::make('12345678'),
+                'role' => 'keluarga',
+                'is_remaja' => 1,
+                'status' => 1,
+            ]);
+
+            $r->update([
+                'user_id' => $user->id,
+            ]);
+        }
+        return $remaja;
+
+        return Carbon::parse(now())->isoFormat('YYYY-MM-DD');
+    }
+
     public function lengkapiProfil()
     {
-        // if (!Auth::user()->profil) {
-        return view('dashboard.pages.masterData.profil.lengkapiProfil.index');
-        // } else {
-        //     abort(404);
-        // }
+        if (Auth::user()->profil) {
+            return redirect('/dashboard');
+        }
+        $user = Auth::user();
+        $data = [
+            'user' => $user,
+            'agama' => Agama::all(),
+            'provinsi' => Provinsi::all(),
+        ];
+        return view('dashboard.pages.masterData.profil.lengkapiProfil.index', $data);
+    }
+
+    public function tambahProfil(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role != 'admin') {
+            $validateSTR = 'required|min:7';
+        } else {
+            $validateSTR = '';
+        }
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'nik' => 'required|unique:bidan,nik,NULL,id,deleted_at,NULL|digits:16',
+                'nama_lengkap' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required',
+                'agama' => 'required',
+                'tujuh_angka_terakhir_str' => $validateSTR,
+                'nomor_hp' => ['required', 'max:13', Rule::unique('users')->where(function ($query) use ($user) {
+                    return $query->where('role', $user->role)->whereNull('deleted_at');
+                })->ignore($user->id)],
+                'alamat' => 'required',
+                'provinsi' => 'required',
+                'kabupaten_kota' => 'required',
+                'kecamatan' => 'required',
+                'desa_kelurahan' => 'required',
+                'foto_profil' => 'image|file|max:3072'
+            ],
+            [
+                'nik.required' => 'NIK tidak boleh kosong',
+                'nik.unique' => 'NIK sudah terdaftar',
+                'nik.digits' => 'NIK harus 16 digit',
+                'nama_lengkap.required' => 'Nama lengkap tidak boleh kosong',
+                'jenis_kelamin.required' => 'Jenis kelamin tidak boleh kosong',
+                'tempat_lahir.required' => 'Tempat lahir tidak boleh kosong',
+                'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong',
+                'agama.required' => 'Agama tidak boleh kosong',
+                'tujuh_angka_terakhir_str.required' => 'Tujuh angka terakhir STR tidak boleh kosong',
+                'tujuh_angka_terakhir_str.min' => 'Tujuh angka terakhir STR tidak boleh kurang dari 7 digit',
+                'nomor_hp.required' => 'Nomor HP tidak boleh kosong',
+                'nomor_hp.unique' => 'Nomor HP sudah digunakan pada ' . $user->role . ' lain',
+                'nomor_hp.max' => 'Nomor HP tidak boleh lebih dari 13 digit',
+                'alamat.required' => 'Alamat tidak boleh kosong',
+                'provinsi.required' => 'Provinsi tidak boleh kosong',
+                'kabupaten_kota.required' => 'Kabupaten/Kota tidak boleh kosong',
+                'kecamatan.required' => 'Kecamatan tidak boleh kosong',
+                'desa_kelurahan.required' => 'Desa/Kelurahan tidak boleh kosong',
+                'foto_profil.image' => 'Foto profil harus berupa gambar',
+                'foto_profil.max' => 'Foto profil tidak boleh lebih dari 3MB',
+
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+
+        $dataProfil = [
+            'user_id' => $user->id,
+            'nik' => $request->nik,
+            'nama_lengkap' => strtoupper($request->nama_lengkap),
+            'jenis_kelamin' => strtoupper($request->jenis_kelamin),
+            'tempat_lahir' => strtoupper($request->tempat_lahir),
+            'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
+            'agama_id' => $request->agama,
+            'nomor_hp' => $user->nomor_hp,
+            'email' => $request->email,
+            'alamat' => strtoupper($request->alamat),
+            'provinsi_id' => $request->provinsi,
+            'kabupaten_kota_id' => $request->kabupaten_kota,
+            'kecamatan_id' => $request->kecamatan,
+            'desa_kelurahan_id' => $request->desa_kelurahan,
+        ];
+
+        if ($user->role != 'admin') {
+            $dataProfil['tujuh_angka_terakhir_str'] = $request->tujuh_angka_terakhir_str;
+        }
+
+        if ($request->file('foto_profil')) {
+            $request->file('foto_profil')->storeAs(
+                'upload/foto_profil/' . $user->role . '/',
+                $request->nik .
+                    '.' . $request->file('foto_profil')->extension()
+            );
+            $dataProfil['foto_profil'] = $request->nik .
+                '.' . $request->file('foto_profil')->extension();
+        }
+
+        if ($user->role == 'admin') {
+            Admin::create($dataProfil);
+        } else if ($user->role == 'bidan') {
+            Bidan::create($dataProfil);
+        } else if ($user->role == 'penyuluh') {
+            Penyuluh::create($dataProfil);
+        }
+
+        $dataAkun = [
+            'nomor_hp' => $request->nomor_hp,
+            'nik' => $request->nik,
+        ];
+
+        User::where('id', $user->id)->update($dataAkun);
+
+        return response()->json(['success' => 'Berhasil menambahkan profil']);
     }
 
     public function registrasi()

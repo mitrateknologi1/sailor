@@ -28,8 +28,9 @@
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Deteksi Dini</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'url' => url('deteksi-dini/create'),
+                        @component('dashboard.components.buttons.add',
+                            [
+                                'url' => url('deteksi-dini/create'),
                             ])
                         @endcomponent
                     </div>
@@ -40,11 +41,12 @@
                                     <span class="fieldset-tile text-secondary bg-white">Filter Data</span>
                                     <div class="row">
                                         <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Status',
-                                                'id' => 'status',
-                                                'name' => 'status',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Status',
+                                                    'id' => 'status',
+                                                    'name' => 'status',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option value="1">Aktif</option>
@@ -53,11 +55,12 @@
                                             @endcomponent
                                         </div>
                                         <div class="col-lg">
-                                            @component('dashboard.components.formElements.select', [
-                                                'label' => 'Kategori Gizi',
-                                                'id' => 'kategori-gizi',
-                                                'name' => 'kategori_gizi',
-                                                'class' => 'filter',
+                                            @component('dashboard.components.formElements.select',
+                                                [
+                                                    'label' => 'Kategori Gizi',
+                                                    'id' => 'kategori-gizi',
+                                                    'name' => 'kategori_gizi',
+                                                    'class' => 'filter',
                                                 ])
                                                 @slot('options')
                                                     <option>Mustard</option>
@@ -73,10 +76,10 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border border-secondary">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-data',
-                                        'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Skor', 'Kategori',
-                                        'Desa/Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-data',
+                                            'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Skor', 'Kategori', 'Desa/Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>

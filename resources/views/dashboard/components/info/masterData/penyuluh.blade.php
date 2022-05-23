@@ -9,7 +9,7 @@
                     Kolom <span class="fw-bold">Aksi:</span>
                     <ul>
                         <li>
-                            Dapat melihat <span class="fw-bold">detail</span> data
+                            Dapat melihat <span class="fw-bold"><i class="fas fa-eye"></i> detail</span> data
                         </li>
                     </ul>
                 </li>

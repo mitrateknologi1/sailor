@@ -29,6 +29,13 @@ class BidanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
+
     public function index(Request $request)
     {
         if (in_array(Auth::user()->role, ['admin', 'bidan', 'penyuluh'])) {
@@ -38,10 +45,16 @@ class BidanController extends Controller
                 // Filter
                 $data->where(function ($query) use ($request) {
                     if ($request->lokasiTugas) {
-                        $query->whereHas('lokasiTugas', function ($query) use ($request) {
-                            $query->where('jenis_profil', 'bidan');
-                            $query->where('desa_kelurahan_id', $request->lokasiTugas);
-                        });
+                        if ($request->lokasiTugas != '-') {
+                            $query->whereHas('lokasiTugas', function ($query) use ($request) {
+                                $query->where('jenis_profil', 'bidan');
+                                $query->where('desa_kelurahan_id', $request->lokasiTugas);
+                            });
+                        } else {
+                            $query->whereDoesntHave('lokasiTugas', function ($query) use ($request) {
+                                $query->where('jenis_profil', 'bidan');
+                            });
+                        }
                     }
                 });
 

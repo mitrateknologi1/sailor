@@ -25,6 +25,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
+
     public function index(Request $request)
     {
 
@@ -125,8 +131,18 @@ class UserController extends Controller
                     }
                 })
 
+                ->addColumn('nomor_hp', function ($data) {
+                    if ($data->nomor_hp != null) {
+                        return $data->nomor_hp;
+                    }
+                    return '-';
+                })
+
                 ->addColumn('role', function ($data) {
                     if ($data->role == 'admin') {
+                        if ($data->id == '5gf9ba91-4778-404c-aa7f-5fd327e87e80') {
+                            return '<span class="badge rounded-pill bg-danger">Super Admin</span>';
+                        }
                         return '<span class="badge rounded-pill bg-warning">Admin</span>';
                     } else if ($data->role == 'bidan') {
                         return '<span class="badge rounded-pill bg-primary">Bidan</span>';
@@ -197,6 +213,7 @@ class UserController extends Controller
                     'status',
                     'role',
                     'bidan',
+                    'nomor_hp',
                     'action'
                 ])
                 ->make(true);

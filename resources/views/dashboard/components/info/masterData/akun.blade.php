@@ -9,11 +9,12 @@
                     Kolom <span class="fw-bold">Aksi:</span>
                     <ul>
                         <li>
-                            Dapat melihat <span class="fw-bold">detail</span> data
+                            Dapat melihat <span class="fw-bold"><i class="fas fa-eye"></i> detail</span> data
                         </li>
                         <li>
-                            Hanya dapat <span class="fw-bold">menghapus</span> dan <span
-                                class="fw-bold">mengubah</span> data yang profilnya
+                            Hanya dapat <span class="fw-bold"><i class="fas fa-sm fa-trash"></i> menghapus</span>
+                            dan <span class="fw-bold"><i class="fas fa-edit"></i> mengubah</span> data yang
+                            profilnya
                             telah anda validasi.
                         </li>
                     </ul>

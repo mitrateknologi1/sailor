@@ -8,8 +8,9 @@
     <meta name="description" content="Responsive Bootstrap 5 admin template and web Application ui kit.">
     <meta name="keyword"
         content="LUNO, Bootstrap 5, ReactJs, Angular, Laravel, VueJs, ASP .Net, Admin Dashboard, Admin Theme, HRMS, Projects">
-    <title>:: LUNO ::</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+    <title>SI GERCEP STUNTING | Login</title>
+    <link rel="shortcut icon" href="{{ asset('assets/favicon') }}/favicon.ico" type="image/x-icon" />
+
     <!-- project css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/css/luno.style.min.css">
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/font-awesome/css/all.min.css">
@@ -62,10 +63,11 @@
                         <div class="card shadow-sm w-100 p-4 p-md-5 px-md-3" style="max-width: 35rem;">
                             <div class="justify-content-center text-center">
                                 <h1>MASUK</h1>
-                                <span class="text-muted text-center">Pilih ingin masuk sebagai
-                                    Keluarga/Bidan/Penyuluh</span>
+                                <span class="text-muted text-center px-2">Pilih ingin masuk sebagai
+                                    Keluarga (Kepala Keluarga/Remaja)
+                                    <br>/ Bidan / Penyuluh</span>
                             </div>
-                            <div class="card-header justify-content-center py-4">
+                            <div class="card-header justify-content-center py-4 pt-3">
                                 <ul class="nav nav-tabs tab-page-toolbar rounded d-inline-flex" role="tablist">
                                     <li class="nav-item" id="keluarga"><a class="nav-link border-0 active"
                                             data-bs-toggle="tab" id="nav-link-keluarga" href="#nav-keluarga"
@@ -90,6 +92,8 @@
                                                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#btn-normal" role="tab" aria-selected="true">Buttons</a></li>
                                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#btn-group" role="tab" aria-selected="false">Buttons Groups</a></li>
                                             </ul> --}}
+                                            <span class="text-center text-muted mt-2">Login sebagai Kepala Keluarga /
+                                                Remaja</span>
                                             <input type="hidden" id="role" class="form-control form-control" name="role"
                                                 value="keluarga">
                                             @csrf
@@ -98,9 +102,9 @@
                                                     {{ session('loginError') }}
                                                 </div>
                                             @endif
-                                            <div class="col-12">
+                                            <div class="col-12 mt-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Nomor HP</label>
+                                                    <label class="form-label">Nomor HP / NIK</label>
                                                     <input type="text" id="nomor-hp" name="nomor_hp"
                                                         class="form-control form-control-lg angka"
                                                         placeholder="0812.........">
@@ -111,8 +115,9 @@
                                                     <div class="form-label">
                                                         <span class="d-flex justify-content-between align-items-center">
                                                             Kata Sandi
-                                                            <a class="text-primary"
-                                                                href="auth-password-reset.html">Lupa Kata Sandi?</a>
+                                                            <a class="text-primary lupa-kata-sandi" data-role="keluarga"
+                                                                href="#">Lupa Kata
+                                                                Sandi?</a>
                                                         </span>
                                                     </div>
                                                     <input type="password" id="kata_sandi" name="password"
@@ -127,7 +132,7 @@
                                                     MASUK</button>
                                             </div>
                                             <div class="col-12 text-center mt-4">
-                                                <span class="text-muted">Belum Punya Akun? <a
+                                                <span class="text-muted">Belum memiliki akun keluarga? <a
                                                         href="{{ route('registrasi') }} ">Daftar disini</a></span>
                                             </div>
                                         </form>
@@ -145,7 +150,7 @@
                                             @endif
                                             <div class="col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Nomor HP</label>
+                                                    <label class="form-label">Nomor HP / NIK</label>
                                                     <input type="text" id="nomor-hp" name="nomor_hp"
                                                         class="form-control form-control-lg angka"
                                                         placeholder="0812.........">
@@ -156,8 +161,8 @@
                                                     <div class="form-label">
                                                         <span class="d-flex justify-content-between align-items-center">
                                                             Kata Sandi
-                                                            <a class="text-primary"
-                                                                href="auth-password-reset.html">Lupa Kata Sandi?</a>
+                                                            <a class="text-primary lupa-kata-sandi" data-role="bidan"
+                                                                href="#">Lupa Kata Sandi?</a>
                                                         </span>
                                                     </div>
                                                     <input type="password" id="password" name="password"
@@ -186,7 +191,7 @@
                                             @endif
                                             <div class="col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Nomor HP</label>
+                                                    <label class="form-label">Nomor HP / NIK</label>
                                                     <input type="text" id="nomor-hp" name="nomor_hp"
                                                         class="form-control form-control-lg angka"
                                                         placeholder="0812.........">
@@ -197,8 +202,8 @@
                                                     <div class="form-label">
                                                         <span class="d-flex justify-content-between align-items-center">
                                                             Kata Sandi
-                                                            <a class="text-primary"
-                                                                href="auth-password-reset.html">Lupa Kata Sandi?</a>
+                                                            <a class="text-primary lupa-kata-sandi" data-role="penyuluh"
+                                                                href="#">Lupa Kata Sandi?</a>
                                                         </span>
                                                     </div>
                                                     <input type="password" id="password" name="password"
@@ -227,7 +232,7 @@
                                             @endif
                                             <div class="col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Nomor HP</label>
+                                                    <label class="form-label">Nomor HP / NIK</label>
                                                     <input type="text" id="nomor-hp" name="nomor_hp"
                                                         class="form-control form-control-lg angka"
                                                         placeholder="0812.........">
@@ -238,8 +243,6 @@
                                                     <div class="form-label">
                                                         <span class="d-flex justify-content-between align-items-center">
                                                             Kata Sandi
-                                                            <a class="text-primary"
-                                                                href="auth-password-reset.html">Lupa Kata Sandi?</a>
                                                         </span>
                                                     </div>
                                                     <input type="password" id="password" name="password"
@@ -282,6 +285,21 @@
 
         });
 
+        $('.lupa-kata-sandi').click(function() {
+            const role = $(this).data('role')
+            if (role == 'keluarga') {
+                Swal.fire({
+                    text: 'Silahkan hubungi bidan terdekat apabila lupa kata sandi',
+                    icon: 'info',
+                })
+            } else {
+                Swal.fire({
+                    text: 'Silahkan hubungi admin apabila lupa kata sandi',
+                    icon: 'info',
+                })
+            }
+        });
+
         document.getElementById("nomor-hp").focus();
 
         $('.form-login').submit(function(e) {
@@ -297,7 +315,7 @@
                 },
                 data: data,
                 success: function(response) {
-                    console.log(response)
+                    console.log(response);
                     if (response.res == 'inputan_tidak_lengkap') {
                         Swal.fire(
                             'Inputan tidak lengkap',
@@ -325,7 +343,8 @@
 
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = "{{ url('registrasi-ulang/') }}" + "/" +
+                                window.location.href = "{{ url('registrasi-ulang/') }}" +
+                                    "/" +
                                     response.id;
 
                             }

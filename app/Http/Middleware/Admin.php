@@ -20,6 +20,6 @@ class Admin
         if (Auth::check() && Auth::user()->role == 'admin') {
             return $next($request);
         }
-        return redirect('/');
+        return abort(403, 'Anda tidak memiliki akses ke halaman ini.');
     }
 }
