@@ -109,12 +109,12 @@
                                                 @slot('kecamatanKK', isset($kecamatanKK) ? $kecamatanKK : null)
                                                 @slot('kabupatenKotaKK', isset($kabupatenKotaKK) ? $kabupatenKotaKK : null)
                                                 @slot('provinsiKK', isset($provinsiKK) ? $provinsiKK : null)
-                                                @slot('agama', $agama)')
-                                                @slot('pendidikan', $pendidikan)')
-                                                @slot('pekerjaan', $pekerjaan)')
-                                                @slot('golonganDarah', $golonganDarah)')
-                                                @slot('statusPerkawinan', $statusPerkawinan)')
-                                                @slot('statusHubungan', $statusHubungan)')
+                                                @slot('agama', $agama)
+                                                @slot('pendidikan', $pendidikan)
+                                                @slot('pekerjaan', $pekerjaan)
+                                                @slot('golonganDarah', $golonganDarah)
+                                                @slot('statusPerkawinan', $statusPerkawinan)
+                                                @slot('statusHubungan', $statusHubungan)
                                                 @slot('action', route('bidan.store'))
                                                 @slot('method', 'POST')
                                                 @slot('back_url', route('bidan.index'))
@@ -201,7 +201,6 @@
             <script src="{{ asset('assets/dashboard') }}/js/moment/moment-with-locales.min.js"></script>
 
 
-            @stack('script')
             <script>
                 $(document).on('select2:open', () => {
                     document.querySelector('.select2-search__field').focus();
@@ -219,6 +218,7 @@
                     $('.waktu').mask('00:00');
                     $('.angka').mask('00000000000000000000');
                 })
+
 
                 $('#status-hubungan').val('1')
                 $('#status-hubungan').prop('disabled', true)
@@ -307,7 +307,7 @@
                     this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
                 });
             </script>
-            {{-- @stack('script') --}}
+            @stack('script')
 
         </body>
 

@@ -367,9 +367,9 @@
                     $('#modal-provinsi').html(data.provinsi_nama);
                     if (data.foto_profil != null) {
                         $('#modal-foto-profil').html(
-                            '<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/admin/' +
+                            '<div class="image-input avatar xxl rounded-4" style="background-image: url({{ Storage::url('upload/foto_profil/admin/') }}' +
                             data.foto_profil +
-                            ')"> <div class="avatar-wrapper rounded-4" style="background-image: url(upload/foto_profil/admin/' +
+                            ')"> <div class="avatar-wrapper rounded-4" style="background-image: url({{ Storage::url('upload/foto_profil/admin/') }}' +
                             data.foto_profil +
                             ')"></div><div class="file-input"><input type="file" class="form-control" name="file-input" id="file-input"><label for="file-input" class="fa fa-pencil shadow text-muted"></label></div></div>'
                         )

@@ -775,7 +775,7 @@
                         $('#file-kartu-keluarga').removeClass('d-none');
                         $('#modal-kartu-keluarga').addClass('d-none')
                         $('#file-kartu-keluarga').attr('href',
-                            '{{ asset('upload/kartu_keluarga') }}/' + data.file_kk);
+                            '{{ Storage::url('upload/kartu_keluarga') }}/' + data.file_kk);
 
                     } else {
                         $('#file-kartu-keluarga').addClass('d-none')
@@ -825,7 +825,7 @@
                             $('#modal-file-surat-keterangan-domisili').addClass('d-none')
                             $('#file-surat-keterangan-domisili').removeClass('d-none');
                             $('#file-surat-keterangan-domisili').attr('href',
-                                '{{ asset('upload/surat_keterangan_domisili') }}/' + data
+                                '{{ Storage::url('upload/surat_keterangan_domisili') }}/' + data
                                 .surat_keterangan_domisili);
                         } else {
                             $('#modal-file-surat-keterangan-domisili').removeClass('d-none')
@@ -837,7 +837,7 @@
 
                     if (data.foto_profil != null) {
                         $('#modal-foto-profil').html(
-                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url(upload/foto_profil/keluarga/' +
+                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url({{ Storage::url('upload/foto_profil/keluarga/') }}' +
                             data.foto_profil + ')">')
                     } else {
                         $('#modal-foto-profil').html(
@@ -1007,7 +1007,7 @@
                         $('#file-kartu-keluarga2').removeClass('d-none');
                         $('#modal-kartu-keluarga2').addClass('d-none')
                         $('#file-kartu-keluarga2').attr('href',
-                            '{{ asset('upload/kartu_keluarga') }}/' + data.file_kk);
+                            '{{ Storage::url('upload/kartu_keluarga') }}/' + data.file_kk);
 
                     } else {
                         $('#file-kartu-keluarga2').addClass('d-none')
