@@ -6,6 +6,7 @@ use App\Traits\TraitUuid;
 use App\Models\KartuKeluarga;
 use App\Models\PertumbuhanAnak;
 use App\Models\WilayahDomisili;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +19,7 @@ class AnggotaKeluarga extends Model
     use SoftDeletes;
     protected $table = 'anggota_keluarga';
     protected $guarded = ['id'];
+    protected $appends = ['umur'];
 
     public function kartuKeluarga()
     {
@@ -112,5 +114,10 @@ class AnggotaKeluarga extends Model
     public function scopeValid($query)
     {
         $query->where('is_valid', 1);
+    }
+
+    public function getUmurAttribute()
+    {
+        return Carbon::parse($this->attributes['tanggal_lahir'])->age;
     }
 }

@@ -97,7 +97,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (Auth::user()->is_remaja == 1)
+                @if (Auth::user()->is_remaja == 1 || Auth::user()->role == 'admin' || Auth::user()->role == 'bidan' || Auth::user()->role == 'penyuluh')
                     <li>
                         <a class="m-link" id="m-link-randa-kabilasa" href="{{ url('randa-kabilasa') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor"
