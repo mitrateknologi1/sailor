@@ -41,6 +41,7 @@ use App\Http\Controllers\dashboard\utama\randaKabilasa\MencegahPernikahanDiniCon
 use App\Http\Controllers\dashboard\utama\randaKabilasa\MeningkatkanLifeSkillController;
 use App\Http\Controllers\dashboard\utama\randaKabilasa\RandaKabilasaController;
 use App\Http\Controllers\dashboard\utama\TesMapController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PemberitahuanController;
 use App\Http\Controllers\PersonalController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -60,17 +61,15 @@ use App\Models\PerkiraanMelahirkan;
 
 
 
+Route::get('/', [LandingPageController::class, 'index'])->name('landingPage');
+
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/', function () {
-        return view('landingPage.pages.home');
-    });
 
     Route::get('/login', function () {
         return view('dashboard.pages.login');
     })->name('login');
 
     Route::post('/cekLogin', [AuthController::class, 'cekLogin']);
-    Route::get('/lengkapi-profil', [AuthController::class, 'lengkapiProfil'])->name('lengkapiProfil');
 
     Route::get('registrasi', [AuthController::class, 'registrasi'])->name('registrasi');
     Route::get('registrasi-ulang/{keluarga}', [AuthController::class, 'registrasiUlang']);
@@ -79,7 +78,11 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 
+Route::get('/cek-remaja', [AuthController::class, 'cekRemaja'])->name('cekRemaja');
+
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/lengkapi-profil', [AuthController::class, 'lengkapiProfil'])->name('lengkapiProfil');
+    Route::post('/tambah-profil', [AuthController::class, 'tambahProfil'])->name('tambahProfil');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profil-dan-akun', [PersonalController::class, 'index'])->name('profilDanAkun');
@@ -160,12 +163,14 @@ Route::group(['middleware' => 'auth'], function () {
     // ----------------- End Randa Kabilasa -----------------
 
 
-    // ----------------- Start Master Soal -----------------
-    Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
-    Route::resource('/masterData/soal-deteksi-dini', SoalDeteksiDiniController::class);
-    Route::resource('/masterData/soal-mencegah-malnutrisi', SoalMencegahMalnutrisiController::class);
-    Route::resource('/masterData/soal-meningkatkan-life-skill', SoalMeningkatkanLifeSkillController::class);
-    // ----------------- End Master Soal -----------------
+    Route::group(['middleware' => 'admin'], function () {
+        // ----------------- Start Master Soal -----------------
+        Route::resource('/masterData/soal-ibu-melahirkan-stunting', SoalIbuMelahirkanStuntingController::class);
+        Route::resource('/masterData/soal-deteksi-dini', SoalDeteksiDiniController::class);
+        Route::resource('/masterData/soal-mencegah-malnutrisi', SoalMencegahMalnutrisiController::class);
+        Route::resource('/masterData/soal-meningkatkan-life-skill', SoalMeningkatkanLifeSkillController::class);
+        // ----------------- End Master Soal -----------------
+    });
 
 
     // ----------------- Start Master Profil -----------------
@@ -192,64 +197,57 @@ Route::group(['middleware' => 'auth'], function () {
     // ----------------- Start Master Akun -----------------
     Route::resource('user', UserController::class);
     // ----------------- End Master Akun -----------------
+
+
+    Route::group(['middleware' => 'admin'], function () {
+        // ----------------- Start Master Wilayah -----------------
+        Route::resource('/masterData/provinsi', ProvinsiController::class);
+        Route::resource('masterData/kabupatenKota/{provinsi}', KabupatenKotaController::class)->parameters([
+            '{provinsi}' => 'kabupatenKota'
+        ]);
+        Route::resource('masterData/kecamatan/{kabupatenKota}', KecamatanController::class)->parameters([
+            '{kabupatenKota}' => 'kecamatan'
+        ]);
+        Route::resource('masterData/desaKelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
+            '{kecamatan}' => 'desaKelurahan'
+        ]);
+        // ----------------- End Master Wilayah -----------------
+    });
+
+
+    Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
+    Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);
+
+    Route::get('/map-deteksi-stunting', [MapDeteksiStuntingController::class, 'index']);
+    Route::post('/map-deteksi-stunting/export', [MapDeteksiStuntingController::class, 'export']);
+    Route::get('/petaData/stuntingAnak', [MapDeteksiStuntingController::class, 'getMapDataStuntingAnak']);
+    Route::get('/petaData/deteksiIbuMelahirkanStunting', [MapDeteksiStuntingController::class, 'getMapDataDeteksiIbuMelahirkanStunting']);
+    Route::get('/petaData/detailStuntingAnak', [MapDeteksiStuntingController::class, 'getDetailDataStuntingAnak']);
+    Route::get('/petaData/detailIbuMelahirkanStunting', [MapDeteksiStuntingController::class, 'getDetailDataIbuMelahirkanStunting']);
+
+    Route::get('/map-moms-care', [MapMomsCareController::class, 'index']);
+    Route::get('/petaData/deteksiDini', [MapMomsCareController::class, 'getMapDataDeteksiDini']);
+    Route::get('/petaData/anc', [MapMomsCareController::class, 'getMapDataAnc']);
+    Route::get('/petaData/detailDeteksiDini', [MapMomsCareController::class, 'getDetailDataDeteksiDini']);
+    Route::get('/petaData/detailAnc', [MapMomsCareController::class, 'getDetailDataAnc']);
+    Route::post('/map-moms-care/export', [MapMomsCareController::class, 'export']);
+
+    Route::get('/map-randa-kabilasa', [MapRandaKabilasaController::class, 'index']);
+    Route::get('/petaData/randaKabilasa', [MapRandaKabilasaController::class, 'getMapDataRandaKabilasa']);
+    Route::get('/petaData/detailRandaKabilasa', [MapRandaKabilasaController::class, 'getDetailDataRandaKabilasa']);
+    Route::post('/map-randa-kabilasa/export', [MapRandaKabilasaController::class, 'export']);
+
+    Route::get('/map-tumbuh-kembang', [MapTumbuhKembangController::class, 'index']);
+    Route::get('/petaData/pertumbuhanAnak', [MapTumbuhKembangController::class, 'getMapDataPertumbuhanAnak']);
+    Route::get('/petaData/detailPertumbuhanAnak', [MapTumbuhKembangController::class, 'getDetailDataPertumbuhanAnak']);
+    Route::post('/map-tumbuh-kembang/export', [MapTumbuhKembangController::class, 'export']);
+
+    Route::resource('pemberitahuan', PemberitahuanController::class);
+    Route::post('pemberitahuan/destroy-all', [PemberitahuanController::class, 'destroyAll'])->name('destroyAllPemberitahuan');
 });
 
-
-
-
-
-// ----------------- Start Master -----------------
-Route::resource('masterData/desa-kelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
-    '{kecamatan}' => 'kelurahan'
-]);
-
-Route::resource('masterData/kabupatenKota/{provinsi}', KabupatenKotaController::class)->parameters([
-    '{provinsi}' => 'kabupatenKota'
-]);
-
-Route::resource('masterData/kecamatan/{kabupatenKota}', KecamatanController::class)->parameters([
-    '{kabupatenKota}' => 'kecamatan'
-]);
-
-Route::resource('masterData/desaKelurahan/{kecamatan}', DesaKelurahanController::class)->parameters([
-    '{kecamatan}' => 'desaKelurahan'
-]);
-
-Route::resource('/masterData/provinsi', ProvinsiController::class);
-
-Route::get('map/kecamatan', [KecamatanController::class, 'getMapData']);
-Route::get('map/desaKelurahan', [DesaKelurahanController::class, 'getMapData']);
-
 // Wilayah
-Route::resource('provinsi', ProvinsiController::class);
 Route::get('/provinsi', [ListController::class, 'listProvinsi'])->name('listProvinsi');
 Route::get('/kabupaten-kota', [ListController::class, 'listKabupatenKota'])->name('listKabupatenKota');
 Route::get('/kecamatan', [ListController::class, 'listKecamatan'])->name('listKecamatan');
 Route::get('/desa-kelurahan', [ListController::class, 'listDesaKelurahan'])->name('listDesaKelurahan');
-
-Route::get('/map-deteksi-stunting', [MapDeteksiStuntingController::class, 'index']);
-Route::post('/map-deteksi-stunting/export', [MapDeteksiStuntingController::class, 'export']);
-Route::get('/petaData/stuntingAnak', [MapDeteksiStuntingController::class, 'getMapDataStuntingAnak']);
-Route::get('/petaData/deteksiIbuMelahirkanStunting', [MapDeteksiStuntingController::class, 'getMapDataDeteksiIbuMelahirkanStunting']);
-Route::get('/petaData/detailStuntingAnak', [MapDeteksiStuntingController::class, 'getDetailDataStuntingAnak']);
-Route::get('/petaData/detailIbuMelahirkanStunting', [MapDeteksiStuntingController::class, 'getDetailDataIbuMelahirkanStunting']);
-
-Route::get('/map-moms-care', [MapMomsCareController::class, 'index']);
-Route::get('/petaData/deteksiDini', [MapMomsCareController::class, 'getMapDataDeteksiDini']);
-Route::get('/petaData/anc', [MapMomsCareController::class, 'getMapDataAnc']);
-Route::get('/petaData/detailDeteksiDini', [MapMomsCareController::class, 'getDetailDataDeteksiDini']);
-Route::get('/petaData/detailAnc', [MapMomsCareController::class, 'getDetailDataAnc']);
-Route::post('/map-moms-care/export', [MapMomsCareController::class, 'export']);
-
-Route::get('/map-randa-kabilasa', [MapRandaKabilasaController::class, 'index']);
-Route::get('/petaData/randaKabilasa', [MapRandaKabilasaController::class, 'getMapDataRandaKabilasa']);
-Route::get('/petaData/detailRandaKabilasa', [MapRandaKabilasaController::class, 'getDetailDataRandaKabilasa']);
-Route::post('/map-randa-kabilasa/export', [MapRandaKabilasaController::class, 'export']);
-
-Route::get('/map-tumbuh-kembang', [MapTumbuhKembangController::class, 'index']);
-Route::get('/petaData/pertumbuhanAnak', [MapTumbuhKembangController::class, 'getMapDataPertumbuhanAnak']);
-Route::get('/petaData/detailPertumbuhanAnak', [MapTumbuhKembangController::class, 'getDetailDataPertumbuhanAnak']);
-Route::post('/map-tumbuh-kembang/export', [MapTumbuhKembangController::class, 'export']);
-
-Route::resource('pemberitahuan', PemberitahuanController::class);
-Route::post('pemberitahuan/destroy-all', [PemberitahuanController::class, 'destroyAll'])->name('destroyAllPemberitahuan');

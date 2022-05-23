@@ -23,10 +23,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    // function __construct()
-    // {
-    //     $this->middleware('admin');
-    // }
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -73,19 +74,7 @@ class AdminController extends Controller
                     return $actionBtn;
                 })
 
-                // ->filter(function ($query) use ($request) {    
-                //     if ($request->search != '') {
-                //         $query->whereHas('anggotaKeluarga', function ($query) use ($request) {
-                //             $query->where("nama_lengkap", "LIKE", "%$request->search%");
-                //         });
-                //     }      
 
-                //     // if (!empty($request->role)) {
-                //     //     $query->whereHas('user', function ($query) use ($request) {
-                //     //         $query->where('users.role', $request->role);                       
-                //     //     });
-                //     // }
-                // })
                 ->rawColumns([
                     'action',
                     'desa_kelurahan',

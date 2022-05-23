@@ -237,8 +237,6 @@
                                             icon: 'success',
                                             title: titleResult,
                                             text: textResult,
-                                            showConfirmButton: false,
-                                            timer: 2000,
                                         }).then((result) => {
                                             // set location
                                             window.location.href =
@@ -257,8 +255,6 @@
                                             icon: 'error',
                                             title: 'Terjadi kesalahan',
                                             text: 'Data gagal disimpan',
-                                            showConfirmButton: false,
-                                            timer: 1500
                                         })
                                     }
 

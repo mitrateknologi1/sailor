@@ -17,6 +17,7 @@ class MapTumbuhKembangController extends Controller
 {
     function __construct()
     {
+        $this->middleware('profil_ada');
         $this->middleware('bukanKeluarga');
     }
 

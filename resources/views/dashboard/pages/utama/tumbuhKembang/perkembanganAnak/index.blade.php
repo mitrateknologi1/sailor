@@ -81,7 +81,7 @@
                                                 'Nama Ayah',
                                                 'Nama Ibu',
                                                 'Jenis
-                                                                            Kelamin',
+                                                                                                                Kelamin',
                                                 'Tanggal Lahir',
                                                 'Usia',
                                                 'Motorik Kasar',
@@ -335,7 +335,8 @@
                 },
                 {
                     data: 'bidan',
-                    name: 'bidan'
+                    name: 'bidan',
+                    className: 'text-center',
                 },
                 {
                     data: 'tanggal_validasi',

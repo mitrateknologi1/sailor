@@ -23,6 +23,11 @@ class PerkembanganAnakController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
     public function index(Request $request)
     {
         if (in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])) {
@@ -115,7 +120,7 @@ class PerkembanganAnakController extends Controller
                     })
 
                     ->addColumn('bidan', function ($row) {
-                        return $row->bidan ? $row->bidan->nama_lengkap : '<span class="badge rounded bg-warning">Belum Ada</span>';
+                        return $row->bidan ? $row->bidan->nama_lengkap : '-';
                     })
 
                     ->addColumn('tanggal_validasi', function ($row) {

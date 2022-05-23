@@ -8,8 +8,9 @@
     <meta name="description" content="Responsive Bootstrap 5 admin template and web Application ui kit.">
     <meta name="keyword"
         content="LUNO, Bootstrap 5, ReactJs, Angular, Laravel, VueJs, ASP .Net, Admin Dashboard, Admin Theme, HRMS, Projects">
-    <title>MOMS CARE TERINTEGRASI | @yield('title')</title>
-    <link rel="icon" href="#" type="image/x-icon"> <!-- Favicon-->
+    <title>SI GERCEP STUNTING | Registrasi</title>
+    <link rel="shortcut icon" href="{{ asset('assets/favicon') }}/favicon.ico" type="image/x-icon" />
+
 
     <!-- plugin css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/font-awesome/css/all.min.css">
@@ -129,37 +130,40 @@
                                                 <span class="fieldset-tile text-info bg-white">Input Akun</span>
                                                 <div class="row g-3">
                                                     <div class="col-lg-4 col-md-4">
-                                                        @component('dashboard.components.formElements.input', [
-                                                            'label' => 'Nomor HP',
-                                                            'type' => 'text',
-                                                            'id' => 'nomor-hp',
-                                                            'name' => 'nomor_hp',
-                                                            'class' => 'angka',
-                                                            'value' => $anggotaKeluarga->user->nomor_hp ?? null,
-                                                            'wajib' => '<sup class="text-danger">*</sup>',
+                                                        @component('dashboard.components.formElements.input',
+                                                            [
+                                                                'label' => 'Nomor HP',
+                                                                'type' => 'text',
+                                                                'id' => 'nomor-hp',
+                                                                'name' => 'nomor_hp',
+                                                                'class' => 'angka',
+                                                                'value' => $anggotaKeluarga->user->nomor_hp ?? null,
+                                                                'wajib' => '<sup class="text-danger">*</sup>',
                                                             ])
                                                         @endcomponent
                                                         {{-- <small class="d-block" class="text-muted" style="font-style: italic;">Pastikan nomor HP yang anda masukkan aktif, untuk menerima sms notifikasi.</small> --}}
                                                     </div>
                                                     <div class="col-lg-4 col-md-4">
-                                                        @component('dashboard.components.formElements.input', [
-                                                            'label' => 'Kata Sandi',
-                                                            'type' => 'password',
-                                                            'id' => 'kata-sandi',
-                                                            'name' => 'kata_sandi',
-                                                            'class' => '',
-                                                            'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
+                                                        @component('dashboard.components.formElements.input',
+                                                            [
+                                                                'label' => 'Kata Sandi',
+                                                                'type' => 'password',
+                                                                'id' => 'kata-sandi',
+                                                                'name' => 'kata_sandi',
+                                                                'class' => '',
+                                                                'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
                                                             ])
                                                         @endcomponent
                                                     </div>
                                                     <div class="col-lg-4 col-md-4">
-                                                        @component('dashboard.components.formElements.input', [
-                                                            'label' => 'Ulangi Kata Sandi',
-                                                            'type' => 'password',
-                                                            'id' => 'ulangi-kata-sandi',
-                                                            'name' => 'ulangi_kata_sandi',
-                                                            'class' => '',
-                                                            'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
+                                                        @component('dashboard.components.formElements.input',
+                                                            [
+                                                                'label' => 'Ulangi Kata Sandi',
+                                                                'type' => 'password',
+                                                                'id' => 'ulangi-kata-sandi',
+                                                                'name' => 'ulangi_kata_sandi',
+                                                                'class' => '',
+                                                                'wajib' => '<sup class="text-danger wajib-kata-sandi">*</sup>',
                                                             ])
                                                         @endcomponent
                                                     </div>
@@ -170,12 +174,13 @@
                                 @endif
 
                                 <div class="col-12 mt-3 text-end">
-                                    @component('dashboard.components.buttons.submit', [
-                                        'id' => 'proses-pertumbuhan-anak',
-                                        'type' => 'submit',
-                                        'class' => 'text-white text-uppercase',
-                                        'icon' => '<i class="fa-solid fa-paper-plane"></i>',
-                                        'label' => 'Kirim Data',
+                                    @component('dashboard.components.buttons.submit',
+                                        [
+                                            'id' => 'proses-pertumbuhan-anak',
+                                            'type' => 'submit',
+                                            'class' => 'text-white text-uppercase',
+                                            'icon' => '<i class="fa-solid fa-paper-plane"></i>',
+                                            'label' => 'Kirim Data',
                                         ])
                                     @endcomponent
                                 </div>
@@ -249,7 +254,7 @@
                                             'success',
                                         ).then((result) => {
                                             if (result.value) {
-                                                window.location.href = "{{ url('/') }}"
+                                                window.location.href = "{{ url('/login') }}"
                                             }
                                         })
                                     } else {

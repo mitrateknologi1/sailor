@@ -42,7 +42,7 @@
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
-                            @component('dashboard.components.info.masterData.keluarga')
+                            @component('dashboard.components.info.masterData.anggotaKeluarga')
                             @endcomponent
                             <div class="col">
                                 <div class="card fieldset border border-secondary mb-4">
@@ -92,37 +92,7 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-bidan',
-                                            'th' => [
-                                                'No',
-                                                'Dibuat Tanggal',
-                                                'Status',
-                                                'NIK',
-                                                'Nama Lengkap',
-                                                'Jenis Kelamin',
-                                                'Tempat Lahir',
-                                                'Tanggal Lahir',
-                                                'Agama',
-                                                'Pendidikan',
-                                                'Pekerjaan',
-                                                'Golongan Darah',
-                                                'Status Perkawinan',
-                                                'Tanggal Perkawinan',
-                                                'Status Dalam
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    Keluarga',
-                                                'Kewarganegaraan',
-                                                'Nomor Paspor',
-                                                'Nomor KITAP',
-                                                'Nama Ayah',
-                                                'Nama Ibu',
-                                                'Alamat Domisili',
-                                                'Desa/Kelurahan Domisili',
-                                                'Kecamatan Domisili',
-                                                'Kabupaten Domisili',
-                                                'Provinsi Domisili',
-                                                'Bidan',
-                                                'Tanggal Divalidasi',
-                                                'Aksi',
-                                            ],
+                                            'th' => ['No', 'Dibuat Tanggal', 'Status', 'NIK', 'Nama Lengkap', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Agama', 'Pendidikan', 'Pekerjaan', 'Golongan Darah', 'Status Perkawinan', 'Tanggal Perkawinan', 'Status Dalam Keluarga', 'Kewarganegaraan', 'Nomor Paspor', 'Nomor KITAP', 'Nama Ayah', 'Nama Ibu', 'Alamat Domisili', 'Desa/Kelurahan Domisili', 'Kecamatan Domisili', 'Kabupaten Domisili', 'Provinsi Domisili', 'Bidan', 'Tanggal Divalidasi', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -529,7 +499,7 @@
                 },
                 {
                     data: 'bidan',
-                    name: 'bidan'
+                    name: 'bidan',
                 },
                 {
                     data: 'tanggal_validasi',
@@ -555,7 +525,7 @@
                     }
                 },
                 {
-                    targets: [1, 2, 7, 13, 14, 15, 16, 17, 26],
+                    targets: [1, 2, 7, 13, 14, 15, 16, 17, 25, 26],
                     className: 'text-center',
                 },
             ],
@@ -745,7 +715,11 @@
                         )
                     }
 
-                    $('#modal-nomor-hp').html(data.nomor_hp);
+                    if (data.nomor_hp != null) {
+                        $('#modal-nomor-hp').html(data.nomor_hp);
+                    } else {
+                        $('#modal-nomor-hp').html('Tidak Ada');
+                    }
                 },
             })
         })

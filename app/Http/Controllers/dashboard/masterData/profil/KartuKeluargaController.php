@@ -41,6 +41,12 @@ class KartuKeluargaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
+
     public function index(Request $request)
     {
         if (Auth::user()->role == 'keluarga') {
@@ -83,6 +89,35 @@ class KartuKeluargaController extends Controller
             });
 
             $data->where(function ($query) use ($request) {
+                if ($request->statusValidasiAnggota) {
+                    // if (Auth::user()->role == 'admin') {
+                    //     $jumlahAnggotaBelumDivalidasi = $query->anggotaKeluarga->where('is_valid', 0);
+                    // } else {
+                    //     if (Auth::user()->role == 'bidan') {
+                    //         $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+                    //         $jumlahAnggotaBelumDivalidasi = AnggotaKeluarga::where('kartu_keluarga_id', $query->id)
+                    //             ->where('is_valid', 0)
+                    //             ->where(function (Builder $query) use ($lokasiTugas) {
+                    //                 $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    //             });
+                    //     }
+                    // }
+                    if ($request->statusValidasiAnggota == 'Belum Tervalidasi') {
+                        $query->whereHas('anggotaKeluarga', function (Builder $query) {
+                            $query->where('is_valid', 0);
+                            if (Auth::user()->role == 'bidan') {
+                                $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+                                $query->where(function (Builder $query) use ($lokasiTugas) {
+                                    $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+
+            $data->where(function ($query) use ($request) {
                 if ($request->desaKelurahanDomisili) {
                     $query->whereHas('kepalaKeluarga', function ($query) use ($request) {
                         $query->whereHas('wilayahDomisili', function ($query) use ($request) {
@@ -114,6 +149,56 @@ class KartuKeluargaController extends Controller
                     } else {
                         return '<span class="badge rounded bg-danger text-white">Ditolak</span>';
                     }
+                })
+
+                ->addColumn('jumlah_anggota_belum_divalidasi', function ($row) {
+                    if (Auth::user()->role == 'admin') {
+                        $jumlahAnggotaBelumDivalidasi = $row->anggotaKeluarga->where('is_valid', 0)->count();
+                        $jumlahAnggotaTervalidasi = $row->anggotaKeluarga->where('is_valid', 1)->count();
+                        $jumlahAnggotaDitolak = $row->anggotaKeluarga->where('is_valid', 2)->count();
+                    } else {
+                        if (Auth::user()->role == 'bidan') {
+                            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+                            $jumlahAnggotaBelumDivalidasi = $row->anggotaKeluarga()
+                                ->where('is_valid', 0)
+                                ->where(function (Builder $query) use ($lokasiTugas) {
+                                    $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                                })
+                                ->count();
+
+                            $jumlahAnggotaTervalidasi = $row->anggotaKeluarga()
+                                ->where('is_valid', 1)
+                                ->count();
+
+                            $jumlahAnggotaDitolak = $row->anggotaKeluarga()
+                                ->where('is_valid', 2)
+                                ->count();
+                        }
+                    }
+                    if ($row->kepalaKeluarga->is_valid == 0) {
+                        // Belum Divalidasi
+                        return '<span class="badge rounded bg-warning">Belum Divalidasi</span>';
+                    }
+                    if ($row->is_valid == 2) {
+                        return '<span class="badge rounded bg-danger text-white">Ditolak</span>';
+                    } else {
+                        if (Auth::user()->role != 'penyuluh') {
+                            $info = '<div>';
+                            if ($jumlahAnggotaBelumDivalidasi > 0) {
+                                $info .= '<span class="badge rounded bg-warning">' . $jumlahAnggotaBelumDivalidasi . ' Belum Divalidasi</span>';
+                            }
+                            if ($jumlahAnggotaTervalidasi > 0) {
+                                $info .= ' <span class="badge rounded bg-success">' . $jumlahAnggotaTervalidasi . ' Tervalidasi</span>';
+                            }
+                            if ($jumlahAnggotaDitolak > 0) {
+                                $info .= ' <span class="badge rounded bg-danger text-white">' . $jumlahAnggotaDitolak . ' Ditolak</span>';
+                            }
+                            $info .= '</div>';
+
+                            return $info;
+                        }
+                    }
+                    // return $jumlahAnggotaBelumDivalidasi;
                 })
 
                 ->addColumn('jumlah_anggota_keluarga', function ($row) {
@@ -181,7 +266,8 @@ class KartuKeluargaController extends Controller
                     'kecamatan',
                     'kabupaten_kota',
                     'provinsi',
-                    'status'
+                    'status',
+                    'jumlah_anggota_belum_divalidasi',
                 ])
                 ->make(true);
         }

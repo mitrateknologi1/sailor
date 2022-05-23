@@ -28,6 +28,12 @@ class PenyuluhController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
+
     public function index(Request $request)
     {
         if (in_array(Auth::user()->role, ['admin', 'bidan', 'penyuluh'])) {
@@ -37,10 +43,16 @@ class PenyuluhController extends Controller
                 // Filter
                 $data->where(function ($query) use ($request) {
                     if ($request->lokasiTugas) {
-                        $query->whereHas('lokasiTugas', function ($query) use ($request) {
-                            $query->where('jenis_profil', 'penyuluh');
-                            $query->where('desa_kelurahan_id', $request->lokasiTugas);
-                        });
+                        if ($request->lokasiTugas != '-') {
+                            $query->whereHas('lokasiTugas', function ($query) use ($request) {
+                                $query->where('jenis_profil', 'penyuluh');
+                                $query->where('desa_kelurahan_id', $request->lokasiTugas);
+                            });
+                        } else {
+                            $query->whereDoesntHave('lokasiTugas', function ($query) use ($request) {
+                                $query->where('jenis_profil', 'penyuluh');
+                            });
+                        }
                     }
                 });
 
@@ -77,7 +89,7 @@ class PenyuluhController extends Controller
                     ->addColumn('lokasi_tugas', function ($row) {
                         if ($row->lokasiTugas->pluck('desaKelurahan.nama')->implode(', ') == null) {
                             if (Auth::user()->role == 'admin') {
-                                return '<a href="' . route('lokasiTugasBidan', $row->id) . '" class="btn btn-sm btn-primary text-white shadow"><i class="fa-solid fa-map-location-dot"></i> Tentukan Lokasi Tugas</a>';
+                                return '<a href="' . route('lokasiTugasPenyuluh', $row->id) . '" class="btn btn-sm btn-primary text-white shadow"><i class="fa-solid fa-map-location-dot"></i> Tentukan Lokasi Tugas</a>';
                             } else {
                                 return '<span class="badge rounded bg-danger">Lokasi Tugas Belum Ditentukan</span';
                             }

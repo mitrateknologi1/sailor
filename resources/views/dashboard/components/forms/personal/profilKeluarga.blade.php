@@ -1,3 +1,16 @@
+@push('style')
+    <style>
+        input {
+            text-transform: uppercase;
+        }
+
+        #email {
+            text-transform: lowercase !important;
+        }
+
+    </style>
+@endpush
+
 <div class="row g-3">
     <div class="col-lg-6 col-md-6">
         @component('dashboard.components.formElements.input',
@@ -6,6 +19,7 @@
                 'type' => 'text',
                 'id' => 'nama-lengkap',
                 'name' => 'nama_lengkap',
+                'class' => 'ubah-profil',
                 'value' => $profil->nama_lengkap ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -18,7 +32,7 @@
                 'type' => 'text',
                 'id' => 'nik',
                 'name' => 'nik',
-                'class' => 'angka',
+                'class' => 'angka ubah-profil',
                 'value' => $profil->nik ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -34,6 +48,7 @@
                         'name' => 'jenis_kelamin',
                         'value' => 'LAKI-LAKI',
                         'label' => 'LAKI-LAKI',
+                        'class' => 'ubah-profil',
                         'checked' => isset($profil) && $profil->jenis_kelamin == 'LAKI-LAKI' ? 'checked' : '',
                     ])
                 @endcomponent
@@ -45,6 +60,7 @@
                         'name' => 'jenis_kelamin',
                         'value' => 'PEREMPUAN',
                         'label' => 'PEREMPUAN',
+                        'class' => 'ubah-profil',
                         'checked' => isset($profil) && $profil->jenis_kelamin == 'PEREMPUAN' ? 'checked' : '',
                     ])
                 @endcomponent
@@ -59,7 +75,7 @@
                 'type' => 'text',
                 'id' => 'tempat-lahir',
                 'name' => 'tempat_lahir',
-                'class' => '',
+                'class' => 'ubah-profil',
                 'value' => $profil->tempat_lahir ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -72,7 +88,7 @@
                 'type' => 'text',
                 'id' => 'tanggal-lahir',
                 'name' => 'tanggal_lahir',
-                'class' => 'tanggal',
+                'class' => 'tanggal ubah-profil',
                 'placeholder' => 'dd-mm-yyyy',
                 'value' => isset($profil) ? Carbon\Carbon::parse($profil->tanggal_lahir)->isoFormat('DD-MM-YYYY') : '',
                 'wajib' => '<sup class="text-danger">*</sup>',
@@ -85,7 +101,7 @@
                 'label' => 'Agama',
                 'name' => 'agama',
                 'id' => 'agama',
-                'class' => 'select2 agama',
+                'class' => 'select2 agama ubah-profil',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -104,7 +120,7 @@
                 'label' => 'Pendidikan',
                 'name' => 'pendidikan',
                 'id' => 'pendidikan',
-                'class' => 'select2 pendidikan',
+                'class' => 'select2 pendidikan ubah-profil',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -123,7 +139,7 @@
                 'label' => 'Jenis Pekerjaan',
                 'name' => 'pekerjaan',
                 'id' => 'pekerjaan',
-                'class' => 'select2 pekerjaan',
+                'class' => 'select2 pekerjaan ubah-profil',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -142,7 +158,7 @@
                 'label' => 'Golongan Darah',
                 'name' => 'golongan_darah',
                 'id' => 'golongan-darah',
-                'class' => 'select2 golongan-darah',
+                'class' => 'select2 golongan-darah ubah-profil',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -161,7 +177,7 @@
                 'label' => 'Status Perkawinan',
                 'name' => 'status_perkawinan',
                 'id' => 'status-perkawinan',
-                'class' => 'select2 status-perkawinan',
+                'class' => 'select2 status-perkawinan ubah-profil',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -181,7 +197,7 @@
                 'type' => 'text',
                 'id' => 'tanggal-perkawinan',
                 'name' => 'tanggal_perkawinan',
-                'class' => 'tanggal',
+                'class' => 'tanggal ubah-profil',
                 'attribute' => 'disabled',
                 'placeholder' => 'dd-mm-yyyy',
                 'value' => isset($profil) ? Carbon\Carbon::parse($profil->tanggal_perkawinan)->isoFormat('DD-MM-YYYY') : null,
@@ -195,8 +211,8 @@
                 'label' => 'Status Hubungan Dalam Keluarga',
                 'name' => 'status_hubungan',
                 'id' => 'status-hubungan',
-                'class' => 'select2 status-hubungan',
-                'attribute' => '',
+                'class' => 'select2 status-hubungan ubah-profil',
+                'attribute' => 'disabled',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
             @slot('options')
@@ -215,7 +231,7 @@
                 @component('dashboard.components.formElements.radio',
                     [
                         'id' => 'kewarganegaraan-wni',
-                        'class' => 'kewarganegaraan',
+                        'class' => 'kewarganegaraan ubah-profil',
                         'name' => 'kewarganegaraan',
                         'value' => 'WNI',
                         'label' => 'Warga Negara Indonesia (WNI)',
@@ -227,7 +243,7 @@
                 @component('dashboard.components.formElements.radio',
                     [
                         'id' => 'kewarganegaraan-wna',
-                        'class' => 'kewarganegaraan',
+                        'class' => 'kewarganegaraan ubah-profil',
                         'name' => 'kewarganegaraan',
                         'value' => 'WNA',
                         'label' => 'Warga Negara Asing (WNA)',
@@ -246,6 +262,7 @@
                 'id' => 'nomor-paspor',
                 'name' => 'nomor_paspor',
                 'value' => $profil->no_paspor ?? null,
+                'class' => 'nomor-paspor ubah-profil',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -258,6 +275,7 @@
                 'id' => 'nomor-kitap',
                 'name' => 'nomor_kitap',
                 'value' => $profil->no_kitap ?? null,
+                'class' => 'nomor-kitap ubah-profil',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -270,6 +288,7 @@
                 'id' => 'ayah',
                 'name' => 'ayah',
                 'value' => $profil->nama_ayah ?? null,
+                'class' => 'ayah ubah-profil',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -282,16 +301,20 @@
                 'id' => 'ibu',
                 'name' => 'ibu',
                 'value' => $profil->nama_ibu ?? null,
+                'class' => 'ibu ubah-profil',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
     </div>
+    <div id="info-ubah-2" class="info-ubah">
+
+    </div>
     <div class="col-lg-6 col-md-6">
-        <label class="col-md-3 col-sm-4 col-form-label">Foto Profil</label>
+        <label class="col-form-label">Foto Profil</label>
         <div class="col-md-9 col-sm-8">
-            <div class="image-input avatar xxl rounded-4"
+            <div class="image-input foto-profil avatar xxl rounded-4"
                 style="background-image: url({{ isset($profil) && $profil->foto_profil != null ? asset('upload/foto_profil/keluarga/' . $profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
-                <div class="avatar-wrapper rounded-4"
+                <div class="avatar-wrapper foto-profil rounded-4"
                     style="background-image: url({{ isset($profil) && $profil->foto_profil != null ? asset('upload/foto_profil/keluarga/' . $profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
                 </div>
                 <div class="file-input"
@@ -307,6 +330,9 @@
 </div>
 <div class="card fieldset mt-5 p-4">
     <span class="fieldset-tile bg-white">Domisili</span>
+    <div id="info-ubah-1" class="info-ubah">
+
+    </div>
     <div class="row g-3">
         <div class="col-12">
             <div class="form-check">
@@ -415,9 +441,20 @@
                 accept="image/*, application/pdf">
             @if (isset($profil))
                 <small class="text-muted mt-1" style="font-style: italic">Boleh dikosongkan apabila sebelumnya telah
-                    mengupload Surat Keterangan Domisili dan tidak ingin mengubahnya</small>
+                    mengupload Surat Keterangan Domisili atau tidak melakukan perubahan pada wilayah
+                    domisili.</small>
             @endif
             <span class="text-danger d-block error-text file_domisili-error"></span>
+        </div>
+        <div class="col-12 text-end">
+            @component('dashboard.components.buttons.submit',
+                [
+                    'id' => 'proses-profil',
+                    'type' => 'submit',
+                    'class' => 'text-white text-uppercase',
+                    'label' => $titleSubmit ?? 'Simpan',
+                ])
+            @endcomponent
         </div>
     </div>
 </div>
@@ -425,17 +462,25 @@
 
 @push('script')
     <script>
+        $(function() {
+            inisialisasi()
+        })
+
         var alamatKK = '{{ $alamatKK }}'
         var provinsiKK = '{{ $provinsiKK }}'
         var kabupatenKotaKK = '{{ $kabupatenKotaKK }}'
         var kecamatanKK = '{{ $kecamatanKK }}'
         var desaKelurahanKK = '{{ $desaKelurahanKK }}';
 
-        if ('{{ $profil->status_hubungan_dalam_keluarga_id }}' == 1) {
+        function inisialisasi() {
             $('#status-hubungan').attr('disabled', true);
-        }
 
-        $(function() {
+            // if ('{{ $profil->status_hubungan_dalam_keluarga_id }}' == 1) {
+            //     $('#status-hubungan').attr('disabled', true);
+            // } else {
+            //     $('#status-hubungan').attr('disabled', false);
+            // }
+
             $('#check-domisili').prop('checked', false)
             if ($('#desa-kelurahan-domisili').val() != '') {
                 if ($('#desa-kelurahan-domisili').val() == desaKelurahanKK) {
@@ -448,79 +493,73 @@
                 $('.wajib-kata-sandi').addClass('d-none')
 
             }
-        });
-        // click radio button
-        $('.kewarganegaraan').click(function() {
-            if (this.value == 'WNI') {
-                $('#nomor-paspor').val('-');
-                $('#nomor-kitap').val('-');
-            } else {
-                $('#nomor-paspor').val('');
-                $('#nomor-kitap').val('');
-            }
-        });
 
-        if ($('#status-perkawinan').val() != 1) {
-            $('#tanggal-perkawinan').prop('disabled', false);
-        } else {
-            $('#tanggal-perkawinan').prop('disabled', true);
-            $('#tanggal-perkawinan').val('');
-        }
-
-        $('#status-perkawinan').on('change', function() {
-            if ($('#status-perkawinan').val() != 1) {
-                $('#tanggal-perkawinan').prop('disabled', false);
-            } else {
-                $('#tanggal-perkawinan').prop('disabled', true);
-                $('#tanggal-perkawinan').val('');
-            }
-        });
-
-        //////// Wilayah Domisilli
-        if ('{{ isset($profil) }}') {
-            $('#kabupaten-kota-domisili').attr('disabled', false)
-            $('#kecamatan-domisili').attr('disabled', false)
-            $('#desa-kelurahan-domisili').attr('disabled', false)
-        } else {
-            $('#kabupaten-kota-domisili').attr('disabled', true)
-            $('#kecamatan-domisili').attr('disabled', true)
-            $('#desa-kelurahan-domisili').attr('disabled', true)
-
-        }
-
-        $('#check-domisili').click(function() {
-            if ($(this).is(':checked')) {
-                if (alamatKK == '' || provinsiKK == '' || kabupatenKotaKK == '' || kecamatanKK == '' ||
-                    desaKelurahanKK == '') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Alamat Kartu Keluarga Belum Lengkap',
-                        text: 'Silahkan lengkapi alamat kartu keluarga terlebih dahulu, untuk menyamakannya dengan alamat domisili.',
-                    })
-                    $('#check-domisili').prop('checked', false)
+            $('.kewarganegaraan').click(function() {
+                if (this.value == 'WNI') {
+                    $('#nomor-paspor').val('-');
+                    $('#nomor-kitap').val('-');
                 } else {
-                    $('#col-alamat-domisili').addClass('d-none')
-                    $('#alamat-domisili').val(alamatKK)
-                    $('#provinsi-domisili').val(provinsiKK)
-                    $('#provinsi-domisili').trigger('change')
-                    if ($('#provinsi-domisili').val() != provinsiKK) {
-                        $('#check-domisili').prop('checked', false)
-                        $('#col-alamat-domisili').removeClass('d-none')
-                    }
+                    $('#nomor-paspor').val('');
+                    $('#nomor-kitap').val('');
                 }
+            });
+
+
+
+            $('#status-perkawinan').on('change', function() {
+                if ($('#status-perkawinan').val() != 1) {
+                    $('#tanggal-perkawinan').prop('disabled', false);
+                } else {
+                    $('#tanggal-perkawinan').prop('disabled', true);
+                    $('#tanggal-perkawinan').val('');
+                }
+            });
+
+            $('#check-domisili').click(function() {
+                if ($(this).is(':checked')) {
+                    if (alamatKK == '' || provinsiKK == '' || kabupatenKotaKK == '' || kecamatanKK ==
+                        '' ||
+                        desaKelurahanKK == '') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Alamat Kartu Keluarga Belum Lengkap',
+                            text: 'Silahkan lengkapi alamat kartu keluarga terlebih dahulu, untuk menyamakannya dengan alamat domisili.',
+                        })
+                        $('#check-domisili').prop('checked', false)
+                    } else {
+                        $('#col-alamat-domisili').addClass('d-none')
+                        $('#alamat-domisili').val(alamatKK)
+                        $('#provinsi-domisili').val(provinsiKK)
+                        $('#provinsi-domisili').trigger('change')
+                        if ($('#provinsi-domisili').val() != provinsiKK) {
+                            $('#check-domisili').prop('checked', false)
+                            $('#col-alamat-domisili').removeClass('d-none')
+                        }
+                    }
+                } else {
+                    $('#col-alamat-domisili').removeClass('d-none')
+                }
+            })
+
+            //////// Wilayah Domisilli
+            if ('{{ isset($profil) }}') {
+                $('#kabupaten-kota-domisili').attr('disabled', false)
+                $('#kecamatan-domisili').attr('disabled', false)
+                $('#desa-kelurahan-domisili').attr('disabled', false)
             } else {
-                $('#col-alamat-domisili').removeClass('d-none')
+                $('#kabupaten-kota-domisili').attr('disabled', true)
+                $('#kecamatan-domisili').attr('disabled', true)
+                $('#desa-kelurahan-domisili').attr('disabled', true)
+
             }
-        })
 
-
-        // $('#alamat-domisili').on('keyup', function(){
-        //     if($('#alamat-domisili').val() != alamatKK){
-        //         $('#check-domisili').prop('checked', false)
-        //         $('#col-alamat-domisili').removeClass('d-none')
-        //     } 
-        // });
-
+            // $('#alamat-domisili').on('keyup', function(){
+            //     if($('#alamat-domisili').val() != alamatKK){
+            //         $('#check-domisili').prop('checked', false)
+            //         $('#col-alamat-domisili').removeClass('d-none')
+            //     } 
+            // });
+        }
 
         $(document).on('change', '#provinsi-domisili', function() {
             if ($('#provinsi-domisili').val() != provinsiKK) {
@@ -543,7 +582,8 @@
                 $.each(result, function(key, val) {
                     if (val.id == kabupatenKotaKK) {
                         if ($('#check-domisili').is(':checked')) {
-                            $('#kabupaten-kota-domisili').append('<option value="' + val.id +
+                            $('#kabupaten-kota-domisili').append('<option value="' + val
+                                .id +
                                 '" selected>' + val.nama + '</option>')
                             $('#kabupaten-kota-domisili').trigger('change')
                         } else {
@@ -553,11 +593,9 @@
                     } else {
                         $('#kabupaten-kota-domisili').append(
                             `<option value="${val.id}">${val.nama}</option>`);
-
                     }
                 })
             });
-
         })
 
         $(document).on('change', '#kabupaten-kota-domisili', function() {
@@ -578,7 +616,8 @@
                     if (val.id == kecamatanKK) {
                         if ($('#check-domisili').is(':checked')) {
                             $('#kecamatan-domisili').append(
-                                `<option value="${val.id}" selected>${val.nama}</option>`);
+                                `<option value="${val.id}" selected>${val.nama}</option>`
+                            );
                             $('#kecamatan-domisili').trigger('change')
                         } else {
                             $('#kecamatan-domisili').append(
@@ -607,7 +646,8 @@
                     if (val.id == desaKelurahanKK) {
                         if ($('#check-domisili').is(':checked')) {
                             $('#desa-kelurahan-domisili').append(
-                                `<option value="${val.id}" selected>${val.nama}</option>`);
+                                `<option value="${val.id}" selected>${val.nama}</option>`
+                            );
                             $('#desa-kelurahan-domisili').trigger('change')
                         } else {
                             $('#desa-kelurahan-domisili').append(
@@ -625,7 +665,8 @@
         $(document).on('change', '#desa-kelurahan-domisili', function() {
             $.ajax({
                 type: "GET",
-                url: "{{ url('cek-bidan-domisili') }}" + '/' + $('#desa-kelurahan-domisili').val(),
+                url: "{{ url('cek-bidan-domisili') }}" + '/' + $('#desa-kelurahan-domisili')
+                    .val(),
                 data: {
                     _token: "{{ csrf_token() }}",
                     desaKelurahanID: $('#desa-kelurahan-domisili').val()
@@ -637,6 +678,8 @@
                             'Tidak ditemukan bidan untuk desa/kelurahan domisili yang anda pilih. Silahkan pilih desa/kelurahan domisili lain.',
                             'error'
                         ).then(function() {
+                            $('#profil').trigger('change');
+
                             $('#kecamatan-domisili').trigger('change')
                             $('#check-domisili').prop('checked', false)
                             $('#col-alamat-domisili').removeClass('d-none')

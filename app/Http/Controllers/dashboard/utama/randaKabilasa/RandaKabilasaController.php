@@ -21,6 +21,12 @@ class RandaKabilasaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('profil_ada');
+    }
+
+
     public function index(Request $request)
     {
         if (in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])) {
@@ -121,7 +127,7 @@ class RandaKabilasaController extends Controller
                     })
                     ->addColumn('status_mencegah_malnutrisi', function ($row) {
                         if ($row->is_valid_mencegah_malnutrisi == 0) {
-                            return '<span class="badge badge-danger bg-warning">Belum Divalidasi</span>';
+                            return '<span class="badge badge-warning bg-warning">Belum Divalidasi</span>';
                         } else if ($row->is_valid_mencegah_malnutrisi == 2) {
                             return '<span class="badge badge-danger bg-danger">Ditolak</span>';
                         } else {
@@ -130,9 +136,9 @@ class RandaKabilasaController extends Controller
                     })
                     ->addColumn('status_mencegah_pernikahan_dini', function ($row) {
                         if ($row->is_valid_mencegah_pernikahan_dini == 0 && $row->is_mencegah_pernikahan_dini == 0) {
-                            return '<span class="badge badge-danger bg-danger">Belum Melakukan Asesmen</span>';
+                            return '<span class="badge badge-warning bg-warning">Belum Melakukan Asesmen</span>';
                         } else if ($row->is_valid_mencegah_pernikahan_dini == 0) {
-                            return '<span class="badge badge-danger bg-warning">Belum Divalidasi</span>';
+                            return '<span class="badge badge-warning bg-warning">Belum Divalidasi</span>';
                         } else if ($row->is_valid_mencegah_pernikahan_dini == 2) {
                             return '<span class="badge badge-danger bg-danger">Ditolak</span>';
                         } else {
@@ -141,9 +147,9 @@ class RandaKabilasaController extends Controller
                     })
                     ->addColumn('status_meningkatkan_life_skill', function ($row) {
                         if ($row->is_valid_meningkatkan_life_skill == 0 && $row->is_meningkatkan_life_skill == 0) {
-                            return '<span class="badge badge-danger bg-danger">Belum Melakukan Asesmen</span>';
+                            return '<span class="badge badge-warning bg-warning">Belum Melakukan Asesmen</span>';
                         } else if ($row->is_valid_meningkatkan_life_skill == 0) {
-                            return '<span class="badge badge-danger bg-warning">Belum Divalidasi</span>';
+                            return '<span class="badge badge-warning bg-warning">Belum Divalidasi</span>';
                         } else if ($row->is_valid_meningkatkan_life_skill == 2) {
                             return '<span class="badge badge-danger bg-danger">Ditolak</span>';
                         } else {
@@ -153,10 +159,10 @@ class RandaKabilasaController extends Controller
                     ->addColumn('status_asesmen', function ($row) {
                         $statusAsesmen = '';
                         if ($row->is_mencegah_pernikahan_dini == 0) {
-                            $statusAsesmen .= '<span class="badge badge-danger bg-danger">Belum Asesmen Mencegah Pernikahan Dini</span><br>';
+                            $statusAsesmen .= '<span class="badge badge-warning bg-warning">Belum Asesmen Mencegah Pernikahan Dini</span><br>';
                         }
                         if ($row->is_meningkatkan_life_skill == 0) {
-                            $statusAsesmen .= '<span class="badge badge-danger bg-danger">Belum Asesmen Meningkatkan Life Skill</span><br>';
+                            $statusAsesmen .= '<span class="badge badge-warning bg-warning">Belum Asesmen Meningkatkan Life Skill</span><br>';
                         }
                         if ($row->is_mencegah_pernikahan_dini == 1 && $row->is_meningkatkan_life_skill == 1) {
                             $statusAsesmen .= '<span class="badge badge-success bg-success">Sudah Melakukan Seluruh Asesmen</span><br>';

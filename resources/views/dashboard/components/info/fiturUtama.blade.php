@@ -20,18 +20,22 @@
                     <ul>
                         @if (Auth::user()->role == 'bidan')
                             <li>
-                                Dapat melihat <span class="fw-bold">detail</span> data
+                                Dapat melihat <span class="fw-bold"><i class="fas fa-eye"></i> detail</span>
+                                data
                             </li>
                             <li>
-                                Hanya dapat <span class="fw-bold">menghapus</span> dan <span
-                                    class="fw-bold">mengubah</span> data yang
+                                Hanya dapat <span class="fw-bold"><i class="fas fa-sm fa-trash"></i>
+                                    menghapus</span>
+                                dan <span class="fw-bold"><i class="fas fa-edit"></i> mengubah</span> data yang
                                 telah anda validasi.
                             </li>
-                            <li>Tombol <span class="fw-bold">konfirmasi</span> hanya akan muncul
+                            <li>Tombol <span class="fw-bold"><i class="fa-solid fa-clipboard-check"></i>
+                                    konfirmasi</span> hanya akan muncul
                                 ketika ada data baru dilokasi tugas anda.</li>
                         @elseif (Auth::user()->role == 'penyuluh')
                             <li>
-                                Dapat melihat <span class="fw-bold">detail</span> data
+                                Dapat melihat <span class="fw-bold"><i class="fas fa-eye"></i> detail</span>
+                                data
                             </li>
                         @endif
                     </ul>

@@ -23,12 +23,18 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        if (!Auth::user()->profil) {
+            return redirect()->route('lengkapiProfil');
+        }
+
         if (Auth::user()->role == 'keluarga') {
             if (Auth::user()->is_remaja == 1) {
                 return redirect('randa-kabilasa');
             }
             return view('dashboard.pages.utama.dashboard.keluarga');
         }
+
+
 
         $stuntingAnakValidasi = $this->_stunting_anak()['validasi'];
         $stuntingAnakBelumValidasi = $this->_stunting_anak()['belum_validasi'];

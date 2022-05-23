@@ -135,7 +135,7 @@
                 'id' => 'nomor-hp',
                 'name' => 'nomor_hp',
                 'class' => 'angka',
-                'value' => $profil->nomor_hp ?? null,
+                'value' => $user->nomor_hp ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -184,12 +184,14 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
             @slot('options')
-                @foreach ($kabupatenKota as $kab)
-                    <option value="{{ $kab->id }}"
-                        {{ isset($profil) && $kab->id == $profil->kabupaten_kota_id ? 'selected' : '' }}>
-                        {{ $kab->nama }}</option>
-                @endforeach
-            @endslot
+                @if (isset($profil))
+                    @foreach ($kabupatenKota as $kab)
+                        <option value="{{ $kab->id }}"
+                            {{ isset($profil) && $kab->id == $profil->kabupaten_kota_id ? 'selected' : '' }}>
+                            {{ $kab->nama }}</option>
+                    @endforeach
+                @endslot
+            @endif
         @endcomponent
     </div>
     <div class="col-md-6">
@@ -203,12 +205,14 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
             @slot('options')
-                @foreach ($kecamatan as $kec)
-                    <option value="{{ $kec->id }}"
-                        {{ isset($profil) && $kec->id == $profil->kecamatan_id ? 'selected' : '' }}>
-                        {{ $kec->nama }}</option>
-                @endforeach
-            @endslot
+                @if (isset($profil))
+                    @foreach ($kecamatan as $kec)
+                        <option value="{{ $kec->id }}"
+                            {{ isset($profil) && $kec->id == $profil->kecamatan_id ? 'selected' : '' }}>
+                            {{ $kec->nama }}</option>
+                    @endforeach
+                @endslot
+            @endif
         @endcomponent
     </div>
     <div class="col-md-6">
@@ -222,12 +226,14 @@
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
             @slot('options')
-                @foreach ($desaKelurahan as $des)
-                    <option value="{{ $des->id }}"
-                        {{ isset($profil) && $des->id == $profil->desa_kelurahan_id ? 'selected' : '' }}>
-                        {{ $des->nama }}</option>
-                @endforeach
-            @endslot
+                @if (isset($profil))
+                    @foreach ($desaKelurahan as $des)
+                        <option value="{{ $des->id }}"
+                            {{ isset($profil) && $des->id == $profil->desa_kelurahan_id ? 'selected' : '' }}>
+                            {{ $des->nama }}</option>
+                    @endforeach
+                @endslot
+            @endif
         @endcomponent
     </div>
     <div class="col-md-6">

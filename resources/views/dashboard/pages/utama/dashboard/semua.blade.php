@@ -21,6 +21,16 @@
 
 @section('content')
     <div class="row g-3">
+        @if (in_array(Auth::user()->role, ['bidan', 'penyuluh']) && Auth::user()->profil->lokasiTugas->count() == 0)
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                    <h6 class="fw-bold">Perhatian!</h6>
+                    Saat ini anda belum memiliki lokasi tugas, sehingga tidak dapat melihat maupun menambahkan data pada
+                    menu utama. Silahkan hubungi admin untuk menambahkan lokasi tugas anda.
+                </div>
+            </div>
+        @endif
+
         <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="alert alert-info rounded-4">
                 <div class="card-body p-0">

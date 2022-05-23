@@ -38,7 +38,7 @@
                     </div>
                     <div class="card-body pt-2">
                         <div class="row mb-0">
-                            @component('dashboard.components.info.fiturUtama')
+                            @component('dashboard.components.info.utama.randaKabilasa')
                             @endcomponent
                             <div class="col">
                                 <div class="card fieldset border border-secondary mb-4">
