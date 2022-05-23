@@ -376,59 +376,64 @@
                             <ul class="list-unstyled mb-0">
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Badan:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-tinggi-badan"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-tinggi-badan"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Tekanan Darah:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-tekanan-darah"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-tekanan-darah"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Lengan Atas:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-lengan-atas"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-lengan-atas"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Denyut Jantung:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-denyut-jantung"> -
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-denyut-jantung"> -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Hemoglobin Darah:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-kategori-hemoglobin-darah">
+                                    <span class="badge float-end text-uppercase kategori-bg"
+                                        id="modal-kategori-hemoglobin-darah">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sebelum Hamil:</label>
-                                    <span class="badge float-end text-uppercase"
+                                    <span class="badge float-end text-uppercase kategori-bg"
                                         id="modal-vaksin-tetanus-sebelum-hamil">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Vaksin Tetanus Sesudah Hamil:</label>
-                                    <span class="badge float-end text-uppercase"
+                                    <span class="badge float-end text-uppercase kategori-bg"
                                         id="modal-vaksin-tetanus-sesudah-hamil">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Posisi Janin:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-posisi-janin">
+                                    <span class="badge float-end text-uppercase kategori-bg" id="modal-posisi-janin">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Minum 90 Tablet Tambah darah:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-minum-tablet">
+                                    <span class="badge float-end text-uppercase kategori-bg" id="modal-minum-tablet">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-pencil-alt"></i> Konseling:</label>
-                                    <span class="badge float-end text-uppercase" id="modal-konseling">
+                                    <span class="badge float-end text-uppercase kategori-bg" id="modal-konseling">
                                         -
                                     </span>
                                 </li>

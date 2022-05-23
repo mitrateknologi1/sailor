@@ -4,22 +4,24 @@
         @method('PUT')
     @endif
     <div class="row g-4">
-        <div class="col-sm-12 col-lg-6">
-            @component('dashboard.components.formElements.input',
-                [
-                    'label' => 'Nama Kepala Keluarga / Nomor KK',
-                    'type' => 'text',
-                    'id' => 'nama-kepala-keluarga',
-                    'name' => 'nama_kepala_keluarga',
-                    'class' => '',
-                    'wajib' => '<sup class="text-danger">*</sup>',
-                    'placeholder' => 'Nama Kepala Keluarga / Nomor KK',
-                    'attribute' => 'readonly',
-                    'value' => $randaKabilasa->anggotaKeluarga->kartuKeluarga->nama_kepala_keluarga . ' / ' . $randaKabilasa->anggotaKeluarga->kartuKeluarga->nomor_kk,
-                ])
-            @endcomponent
-        </div>
-        <div class="col-sm-12 col-lg-6">
+        @if (Auth::user()->is_remaja != 1)
+            <div class="col-sm-12 col-lg">
+                @component('dashboard.components.formElements.input',
+                    [
+                        'label' => 'Nama Kepala Keluarga / Nomor KK',
+                        'type' => 'text',
+                        'id' => 'nama-kepala-keluarga',
+                        'name' => 'nama_kepala_keluarga',
+                        'class' => '',
+                        'wajib' => '<sup class="text-danger">*</sup>',
+                        'placeholder' => 'Nama Kepala Keluarga / Nomor KK',
+                        'attribute' => 'readonly',
+                        'value' => $randaKabilasa->anggotaKeluarga->kartuKeluarga->nama_kepala_keluarga . ' / ' . $randaKabilasa->anggotaKeluarga->kartuKeluarga->nomor_kk,
+                    ])
+                @endcomponent
+            </div>
+        @endif
+        <div class="col-sm-12 col-lg">
             @component('dashboard.components.formElements.input',
                 [
                     'label' => 'Nama Remaja (Tanggal Lahir)',

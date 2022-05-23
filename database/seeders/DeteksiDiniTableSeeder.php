@@ -14,59 +14,39 @@ class DeteksiDiniTableSeeder extends Seeder
      */
     public function run()
     {
-
+        
 
         \DB::table('deteksi_dini')->delete();
-
-        \DB::table('deteksi_dini')->insert(array(
-            0 =>
-            array(
-                'id' => '468aa6e4-d9a3-4c5c-ae1e-d1ae175a9c6a',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120009',
-                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
-                'skor' => 18,
-                'kategori' => 'Kehamilan : KRST (Beresiko SANGAT TINGGI)',
-                'is_valid' => 1,
-                'tanggal_validasi' => '2022-04-20',
-                'created_at' => '2022-04-20 15:09:56',
-                'updated_at' => '2022-04-20 15:09:56',
-            ),
-            1 =>
-            array(
-                'id' => 'aea1b923-4fd8-4417-b65e-f255e58bc827',
+        
+        \DB::table('deteksi_dini')->insert(array (
+            0 => 
+            array (
+                'id' => '59037f3a-4ec0-46f5-8059-6370bcfa0285',
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120003',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'skor' => 2,
-                'kategori' => 'Kehamilan : KRR (Beresiko Rendah)',
+            'kategori' => 'Kehamilan : KRR (Beresiko Rendah)',
                 'is_valid' => 1,
-                'tanggal_validasi' => '2022-04-20',
-                'created_at' => '2022-04-20 15:08:54',
-                'updated_at' => '2022-04-20 15:08:54',
+                'tanggal_validasi' => '2022-05-22',
+                'alasan_ditolak' => NULL,
+                'created_at' => '2022-05-22 18:32:07',
+                'updated_at' => '2022-05-22 18:32:07',
             ),
-            2 =>
-            array(
-                'id' => 'aed7298a-7e85-4f8f-b4db-5a8e0fcf8c0a',
+            1 => 
+            array (
+                'id' => '922a7bae-4fb8-419a-b9b0-95f0daaa7e2d',
                 'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120009',
-                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
-                'skor' => 2,
-                'kategori' => 'Kehamilan : KRR (Beresiko Rendah)',
-                'is_valid' => 1,
-                'tanggal_validasi' => '2022-04-20',
-                'created_at' => '2022-04-20 15:08:41',
-                'updated_at' => '2022-04-20 15:08:41',
-            ),
-            3 =>
-            array(
-                'id' => 'db33f765-0417-406b-9a93-6c3979ce9f0c',
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120003',
                 'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
-                'skor' => 10,
-                'kategori' => 'Kehamilan : KRT (Beresiko TINGGI)',
+                'skor' => 130,
+            'kategori' => 'Kehamilan : KRST (Beresiko SANGAT TINGGI)',
                 'is_valid' => 1,
-                'tanggal_validasi' => '2022-04-20',
-                'created_at' => '2022-04-20 15:09:40',
-                'updated_at' => '2022-04-20 15:09:40',
+                'tanggal_validasi' => '2022-05-22',
+                'alasan_ditolak' => NULL,
+                'created_at' => '2022-05-22 18:29:52',
+                'updated_at' => '2022-05-22 18:29:52',
             ),
         ));
+        
+        
     }
 }

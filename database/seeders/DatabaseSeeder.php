@@ -74,5 +74,6 @@ class DatabaseSeeder extends Seeder
         $this->call(JawabanMencegahMalnutrisiTableSeeder::class);
         $this->call(JawabanMeningkatkanLifeSkillTableSeeder::class);
         $this->call(MencegahPernikahanDiniTableSeeder::class);
+        $this->call(PerkiraanMelahirkanTableSeeder::class);
     }
 }
