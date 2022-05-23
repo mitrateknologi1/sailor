@@ -37,6 +37,11 @@ class PersonalController extends Controller
     public function index()
     {
         $user = User::with('profil')->find(Auth::user()->id);
+        if (Storage::exists('upload/foto_profil/' . $user->role . '/' . $user->profil->foto_profil)) {
+            $foto_profil = Storage::url('upload/foto_profil/' . $user->role . '/' . $user->profil->foto_profil);
+        } else {
+            $foto_profil = asset('assets/dashboard/images/avatar.png');
+        }
         if (in_array(Auth::user()->role, ['bidan', 'penyuluh', 'admin'])) {
             $data = [
                 'user' => $user,
@@ -46,6 +51,8 @@ class PersonalController extends Controller
                 'kabupatenKota' => KabupatenKota::where('provinsi_id', $user->profil->provinsi_id)->get(),
                 'kecamatan' => Kecamatan::where('kabupaten_kota_id', $user->profil->kabupaten_kota_id)->get(),
                 'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $user->profil->kecamatan_id)->get(),
+                'foto_profil' => $foto_profil,
+
             ];
             return view('dashboard.pages.personal.selainKeluarga', $data);
         } else {
@@ -67,6 +74,7 @@ class PersonalController extends Controller
                 'kecamatanKK' => $user->profil->kartuKeluarga->kecamatan_id,
                 'desaKelurahanKK' => $user->profil->kartuKeluarga->desa_kelurahan_id,
                 'alamatKK' => $user->profil->kartuKeluarga->alamat,
+                'foto_profil' => $foto_profil,
             ];
             if ($user->profil->status_hubungan_dalam_keluarga_id == 1) {
                 $data['statusHubungan'] = StatusHubungan::all();
@@ -80,6 +88,11 @@ class PersonalController extends Controller
     public function profilAnggotaKeluarga(Request $request)
     {
         $profil = AnggotaKeluarga::find($request->id);
+        if (Storage::exists('upload/foto_profil/keluarga/' . $profil->foto_profil)) {
+            $foto_profil = Storage::url('upload/foto_profil/keluarga/' . $profil->foto_profil);
+        } else {
+            $foto_profil = asset('assets/dashboard/images/avatar.png');
+        }
 
         $data = [
             'anggotaKeluarga' => $profil->kartuKeluarga->anggotaKeluarga,
@@ -99,6 +112,7 @@ class PersonalController extends Controller
             'desaKelurahanKK' => $profil->kartuKeluarga->desa_kelurahan_id,
             'alamatKK' => $profil->kartuKeluarga->alamat,
             'wilayahDomisili' => $profil->wilayahDomisili,
+            'foto_profil' => $foto_profil,
             'titleSubmit' => 'Perbarui',
 
         ];

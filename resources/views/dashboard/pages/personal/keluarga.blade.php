@@ -67,6 +67,7 @@
                                                         'kabupatenKotaKK' => isset($kabupatenKotaKK) ? $kabupatenKotaKK : null,
                                                         'provinsiKK' => isset($provinsiKK) ? $provinsiKK : null,
                                                         'alamatKK' => isset($alamatKK) ? $alamatKK : null,
+                                                        'foto_profil' => $foto_profil,
                                                         'titleSubmit' => 'Perbarui',
                                                     ])
                                                 @endcomponent

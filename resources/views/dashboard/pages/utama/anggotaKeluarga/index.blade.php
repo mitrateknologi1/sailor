@@ -27,10 +27,11 @@
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-2">Data Anggota Keluarga</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'id' => 'catatan-pertumbuhan-anak',
-                            'class' => '',
-                            'url' => url('anggota-keluarga' . '/' . Auth::user()->profil->kartu_keluarga_id . '/create'),
+                        @component('dashboard.components.buttons.add',
+                            [
+                                'id' => 'catatan-pertumbuhan-anak',
+                                'class' => '',
+                                'url' => url('anggota-keluarga' . '/' . Auth::user()->profil->kartu_keluarga_id . '/create'),
                             ])
                         @endcomponent
                     </div>
@@ -54,7 +55,7 @@
                                                         <div class="card-body p-0">
                                                             <div class="row justify-content-center">
                                                                 <div class="avatar xl rounded-circle no-thumbnail mb-3">
-                                                                    <img src="{{ isset($item) &&$item->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . $item->foto_profil)? asset('upload/foto_profil/keluarga/' . $item->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                                                    <img src="{{ isset($item) && $item->foto_profil != null && Storage::exists('upload/foto_profil/keluarga/' . $item->foto_profil) ? Storage::url('upload/foto_profil/keluarga/' . $item->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
                                                                         alt="Avatar"
                                                                         class="rounded-circle avatar xl shadow img-thumbnail">
                                                                 </div>

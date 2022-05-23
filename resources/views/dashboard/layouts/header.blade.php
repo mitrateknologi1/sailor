@@ -74,7 +74,7 @@
                         <a class="nav-link dropdown-toggle rounded-circle after-none p-0" href="#" role="button"
                             data-bs-toggle="dropdown">
                             <img class="avatar img-thumbnail rounded-circle shadow"
-                                src="{{ Auth::user()->profil->foto_profil != null && Storage::exists('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) ? asset('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
+                                src="{{ Auth::user()->profil->foto_profil != null && Storage::exists('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) ? Storage::url('upload/foto_profil/' . Auth::user()->role . '/' . Auth::user()->profil->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
                                 alt="Avatar" class="rounded-circle avatar xl shadow img-thumbnail">
                         </a>
                         <div class="dropdown-menu border-0 rounded-4 shadow p-0">
