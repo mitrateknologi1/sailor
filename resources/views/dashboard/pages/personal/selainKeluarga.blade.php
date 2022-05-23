@@ -31,6 +31,7 @@
                                                     'kabupatenKota' => $kabupatenKota,
                                                     'kecamatan' => $kecamatan,
                                                     'desaKelurahan' => $desaKelurahan,
+                                                    'foto_profil' => $foto_profil,
                                                     'titleSubmit' => 'Perbarui',
                                                 ])
                                             @endcomponent

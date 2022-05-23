@@ -707,8 +707,8 @@
 
                     if (data.foto_profil != null) {
                         $('#modal-foto-profil').html(
-                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url(../upload/foto_profil/keluarga/' +
-                            data.foto_profil + ')">')
+                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url({{ Storage::url('upload/foto_profil/keluarga') }}/' +
+                            data.foto_profil + ')></div>');
                     } else {
                         $('#modal-foto-profil').html(
                             '<span class="badge bg-info text-uppercase shadow">Tidak Ada</span>'

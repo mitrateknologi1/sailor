@@ -26,10 +26,11 @@
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-2">Data Pertumbuhan Anak</h5>
                         @if (Auth::user()->role != 'penyuluh')
-                            @component('dashboard.components.buttons.add', [
-                                'id' => 'catatan-pertumbuhan-anak',
-                                'class' => '',
-                                'url' => route('pertumbuhan-anak.create'),
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'catatan-pertumbuhan-anak',
+                                    'class' => '',
+                                    'url' => route('pertumbuhan-anak.create'),
                                 ])
                             @endcomponent
                         @endif
@@ -54,7 +55,7 @@
                                                         <div class="card-body p-0">
                                                             <div class="row justify-content-center">
                                                                 <div class="avatar xl rounded-circle no-thumbnail mb-3">
-                                                                    <img src="{{ isset($item->anggotaKeluarga) &&$item->anggotaKeluarga->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil)? asset('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                                                    <img src="{{ isset($item->anggotaKeluarga) && $item->anggotaKeluarga->foto_profil != null && Storage::exists('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil) ? Storage::url('upload/foto_profil/keluarga/' . $item->anggotaKeluarga->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
                                                                         alt="Avatar"
                                                                         class="rounded-circle avatar xl shadow img-thumbnail">
                                                                 </div>
@@ -238,12 +239,13 @@
                     </div>
                     <div class="row g-3 align-items-end" id="form-konfirmasi">
                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
-                            @component('dashboard.components.formElements.select', [
-                                'label' => 'Konfirmasi',
-                                'id' => 'konfirmasi',
-                                'name' => 'konfirmasi',
-                                'class' => 'kosong',
-                                'wajib' => '<sup class="text-danger">*</sup>',
+                            @component('dashboard.components.formElements.select',
+                                [
+                                    'label' => 'Konfirmasi',
+                                    'id' => 'konfirmasi',
+                                    'name' => 'konfirmasi',
+                                    'class' => 'kosong',
+                                    'wajib' => '<sup class="text-danger">*</sup>',
                                 ])
                                 @slot('options')
                                     <option value="1">Validasi</option>
@@ -253,12 +255,13 @@
                         </div>
                         @if (Auth::user()->role == 'admin')
                             <div class="col-lg col-sm-12" id="pilih-bidan">
-                                @component('dashboard.components.formElements.select', [
-                                    'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
-                                    'id' => 'nama-bidan',
-                                    'name' => 'bidan_id',
-                                    'class' => 'bidan_id filter',
-                                    'wajib' => '<sup class="text-danger">*</sup>',
+                                @component('dashboard.components.formElements.select',
+                                    [
+                                        'label' => 'Bidan sesuai lokasi domisili kepala keluarga',
+                                        'id' => 'nama-bidan',
+                                        'name' => 'bidan_id',
+                                        'class' => 'bidan_id filter',
+                                        'wajib' => '<sup class="text-danger">*</sup>',
                                     ])
                                 @endcomponent
                             </div>
@@ -276,14 +279,16 @@
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
                         <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
-                            @component('dashboard.components.buttons.edit', [
-                                'id' => 'modal-btn-ubah',
+                            @component('dashboard.components.buttons.edit',
+                                [
+                                    'id' => 'modal-btn-ubah',
                                 ])
                             @endcomponent
                         </div>
                         <div class="col-sm-12 col-lg-8" id="col-modal-btn-konfirmasi">
-                            @component('dashboard.components.buttons.konfirmasi', [
-                                'id' => 'modal-btn-konfirmasi',
+                            @component('dashboard.components.buttons.konfirmasi',
+                                [
+                                    'id' => 'modal-btn-konfirmasi',
                                 ])
                             @endcomponent
                         </div>
