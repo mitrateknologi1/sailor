@@ -464,7 +464,7 @@
             } else {
                 var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
             }
-            var rentang_umur = 'semua_umur';
+            var rentang_umur = 'remaja';
             var id_anak = "{{ isset($dataEdit) ? $dataEdit->randaKabilasa->anggota_keluarga_id : '' }}";
             var selected = '';
             $('#nama-anak').html('');
@@ -475,6 +475,7 @@
                 method: "{{ $method }}",
                 id_anak: id_anak
             }, function(result) {
+                console.log(result);
                 $.each(result.anggota_keluarga, function(key, val) {
                     var tanggal_lahir = moment(val.tanggal_lahir).format('LL');
                     selected = '';
@@ -482,9 +483,17 @@
                         "{{ isset($dataEdit) ? $dataEdit->randaKabilasa->anggota_keluarga_id : '' }}") {
                         selected = 'selected';
                     }
-                    $('#nama-anak').append(
-                        `<option value="${val.id}" ${selected}>${val.nama_lengkap} (${tanggal_lahir})</option>`
-                    );
+                    if (1 == "{{ Auth::user()->is_remaja }}") {
+                        $('#nama-anak').append(
+                            `<option value="${val.id}" selected>${val.nama_lengkap} (${tanggal_lahir})</option>`
+                        );
+                    } else {
+                        $('#nama-anak').append(
+                            `<option value="${val.id}" ${selected}>${val.nama_lengkap} (${tanggal_lahir})</option>`
+                        );
+                    }
+
+
                 })
 
                 if ("{{ $method }}" == 'PUT') {

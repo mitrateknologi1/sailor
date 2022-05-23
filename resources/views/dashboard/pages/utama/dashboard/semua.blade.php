@@ -164,14 +164,16 @@
                     <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
                             class="fw-bold">{{ $perkiraanMelahirkanTotal }}</span></div>
                 </div>
-                @if ($perkiraanMelahirkanBelumValidasi > 0)
-                    <div class="text-center">
-                        @component('dashboard.components.buttons.validasi',
-                            [
-                                'url' => url('perkiraan-melahirkan'),
-                            ])
-                        @endcomponent
-                    </div>
+                @if (Auth::user()->role != 'penyuluh')
+                    @if ($perkiraanMelahirkanBelumValidasi > 0)
+                        <div class="text-center">
+                            @component('dashboard.components.buttons.validasi',
+                                [
+                                    'url' => url('perkiraan-melahirkan'),
+                                ])
+                            @endcomponent
+                        </div>
+                    @endif
                 @endif
                 <div class="progress mt-2" style="height: 1px;">
                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"
@@ -191,14 +193,16 @@
                     <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
                             class="fw-bold">{{ $deteksiDiniTotal }}</span></div>
                 </div>
-                @if ($deteksiDiniBelumValidasi > 0)
-                    <div class="text-center">
-                        @component('dashboard.components.buttons.validasi',
-                            [
-                                'url' => url('deteksi-dini'),
-                            ])
-                        @endcomponent
-                    </div>
+                @if (Auth::user()->role != 'penyuluh')
+                    @if ($deteksiDiniBelumValidasi > 0)
+                        <div class="text-center">
+                            @component('dashboard.components.buttons.validasi',
+                                [
+                                    'url' => url('deteksi-dini'),
+                                ])
+                            @endcomponent
+                        </div>
+                    @endif
                 @endif
                 <div class="progress mt-2" style="height: 1px;">
                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"
@@ -217,14 +221,16 @@
                     <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
                             class="fw-bold">{{ $ancTotal }}</span></div>
                 </div>
-                @if ($ancBelumValidasi > 0)
-                    <div class="text-center">
-                        @component('dashboard.components.buttons.validasi',
-                            [
-                                'url' => url('anc'),
-                            ])
-                        @endcomponent
-                    </div>
+                @if (Auth::user()->role != 'penyuluh')
+                    @if ($ancBelumValidasi > 0)
+                        <div class="text-center">
+                            @component('dashboard.components.buttons.validasi',
+                                [
+                                    'url' => url('anc'),
+                                ])
+                            @endcomponent
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>
@@ -259,14 +265,16 @@
                     <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
                             class="fw-bold">{{ $stuntingAnakTotal }}</span></div>
                 </div>
-                @if ($stuntingAnakBelumValidasi > 0)
-                    <div class="text-center">
-                        @component('dashboard.components.buttons.validasi',
-                            [
-                                'url' => url('stunting-anak'),
-                            ])
-                        @endcomponent
-                    </div>
+                @if (Auth::user()->role != 'penyuluh')
+                    @if ($stuntingAnakBelumValidasi > 0)
+                        <div class="text-center">
+                            @component('dashboard.components.buttons.validasi',
+                                [
+                                    'url' => url('stunting-anak'),
+                                ])
+                            @endcomponent
+                        </div>
+                    @endif
                 @endif
                 <div class="progress mt-2" style="height: 1px;">
                     <div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100"
@@ -286,14 +294,16 @@
                     <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
                             class="fw-bold">{{ $ibuMelahirkanStuntingTotal }}</span></div>
                 </div>
-                @if ($ibuMelahirkanStuntingBelumValidasi > 0)
-                    <div class="text-center">
-                        @component('dashboard.components.buttons.validasi',
-                            [
-                                'url' => url('deteksi-ibu-melahirkan-stunting'),
-                            ])
-                        @endcomponent
-                    </div>
+                @if (Auth::user()->role != 'penyuluh')
+                    @if ($ibuMelahirkanStuntingBelumValidasi > 0)
+                        <div class="text-center">
+                            @component('dashboard.components.buttons.validasi',
+                                [
+                                    'url' => url('deteksi-ibu-melahirkan-stunting'),
+                                ])
+                            @endcomponent
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>
@@ -327,14 +337,16 @@
                     <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
                             class="fw-bold">{{ $pertumbuhanAnakTotal }}</span></div>
                 </div>
-                @if ($pertumbuhanAnakBelumValidasi > 0)
-                    <div class="text-center">
-                        @component('dashboard.components.buttons.validasi',
-                            [
-                                'url' => url('pertumbuhan-anak'),
-                            ])
-                        @endcomponent
-                    </div>
+                @if (Auth::user()->role != 'penyuluh')
+                    @if ($pertumbuhanAnakBelumValidasi > 0)
+                        <div class="text-center">
+                            @component('dashboard.components.buttons.validasi',
+                                [
+                                    'url' => url('pertumbuhan-anak'),
+                                ])
+                            @endcomponent
+                        </div>
+                    @endif
                 @endif
                 <div class="progress mt-2" style="height: 1px;">
                     <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"
@@ -354,14 +366,16 @@
                     <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
                             class="fw-bold">{{ $perkembanganAnakTotal }}</span></div>
                 </div>
-                @if ($perkembanganAnakBelumValidasi > 0)
-                    <div class="text-center">
-                        @component('dashboard.components.buttons.validasi',
-                            [
-                                'url' => url('perkembangan-anak'),
-                            ])
-                        @endcomponent
-                    </div>
+                @if (Auth::user()->role != 'penyuluh')
+                    @if ($perkembanganAnakBelumValidasi > 0)
+                        <div class="text-center">
+                            @component('dashboard.components.buttons.validasi',
+                                [
+                                    'url' => url('perkembangan-anak'),
+                                ])
+                            @endcomponent
+                        </div>
+                    @endif
                 @endif
             </div>
 

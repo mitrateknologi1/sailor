@@ -1011,21 +1011,53 @@ class DashboardController extends Controller
 
     private function _keluarga()
     {
-        $dataTotal = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->count();
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+        $dataTotal = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')->where(function ($query) use ($lokasiTugas) {
+            $query->whereIn('is_valid', [1, 2]);
+            $query->orWhere(function ($query) use ($lokasiTugas) {
+                $query->where('is_valid', 0);
+                $query->whereHas('kepalaKeluarga', function ($query) use ($lokasiTugas) {
+                    $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                });
+            });
+        })->count();
+
         $dataValidasi = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('id', 'DESC')
+            ->where(function ($query) use ($lokasiTugas) {
+                $query->whereIn('is_valid', [1, 2]);
+                $query->orWhere(function ($query) use ($lokasiTugas) {
+                    $query->where('is_valid', 0);
+                    $query->whereHas('kepalaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    });
+                });
+            })
             ->where('is_valid', 1)
             ->count();
 
+
         $dataDitolak = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('id', 'DESC')
+            ->where(function ($query) use ($lokasiTugas) {
+                $query->whereIn('is_valid', [1, 2]);
+                $query->orWhere(function ($query) use ($lokasiTugas) {
+                    $query->where('is_valid', 0);
+                    $query->whereHas('kepalaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    });
+                });
+            })
             ->where('is_valid', 2)
             ->count();
         $dataBelumDivalidasi = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('id', 'DESC')
+            ->where(function ($query) use ($lokasiTugas) {
+                $query->whereIn('is_valid', [1, 2]);
+                $query->orWhere(function ($query) use ($lokasiTugas) {
+                    $query->where('is_valid', 0);
+                    $query->whereHas('kepalaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    });
+                });
+            })
             ->where('is_valid', 0)
             ->count();
 

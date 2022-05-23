@@ -178,7 +178,6 @@ class PerkiraanMelahirkanController extends Controller
             } else if (Auth::user()->role == 'keluarga') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
-            $kartuKeluarga = KartuKeluarga::latest()->get();
             return view('dashboard.pages.utama.momsCare.perkiraanMelahirkan.create', compact('kartuKeluarga'));
         } else {
             return abort(404);

@@ -121,6 +121,65 @@ class ListController extends Controller
                 'anggota_keluarga' => $anggotaKeluarga,
                 'anggota_keluarga_hapus' => $anggotaKeluargaHapus
             ]);
+        } else if ($request->rentang_umur == 'remaja') {
+            $id = $request->id;
+            $profil_id = Auth::user()->profil->id; //bidan/penyuluh
+            $lokasiTugas = LokasiTugas::ofLokasiTugas($profil_id);
+            $tanggalSekarang = date('Y-m-d');
+            $lokasiAnak = '';
+            if ($request->method == "PUT") {
+                $anak = AnggotaKeluarga::with('wilayahDomisili')->valid()->withTrashed()->where('id', $request->id_anak)->first();
+                $lokasiAnak = $anak->wilayahDomisili->desa_kelurahan_id;
+            }
+
+            if (Auth::user()->is_remaja != 1) {
+                $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
+                    ->where('status_hubungan_dalam_keluarga_id', 4)
+                    ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                        if (Auth::user()->role != 'admin') {
+                            if ($request->method == "POST") {
+                                return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
+                            } else { // PUT
+                                return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
+                            }
+                        }
+                    })
+                    ->orderBy('tanggal_lahir', 'desc')
+                    ->get()->where('umur', '<=', 21)->where('umur', '>=', 12);
+
+                if (Auth::user()->role == 'keluarga') {
+                    $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
+                        ->where('status_hubungan_dalam_keluarga_id', 4)
+                        ->orderBy('tanggal_lahir', 'desc')
+                        ->get()->where('umur', '<=', 21)->where('umur', '>=', 12);
+                }
+            }
+
+            if (Auth::user()->is_remaja == 1) {
+                $anggotaKeluarga = AnggotaKeluarga::valid()->withTrashed()->where('id', Auth::user()->profil->id)->get();
+            }
+
+            $anggotaKeluargaHapus = '';
+            if (Auth::user()->is_remaja != 1) {
+                if ($request->method == "PUT") {
+                    $idAnak = $request->id_anak;
+                    $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
+                        ->where('status_hubungan_dalam_keluarga_id', 4)
+                        ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                            if (Auth::user()->role != 'admin') {
+                                return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
+                            }
+                        })
+                        ->onlyTrashed()
+                        ->where('id', $idAnak)
+                        ->first();
+                }
+            }
+
+            return response()->json([
+                'anggota_keluarga' => $anggotaKeluarga,
+                'anggota_keluarga_hapus' => $anggotaKeluargaHapus
+            ]);
         }
     }
 

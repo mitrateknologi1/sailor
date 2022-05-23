@@ -213,7 +213,7 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => ['No', 'Tanggal Dibuat', 'Status Validasi Asesmen Mencegah Malnutrisi', 'Status Validasi Asesmen Mencegah Pernikahan Dini', 'Status Validasi Asesmen Meningkatkan Life Skill', 'Status Asesmen', 'Nama Remaja', 'Kategori HB', 'Kategori Lingkar Lengan Atas', 'Kategori Indeks Masa Tubuh', 'Asesmen Mencegah Malnutrisi', 'Asesmen Meningkatkan Life Skill', 'Asesmen Mencegah Pernikahan Dini', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                            'th' => ['No', 'Tanggal Dibuat', 'Nama Remaja', 'Status Validasi Asesmen Mencegah Malnutrisi', 'Status Validasi Asesmen Mencegah Pernikahan Dini', 'Status Validasi Asesmen Meningkatkan Life Skill', 'Status Asesmen', 'Kategori HB', 'Kategori Lingkar Lengan Atas', 'Kategori Indeks Masa Tubuh', 'Asesmen Mencegah Malnutrisi', 'Asesmen Meningkatkan Life Skill', 'Asesmen Mencegah Pernikahan Dini', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -451,6 +451,11 @@
                     className: 'text-center',
                 },
                 {
+                    data: 'nama_remaja',
+                    name: 'nama_remaja',
+                    className: 'text-center',
+                },
+                {
                     data: 'status_mencegah_malnutrisi',
                     name: 'status_mencegah_malnutrisi',
                     className: 'text-center',
@@ -468,11 +473,6 @@
                 {
                     data: 'status_asesmen',
                     name: 'status_asesmen',
-                    className: 'text-center',
-                },
-                {
-                    data: 'nama_remaja',
-                    name: 'nama_remaja',
                     className: 'text-center',
                 },
                 {
