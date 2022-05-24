@@ -74,10 +74,10 @@ Route::group(['middleware' => 'guest'], function () {
 
     Route::get('registrasi', [AuthController::class, 'registrasi'])->name('registrasi');
     Route::get('registrasi-ulang/{keluarga}', [AuthController::class, 'registrasiUlang']);
-    Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
     Route::put('registrasi-ulang/{keluarga}', [AuthController::class, 'updateRegistrasi'])->name('updateRegistrasi');
 });
 
+Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
 
 Route::get('/cek-remaja', [AuthController::class, 'cekRemaja'])->name('cekRemaja');
 

@@ -236,25 +236,26 @@
                                     processData: false,
                                     success: function(data) {
                                         $("#overlay").fadeOut(100);
-                                        if ($.isEmptyObject(data.error)) {
-                                            Swal.fire(
-                                                'Berhasil!',
-                                                'Data berhasil disimpan.',
-                                                'success',
-                                            ).then((result) => {
-                                                if (result.value) {
-                                                    window.location.href =
-                                                        "{{ url()->previous() }}";
-                                                }
-                                            })
-                                        } else {
-                                            Swal.fire(
-                                                'Terjadi Kesalahan!',
-                                                'Periksa kembali data yang anda masukkan',
-                                                'error'
-                                            )
-                                            printErrorMsg(data.error);
-                                        }
+                                        console.log(data)
+                                        // if ($.isEmptyObject(data.error)) {
+                                        //     Swal.fire(
+                                        //         'Berhasil!',
+                                        //         'Data berhasil disimpan.',
+                                        //         'success',
+                                        //     ).then((result) => {
+                                        //         if (result.value) {
+                                        //             window.location.href =
+                                        //                 "{{ url()->previous() }}";
+                                        //         }
+                                        //     })
+                                        // } else {
+                                        //     Swal.fire(
+                                        //         'Terjadi Kesalahan!',
+                                        //         'Periksa kembali data yang anda masukkan',
+                                        //         'error'
+                                        //     )
+                                        //     printErrorMsg(data.error);
+                                        // }
                                     },
                                     error: function(data) {
                                         alert(data.responseJSON.message)

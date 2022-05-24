@@ -395,6 +395,7 @@
             })
         })
 
+        //
         $(document).on('click', '#btn-lihat', function() {
             var penyuluh = $(this).val();
             $('#modal-lihat').modal('show');
