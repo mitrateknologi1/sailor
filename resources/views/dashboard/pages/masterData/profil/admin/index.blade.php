@@ -194,10 +194,6 @@
             ],
             ajax: {
                 url: "{{ route('admin.index') }}",
-                data: function(d) {
-                    // d.role = $('#role-filter').val();                    
-                    // d.search = $('input[type="search"]').val();
-                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -379,7 +375,7 @@
                     }
                     $('#modal-btn-ubah').attr('href', '{{ url('admin') }}' + '/' + admin +
                         '/edit');
-                },
+                }
             })
         })
     </script>

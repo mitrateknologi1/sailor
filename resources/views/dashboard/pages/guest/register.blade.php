@@ -38,6 +38,33 @@
             text-transform: lowercase !important;
         }
 
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100000;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .cv-spinner {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px #ddd solid;
+            border-top: 4px #2e93e6 solid;
+            border-radius: 50%;
+            animation: sp-anime 0.8s infinite linear;
+        }
+
     </style>
 </head>
 
@@ -295,13 +322,11 @@
                 })
 
                 var overlay = $('#overlay').hide();
-                $(document)
-                    .ajaxStart(function() {
-                        overlay.show();
-                    })
-                    .ajaxStop(function() {
-                        overlay.hide();
-                    });
+                $(document).ajaxStart(function() {
+                    overlay.show();
+                }).ajaxStop(function() {
+                    overlay.hide();
+                });
 
                 $('.numerik').on('input', function(e) {
                     this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
