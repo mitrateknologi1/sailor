@@ -65,6 +65,12 @@
             animation: sp-anime 0.8s infinite linear;
         }
 
+        @keyframes sp-anime {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
 </head>
 
@@ -232,6 +238,7 @@
                 $(document).on('select2:open', () => {
                     document.querySelector('.select2-search__field').focus();
                 });
+
                 $(function() {
                     $('.modal').modal({
                         backdrop: 'static',
@@ -322,6 +329,7 @@
                 })
 
                 var overlay = $('#overlay').hide();
+
                 $(document).ajaxStart(function() {
                     overlay.show();
                 }).ajaxStop(function() {

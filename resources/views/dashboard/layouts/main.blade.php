@@ -366,6 +366,7 @@
         })
 
         var overlay = $('#overlay').hide();
+
         $(document)
             .ajaxStart(function() {
                 overlay.show();
