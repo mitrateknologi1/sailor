@@ -9,7 +9,6 @@
         Keluarga</a>
 @endsection
 
-
 @section('breadcrumb')
     <div class="col">
         <ol class="breadcrumb bg-transparent mb-0">
@@ -804,3 +803,5 @@
         $('.select2').select2()
     </script>
 @endpush
+
+// test
