@@ -33,15 +33,20 @@ class ListController extends Controller
             $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
                 ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
-                ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                ->whereHas('wilayahDomisili', function ($query) use ($lokasiTugas) {
                     if (Auth::user()->role != 'admin') {
-                        if ($request->method == "POST") {
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
-                        } else { // PUT
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
-                        }
+                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
                     }
                 })
+
+                ->orWhere(function ($query) use ($request, $id) {
+                    if (($request->method == 'PUT')) {
+                        $query->where('id', $request->id_anak);
+                        $query->where('kartu_keluarga_id', $id);
+                        $query->where('status_hubungan_dalam_keluarga_id', 4);
+                    }
+                })
+
                 ->orderBy('tanggal_lahir', 'desc')
                 ->get();
 
@@ -59,7 +64,7 @@ class ListController extends Controller
                 $anggotaKeluargaHapus = AnggotaKeluarga::where('kartu_keluarga_id', $id)
                     ->where('status_hubungan_dalam_keluarga_id', 4)
                     ->whereBetween('tanggal_lahir', [$tanggalPembanding, $tanggalSekarang])
-                    ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
+                    ->whereHas('wilayahDomisili', function ($query) use ($lokasiTugas, $lokasiAnak) {
                         if (Auth::user()->role != 'admin') {
                             return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
                         }
@@ -86,13 +91,18 @@ class ListController extends Controller
                 ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiAnak) {
                     if (Auth::user()->role != 'admin') {
-                        if ($request->method == "POST") {
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
-                        } else { // PUT
-                            return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
-                        }
+                        $query->whereIn('desa_kelurahan_id', $lokasiTugas);
                     }
                 })
+
+                ->orWhere(function ($query) use ($request, $id) {
+                    if (($request->method == 'PUT')) {
+                        $query->where('id', $request->id_anak);
+                        $query->where('kartu_keluarga_id', $id);
+                        $query->where('status_hubungan_dalam_keluarga_id', 4);
+                    }
+                })
+
                 ->orderBy('tanggal_lahir', 'desc')
                 ->get();
 

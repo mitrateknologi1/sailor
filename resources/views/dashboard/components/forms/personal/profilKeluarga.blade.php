@@ -665,8 +665,7 @@
         $(document).on('change', '#desa-kelurahan-domisili', function() {
             $.ajax({
                 type: "GET",
-                url: "{{ url('cek-bidan-domisili') }}" + '/' + $('#desa-kelurahan-domisili')
-                    .val(),
+                url: "{{ url('cek-bidan-domisili') }}",
                 data: {
                     _token: "{{ csrf_token() }}",
                     desaKelurahanID: $('#desa-kelurahan-domisili').val()

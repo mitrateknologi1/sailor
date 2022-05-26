@@ -6,12 +6,13 @@
     <div class="row g-4">
         @if (Auth::user()->role != 'keluarga')
             <div class="col-sm-12 col-md-6 col-lg">
-                @component('dashboard.components.formElements.select', [
-                    'label' => 'Nama Kepala Keluarga / Nomor KK',
-                    'id' => 'nama-kepala-keluarga',
-                    'name' => 'nama_kepala_keluarga',
-                    'class' => 'select2',
-                    'wajib' => '<sup class="text-danger">*</sup>',
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Nama Kepala Keluarga / Nomor KK',
+                        'id' => 'nama-kepala-keluarga',
+                        'name' => 'nama_kepala_keluarga',
+                        'class' => 'select2',
+                        'wajib' => '<sup class="text-danger">*</sup>',
                     ])
                     @slot('options')
                         @foreach ($kartuKeluarga as $kk)
@@ -24,34 +25,37 @@
             </div>
         @endif
         <div class="col-sm-12 col-md-6 col-lg">
-            @component('dashboard.components.formElements.select', [
-                'label' => 'Nama Anak (Tanggal Lahir)',
-                'id' => 'nama-anak',
-                'name' => 'nama_anak',
-                'class' => 'select2',
-                'attribute' => 'disabled',
-                'wajib' => '<sup class="text-danger">*</sup>',
+            @component('dashboard.components.formElements.select',
+                [
+                    'label' => 'Nama Anak (Tanggal Lahir)',
+                    'id' => 'nama-anak',
+                    'name' => 'nama_anak',
+                    'class' => 'select2',
+                    'attribute' => 'disabled',
+                    'wajib' => '<sup class="text-danger">*</sup>',
                 ])
             @endcomponent
         </div>
         @if (Auth::user()->role == 'admin' && $method == 'POST')
             <div class="col-sm-12 col-md-6 col-lg">
-                @component('dashboard.components.formElements.select', [
-                    'label' => 'Bidan sesuai lokasi anak',
-                    'id' => 'nama-bidan',
-                    'name' => 'nama_bidan',
-                    'class' => 'select2',
-                    'attribute' => 'disabled',
-                    'wajib' => '<sup class="text-danger">*</sup>',
+                @component('dashboard.components.formElements.select',
+                    [
+                        'label' => 'Bidan sesuai lokasi anak',
+                        'id' => 'nama-bidan',
+                        'name' => 'nama_bidan',
+                        'class' => 'select2',
+                        'attribute' => 'disabled',
+                        'wajib' => '<sup class="text-danger">*</sup>',
                     ])
                 @endcomponent
             </div>
         @endif
 
         <div class="col-12 text-end">
-            @component('dashboard.components.buttons.process', [
-                'id' => 'proses-pertumbuhan-anak',
-                'type' => 'submit',
+            @component('dashboard.components.buttons.process',
+                [
+                    'id' => 'proses-pertumbuhan-anak',
+                    'type' => 'submit',
                 ])
             @endcomponent
         </div>
@@ -108,13 +112,13 @@
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Batal</button>
                         </div>
                         <div class="col-sm-6 col-lg-8">
-                            @component('dashboard.components.buttons.submit', [
-                                'id' => 'proses-pertumbuhan-anak',
-                                'type' => 'submit',
-                                'class' => 'text-white text-uppercase w-100',
-                                'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' :
-                                null,
-                                'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
+                            @component('dashboard.components.buttons.submit',
+                                [
+                                    'id' => 'proses-pertumbuhan-anak',
+                                    'type' => 'submit',
+                                    'class' => 'text-white text-uppercase w-100',
+                                    'icon' => Auth::user()->role == 'keluarga' ? '<i class="fa-solid fa-paper-plane"></i>' : null,
+                                    'label' => Auth::user()->role == 'keluarga' ? 'Kirim Data' : 'Simpan',
                                 ])
                             @endcomponent
                         </div>
