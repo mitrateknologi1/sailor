@@ -946,9 +946,26 @@ class PertumbuhanAnakController extends Controller
             abort(403, 'Maaf, halaman ini bukan untuk Remaja');
         }
         if ((Auth::user()->profil->id == $pertumbuhanAnak->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $pertumbuhanAnak->anggotaKeluarga->kartu_keluarga_id)) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    })
+                    ->orWhereHas('anggotaKeluarga', function ($query) use ($pertumbuhanAnak) {
+                        $query->where('id', $pertumbuhanAnak->anggota_keluarga_id);
+                    })
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'keluarga') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+            }
             $data = [
                 'anak' => PertumbuhanAnak::where('id', $pertumbuhanAnak->id)->first(),
-                'kartuKeluarga' => KartuKeluarga::latest()->get(),
+                // 'kartuKeluarga' => KartuKeluarga::latest()->get(),
+                'kartuKeluarga' => $kartuKeluarga,
             ];
             return view('dashboard.pages.utama.tumbuhKembang.pertumbuhanAnak.edit', $data);
         } else {

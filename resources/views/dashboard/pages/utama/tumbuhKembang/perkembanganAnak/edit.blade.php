@@ -34,7 +34,7 @@
                             @slot('kartuKeluarga', $kartuKeluarga)
                             @slot('anak', $anak)
                             @slot('form_id', 'form_edit_perkembangan_anak')
-                            @slot('proses', route('proses-perkembangan-anak'))'))
+                            @slot('proses', route('proses-perkembangan-anak'))
                             @slot('action', route('perkembangan-anak.update', $anak->id))
                             @slot('method', 'PUT')
                             @slot('back_url', route('perkembangan-anak.index'))

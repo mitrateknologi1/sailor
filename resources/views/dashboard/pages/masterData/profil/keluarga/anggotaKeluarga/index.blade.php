@@ -803,5 +803,3 @@
         $('.select2').select2()
     </script>
 @endpush
-
-// test
