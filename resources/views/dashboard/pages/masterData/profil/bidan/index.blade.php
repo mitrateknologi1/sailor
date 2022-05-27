@@ -431,7 +431,7 @@
                     $('#modal-provinsi').html(data.provinsi_nama);
                     if (data.foto_profil != null) {
                         $('#modal-foto-profil').html(
-                            '<div class="image-input avatar xxl rounded-4" style="background-image: url(upload/foto_profil/bidan/' +
+                            '<div class="image-input avatar xxl rounded-4" style="background-image: url({{ Storage::url('upload/foto_profil/bidan/') }}' +
                             data.foto_profil + ')">')
                     } else {
                         $('#modal-foto-profil').html(

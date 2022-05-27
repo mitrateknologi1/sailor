@@ -361,7 +361,6 @@
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
                     .format('YYYY-MM-DD'));
             });
-
         })
 
         // project data table
@@ -385,6 +384,7 @@
         })
 
         var overlay = $('#overlay').hide();
+
         $(document)
             .ajaxStart(function() {
                 overlay.show();

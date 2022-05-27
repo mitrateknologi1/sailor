@@ -38,6 +38,39 @@
             text-transform: lowercase !important;
         }
 
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100000;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .cv-spinner {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px #ddd solid;
+            border-top: 4px #2e93e6 solid;
+            border-radius: 50%;
+            animation: sp-anime 0.8s infinite linear;
+        }
+
+        @keyframes sp-anime {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
 </head>
 
@@ -109,12 +142,12 @@
                                                 @slot('kecamatanKK', isset($kecamatanKK) ? $kecamatanKK : null)
                                                 @slot('kabupatenKotaKK', isset($kabupatenKotaKK) ? $kabupatenKotaKK : null)
                                                 @slot('provinsiKK', isset($provinsiKK) ? $provinsiKK : null)
-                                                @slot('agama', $agama)')
-                                                @slot('pendidikan', $pendidikan)')
-                                                @slot('pekerjaan', $pekerjaan)')
-                                                @slot('golonganDarah', $golonganDarah)')
-                                                @slot('statusPerkawinan', $statusPerkawinan)')
-                                                @slot('statusHubungan', $statusHubungan)')
+                                                @slot('agama', $agama)
+                                                @slot('pendidikan', $pendidikan)
+                                                @slot('pekerjaan', $pekerjaan)
+                                                @slot('golonganDarah', $golonganDarah)
+                                                @slot('statusPerkawinan', $statusPerkawinan)
+                                                @slot('statusHubungan', $statusHubungan)
                                                 @slot('action', route('bidan.store'))
                                                 @slot('method', 'POST')
                                                 @slot('back_url', route('bidan.index'))
@@ -201,11 +234,11 @@
             <script src="{{ asset('assets/dashboard') }}/js/moment/moment-with-locales.min.js"></script>
 
 
-            @stack('script')
             <script>
                 $(document).on('select2:open', () => {
                     document.querySelector('.select2-search__field').focus();
                 });
+
                 $(function() {
                     $('.modal').modal({
                         backdrop: 'static',
@@ -219,6 +252,7 @@
                     $('.waktu').mask('00:00');
                     $('.angka').mask('00000000000000000000');
                 })
+
 
                 $('#status-hubungan').val('1')
                 $('#status-hubungan').prop('disabled', true)
@@ -295,19 +329,18 @@
                 })
 
                 var overlay = $('#overlay').hide();
-                $(document)
-                    .ajaxStart(function() {
-                        overlay.show();
-                    })
-                    .ajaxStop(function() {
-                        overlay.hide();
-                    });
+
+                $(document).ajaxStart(function() {
+                    overlay.show();
+                }).ajaxStop(function() {
+                    overlay.hide();
+                });
 
                 $('.numerik').on('input', function(e) {
                     this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
                 });
             </script>
-            {{-- @stack('script') --}}
+            @stack('script')
 
         </body>
 

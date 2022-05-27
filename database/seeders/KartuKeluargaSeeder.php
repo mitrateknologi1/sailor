@@ -38,7 +38,7 @@ class KartuKeluargaSeeder extends Seeder
             ],
             [
                 'id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120003', //2
-                'bidan_id' =>  null,
+                'bidan_id' =>  '9b6120ac-c4a1-11ec-9d64-0242ac120003',
                 'nomor_kk' => 8902983209900001,
                 'nama_kepala_keluarga' => 'RANGGA',
                 'alamat' => 'JL. SETAPAK NO. 1',
@@ -52,8 +52,8 @@ class KartuKeluargaSeeder extends Seeder
                 // 'dikeluarkan_tanggal' => '2021-01-11',
                 // 'dikeluarkan_oleh' => 'ROGER',
                 'file_kk' => null,
-                'is_valid' => 0,
-                'tanggal_validasi' => null,
+                'is_valid' => 1,
+                'tanggal_validasi' => now(),
                 'alasan_ditolak' => null,
                 'created_at' => now(),
             ],

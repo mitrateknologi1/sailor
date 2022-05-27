@@ -275,9 +275,9 @@
             <label class="col-md-3 col-sm-4 col-form-label">Foto Profil</label>
             <div class="col-md-9 col-sm-8">
                 <div class="image-input avatar xxl rounded-4"
-                    style="background-image: url({{ isset($bidan) && $bidan->foto_profil != null ? asset('upload/foto_profil/bidan/' . $bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
+                    style="background-image: url({{ isset($bidan) && $bidan->foto_profil != null ? Storage::url('upload/foto_profil/bidan/' . $bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
                     <div class="avatar-wrapper rounded-4"
-                        style="background-image: url({{ isset($bidan) && $bidan->foto_profil != null ? asset('upload/foto_profil/bidan/' . $bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
+                        style="background-image: url({{ isset($bidan) && $bidan->foto_profil != null ? Storage::url('upload/foto_profil/bidan/' . $bidan->foto_profil) : asset('assets/dashboard/images/avatar.png') }});">
                     </div>
                     <div class="file-input"
                         style="background: var(--card-color); text-align: center; height: 24px; width: 24px; line-height: 24px; border-radius: 24px; background-position: center !important;">

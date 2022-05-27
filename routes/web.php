@@ -44,6 +44,7 @@ use App\Http\Controllers\dashboard\utama\TesMapController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PemberitahuanController;
 use App\Http\Controllers\PersonalController;
+use App\Http\Controllers\UmumController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Models\Anc;
 use App\Models\PerkiraanMelahirkan;
@@ -62,9 +63,9 @@ use App\Models\PerkiraanMelahirkan;
 
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landingPage');
+Route::get('cek-bidan-domisili', [UmumController::class, 'cekBidanDomisili']);
 
 Route::group(['middleware' => 'guest'], function () {
-
     Route::get('/login', function () {
         return view('dashboard.pages.login');
     })->name('login');
@@ -73,10 +74,10 @@ Route::group(['middleware' => 'guest'], function () {
 
     Route::get('registrasi', [AuthController::class, 'registrasi'])->name('registrasi');
     Route::get('registrasi-ulang/{keluarga}', [AuthController::class, 'registrasiUlang']);
-    Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
     Route::put('registrasi-ulang/{keluarga}', [AuthController::class, 'updateRegistrasi'])->name('updateRegistrasi');
 });
 
+Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
 
 Route::get('/cek-remaja', [AuthController::class, 'cekRemaja'])->name('cekRemaja');
 
@@ -179,7 +180,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('anggota-keluarga/{keluarga}', AnggotaKeluargaController::class)->parameters([
         '{keluarga}' => 'anggotaKeluarga'
     ]);
-    Route::get('cek-bidan-domisili/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'cekBidanDomisili']);
     Route::put('anggota-keluarga/validasi/{keluarga}/{anggotaKeluarga}', [AnggotaKeluargaController::class, 'validasi']);
 
     Route::resource('bidan', BidanController::class);

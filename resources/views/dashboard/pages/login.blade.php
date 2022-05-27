@@ -43,6 +43,12 @@
             animation: sp-anime 0.8s infinite linear;
         }
 
+        @keyframes sp-anime {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
 </head>
 

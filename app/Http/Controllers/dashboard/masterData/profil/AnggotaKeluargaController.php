@@ -789,24 +789,6 @@ class AnggotaKeluargaController extends Controller
         }
     }
 
-    public function cekBidanDomisili(Request $request)
-    {
-        $kelurahanAnggotaKeluargaID = $request->desaKelurahanID;
-        $kelurahanLokasiTugasBidan = LokasiTugas::pluck('desa_kelurahan_id')->toArray();
-        $data = [
-            'kelurahanAnggotaKeluargaID' => $kelurahanAnggotaKeluargaID,
-            'kelurahanLokasiTugasBidan' => $kelurahanLokasiTugasBidan,
-        ];
-        // return $data;
-
-        // return $kelurahanLokasiTugasBidan;
-        if (in_array($kelurahanAnggotaKeluargaID, $kelurahanLokasiTugasBidan)) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
-
     /**
      * Remove the specified resource from storage.
      *

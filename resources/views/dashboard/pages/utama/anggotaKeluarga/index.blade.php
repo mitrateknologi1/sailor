@@ -27,10 +27,11 @@
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-2">Data Anggota Keluarga</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'id' => 'catatan-pertumbuhan-anak',
-                            'class' => '',
-                            'url' => url('anggota-keluarga' . '/' . Auth::user()->profil->kartu_keluarga_id . '/create'),
+                        @component('dashboard.components.buttons.add',
+                            [
+                                'id' => 'catatan-pertumbuhan-anak',
+                                'class' => '',
+                                'url' => url('anggota-keluarga' . '/' . Auth::user()->profil->kartu_keluarga_id . '/create'),
                             ])
                         @endcomponent
                     </div>
@@ -54,7 +55,7 @@
                                                         <div class="card-body p-0">
                                                             <div class="row justify-content-center">
                                                                 <div class="avatar xl rounded-circle no-thumbnail mb-3">
-                                                                    <img src="{{ isset($item) &&$item->foto_profil != null &&Storage::exists('upload/foto_profil/keluarga/' . $item->foto_profil)? asset('upload/foto_profil/keluarga/' . $item->foto_profil): asset('assets/dashboard/images/avatar.png') }}"
+                                                                    <img src="{{ isset($item) && $item->foto_profil != null && Storage::exists('upload/foto_profil/keluarga/' . $item->foto_profil) ? Storage::url('upload/foto_profil/keluarga/' . $item->foto_profil) : asset('assets/dashboard/images/avatar.png') }}"
                                                                         alt="Avatar"
                                                                         class="rounded-circle avatar xl shadow img-thumbnail">
                                                                 </div>
@@ -476,7 +477,7 @@
                         if (data.surat_keterangan_domisili) {
                             $('#file-surat-keterangan-domisili').removeClass('d-none');
                             $('#file-surat-keterangan-domisili').attr('href',
-                                '{{ asset('upload/surat_keterangan_domisili') }}/' + data
+                                '{{ Storage::url('upload/surat_keterangan_domisili') }}/' + data
                                 .surat_keterangan_domisili);
                         } else {
                             $('#modal-file-surat-keterangan-domisili').removeClass('d-none')
@@ -485,7 +486,7 @@
 
                     if (data.foto_profil != null) {
                         $('#modal-foto-profil').html(
-                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url(../upload/foto_profil/keluarga/' +
+                            '<div class="image-input shadow avatar xxl rounded-4" style="background-image: url({{ Storage::url('/upload/foto_profil/keluarga/') }}/' +
                             data.foto_profil + ')">')
                     } else {
                         $('#modal-foto-profil').html(
