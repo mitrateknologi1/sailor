@@ -38,6 +38,24 @@
             height: 28px;
         } */
 
+        .dropdown-menu {
+            position: absolute;
+            z-index: 1000;
+            display: none;
+            min-width: 10rem;
+            padding: .5rem 0;
+            margin: 0;
+            font-size: 1rem;
+            color: #212529;
+            text-align: left;
+            list-style: none;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid rgba(25, 26, 28, .15);
+            border-radius: .25rem;
+            z-index: 999999 !important;
+        }
+
         @media only screen and (max-width: 567px) {
             .pulse-ring {
                 left: -2px !important;
