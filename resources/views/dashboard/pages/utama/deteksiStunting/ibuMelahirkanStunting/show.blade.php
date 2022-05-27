@@ -155,7 +155,7 @@
                                         @endphp
                                     @endif
                                 @endforeach
-                                @if ($data['is_valid'] == 0)
+                                @if ($data['is_valid'] == 0 && Auth::user()->role != 'keluarga')
                                     <div class="row g-3 align-items-end mt-1" id="form-konfirmasi">
                                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
                                             @component('dashboard.components.formElements.select',
@@ -207,7 +207,7 @@
                                             ])
                                         @endcomponent
                                     </div>
-                                    @if ($data['is_valid'] == 0)
+                                    @if ($data['is_valid'] == 0 && Auth::user()->role != 'keluarga')
                                         <div class="col-sm-12 col-lg" id="col-modal-btn-konfirmasi">
                                             @component('dashboard.components.buttons.konfirmasi',
                                                 [
@@ -217,7 +217,7 @@
                                         </div>
                                     @endif
 
-                                    @if (Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id || Auth::user()->role == 'admin')
+                                    @if ((Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id || Auth::user()->role == 'admin') && $deteksiIbuMelahirkanStunting->is_valid == 1)
                                         <div class="col-sm-6 col-lg">
                                             @component('dashboard.components.buttons.edit',
                                                 [
