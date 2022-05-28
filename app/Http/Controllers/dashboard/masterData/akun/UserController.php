@@ -157,17 +157,17 @@ class UserController extends Controller
                     }
                 })
 
-                // ->addColumn('bidan', function ($data) {
-                //     if ($data->role == 'keluarga') {
-                //         if ($data->keluarga->bidan) {
-                //             return $data->keluarga->bidan->nama_lengkap;
-                //         } else {
-                //             return '<span class="badge rounded-pill bg-danger">Profil Belum Dikonfirmasi</span>';
-                //         }
-                //     } else {
-                //         return '-';
-                //     }
-                // })
+                ->addColumn('bidan', function ($data) {
+                    if ($data->role == 'keluarga') {
+                        if ($data->keluarga->bidan) {
+                            return $data->keluarga->bidan->nama_lengkap;
+                        } else {
+                            return '<span class="badge rounded-pill bg-danger">Profil Belum Dikonfirmasi</span>';
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
 
                 ->addColumn('action', function ($row) {
                     $actionBtn = '
@@ -183,7 +183,7 @@ class UserController extends Controller
                         if ($row->role != 'admin') {
                             if (Auth::user()->role == 'bidan') {
                                 if ($row->role == 'keluarga') {
-                                    if ($row->kepalaKeluarga->bidan_id == Auth::user()->bidan->id) {
+                                    if ($row->keluarga->bidan_id == Auth::user()->bidan->id) {
                                         $actionBtn .= '
                                         <a href="' . route('user.edit', $row->id) . '" id="btn-edit" class="btn btn-warning btn-sm mr-1 my-1 text-white shadow" data-toggle="tooltip" data-placement="top" title="Ubah"><i class="fas fa-edit"></i></a>';
                                         $actionBtn .= '
@@ -419,49 +419,48 @@ class UserController extends Controller
             }
             $user->delete();
         } else if ($user->role == 'keluarga') {
-            // if ($user->is_remaja == 0) { //kepala keluarga\
-            if (Storage::exists('upload/kartu_keluarga/' . $user->kepalaKeluarga->kartuKeluarga->file_kk)) {
-                Storage::delete('upload/kartu_keluarga/' . $user->kepalaKeluarga->kartuKeluarga->file_kk);
+            if ($user->is_remaja == 0) { //kepala keluarga\
+                if (Storage::exists('upload/kartu_keluarga/' . $user->kepalaKeluarga->kartuKeluarga->file_kk)) {
+                    Storage::delete('upload/kartu_keluarga/' . $user->kepalaKeluarga->kartuKeluarga->file_kk);
+                }
+
+                foreach ($user->kepalaKeluarga->kartuKeluarga->anggotaKeluarga as $anggota) {
+                    if (Storage::exists('upload/foto_profil/keluarga/' . $anggota->foto_profil)) {
+                        Storage::delete('upload/foto_profil/keluarga/' . $anggota->foto_profil);
+                    }
+                    if (Storage::exists('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili)) {
+                        Storage::delete('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili);
+                    }
+
+                    $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
+
+                    if ($anggota->wilayahDomisili) {
+                        $anggota->wilayahDomisili->delete();
+                    }
+
+                    if ($anggota->user) {
+                        $anggota->user->delete();
+                    }
+
+                    if ($pemberitahuan) {
+                        $pemberitahuan->delete();
+                    }
+
+
+                    $anggota->delete();
+                }
+
+                $user->kepalaKeluarga->kartuKeluarga->delete();
+            } else if ($user->is_remaja == 1) { //remaja
+                if (Storage::exists('upload/foto_profil/keluarga/' . $user->remaja->foto_profil)) {
+                    Storage::delete('upload/foto_profil/keluarga/' . $user->remaja->foto_profil);
+                }
+
+                $user->remaja->delete();
+                $user->delete();
             }
-
-            foreach ($user->kepalaKeluarga->kartuKeluarga->anggotaKeluarga as $anggota) {
-                if (Storage::exists('upload/foto_profil/keluarga/' . $anggota->foto_profil)) {
-                    Storage::delete('upload/foto_profil/keluarga/' . $anggota->foto_profil);
-                }
-                if (Storage::exists('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili)) {
-                    Storage::delete('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili);
-                }
-
-                $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
-
-                if ($anggota->wilayahDomisili) {
-                    $anggota->wilayahDomisili->delete();
-                }
-
-                if ($anggota->user) {
-                    $anggota->user->delete();
-                }
-
-                if ($pemberitahuan) {
-                    $pemberitahuan->delete();
-                }
-              
-                $anggota->delete();
-            }
-            $user->kepalaKeluarga->kartuKeluarga->delete();
-        } else if ($user->is_remaja == 1) { //remaja
-            if (Storage::exists('upload/foto_profil/keluarga/' . $user->remaja->foto_profil)) {
-                Storage::delete('upload/foto_profil/keluarga/' . $user->remaja->foto_profil);
-            }
-            $user->remaja->delete();
-            $user->delete();
         }
-    }
 
-    return response()->json(['res' => 'success']);
+        return response()->json(['res' => 'success']);
     }
 }
-
-
-
-     
