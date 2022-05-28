@@ -149,11 +149,18 @@ class ListController extends Controller
                         if (Auth::user()->role != 'admin') {
                             if ($request->method == "POST") {
                                 return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
-                            } else { // PUT
-                                return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiAnak);
                             }
                         }
                     })
+
+                    ->orWhere(function ($query) use ($request, $id) {
+                        if (($request->method == 'PUT')) {
+                            $query->where('id', $request->id_anak);
+                            $query->where('kartu_keluarga_id', $id);
+                            $query->where('status_hubungan_dalam_keluarga_id', 4);
+                        }
+                    })
+
                     ->whereHas('user', function ($query) {
                         $query->where('is_remaja', 1);
                     })
