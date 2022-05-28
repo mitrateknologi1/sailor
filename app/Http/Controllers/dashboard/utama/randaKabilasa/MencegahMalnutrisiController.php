@@ -47,6 +47,11 @@ class MencegahMalnutrisiController extends Controller
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
                 $kartuKeluarga = KartuKeluarga::valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->whereHas('user', function ($query) {
+                            $query->where('is_remaja', 1);
+                        });
+                    })
                     ->latest()->get();
             } else if (Auth::user()->role == 'bidan') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
