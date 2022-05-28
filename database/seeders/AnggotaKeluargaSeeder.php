@@ -154,7 +154,7 @@ class AnggotaKeluargaSeeder extends Seeder
                 'id' => '674085d6-c4a3-11ec-9d64-0242ac120045', //3.1
                 'bidan_id' => null,
                 'kartu_keluarga_id' => 'de2a4fde-c4a2-11ec-9d64-0242ac120002',
-                'user_id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e94',
+                'user_id' => null,
                 'nama_lengkap' => 'MEI',
                 'nik' => 1234567890123446,
                 'jenis_kelamin' => 'PEREMPUAN',

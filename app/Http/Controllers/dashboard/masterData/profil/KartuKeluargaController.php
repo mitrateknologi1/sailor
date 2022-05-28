@@ -593,6 +593,14 @@ class KartuKeluargaController extends Controller
             }
 
             $user = User::where('id', $keluarga->kepalaKeluarga->user_id);
+
+            $remaja = AnggotaKeluarga::where('kartu_keluarga_id', $keluarga->id)
+                ->where('status_hubungan_dalam_keluarga_id', 4)
+                ->whereNotNull('user_id')->get();
+            foreach ($remaja as $r) {
+                $r->user->delete();
+            }
+            // $remaja->user->delete();
             $user->delete();
 
             $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $keluarga->id);
