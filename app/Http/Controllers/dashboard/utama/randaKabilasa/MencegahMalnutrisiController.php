@@ -341,8 +341,32 @@ class MencegahMalnutrisiController extends Controller
     public function edit(MencegahMalnutrisi $mencegahMalnutrisi)
     {
         if ((Auth::user()->profil->id == $mencegahMalnutrisi->randaKabilasa->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $mencegahMalnutrisi->randaKabilasa->anggotaKeluarga->kartu_keluarga_id)) {
-            $kartuKeluarga = KartuKeluarga::latest()->get();
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             $daftarSoal = SoalMencegahMalnutrisi::orderBy('urutan', 'asc')->get();
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->whereHas('anggotaKeluarga', function ($query) {
+                        $query->where('status_hubungan_dalam_keluarga_id', 4);
+                    })
+                    ->whereHas('user', function ($query) {
+                        $query->where('is_remaja', 1);
+                    })
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('user', function ($query) {
+                        $query->where('is_remaja', 1);
+                    })
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    })
+                    ->orWhereHas('anggotaKeluarga', function ($query) use ($mencegahMalnutrisi) {
+                        $query->where('id', $mencegahMalnutrisi->randaKabilasa->anggota_keluarga_id);
+                    })
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'keluarga') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+            }
             if (count($daftarSoal) > 0) {
                 return view('dashboard.pages.utama.randaKabilasa.mencegahMalnutrisi.edit', compact('kartuKeluarga', 'daftarSoal', 'mencegahMalnutrisi'));
             } else {
