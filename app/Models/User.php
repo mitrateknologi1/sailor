@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function bidan()
     {
-        return $this->hasOne(Bidan::class, 'user_id', 'id');
+        return $this->hasOne(Bidan::class, 'user_id', 'id')->withTrashed();
     }
 
     public function penyuluh()
@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function kepalaKeluarga()
     {
-        return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
+        return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id')->withTrashed();
     }
 
     // lokasi tugas if role != admin
