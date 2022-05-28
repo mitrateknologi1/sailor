@@ -84,7 +84,7 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-akun',
-                                            'th' => ['No', 'Nama Profil', 'Nomor HP', 'Role', 'Status', 'Dibuat Tanggal', 'Bidan', 'Aksi'],
+                                            'th' => ['No', 'Nama Profil', 'Nomor HP', 'Role', 'Status', 'Dibuat Tanggal', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -163,11 +163,11 @@
                     data: 'created_at',
                     name: 'created_at'
                 },
-                {
-                    data: 'bidan',
-                    name: 'bidan',
-                    visible: '{{ Auth::user()->role == 'bidan' ? true : false }}'
-                },
+                // {
+                //     data: 'bidan',
+                //     name: 'bidan',
+                //     visible: '{{ Auth::user()->role == 'bidan' ? true : false }}'
+                // },
                 {
                     data: 'action',
                     name: 'action',
