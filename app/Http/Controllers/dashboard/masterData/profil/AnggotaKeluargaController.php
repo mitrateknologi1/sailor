@@ -812,6 +812,9 @@ class AnggotaKeluargaController extends Controller
                 $pemberitahuan->delete();
             }
             $anggotaKeluarga->wilayahDomisili->delete();
+            if ($anggotaKeluarga->user) {
+                $anggotaKeluarga->user->delete();
+            }
             $anggotaKeluarga->delete();
             return response()->json(['res' => 'success']);
         } else {

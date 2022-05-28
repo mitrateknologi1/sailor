@@ -236,11 +236,15 @@ class PertumbuhanAnakController extends Controller
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
                 $kartuKeluarga = KartuKeluarga::valid()
+                    ->whereHas('anggotaKeluarga', function ($query) {
+                        $query->where('status_hubungan_dalam_keluarga_id', '4');
+                    })
                     ->latest()->get();
             } else if (Auth::user()->role == 'bidan') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
                     ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                        $query->where('status_hubungan_dalam_keluarga_id', '4');
                     })->latest()->get();
             } else if (Auth::user()->role == 'keluarga') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
@@ -954,9 +958,11 @@ class PertumbuhanAnakController extends Controller
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
                     ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                        $query->where('status_hubungan_dalam_keluarga_id', 4);
                     })
                     ->orWhereHas('anggotaKeluarga', function ($query) use ($pertumbuhanAnak) {
                         $query->where('id', $pertumbuhanAnak->anggota_keluarga_id);
+                        $query->where('status_hubungan_dalam_keluarga_id', 4);
                     })
                     ->latest()->get();
             } else if (Auth::user()->role == 'keluarga') {

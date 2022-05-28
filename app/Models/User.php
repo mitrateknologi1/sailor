@@ -73,6 +73,11 @@ class User extends Authenticatable
         return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id')->withTrashed();
     }
 
+    public function remaja()
+    {
+        return $this->hasOne(AnggotaKeluarga::class, 'user_id', 'id');
+    }
+
     // lokasi tugas if role != admin
     public function lokasiTugas()
     {

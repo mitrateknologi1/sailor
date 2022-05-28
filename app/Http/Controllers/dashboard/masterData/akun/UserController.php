@@ -445,23 +445,23 @@ class UserController extends Controller
                 if ($pemberitahuan) {
                     $pemberitahuan->delete();
                 }
-
-
+              
                 $anggota->delete();
             }
-
             $user->kepalaKeluarga->kartuKeluarga->delete();
-            // } else if ($user->is_remaja == 1) { //remaja
-
-            // }
+        } else if ($user->is_remaja == 1) { //remaja
+            if (Storage::exists('upload/foto_profil/keluarga/' . $user->remaja->foto_profil)) {
+                Storage::delete('upload/foto_profil/keluarga/' . $user->remaja->foto_profil);
+            }
+            $user->remaja->delete();
+            $user->delete();
         }
+    }
 
-
-
-
-
-
-
-        return response()->json(['res' => 'success']);
+    return response()->json(['res' => 'success']);
     }
 }
+
+
+
+     
