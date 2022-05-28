@@ -184,7 +184,8 @@ class StuntingAnakController extends Controller
                 $kartuKeluarga = KartuKeluarga::valid()
                     ->latest()->get();
             } else if (Auth::user()->role == 'bidan') {
-                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
+                    ->valid()
                     ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                     })->latest()->get();
@@ -874,7 +875,22 @@ class StuntingAnakController extends Controller
             abort(403, 'Maaf, halaman ini bukan untuk Remaja');
         }
         if ((Auth::user()->profil->id == $stuntingAnak->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $stuntingAnak->anggotaKeluarga->kartu_keluarga_id)) {
-            $kartuKeluarga = KartuKeluarga::latest()->get();
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    })
+                    ->orWhereHas('anggotaKeluarga', function ($query) use ($stuntingAnak) {
+                        $query->where('id', $stuntingAnak->anggota_keluarga_id);
+                    })
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'keluarga') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+            }
             return view('dashboard.pages.utama.deteksiStunting.stuntingAnak.edit', compact('kartuKeluarga', 'stuntingAnak'));
         } else {
             return abort(404);

@@ -327,14 +327,19 @@ class AncController extends Controller
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
                 $kartuKeluarga = KartuKeluarga::valid()
+                    ->whereHas('anggotaKeluarga', function ($query) {
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
                     ->latest()->get();
             } else if (Auth::user()->role == 'bidan') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
                     ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
                     })->latest()->get();
             } else if (Auth::user()->role == 'keluarga') {
-                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
+                    ->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
             }
             return view('dashboard.pages.utama.momsCare.anc.create', compact('kartuKeluarga'));
         } else {
@@ -715,7 +720,25 @@ class AncController extends Controller
             abort(403, 'Maaf, halaman ini bukan untuk Remaja');
         }
         if ((Auth::user()->profil->id == $anc->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $anc->anggotaKeluarga->kartu_keluarga_id)) {
-            $kartuKeluarga = KartuKeluarga::latest()->get();
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->whereHas('anggotaKeluarga', function ($query) {
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
+                    ->orWhereHas('anggotaKeluarga', function ($query) use ($anc) {
+                        $query->where('id', $anc->anggota_keluarga_id);
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
+                    ->latest()->get();
+            }
             return view('dashboard.pages.utama.momsCare.anc.edit', compact('anc', 'kartuKeluarga'));
         } else {
             return abort(404);

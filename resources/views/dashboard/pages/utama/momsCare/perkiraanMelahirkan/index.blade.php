@@ -73,19 +73,7 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => [
-                                                'No',
-                                                'Tanggal Dibuat',
-                                                'Status',
-                                                'Nama Ibu',
-                                                'Tanggal Haid Terakhir',
-                                                'Tanggal Perkiraan Lahir',
-                                                'Usia Kehamilan',
-                                                'Desa / Kelurahan',
-                                                'Bidan',
-                                                'Tanggal Validasi',
-                                                'Aksi',
-                                            ],
+                                            'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Tanggal Haid Terakhir', 'Tanggal Perkiraan Lahir', 'Usia Kehamilan', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -196,7 +184,7 @@
                             <button class="btn btn-outline-dark text-uppercase w-100" data-bs-dismiss="modal"
                                 aria-label="Close"><i class="bi bi-x-circle"></i> Tutup</button>
                         </div>
-                        <div class="col-sm-6 col-lg-8">
+                        <div class="col-sm-12 col-lg-8" id="col-modal-btn-ubah">
                             @component('dashboard.components.buttons.edit',
                                 [
                                     'id' => 'modal-btn-ubah',

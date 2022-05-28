@@ -154,14 +154,20 @@ class ListController extends Controller
                             }
                         }
                     })
+                    ->whereHas('user', function ($query) {
+                        $query->where('is_remaja', 1);
+                    })
                     ->orderBy('tanggal_lahir', 'desc')
-                    ->get()->where('umur', '<=', 21)->where('umur', '>=', 12);
+                    ->get();
 
                 if (Auth::user()->role == 'keluarga') {
                     $anggotaKeluarga = AnggotaKeluarga::valid()->where('kartu_keluarga_id', $id)
                         ->where('status_hubungan_dalam_keluarga_id', 4)
+                        ->whereHas('user', function ($query) {
+                            $query->where('is_remaja', 1);
+                        })
                         ->orderBy('tanggal_lahir', 'desc')
-                        ->get()->where('umur', '<=', 21)->where('umur', '>=', 12);
+                        ->get();
                 }
             }
 
@@ -270,13 +276,18 @@ class ListController extends Controller
 
         $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)
             ->where('status_hubungan_dalam_keluarga_id', 3)
-            ->whereHas('wilayahDomisili', function ($query) use ($request, $lokasiTugas, $lokasiIbu) {
+
+            ->whereHas('wilayahDomisili', function ($query) use ($lokasiTugas) {
                 if (Auth::user()->role != 'admin') {
-                    if ($request->method == "POST") {
-                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
-                    } else { // PUT
-                        return $query->whereIn('desa_kelurahan_id', $lokasiTugas)->orWhere('desa_kelurahan_id', $lokasiIbu);
-                    }
+                    return $query->whereIn('desa_kelurahan_id', $lokasiTugas);
+                }
+            })
+
+            ->orWhere(function ($query) use ($request, $id) {
+                if (($request->method == 'PUT')) {
+                    $query->where('id', $request->id_edit);
+                    $query->where('kartu_keluarga_id', $id);
+                    $query->where('status_hubungan_dalam_keluarga_id', 3);
                 }
             })
             ->get();

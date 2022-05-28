@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Edit Perkiraan Melahirkan
+    Edit Antenatal Care
 @endsection
 
 @push('style')
@@ -12,8 +12,8 @@
         <ol class="breadcrumb bg-transparent mb-0">
             <li class="breadcrumb-item"><a class="text-secondary" href="{{ url('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Moms Care</li>
-            <li class="breadcrumb-item active" aria-current="page">Perkiraan Melahirkan</li>
-            <li class="breadcrumb-item active" aria-current="page">Edit Perkiraan Melahirkan</li>
+            <li class="breadcrumb-item active" aria-current="page">Antenatal Care</li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Antenatal Care</li>
         </ol>
     </div>
 @endsection

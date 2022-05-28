@@ -172,14 +172,23 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
             if (Auth::user()->role == 'admin') {
                 $kartuKeluarga = KartuKeluarga::valid()
+                    ->whereHas('anggotaKeluarga', function ($query) {
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
                     ->latest()->get();
             } else if (Auth::user()->role == 'bidan') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
                     ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
-                    })->latest()->get();
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
+                    ->latest()
+                    ->get();
             } else if (Auth::user()->role == 'keluarga') {
-                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->where('id', Auth::user()->profil->kartu_keluarga_id)->latest()->get();
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')
+                    ->where('id', Auth::user()->profil->kartu_keluarga_id)
+                    ->latest()
+                    ->get();
             }
             $daftarSoal = SoalIbuMelahirkanStunting::orderBy('urutan', 'asc')->get();
             if (count($daftarSoal) > 0) {
@@ -374,7 +383,25 @@ class DeteksiIbuMelahirkanStuntingController extends Controller
             abort(403, 'Maaf, halaman ini bukan untuk Remaja');
         }
         if ((Auth::user()->profil->id == $deteksiIbuMelahirkanStunting->bidan_id) || (Auth::user()->role == 'admin') || (Auth::user()->profil->kartu_keluarga_id == $deteksiIbuMelahirkanStunting->anggotaKeluarga->kartu_keluarga_id)) {
-            $kartuKeluarga = KartuKeluarga::latest()->get();
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            if (Auth::user()->role == 'admin') {
+                $kartuKeluarga = KartuKeluarga::valid()
+                    ->whereHas('anggotaKeluarga', function ($query) {
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
+                    ->latest()->get();
+            } else if (Auth::user()->role == 'bidan') {
+                $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
+                    ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
+                    ->orWhereHas('anggotaKeluarga', function ($query) use ($deteksiIbuMelahirkanStunting) {
+                        $query->where('id', $deteksiIbuMelahirkanStunting->anggota_keluarga_id);
+                        $query->where('status_hubungan_dalam_keluarga_id', 3);
+                    })
+                    ->latest()->get();
+            }
             $daftarSoal = SoalIbuMelahirkanStunting::orderBy('urutan', 'asc')->get();
             if (count($daftarSoal) > 0) {
                 return view('dashboard.pages.utama.deteksiStunting.ibuMelahirkanStunting.edit', compact('kartuKeluarga', 'daftarSoal', 'deteksiIbuMelahirkanStunting'));

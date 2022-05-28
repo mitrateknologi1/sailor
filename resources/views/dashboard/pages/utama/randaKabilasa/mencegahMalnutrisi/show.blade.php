@@ -222,7 +222,7 @@
                                         @endphp
                                     @endif
                                 @endforeach
-                                @if ($data['is_valid_mencegah_malnutrisi'] == 0)
+                                @if ($data['is_valid_mencegah_malnutrisi'] == 0 && Auth::user()->role != 'keluarga')
                                     <div class="row g-3 align-items-end" id="form-konfirmasi">
                                         <div class="col-lg col-sm-12" id="pilih-konfirmasi">
                                             @component('dashboard.components.formElements.select',
@@ -274,7 +274,7 @@
                                             ])
                                         @endcomponent
                                     </div>
-                                    @if ($data['is_valid_mencegah_malnutrisi'] == 0)
+                                    @if ($data['is_valid_mencegah_malnutrisi'] == 0 && Auth::user()->role != 'keluarga')
                                         <div class="col-sm-12 col-lg" id="col-modal-btn-konfirmasi">
                                             @component('dashboard.components.buttons.konfirmasi',
                                                 [
@@ -283,7 +283,7 @@
                                             @endcomponent
                                         </div>
                                     @endif
-                                    @if (Auth::user()->profil->id == $mencegahMalnutrisi->randaKabilasa->bidan_id || Auth::user()->role == 'admin')
+                                    @if ((Auth::user()->profil->id == $mencegahMalnutrisi->randaKabilasa->bidan_id || Auth::user()->role == 'admin') && $data['is_valid_mencegah_malnutrisi'] == 1)
                                         <div class="col-sm-6 col-lg">
                                             @component('dashboard.components.buttons.edit',
                                                 [
