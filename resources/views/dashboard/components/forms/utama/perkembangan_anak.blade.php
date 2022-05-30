@@ -292,7 +292,7 @@
             } else {
                 var id = '{{ Auth::user()->profil->kartu_keluarga_id }}';
             }
-            var rentang_umur = 'semua_umur';
+            var rentang_umur = 'balita';
             var id_anak = "{{ isset($anak) ? $anak->anggotaKeluarga->id : '' }}";
             var selected = '';
             $('#nama-anak').html('');

@@ -15,18 +15,6 @@ class PerkembanganAnakSeeder extends Seeder
     public function run()
     {
         DB::table('perkembangan_anak')->insert(array(
-            1 =>
-            array(
-                'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120003', //2
-                'anggota_keluarga_id' => '674085d6-c4a3-11ec-9d64-0242ac120004',
-                'bidan_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
-                'created_at' => '2022-04-01 21:11:16',
-                'is_valid' => 1,
-                'motorik_halus' => 'Mulai belajar membaca berhitung, menggambar, mewarnai dan merangkai kalimat dengan baik',
-                'motorik_kasar' => 'Dapat berdiri satu kaki, mulai dapat menari, melakukan gerakan olah tubuh, keseimbangan tubuh mulai membaik',
-                'tanggal_validasi' => '2022-04-01',
-                'updated_at' => '2022-04-01 21:11:32',
-            ),
             2 =>
             array(
                 'id' => 'e66ebfd4-c4a4-11ec-9d64-0242ac120004', //3
