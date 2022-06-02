@@ -45,7 +45,7 @@ class PerkiraanMelahirkanController extends Controller
                         }
 
                         if (Auth::user()->role == 'penyuluh') { // penyuluh
-                            $query->valid();
+                            $query->where('is_valid', 1);
                         }
                     })
                     ->where(function ($query) use ($request) {
