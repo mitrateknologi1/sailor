@@ -17,11 +17,23 @@ class ApiBidanController extends Controller
     public function index(Request $request)
     {
         $pageSize = $request->page_size ?? 20;
-        $withDaerah = $request->with_daerah;
-        if ($withDaerah) {
-            return Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan',)->paginate($pageSize);
+        $relation = $request->relation;
+        $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
+        $data = 0;
+
+        if ($relation || $lokasiTugasKelurahanId) {
+            $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
+        } else {
+            $data = new Bidan;
         }
-        return Bidan::paginate($pageSize);
+
+        if ($lokasiTugasKelurahanId) {
+            $data->whereHas('lokasiTugas',  function ($query) use ($lokasiTugasKelurahanId) {
+                $query->where('desa_kelurahan_id', $lokasiTugasKelurahanId);
+            });
+        }
+
+        return $data->paginate($pageSize);
     }
 
     /**

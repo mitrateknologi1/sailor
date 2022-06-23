@@ -36,5 +36,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/lokasi_tugas', [ApiLokasiTugasController::class, 'index']);
     Route::post('/lokasi_tugas', [ApiLokasiTugasController::class, 'store']);
     Route::put('/lokasi_tugas/{id}', [ApiLokasiTugasController::class, 'update']);
-    Route::delete('/lokasi_tugas/{id}', [ApiLokasiTugasController::class, 'destroy']);
+    Route::delete('/lokasi_tugas', [ApiLokasiTugasController::class, 'destroy']);
 });
