@@ -23,6 +23,23 @@ class KartuKeluarga extends Model
     use SoftDeletes;
     protected $table = 'kartu_keluarga';
     protected $guarded = ['id'];
+    protected $fillable = [
+        "bidan_id",
+        "nomor_kk",
+        "nama_kepala_keluarga",
+        "alamat",
+        "rt",
+        "rw",
+        "kode_pos",
+        "desa_kelurahan_id",
+        "kecamatan_id",
+        "kabupaten_kota_id",
+        "provinsi_id",
+        "file_kk",
+        "is_valid",
+        "tanggal_validasi",
+        "alasan_ditolak",
+    ];
 
 
     public function anggotaKeluarga()

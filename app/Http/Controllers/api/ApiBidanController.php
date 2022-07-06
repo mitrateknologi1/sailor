@@ -19,21 +19,21 @@ class ApiBidanController extends Controller
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
-        $data = 0;
+        $bidan = null;
 
         if ($relation || $lokasiTugasKelurahanId) {
-            $data = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
+            $bidan = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
         } else {
-            $data = new Bidan;
+            $bidan = new Bidan;
         }
 
         if ($lokasiTugasKelurahanId) {
-            $data->whereHas('lokasiTugas',  function ($query) use ($lokasiTugasKelurahanId) {
+            $bidan->whereHas('lokasiTugas',  function ($query) use ($lokasiTugasKelurahanId) {
                 $query->where('desa_kelurahan_id', $lokasiTugasKelurahanId);
             });
         }
 
-        return $data->paginate($pageSize);
+        return $bidan->paginate($pageSize);
     }
 
     /**
@@ -69,9 +69,14 @@ class ApiBidanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        return Bidan::find($id);
+        $relation = $request->relation;
+
+        if ($relation) {
+            return Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama')->where('id', $id)->first();
+        }
+        return Bidan::where('id', $id)->first();
     }
 
     /**
@@ -91,6 +96,7 @@ class ApiBidanController extends Controller
             "kabupaten_kota_id" => "exists:kabupaten_kota,id",
             "provinsi_id" => "exists:provinsi,id",
         ]);
+
         $bidan = Bidan::find($id);
         $bidan->update($request->all());
         return $bidan;

@@ -18,13 +18,13 @@ class ApiLokasiTugasController extends Controller
     public function index(Request $request)
     {
         $pageSize = $request->page_size ?? 20;
-        $filterBy = $request->filter_by;
+        $jenisProfil = $request->jenis_profil;
 
-        if ($filterBy) {
+        if ($jenisProfil) {
             return LokasiTugas::with('desaKelurahan')
-                ->where('jenis_profil', $filterBy)
+                ->where('jenis_profil', $jenisProfil)
                 ->groupBy('desa_kelurahan_id')
-                ->get();
+                ->paginate($pageSize);
         }
 
         return LokasiTugas::paginate($pageSize);
@@ -40,14 +40,6 @@ class ApiLokasiTugasController extends Controller
     {
         $reqBody = json_decode($request->getContent());
         if (is_array($reqBody) && sizeof($reqBody) > 0) {
-            // $rules = [
-            //     'required', function ($attribute, $value, $fail) {
-            //         if (!DB::table('bidan')->where('id', $value)->exists() && !DB::table('penyuluh')->where('id', $value)->exists()) {
-            //             return $fail("The provided $attribute is not valid.");
-            //         }
-            //     }
-            // ];
-            error_log("sini");
             $request->validate([
                 "*.jenis_profil" => "required|in:bidan,penyuluh",
                 "*.profil_id" => "required",
@@ -60,7 +52,6 @@ class ApiLokasiTugasController extends Controller
 
             return LokasiTugas::insert($request->all());
         } else {
-            error_log("situ");
             $request->validate([
                 "jenis_profil" => "required|in:bidan,penyuluh",
                 "profil_id" => "required",

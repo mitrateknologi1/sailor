@@ -15,8 +15,8 @@ class ApiAuthController extends Controller
     public function register(Request $request)
     {
         $fields = $request->validate([
-            'nik' => 'required|string',
-            'nomor_hp' => 'required|string',
+            'nik' => 'required|string|unique:users,nik',
+            'nomor_hp' => 'required|string|unique:users,nomor_hp',
             'password' => 'required|string|confirmed',
         ]);
 
@@ -37,41 +37,33 @@ class ApiAuthController extends Controller
 
     public function login(Request $request)
     {
-        $credsPhone = $request->validate([
+        $credentials = $request->validate([
             'nomor_hp' => ['required_if:nik,null'],
             'nik' => ['required_if:nomor_hp,null'],
+            'role' => ['required'],
             'password' => ['required']
         ]);
 
-        if (!$request->nomor_hp) {
-            $user = User::where('nik', $credsPhone['nik'])->first();
+        $user = User::where('nomor_hp', $credentials['nomor_hp'])->where('role', $credentials['role'])->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return response([
+                'message' => 'Bad credentials.'
+            ], 401);
+        }
+
+        if ($user->status == 1) {
+            $token = $user->createToken('myapptoken')->plainTextToken;
+
+            return response([
+                "user" => $user,
+                "token" => $token,
+            ], 201);
         } else {
-            $user = User::where('nomor_hp', $credsPhone['nomor_hp'])->first();
+            return response([
+                'message' => 'Account disabled.'
+            ], 401);
         }
-
-        if (Auth::attempt($credsPhone)) {
-            if (Auth::user()->status == 1) {
-                $token = $user->createToken('userToken')->plainTextToken;
-
-                // get profile data
-                // if ($user->role == "admin"){
-                //     $profil = Admin::where('user_id', '=', Auth::user()->id)->first(); 
-                // }
-
-                return response([
-                    "user" => $user,
-                    "token" => $token,
-                    // "profil" => $profil,
-                ], 201);
-            } else {
-                return response([
-                    'message' => 'Account disabled.'
-                ], 401);
-            }
-        }
-        return response([
-            'message' => 'Bad credentials.'
-        ], 401);
     }
 
     public function logout(Request $request)
