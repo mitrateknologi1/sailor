@@ -19,12 +19,10 @@ class ApiBidanController extends Controller
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
-        $bidan = null;
+        $bidan = new Bidan;
 
         if ($relation || $lokasiTugasKelurahanId) {
             $bidan = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
-        } else {
-            $bidan = new Bidan;
         }
 
         if ($lokasiTugasKelurahanId) {

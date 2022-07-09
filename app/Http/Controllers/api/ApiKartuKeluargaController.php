@@ -22,13 +22,12 @@ class ApiKartuKeluargaController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
-        $kartuKeluarga = null;
+        $kartuKeluarga = new KartuKeluarga;
 
         if ($relation) {
             $kartuKeluarga = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'bidan');
-        } else {
-            $kartuKeluarga = new KartuKeluarga;
         }
+
         return  $kartuKeluarga->paginate($pageSize);
     }
 
@@ -79,22 +78,18 @@ class ApiKartuKeluargaController extends Controller
     public function update(Request $request, $id)
     {
         $kartuKeluarga = KartuKeluarga::find($id);
-        if (($request->user()->profil->id == $kartuKeluarga->bidan_id) || ($request->user()->role == 'admin')) {
-            $request->validate([
-                "bidan_id" => 'exists:bidan,id',
-                "nomor_kk" => "unique:kartu_keluarga,nomor_kk,$id",
-                "desa_kelurahan_id" => "exists:desa_kelurahan,id",
-                "kecamatan_id" => "exists:kecamatan,id",
-                "kabupaten_kota_id" => "exists:kabupaten_kota,id",
-                "provinsi_id" => "exists:provinsi,id",
-                "is_valid" => 'in:0,1',
-            ]);
-            $kartuKeluarga->update($request->all());
-            return $kartuKeluarga;
-        }
-        return response([
-            'message' => "Not Permitted",
-        ], 403);
+
+        $request->validate([
+            "bidan_id" => 'exists:bidan,id',
+            "nomor_kk" => "unique:kartu_keluarga,nomor_kk,$id",
+            "desa_kelurahan_id" => "exists:desa_kelurahan,id",
+            "kecamatan_id" => "exists:kecamatan,id",
+            "kabupaten_kota_id" => "exists:kabupaten_kota,id",
+            "provinsi_id" => "exists:provinsi,id",
+            "is_valid" => 'in:0,1',
+        ]);
+        $kartuKeluarga->update($request->all());
+        return $kartuKeluarga;
     }
 
     /**
@@ -107,49 +102,44 @@ class ApiKartuKeluargaController extends Controller
     {
         $kartuKeluarga = KartuKeluarga::find($id);
 
-        if ((Auth::user()->profil->id == $kartuKeluarga->bidan_id) || (Auth::user()->role == 'admin')) {
-            foreach ($kartuKeluarga->anggotaKeluarga as $anggota) {
-                if (Storage::exists('upload/foto_profil/keluarga/' . $anggota->foto_profil)) {
-                    Storage::delete('upload/foto_profil/keluarga/' . $anggota->foto_profil);
-                }
 
-                if (Storage::exists('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili)) {
-                    Storage::delete('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili);
-                }
-
-                $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
-
-                if ($anggota->wilayahDomisili) {
-                    $anggota->wilayahDomisili->delete();
-                }
-
-                if ($pemberitahuan) {
-                    $pemberitahuan->delete();
-                }
-            }
-            if (Storage::exists('upload/kartu_keluarga/' . $kartuKeluarga->file_kk)) {
-                Storage::delete('upload/kartu_keluarga/' . $kartuKeluarga->file_kk);
+        foreach ($kartuKeluarga->anggotaKeluarga as $anggota) {
+            if (Storage::exists('upload/foto_profil/keluarga/' . $anggota->foto_profil)) {
+                Storage::delete('upload/foto_profil/keluarga/' . $anggota->foto_profil);
             }
 
-            $user = User::where('id', $kartuKeluarga->kepalaKeluarga->user_id);
-
-            $remaja = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id)
-                ->where('status_hubungan_dalam_keluarga_id', 4)
-                ->whereNotNull('user_id')->get();
-            foreach ($remaja as $r) {
-                $r->user->delete();
+            if (Storage::exists('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili)) {
+                Storage::delete('upload/surat_keterangan_domisili/' . $anggota->wilayahDomisili->file_ket_domisili);
             }
-            // $remaja->user->delete();
-            $user->delete();
 
-            $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id);
-            $anggotaKeluarga->delete();
+            $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
 
-            return $kartuKeluarga->delete();
+            if ($anggota->wilayahDomisili) {
+                $anggota->wilayahDomisili->delete();
+            }
+
+            if ($pemberitahuan) {
+                $pemberitahuan->delete();
+            }
+        }
+        if (Storage::exists('upload/kartu_keluarga/' . $kartuKeluarga->file_kk)) {
+            Storage::delete('upload/kartu_keluarga/' . $kartuKeluarga->file_kk);
         }
 
-        return response([
-            'message' => "Not Permitted",
-        ], 403);
+        $user = User::where('id', $kartuKeluarga->kepalaKeluarga->user_id);
+
+        $remaja = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id)
+            ->where('status_hubungan_dalam_keluarga_id', 4)
+            ->whereNotNull('user_id')->get();
+        foreach ($remaja as $r) {
+            $r->user->delete();
+        }
+        // $remaja->user->delete();
+        $user->delete();
+
+        $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id);
+        $anggotaKeluarga->delete();
+
+        return $kartuKeluarga->delete();
     }
 }

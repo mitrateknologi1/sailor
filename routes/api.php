@@ -6,6 +6,7 @@ use App\Http\Controllers\api\ApiAuthController;
 use App\Http\Controllers\api\ApiBidanController;
 use App\Http\Controllers\api\ApiKartuKeluargaController;
 use App\Http\Controllers\api\ApiLokasiTugasController;
+use App\Http\Controllers\api\ApiWilayahDomisiliController;
 use App\Http\Controllers\api\const\ApiAgamaController;
 use App\Http\Controllers\api\const\ApiDesaKelurahanController;
 use App\Http\Controllers\api\const\ApiGolonganDarahController;
@@ -84,6 +85,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'store']);
     Route::put('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'update']);
     Route::delete('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'destroy']);
+
+    Route::get('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'index']);
+    Route::get('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'show']);
+    Route::post('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'store']);
+    Route::put('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'update']);
+    Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy']);
 
     Route::get('/bidan', [ApiBidanController::class, 'index']);
     Route::get('/bidan/{id}', [ApiBidanController::class, 'show']);

@@ -20,12 +20,10 @@ class ApiAnggotaKeluargaController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
-        $anggotaKeluarga = null;
+        $anggotaKeluarga = new AnggotaKeluarga;
 
         if ($relation) {
             $anggotaKeluarga = AnggotaKeluarga::with('kartuKeluarga', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan');
-        } else {
-            $anggotaKeluarga = new AnggotaKeluarga;
         }
 
         return $anggotaKeluarga->paginate($pageSize);
@@ -124,33 +122,27 @@ class ApiAnggotaKeluargaController extends Controller
     {
         $anggotaKeluarga = AnggotaKeluarga::find($id);
 
-        if ((Auth::user()->profil->id == $anggotaKeluarga->bidan_id) || (Auth::user()->role == 'admin')) {
-            if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
-                Storage::delete('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil);
-            }
-
-            if ($anggotaKeluarga->wilayahDomisili) {
-                if (Storage::exists('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili)) {
-                    Storage::delete('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili);
-                }
-                $anggotaKeluarga->wilayahDomisili->delete();
-            }
-
-            $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id);
-
-            if ($pemberitahuan) {
-                $pemberitahuan->delete();
-            }
-
-
-            if ($anggotaKeluarga->user) {
-                $anggotaKeluarga->user->delete();
-            }
-            return $anggotaKeluarga->delete();
+        if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
+            Storage::delete('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil);
         }
 
-        return response([
-            'message' => "Not Permitted",
-        ], 403);
+        if ($anggotaKeluarga->wilayahDomisili) {
+            if (Storage::exists('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili)) {
+                Storage::delete('upload/surat_keterangan_domisili/' . $anggotaKeluarga->wilayahDomisili->file_ket_domisili);
+            }
+            $anggotaKeluarga->wilayahDomisili->delete();
+        }
+
+        $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id);
+
+        if ($pemberitahuan) {
+            $pemberitahuan->delete();
+        }
+
+
+        if ($anggotaKeluarga->user) {
+            $anggotaKeluarga->user->delete();
+        }
+        return $anggotaKeluarga->delete();
     }
 }
