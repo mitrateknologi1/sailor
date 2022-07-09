@@ -6,6 +6,16 @@ use App\Http\Controllers\api\ApiAuthController;
 use App\Http\Controllers\api\ApiBidanController;
 use App\Http\Controllers\api\ApiKartuKeluargaController;
 use App\Http\Controllers\api\ApiLokasiTugasController;
+use App\Http\Controllers\api\const\ApiAgamaController;
+use App\Http\Controllers\api\const\ApiDesaKelurahanController;
+use App\Http\Controllers\api\const\ApiGolonganDarahController;
+use App\Http\Controllers\api\const\ApiKabupatenKotaController;
+use App\Http\Controllers\api\const\ApiKecamatanController;
+use App\Http\Controllers\api\const\ApiPekerjaanController;
+use App\Http\Controllers\api\const\ApiPendidikanController;
+use App\Http\Controllers\api\const\ApiProvinsiController;
+use App\Http\Controllers\api\const\ApiStatusHubunganController;
+use App\Http\Controllers\api\const\ApiStatusPerkawinanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +33,36 @@ use Illuminate\Support\Facades\Route;
 // Public Routes
 Route::post('/login', [ApiAuthController::class, 'login']);
 Route::post('/register', [ApiAuthController::class, 'register']);
+
+Route::get('/agama', [ApiAgamaController::class, 'index']);
+Route::get('/agama/{id}', [ApiAgamaController::class, 'show']);
+
+Route::get('/golongan_darah', [ApiGolonganDarahController::class, 'index']);
+Route::get('/golongan_darah/{id}', [ApiGolonganDarahController::class, 'show']);
+
+Route::get('/status_hubungan', [ApiStatusHubunganController::class, 'index']);
+Route::get('/status_hubungan/{id}', [ApiStatusHubunganController::class, 'show']);
+
+Route::get('/status_perkawinan', [ApiStatusPerkawinanController::class, 'index']);
+Route::get('/status_perkawinan/{id}', [ApiStatusPerkawinanController::class, 'show']);
+
+Route::get('/pendidikan', [ApiPendidikanController::class, 'index']);
+Route::get('/pendidikan/{id}', [ApiPendidikanController::class, 'show']);
+
+Route::get('/pekerjaan', [ApiPekerjaanController::class, 'index']);
+Route::get('/pekerjaan/{id}', [ApiPekerjaanController::class, 'show']);
+
+Route::get('/desa_kelurahan', [ApiDesaKelurahanController::class, 'index']);
+Route::get('/desa_kelurahan/{id}', [ApiDesaKelurahanController::class, 'show']);
+
+Route::get('/kecamatan', [ApiKecamatanController::class, 'index']);
+Route::get('/kecamatan/{id}', [ApiKecamatanController::class, 'show']);
+
+Route::get('/kabupaten_kota', [ApiKabupatenKotaController::class, 'index']);
+Route::get('/kabupaten_kota/{id}', [ApiKabupatenKotaController::class, 'show']);
+
+Route::get('/provinsi', [ApiProvinsiController::class, 'index']);
+Route::get('/provinsi/{id}', [ApiProvinsiController::class, 'show']);
 
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
