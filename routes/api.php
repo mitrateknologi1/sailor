@@ -6,6 +6,7 @@ use App\Http\Controllers\api\ApiAuthController;
 use App\Http\Controllers\api\ApiBidanController;
 use App\Http\Controllers\api\ApiKartuKeluargaController;
 use App\Http\Controllers\api\ApiLokasiTugasController;
+use App\Http\Controllers\api\ApiPenyuluhController;
 use App\Http\Controllers\api\ApiWilayahDomisiliController;
 use App\Http\Controllers\api\const\ApiAgamaController;
 use App\Http\Controllers\api\const\ApiDesaKelurahanController;
@@ -97,6 +98,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/bidan', [ApiBidanController::class, 'store']);
     Route::put('/bidan/{id}', [ApiBidanController::class, 'update']);
     Route::delete('/bidan/{id}', [ApiBidanController::class, 'destroy']);
+
+    Route::get('/penyuluh', [ApiPenyuluhController::class, 'index']);
+    Route::get('/penyuluh/{id}', [ApiPenyuluhController::class, 'show']);
+    Route::post('/penyuluh', [ApiPenyuluhController::class, 'store']);
+    Route::put('/penyuluh/{id}', [ApiPenyuluhController::class, 'update']);
+    Route::delete('/penyuluh/{id}', [ApiPenyuluhController::class, 'destroy']);
 
     Route::get('/lokasi_tugas', [ApiLokasiTugasController::class, 'index']);
     Route::post('/lokasi_tugas', [ApiLokasiTugasController::class, 'store']);

@@ -21,11 +21,14 @@ class ApiBidanController extends Controller
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
         $bidan = new Bidan;
 
-        if ($relation || $lokasiTugasKelurahanId) {
-            $bidan = Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
+        if ($relation) {
+            $bidan = Bidan::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
         }
 
         if ($lokasiTugasKelurahanId) {
+            if (!$relation) {
+                $bidan = Bidan::with('lokasiTugas');
+            }
             $bidan->whereHas('lokasiTugas',  function ($query) use ($lokasiTugasKelurahanId) {
                 $query->where('desa_kelurahan_id', $lokasiTugasKelurahanId);
             });
@@ -45,13 +48,13 @@ class ApiBidanController extends Controller
         $request->validate([
             "user_id" => 'required|exists:users,id',
             "nik" => 'required|unique:bidan,nik',
-            "nama_lengkap" => 'required',
-            "jenis_kelamin" => 'required',
-            "tempat_lahir" => 'required',
-            "tanggal_lahir" => 'required',
-            "agama_id" => 'required',
-            "tujuh_angka_terakhir_str" => 'required',
-            "nomor_hp" => 'required|unique:bidan,nomor_hp',
+            "nama_lengkap" => 'required|string',
+            "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
+            "tempat_lahir" => 'required|string',
+            "tanggal_lahir" => 'required|string',
+            "agama_id" => 'required|numeric',
+            "tujuh_angka_terakhir_str" => 'required|string',
+            "nomor_hp" => 'required|string|unique:bidan,nomor_hp',
             "alamat" => 'required',
             "desa_kelurahan_id" => "required|exists:desa_kelurahan,id",
             "kecamatan_id" => "required|exists:kecamatan,id",
@@ -86,7 +89,10 @@ class ApiBidanController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $bidan = Bidan::find($id);
+
         $request->validate([
+            "user_id" => 'exists:users,id',
             "nik" => "unique:bidan,nik,$id",
             "nomor_hp" => "unique:bidan,nomor_hp,$id",
             "desa_kelurahan_id" => "exists:desa_kelurahan,id",
@@ -95,7 +101,6 @@ class ApiBidanController extends Controller
             "provinsi_id" => "exists:provinsi,id",
         ]);
 
-        $bidan = Bidan::find($id);
         $bidan->update($request->all());
         return $bidan;
     }
@@ -115,7 +120,6 @@ class ApiBidanController extends Controller
         }
 
         $bidan->lokasiTugas()->delete();
-
         return $bidan->delete();
     }
 }
