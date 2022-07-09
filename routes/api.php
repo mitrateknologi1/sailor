@@ -93,17 +93,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'update']);
     Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy']);
 
-    Route::get('/bidan', [ApiBidanController::class, 'index']);
+    Route::get('/bidan', [ApiBidanController::class, 'index'])->middleware('notKeluarga');
     Route::get('/bidan/{id}', [ApiBidanController::class, 'show']);
-    Route::post('/bidan', [ApiBidanController::class, 'store']);
-    Route::put('/bidan/{id}', [ApiBidanController::class, 'update']);
-    Route::delete('/bidan/{id}', [ApiBidanController::class, 'destroy']);
+    Route::post('/bidan', [ApiBidanController::class, 'store'])->middleware('notKeluarga');
+    Route::put('/bidan/{id}', [ApiBidanController::class, 'update'])->middleware('notKeluarga');
+    Route::delete('/bidan/{id}', [ApiBidanController::class, 'destroy'])->middleware('notKeluarga');
 
-    Route::get('/penyuluh', [ApiPenyuluhController::class, 'index']);
+    Route::get('/penyuluh', [ApiPenyuluhController::class, 'index'])->middleware('notKeluarga');
     Route::get('/penyuluh/{id}', [ApiPenyuluhController::class, 'show']);
-    Route::post('/penyuluh', [ApiPenyuluhController::class, 'store']);
-    Route::put('/penyuluh/{id}', [ApiPenyuluhController::class, 'update']);
-    Route::delete('/penyuluh/{id}', [ApiPenyuluhController::class, 'destroy']);
+    Route::post('/penyuluh', [ApiPenyuluhController::class, 'store'])->middleware('notKeluarga');
+    Route::put('/penyuluh/{id}', [ApiPenyuluhController::class, 'update'])->middleware('notKeluarga');
+    Route::delete('/penyuluh/{id}', [ApiPenyuluhController::class, 'destroy'])->middleware('notKeluarga');
 
     Route::get('/lokasi_tugas', [ApiLokasiTugasController::class, 'index']);
     Route::post('/lokasi_tugas', [ApiLokasiTugasController::class, 'store']);

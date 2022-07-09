@@ -17,7 +17,7 @@ class ApiAuthController extends Controller
         $fields = $request->validate([
             'nik' => 'required|string|unique:users,nik',
             'nomor_hp' => 'required|string|unique:users,nomor_hp',
-            'password' => 'required|string|confirmed',
+            'password' => 'required|string',
         ]);
 
         User::create([

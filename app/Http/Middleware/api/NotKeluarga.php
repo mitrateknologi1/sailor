@@ -16,11 +16,12 @@ class NotKeluarga
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->role == 'keluarga') {
-            return response([
-                'message' => 'Access Denied.'
-            ], 401);
+        if (in_array($request->user()->role, ['admin', 'penyuluh', 'bidan'])) {
+            return $next($request);
         }
-        return $next($request);
+
+        return response([
+            'message' => 'Access Denied.'
+        ], 401);
     }
 }
