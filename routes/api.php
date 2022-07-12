@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/kartu_keluarga', [ApiKartuKeluargaController::class, 'index']);
     Route::get('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'show']);
+    Route::post('/kartu_keluarga', [ApiKartuKeluargaController::class, 'store']);
     Route::put('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'update']);
     Route::delete('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'destroy']);
 
