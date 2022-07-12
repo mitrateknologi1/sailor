@@ -53,7 +53,6 @@ class ApiKartuKeluargaController extends Controller
             "provinsi_id" => "required|exists:provinsi,id",
             "is_valid" => 'required|in:0,1',
             "tanggal_validasi" => "string",
-            "alasan_ditolak" => "string",
             "file_kartu_keluarga" => 'mimes:jpeg,jpg,png,pdf|max:3072',
         ]);
 
@@ -66,23 +65,7 @@ class ApiKartuKeluargaController extends Controller
             $fileKK = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
         }
 
-        return KartuKeluarga::create([
-            "bidan_id" => $request->bidan_id,
-            "nomor_kk" => $request->nomor_kk,
-            "nama_kepala_keluarga" => $request->nama_kepala_keluarga,
-            "alamat" => $request->alamat,
-            "rt" => $request->rt,
-            "rw" => $request->rw,
-            "kode_pos" => $request->kode_pos,
-            "desa_kelurahan_id" => $request->desa_kelurahan_id,
-            "kecamatan_id" => $request->kecamatan_id,
-            "kabupaten_kota_id" => $request->kabupaten_kota_id,
-            "provinsi_id" => $request->provinsi_id,
-            "is_valid" => $request->is_valid,
-            "tanggal_validasi" => $request->tanggal_validasi,
-            "alasan_ditolak" => $request->alasan_ditolak,
-            "file_kk" => $fileKK,
-        ]);
+        return KartuKeluarga::create(array_merge($request->all(), ["file_kk" => $fileKK]));
     }
 
     /**
@@ -128,7 +111,7 @@ class ApiKartuKeluargaController extends Controller
 
         $kartuKeluarga = KartuKeluarga::find($id);
 
-        $fileKK = null;
+        $fileKK = $kartuKeluarga->file_kk;
         if ($request->file_kartu_keluarga) {
             if (Storage::exists('upload/kartu_keluarga/' . $kartuKeluarga->file_kk)) {
                 Storage::delete('upload/kartu_keluarga/' . $kartuKeluarga->file_kk);
@@ -140,23 +123,7 @@ class ApiKartuKeluargaController extends Controller
             $fileKK = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
         }
 
-        $kartuKeluarga->update([
-            "bidan_id" => $request->bidan_id ?? $kartuKeluarga->bidan_id,
-            "nomor_kk" => $request->nomor_kk ?? $kartuKeluarga->nomor_kk,
-            "nama_kepala_keluarga" => $request->nama_kepala_keluarga ?? $kartuKeluarga->nama_kepala_keluarga,
-            "alamat" => $request->alamat ?? $kartuKeluarga->alamat,
-            "rt" => $request->rt ?? $kartuKeluarga->rt,
-            "rw" => $request->rw ?? $kartuKeluarga->rw,
-            "kode_pos" => $request->kode_pos ?? $kartuKeluarga->kode_pos,
-            "desa_kelurahan_id" => $request->desa_kelurahan_id ?? $kartuKeluarga->desa_kelurahan_id,
-            "kecamatan_id" => $request->kecamatan_id ?? $kartuKeluarga->kecamatan_id,
-            "kabupaten_kota_id" => $request->kabupaten_kota_id ?? $kartuKeluarga->kabupaten_kota_id,
-            "provinsi_id" => $request->provinsi_id ?? $kartuKeluarga->provinsi_id,
-            "is_valid" => $request->is_valid ?? $kartuKeluarga->is_valid,
-            "tanggal_validasi" => $request->tanggal_validasi ?? $kartuKeluarga->tanggal_validasi,
-            "alasan_ditolak" => $request->alasan_ditolak ?? $kartuKeluarga->alasan_ditolak,
-            "file_kk" => $fileKK ?? $kartuKeluarga->file_kk,
-        ]);
+        $kartuKeluarga->update(array_merge($request->all(), ["file_kk" => $fileKK]));
         return $kartuKeluarga;
     }
 
