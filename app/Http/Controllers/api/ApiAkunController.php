@@ -86,15 +86,22 @@ class ApiAkunController extends Controller
         ]);
 
         $user = User::find($id);
-        $user->update([
-            'nik' => $fields['nik'],
-            'nomor_hp' => $fields['nomor_hp'],
-            'password' => bcrypt($fields['password']),
-            'role' => 'keluarga',
-            'is_remaja' =>  $fields['is_remaja'],
-            'status' =>  $fields['status'],
-        ]);
-        return $user;
+
+        if ($user) {
+            $user->update([
+                'nik' => $fields['nik'],
+                'nomor_hp' => $fields['nomor_hp'],
+                'password' => bcrypt($fields['password']),
+                'role' => 'keluarga',
+                'is_remaja' =>  $fields['is_remaja'],
+                'status' =>  $fields['status'],
+            ]);
+            return $user;
+        }
+
+        return response([
+            'message' => "User with id $id doesn't exist"
+        ], 400);
     }
 
     /**
@@ -106,6 +113,12 @@ class ApiAkunController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+
+        if (!$user) {
+            return response([
+                'message' => "User with id $id doesn't exist"
+            ], 400);
+        }
 
         if (!$user->kepalaKeluarga) {
             return $user->delete();

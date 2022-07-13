@@ -40,32 +40,23 @@ class ApiKartuKeluargaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "bidan_id" => 'required|exists:bidan,id',
+            "bidan_id" => 'nullable|string|exists:bidan,id',
             "nomor_kk" => 'required|unique:kartu_keluarga,nomor_kk',
             "nama_kepala_keluarga" => 'required|string',
             "alamat" => 'required|string',
-            "rt" => 'numeric',
-            "rw" => 'numeric',
-            "kode_pos" => 'numeric',
+            "rt" => 'nullable',
+            "rw" => 'nullable',
+            "kode_pos" => 'required',
             "desa_kelurahan_id" => "required|exists:desa_kelurahan,id",
             "kecamatan_id" => "required|exists:kecamatan,id",
             "kabupaten_kota_id" => "required|exists:kabupaten_kota,id",
             "provinsi_id" => "required|exists:provinsi,id",
             "is_valid" => 'required|in:0,1',
-            "tanggal_validasi" => "string",
-            "file_kartu_keluarga" => 'mimes:jpeg,jpg,png,pdf|max:3072',
+            "tanggal_validasi" => 'nullable|string',
+            "file_kk" => 'nullable|string',
         ]);
 
-        $fileKK = null;
-        if ($request->file_kartu_keluarga) {
-            $request->file('file_kartu_keluarga')->storeAs(
-                'upload/kartu_keluarga/',
-                $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension()
-            );
-            $fileKK = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
-        }
-
-        return KartuKeluarga::create(array_merge($request->all(), ["file_kk" => $fileKK]));
+        return KartuKeluarga::create($request->all());
     }
 
     /**
@@ -90,41 +81,66 @@ class ApiKartuKeluargaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function upload(Request $request, $id)
+    {
+        $request->validate([
+            "nomor_kk" => "required|unique:kartu_keluarga,nomor_kk,$id",
+            "file_kartu_keluarga" => 'required|mimes:jpeg,jpg,png,pdf|max:3072',
+        ]);
+
+        $fileName = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
+        $path = 'upload/kartu_keluarga/';
+
+        if (Storage::exists($path . $fileName)) {
+            Storage::delete($path . $fileName);
+        }
+
+        $request->file('file_kartu_keluarga')->storeAs(
+            $path,
+            $fileName
+        );
+
+        return response([
+            'file_kk' => $fileName
+        ], 201);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-
         $request->validate([
-            "bidan_id" => 'exists:bidan,id',
-            "nomor_kk" => "numeric|unique:kartu_keluarga,nomor_kk,$id",
-            "alamat" => 'string',
-            "rt" => 'numeric',
-            "rw" => 'numeric',
-            "kode_pos" => 'numeric',
-            "desa_kelurahan_id" => "exists:desa_kelurahan,id",
-            "kecamatan_id" => "exists:kecamatan,id",
-            "kabupaten_kota_id" => "exists:kabupaten_kota,id",
-            "provinsi_id" => "exists:provinsi,id",
-            "is_valid" => 'in:0,1',
-            "tanggal_validasi" => "string",
-            "file_kartu_keluarga" => 'mimes:jpeg,jpg,png,pdf|max:3072',
+            "bidan_id" => 'nullable|string|exists:bidan,id',
+            "nomor_kk" => "nullable|unique:kartu_keluarga,nomor_kk,$id",
+            "alamat" => 'nullable|string',
+            "rt" => 'nullable',
+            "rw" => 'nullable',
+            "kode_pos" => 'nullable',
+            "desa_kelurahan_id" => "nullable|exists:desa_kelurahan,id",
+            "kecamatan_id" => "nullable|exists:kecamatan,id",
+            "kabupaten_kota_id" => "nullable|exists:kabupaten_kota,id",
+            "provinsi_id" => "nullable|exists:provinsi,id",
+            "is_valid" => 'nullable|in:0,1',
+            "tanggal_validasi" => 'nullable|nullable|string',
+            "file_kk" => 'nullable|string',
+            "file_kk" => 'nullable|string',
         ]);
 
         $kartuKeluarga = KartuKeluarga::find($id);
 
-        $fileKK = $kartuKeluarga->file_kk;
-        if ($request->file_kartu_keluarga) {
-            if (Storage::exists('upload/kartu_keluarga/' . $kartuKeluarga->file_kk)) {
-                Storage::delete('upload/kartu_keluarga/' . $kartuKeluarga->file_kk);
-            }
-            $request->file('file_kartu_keluarga')->storeAs(
-                'upload/kartu_keluarga/',
-                $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension()
-            );
-            $fileKK = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
+        if ($kartuKeluarga) {
+            $kartuKeluarga->update($request->all());
+            return $kartuKeluarga;
         }
 
-        $kartuKeluarga->update(array_merge($request->all(), ["file_kk" => $fileKK]));
-        return $kartuKeluarga;
+        return response([
+            'message' => "Kartu Keluarga with id $id doesn't exist"
+        ], 400);
     }
 
     /**
@@ -136,6 +152,12 @@ class ApiKartuKeluargaController extends Controller
     public function destroy($id)
     {
         $kartuKeluarga = KartuKeluarga::find($id);
+
+        if (!$kartuKeluarga) {
+            return response([
+                'message' => "Kartu Keluarga with id $id doesn't exist"
+            ], 400);
+        }
 
 
         foreach ($kartuKeluarga->anggotaKeluarga as $anggota) {
@@ -161,16 +183,18 @@ class ApiKartuKeluargaController extends Controller
             Storage::delete('upload/kartu_keluarga/' . $kartuKeluarga->file_kk);
         }
 
-        $user = User::where('id', $kartuKeluarga->kepalaKeluarga->user_id);
+        if ($kartuKeluarga->kepalaKeluarga) {
+            $user = User::where('id', $kartuKeluarga->kepalaKeluarga->user_id);
 
-        $remaja = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id)
-            ->where('status_hubungan_dalam_keluarga_id', 4)
-            ->whereNotNull('user_id')->get();
-        foreach ($remaja as $r) {
-            $r->user->delete();
+            $remaja = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id)
+                ->where('status_hubungan_dalam_keluarga_id', 4)
+                ->whereNotNull('user_id')->get();
+            foreach ($remaja as $r) {
+                $r->user->delete();
+            }
+            // $remaja->user->delete();
+            $user->delete();
         }
-        // $remaja->user->delete();
-        $user->delete();
 
         $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id);
         $anggotaKeluarga->delete();

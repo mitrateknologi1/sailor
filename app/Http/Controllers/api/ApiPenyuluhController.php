@@ -88,9 +88,38 @@ class ApiPenyuluhController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function upload(Request $request, $id)
+    {
+        $request->validate([
+            "nik" => "required|unique:penyuluh,nik,$id",
+            "file_foto_profil" => 'required|mimes:jpeg,jpg,png|max:3072',
+        ]);
+
+        $fileName = $request->nik . '.' . $request->file('file_foto_profil')->extension();
+        $path = 'upload/foto_profil/penyuluh/';
+
+        if (Storage::exists($path . $fileName)) {
+            Storage::delete($path . $fileName);
+        }
+        $request->file('file_foto_profil')->storeAs(
+            $path,
+            $fileName
+        );
+
+        return response([
+            'foto_profil' => $fileName
+        ], 201);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        $penyuluh = Penyuluh::find($id);
 
         $request->validate([
             "user_id" => 'required|exists:users,id',
@@ -110,8 +139,15 @@ class ApiPenyuluhController extends Controller
             "provinsi_id" => "required|exists:provinsi,id",
         ]);
 
-        $penyuluh->update($request->all());
-        return $penyuluh;
+        $penyuluh = Penyuluh::find($id);
+        if ($penyuluh) {
+            $penyuluh->update($request->all());
+            return $penyuluh;
+        }
+
+        return response([
+            'message' => "Penyuluh with id $id doesn't exist"
+        ], 400);
     }
 
     /**
@@ -123,6 +159,12 @@ class ApiPenyuluhController extends Controller
     public function destroy($id)
     {
         $penyuluh = Penyuluh::find($id);
+
+        if (!$penyuluh) {
+            return response([
+                'message' => "Anggota Keluarga with id $id doesn't exist"
+            ], 400);
+        }
 
         if (Storage::exists('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil)) {
             Storage::delete('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil);

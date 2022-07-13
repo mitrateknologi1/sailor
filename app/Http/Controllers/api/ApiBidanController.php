@@ -87,10 +87,38 @@ class ApiBidanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function upload(Request $request, $id)
+    {
+        $request->validate([
+            "nik" => "required|unique:bidan,nik,$id",
+            "file_foto_profil" => 'required|mimes:jpeg,jpg,png|max:3072',
+        ]);
+
+        $fileName = $request->nik . '.' . $request->file('file_foto_profil')->extension();
+        $path = 'upload/foto_profil/bidan/';
+
+        if (Storage::exists($path . $fileName)) {
+            Storage::delete($path . $fileName);
+        }
+        $request->file('file_foto_profil')->storeAs(
+            $path,
+            $fileName
+        );
+
+        return response([
+            'foto_profil' => $fileName
+        ], 201);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        $bidan = Bidan::find($id);
-
         $request->validate([
             "user_id" => 'exists:users,id',
             "nik" => "unique:bidan,nik,$id",
@@ -100,9 +128,16 @@ class ApiBidanController extends Controller
             "kabupaten_kota_id" => "exists:kabupaten_kota,id",
             "provinsi_id" => "exists:provinsi,id",
         ]);
+        $bidan = Bidan::find($id);
 
-        $bidan->update($request->all());
-        return $bidan;
+        if ($bidan) {
+            $bidan->update($request->all());
+            return $bidan;
+        }
+
+        return response([
+            'message' => "Bidan with id $id doesn't exist"
+        ], 400);
     }
 
     /**
@@ -114,6 +149,13 @@ class ApiBidanController extends Controller
     public function destroy($id)
     {
         $bidan = Bidan::find($id);
+
+        if (!$bidan) {
+            return response([
+                'message' => "Anggota Keluarga with id $id doesn't exist"
+            ], 400);
+        }
+
 
         if (Storage::exists('upload/foto_profil/bidan/' . $bidan->foto_profil)) {
             Storage::delete('upload/foto_profil/bidan/' . $bidan->foto_profil);

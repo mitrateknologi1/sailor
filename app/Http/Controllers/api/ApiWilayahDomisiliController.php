@@ -72,9 +72,38 @@ class ApiWilayahDomisiliController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function upload(Request $request, $id)
+    {
+        $request->validate([
+            "nik" => "required|unique:anggota_keluarga,nik,$id",
+            "file_domisili" => 'required|mimes:jpeg,jpg,png|max:3072',
+        ]);
+
+        $fileName = $request->nik . '.' . $request->file('file_domisili')->extension();
+        $path = 'upload/surat_keterangan_domisili/';
+
+        if (Storage::exists($path . $fileName)) {
+            Storage::delete($path . $fileName);
+        }
+        $request->file('file_domisili')->storeAs(
+            $path,
+            $fileName
+        );
+
+        return response([
+            'file_domisili' => $fileName
+        ], 201);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        $wilayahDomisili = WilayahDomisili::find($id);
         $request->validate([
             "anggota_keluarga_id" => "exists:anggota_keluarga,id",
             "alamat" => "string",
@@ -83,8 +112,16 @@ class ApiWilayahDomisiliController extends Controller
             "kabupaten_kota_id" => "exists:kabupaten_kota,id",
             "provinsi_id" => "exists:provinsi,id",
         ]);
-        $wilayahDomisili->update($request->all());
-        return $wilayahDomisili;
+        $wilayahDomisili = WilayahDomisili::find($id);
+
+        if ($wilayahDomisili) {
+            $wilayahDomisili->update($request->all());
+            return $wilayahDomisili;
+        }
+
+        return response([
+            'message' => "Wilayah Domisili with id $id doesn't exist"
+        ], 400);
     }
 
     /**
@@ -96,6 +133,13 @@ class ApiWilayahDomisiliController extends Controller
     public function destroy($id)
     {
         $wilayahDomisili = WilayahDomisili::find($id);
+
+        if (!$wilayahDomisili) {
+            return response([
+                'message' => "Wilayah Domisili with id $id doesn't exist"
+            ], 400);
+        }
+
         if (Storage::exists('upload/surat_keterangan_domisili/' . $wilayahDomisili->file_ket_domisili)) {
             Storage::delete('upload/surat_keterangan_domisili/' . $wilayahDomisili->file_ket_domisili);
         }

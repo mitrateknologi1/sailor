@@ -38,11 +38,11 @@ class ApiAnggotaKeluargaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "bidan_id" => 'required|exists:bidan,id',
+            "bidan_id" => 'exists:bidan,id',
             "kartu_keluarga_id" => 'required|exists:kartu_keluarga,id',
             "user_id" => 'exists:users,id',
             "nama_lengkap" => 'required|string',
-            "nik" => 'required|numeric|unique:anggota_keluarga,nik',
+            "nik" => 'required|unique:anggota_keluarga,nik',
             "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
             "tempat_lahir" => 'required|string',
             "tanggal_lahir" => 'required|string',
@@ -56,7 +56,7 @@ class ApiAnggotaKeluargaController extends Controller
             "nama_ayah" => 'required|string',
             "nama_ibu" => 'required|string',
             "is_valid" => 'required|numeric|in:0,1',
-            "tanggal_validasi" => 'required|string',
+            "foto_profil" => 'nullable|string',
         ]);
 
         return AnggotaKeluarga::create($request->all());
@@ -72,7 +72,7 @@ class ApiAnggotaKeluargaController extends Controller
     {
         $relation = $request->relation;
         if ($relation) {
-            return AnggotaKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'bidan')->where('id', $id)->first();
+            return AnggotaKeluarga::with('kartuKeluarga', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan')->where('id', $id)->first();
         }
         return AnggotaKeluarga::where('id', $id)->first();
     }
@@ -84,15 +84,44 @@ class ApiAnggotaKeluargaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function upload(Request $request, $id)
+    {
+        $request->validate([
+            "nik" => "required|unique:anggota_keluarga,nik,$id",
+            "file_foto_profil" => 'required|mimes:jpeg,jpg,png|max:3072',
+        ]);
+
+        $fileName = $request->nik . '.' . $request->file('file_foto_profil')->extension();
+        $path = 'upload/foto_profil/keluarga/';
+
+        if (Storage::exists($path . $fileName)) {
+            Storage::delete($path . $fileName);
+        }
+        $request->file('file_foto_profil')->storeAs(
+            $path,
+            $fileName
+        );
+
+        return response([
+            'foto_profil' => $fileName
+        ], 201);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        $anggotaKeluarga = AnggotaKeluarga::find($id);
         $request->validate([
             "bidan_id" => 'exists:bidan,id',
             "kartu_keluarga_id" => 'exists:kartu_keluarga,id',
             "user_id" => 'exists:users,id',
             "nama_lengkap" => 'string',
-            "nik" => "numeric|unique:anggota_keluarga,nik,$id",
+            "nik" => "unique:anggota_keluarga,nik,$id",
             "jenis_kelamin" => 'in:PEREMPUAN,LAKI-LAKI',
             "tempat_lahir" => 'string',
             "tanggal_lahir" => 'string',
@@ -106,10 +135,19 @@ class ApiAnggotaKeluargaController extends Controller
             "nama_ayah" => 'string',
             "nama_ibu" => 'string',
             "is_valid" => 'numeric|in:0,1',
-            "tanggal_validasi" => 'string',
+            "foto_profil" => 'nullable|string',
         ]);
-        $anggotaKeluarga->update($request->all());
-        return $anggotaKeluarga;
+
+        $anggotaKeluarga = AnggotaKeluarga::find($id);
+
+        if ($anggotaKeluarga) {
+            $anggotaKeluarga->update($request->all());
+            return $anggotaKeluarga;
+        }
+
+        return response([
+            'message' => "Anggota Keluarga with id $id doesn't exist"
+        ], 400);
     }
 
     /**
@@ -121,6 +159,12 @@ class ApiAnggotaKeluargaController extends Controller
     public function destroy($id)
     {
         $anggotaKeluarga = AnggotaKeluarga::find($id);
+
+        if (!$anggotaKeluarga) {
+            return response([
+                'message' => "Anggota Keluarga with id $id doesn't exist"
+            ], 400);
+        }
 
         if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
             Storage::delete('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil);

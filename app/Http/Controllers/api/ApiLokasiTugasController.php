@@ -94,8 +94,15 @@ class ApiLokasiTugasController extends Controller
             "provinsi_id" => "exists:provinsi,id",
         ]);
         $lokasiTugas = LokasiTugas::find($id);
-        $lokasiTugas->update($request->all());
-        return $lokasiTugas;
+
+        if ($lokasiTugas) {
+            $lokasiTugas->update($request->all());
+            return $lokasiTugas;
+        }
+
+        return response([
+            'message' => "Lokasi Tugas with id $id doesn't exist"
+        ], 400);
     }
 
     /**
