@@ -11,6 +11,14 @@ class DeteksiIbuMelahirkanStunting extends Model
     use HasFactory;
     use TraitUuid;
     protected $table = 'deteksi_ibu_melahirkan_stunting';
+    protected $fillable = [
+        'anggota_keluarga_id',
+        'bidan_id',
+        'kategori',
+        'is_valid',
+        'tanggal_validasi',
+        'alasan_ditolak',
+    ];
 
     public function anggotaKeluarga()
     {

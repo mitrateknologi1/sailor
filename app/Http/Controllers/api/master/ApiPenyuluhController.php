@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\api\master;
 
 use App\Http\Controllers\Controller;
-use App\Models\Bidan;
+use App\Models\Penyuluh;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ApiBidanController extends Controller
+class ApiPenyuluhController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,22 +19,22 @@ class ApiBidanController extends Controller
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
-        $bidan = new Bidan;
+        $penyuluh = new Penyuluh;
 
         if ($relation) {
-            $bidan = Bidan::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
+            $penyuluh = Penyuluh::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama',);
         }
 
         if ($lokasiTugasKelurahanId) {
             if (!$relation) {
-                $bidan = Bidan::with('lokasiTugas');
+                $penyuluh = Penyuluh::with('lokasiTugas');
             }
-            $bidan->whereHas('lokasiTugas',  function ($query) use ($lokasiTugasKelurahanId) {
+            $penyuluh->whereHas('lokasiTugas',  function ($query) use ($lokasiTugasKelurahanId) {
                 $query->where('desa_kelurahan_id', $lokasiTugasKelurahanId);
             });
         }
 
-        return $bidan->paginate($pageSize);
+        return $penyuluh->paginate($pageSize);
     }
 
     /**
@@ -47,7 +47,7 @@ class ApiBidanController extends Controller
     {
         $request->validate([
             "user_id" => 'required|exists:users,id',
-            "nik" => 'required|unique:bidan,nik',
+            "nik" => 'required|numeric|unique:penyuluh,nik',
             "nama_lengkap" => 'required|string',
             "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
             "tempat_lahir" => 'required|string',
@@ -55,13 +55,14 @@ class ApiBidanController extends Controller
             "agama_id" => 'required|numeric',
             "tujuh_angka_terakhir_str" => 'required|string',
             "nomor_hp" => 'required|string|unique:bidan,nomor_hp',
-            "alamat" => 'required',
+            "email" => "required|string",
+            "alamat" => 'required|string',
             "desa_kelurahan_id" => "required|exists:desa_kelurahan,id",
             "kecamatan_id" => "required|exists:kecamatan,id",
             "kabupaten_kota_id" => "required|exists:kabupaten_kota,id",
             "provinsi_id" => "required|exists:provinsi,id",
         ]);
-        return Bidan::create($request->all());
+        return Penyuluh::create($request->all());
     }
 
     /**
@@ -75,9 +76,9 @@ class ApiBidanController extends Controller
         $relation = $request->relation;
 
         if ($relation) {
-            return Bidan::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama')->where('id', $id)->first();
+            return Penyuluh::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama')->where('id', $id)->first();
         }
-        return Bidan::where('id', $id)->first();
+        return Penyuluh::where('id', $id)->first();
     }
 
     /**
@@ -90,12 +91,12 @@ class ApiBidanController extends Controller
     public function upload(Request $request, $id)
     {
         $request->validate([
-            "nik" => "required|unique:bidan,nik,$id",
+            "nik" => "required|unique:penyuluh,nik,$id",
             "file_foto_profil" => 'required|mimes:jpeg,jpg,png|max:3072',
         ]);
 
         $fileName = $request->nik . '.' . $request->file('file_foto_profil')->extension();
-        $path = 'upload/foto_profil/bidan/';
+        $path = 'upload/foto_profil/penyuluh/';
 
         if (Storage::exists($path . $fileName)) {
             Storage::delete($path . $fileName);
@@ -119,24 +120,33 @@ class ApiBidanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            "user_id" => 'exists:users,id',
-            "nik" => "unique:bidan,nik,$id",
-            "nomor_hp" => "unique:bidan,nomor_hp,$id",
-            "desa_kelurahan_id" => "exists:desa_kelurahan,id",
-            "kecamatan_id" => "exists:kecamatan,id",
-            "kabupaten_kota_id" => "exists:kabupaten_kota,id",
-            "provinsi_id" => "exists:provinsi,id",
-        ]);
-        $bidan = Bidan::find($id);
 
-        if ($bidan) {
-            $bidan->update($request->all());
-            return $bidan;
+        $request->validate([
+            "user_id" => 'required|exists:users,id',
+            "nik" => "required|numeric|unique:penyuluh,nik,$id",
+            "nama_lengkap" => 'required|string',
+            "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
+            "tempat_lahir" => 'required|string',
+            "tanggal_lahir" => 'required|string',
+            "agama_id" => 'required|numeric',
+            "tujuh_angka_terakhir_str" => 'required|string',
+            "nomor_hp" => "required|string|unique:bidan,nomor_hp,$id",
+            "email" => "required|string",
+            "alamat" => 'required|string',
+            "desa_kelurahan_id" => "required|exists:desa_kelurahan,id",
+            "kecamatan_id" => "required|exists:kecamatan,id",
+            "kabupaten_kota_id" => "required|exists:kabupaten_kota,id",
+            "provinsi_id" => "required|exists:provinsi,id",
+        ]);
+
+        $penyuluh = Penyuluh::find($id);
+        if ($penyuluh) {
+            $penyuluh->update($request->all());
+            return $penyuluh;
         }
 
         return response([
-            'message' => "Bidan with id $id doesn't exist"
+            'message' => "Penyuluh with id $id doesn't exist"
         ], 400);
     }
 
@@ -148,20 +158,19 @@ class ApiBidanController extends Controller
      */
     public function destroy($id)
     {
-        $bidan = Bidan::find($id);
+        $penyuluh = Penyuluh::find($id);
 
-        if (!$bidan) {
+        if (!$penyuluh) {
             return response([
                 'message' => "Anggota Keluarga with id $id doesn't exist"
             ], 400);
         }
 
-
-        if (Storage::exists('upload/foto_profil/bidan/' . $bidan->foto_profil)) {
-            Storage::delete('upload/foto_profil/bidan/' . $bidan->foto_profil);
+        if (Storage::exists('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil)) {
+            Storage::delete('upload/foto_profil/penyuluh/' . $penyuluh->foto_profil);
         }
 
-        $bidan->lokasiTugas()->delete();
-        return $bidan->delete();
+        $penyuluh->lokasiTugas()->delete();
+        return $penyuluh->delete();
     }
 }

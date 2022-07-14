@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\api\ApiAkunController;
-use App\Http\Controllers\api\ApiAnggotaKeluargaController;
-use App\Http\Controllers\api\ApiAuthController;
-use App\Http\Controllers\api\ApiBidanController;
-use App\Http\Controllers\api\ApiKartuKeluargaController;
-use App\Http\Controllers\api\ApiLokasiTugasController;
-use App\Http\Controllers\api\ApiPenyuluhController;
-use App\Http\Controllers\api\ApiWilayahDomisiliController;
+use App\Http\Controllers\api\master\ApiAkunController;
+use App\Http\Controllers\api\master\ApiAnggotaKeluargaController;
+use App\Http\Controllers\api\master\ApiAuthController;
+use App\Http\Controllers\api\master\ApiBidanController;
+use App\Http\Controllers\api\master\ApiKartuKeluargaController;
+use App\Http\Controllers\api\master\ApiLokasiTugasController;
+use App\Http\Controllers\api\master\ApiPenyuluhController;
+use App\Http\Controllers\api\master\ApiWilayahDomisiliController;
 use App\Http\Controllers\api\const\ApiAgamaController;
 use App\Http\Controllers\api\const\ApiDesaKelurahanController;
 use App\Http\Controllers\api\const\ApiGolonganDarahController;
@@ -18,6 +18,8 @@ use App\Http\Controllers\api\const\ApiPendidikanController;
 use App\Http\Controllers\api\const\ApiProvinsiController;
 use App\Http\Controllers\api\const\ApiStatusHubunganController;
 use App\Http\Controllers\api\const\ApiStatusPerkawinanController;
+use App\Http\Controllers\api\main\ApiIbuMelahirkanStuntingController;
+use App\Http\Controllers\api\main\ApiStuntingAnakController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -115,4 +117,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/lokasi_tugas', [ApiLokasiTugasController::class, 'store']);
     Route::put('/lokasi_tugas/{id}', [ApiLokasiTugasController::class, 'update']);
     Route::delete('/lokasi_tugas', [ApiLokasiTugasController::class, 'destroy']);
+
+    Route::get('/stunting_anak', [ApiStuntingAnakController::class, 'index']);
+    Route::get('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'show']);
+    Route::post('/stunting_anak', [ApiStuntingAnakController::class, 'store']);
+    Route::post('/stunting_anak/upload/{id}', [ApiStuntingAnakController::class, 'upload']);
+    Route::put('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'update']);
+    Route::delete('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'destroy']);
+
+    Route::get('/ibu_melahirkan_stunting', [ApiIbuMelahirkanStuntingController::class, 'index']);
+    Route::get('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'show']);
+    Route::post('/ibu_melahirkan_stunting', [ApiIbuMelahirkanStuntingController::class, 'store']);
+    Route::post('/ibu_melahirkan_stunting/upload/{id}', [ApiIbuMelahirkanStuntingController::class, 'upload']);
+    Route::put('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'update']);
+    Route::delete('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'destroy']);
 });
