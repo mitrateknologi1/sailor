@@ -18,7 +18,10 @@ use App\Http\Controllers\api\const\ApiPendidikanController;
 use App\Http\Controllers\api\const\ApiProvinsiController;
 use App\Http\Controllers\api\const\ApiStatusHubunganController;
 use App\Http\Controllers\api\const\ApiStatusPerkawinanController;
+use App\Http\Controllers\api\main\ApiAncController;
+use App\Http\Controllers\api\main\ApiDeteksiDiniController;
 use App\Http\Controllers\api\main\ApiIbuMelahirkanStuntingController;
+use App\Http\Controllers\api\main\ApiPerkiraanMelahirkanController;
 use App\Http\Controllers\api\main\ApiStuntingAnakController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -121,14 +124,30 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/stunting_anak', [ApiStuntingAnakController::class, 'index']);
     Route::get('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'show']);
     Route::post('/stunting_anak', [ApiStuntingAnakController::class, 'store']);
-    Route::post('/stunting_anak/upload/{id}', [ApiStuntingAnakController::class, 'upload']);
     Route::put('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'update']);
     Route::delete('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'destroy']);
 
     Route::get('/ibu_melahirkan_stunting', [ApiIbuMelahirkanStuntingController::class, 'index']);
     Route::get('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'show']);
     Route::post('/ibu_melahirkan_stunting', [ApiIbuMelahirkanStuntingController::class, 'store']);
-    Route::post('/ibu_melahirkan_stunting/upload/{id}', [ApiIbuMelahirkanStuntingController::class, 'upload']);
     Route::put('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'update']);
     Route::delete('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'destroy']);
+
+    Route::get('/perkiraan_melahirkan', [ApiPerkiraanMelahirkanController::class, 'index']);
+    Route::get('/perkiraan_melahirkan/{id}', [ApiPerkiraanMelahirkanController::class, 'show']);
+    Route::post('/perkiraan_melahirkan', [ApiPerkiraanMelahirkanController::class, 'store']);
+    Route::put('/perkiraan_melahirkan/{id}', [ApiPerkiraanMelahirkanController::class, 'update']);
+    Route::delete('/perkiraan_melahirkan/{id}', [ApiPerkiraanMelahirkanController::class, 'destroy']);
+
+    Route::get('/deteksi_dini', [ApiDeteksiDiniController::class, 'index']);
+    Route::get('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'show']);
+    Route::post('/deteksi_dini', [ApiDeteksiDiniController::class, 'store']);
+    Route::put('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'update']);
+    Route::delete('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'destroy']);
+
+    Route::get('/anc', [ApiAncController::class, 'index']);
+    Route::get('/anc/{id}', [ApiAncController::class, 'show']);
+    Route::post('/anc', [ApiAncController::class, 'store']);
+    Route::put('/anc/{id}', [ApiAncController::class, 'update']);
+    Route::delete('/anc/{id}', [ApiAncController::class, 'destroy']);
 });

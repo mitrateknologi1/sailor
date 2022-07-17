@@ -11,6 +11,15 @@ class DeteksiDini extends Model
     use HasFactory;
     use TraitUuid;
     protected $table = 'deteksi_dini';
+    protected $fillable = [
+        "anggota_keluarga_id",
+        "bidan_id",
+        "skor",
+        "kategori",
+        "is_valid",
+        "tanggal_validasi",
+        "alasan_ditolak",
+    ];
 
     public function anggotaKeluarga()
     {
