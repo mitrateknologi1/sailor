@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
+use App\Models\MencegahMalnutrisi;
 use Illuminate\Http\Request;
 
 class ApiMencegahMalnutrisiController extends Controller
@@ -12,9 +13,17 @@ class ApiMencegahMalnutrisiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $relation = $request->relation;
+        $pageSize = $request->page_size ?? 20;
+        $mencegahMalnutrisi = new MencegahMalnutrisi;
+
+        if ($relation) {
+            $mencegahMalnutrisi = MencegahMalnutrisi::with('randaKabilasa');
+        }
+
+        return $mencegahMalnutrisi->paginate($pageSize);
     }
 
     /**
@@ -25,7 +34,14 @@ class ApiMencegahMalnutrisiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "randa_kabilasa_id" => "required|exists:randa_kabilasa,id",
+            "lingkar_lengan_atas" => "required",
+            "tinggi_badan" => "required",
+            "berat_badan" => "required",
+        ]);
+
+        return MencegahMalnutrisi::create($request->all());
     }
 
     /**
@@ -34,9 +50,14 @@ class ApiMencegahMalnutrisiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $relation = $request->relation;
+
+        if ($relation) {
+            return MencegahMalnutrisi::with('randaKabilasa')->where('id', $id)->first();
+        }
+        return MencegahMalnutrisi::where('id', $id)->first();
     }
 
     /**
@@ -48,7 +69,23 @@ class ApiMencegahMalnutrisiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            "randa_kabilasa_id" => "nullable|exists:randa_kabilasa,id",
+            "lingkar_lengan_atas" => "nullable",
+            "tinggi_badan" => "nullable",
+            "berat_badan" => "nullable",
+        ]);
+
+        $mencegahMalnutrisi = MencegahMalnutrisi::find($id);
+
+        if ($mencegahMalnutrisi) {
+            $mencegahMalnutrisi->update($request->all());
+            return $mencegahMalnutrisi;
+        }
+
+        return response([
+            'message' => "Mencegah Malnutrisi with id $id doesn't exist"
+        ], 400);
     }
 
     /**
@@ -59,6 +96,14 @@ class ApiMencegahMalnutrisiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $mencegahMalnutrisi = MencegahMalnutrisi::find($id);
+
+        if (!$mencegahMalnutrisi) {
+            return response([
+                'message' => "Mencegah Malnutrisi with id $id doesn't exist"
+            ], 400);
+        }
+
+        return $mencegahMalnutrisi->delete();
     }
 }

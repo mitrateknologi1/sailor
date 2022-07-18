@@ -21,6 +21,8 @@ use App\Http\Controllers\api\const\ApiStatusPerkawinanController;
 use App\Http\Controllers\api\main\ApiAncController;
 use App\Http\Controllers\api\main\ApiDeteksiDiniController;
 use App\Http\Controllers\api\main\ApiIbuMelahirkanStuntingController;
+use App\Http\Controllers\api\main\ApiJawabanMencegahMalnutrisiController;
+use App\Http\Controllers\api\main\ApiMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiPerkembanganAnakController;
 use App\Http\Controllers\api\main\ApiPerkiraanMelahirkanController;
 use App\Http\Controllers\api\main\ApiPertumbuhanAnakController;
@@ -171,4 +173,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/randa_kabilasa', [ApiRandaKabilasaController::class, 'store']);
     Route::put('/randa_kabilasa/{id}', [ApiRandaKabilasaController::class, 'update']);
     Route::delete('/randa_kabilasa/{id}', [ApiRandaKabilasaController::class, 'destroy']);
+
+    Route::get('/mencegah_malnutrisi', [ApiMencegahMalnutrisiController::class, 'index']);
+    Route::get('/mencegah_malnutrisi/{id}', [ApiMencegahMalnutrisiController::class, 'show']);
+    Route::post('/mencegah_malnutrisi', [ApiMencegahMalnutrisiController::class, 'store']);
+    Route::put('/mencegah_malnutrisi/{id}', [ApiMencegahMalnutrisiController::class, 'update']);
+    Route::delete('/mencegah_malnutrisi/{id}', [ApiMencegahMalnutrisiController::class, 'destroy']);
+
+    Route::get('/jawaban_mencegah_malnutrisi', [ApiJawabanMencegahMalnutrisiController::class, 'index']);
+    Route::get('/jawaban_mencegah_malnutrisi/{id}', [ApiJawabanMencegahMalnutrisiController::class, 'show']);
+    Route::post('/jawaban_mencegah_malnutrisi', [ApiJawabanMencegahMalnutrisiController::class, 'store']);
+    Route::put('/jawaban_mencegah_malnutrisi/{id}', [ApiJawabanMencegahMalnutrisiController::class, 'update']);
+    Route::delete('/jawaban_mencegah_malnutrisi', [ApiJawabanMencegahMalnutrisiController::class, 'destroy']);
 });

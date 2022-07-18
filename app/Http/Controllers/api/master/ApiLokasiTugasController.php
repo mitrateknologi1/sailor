@@ -49,7 +49,6 @@ class ApiLokasiTugasController extends Controller
                 "*.provinsi_id" => "required|exists:provinsi,id",
             ]);
 
-
             return LokasiTugas::insert($request->all());
         } else {
             $request->validate([
