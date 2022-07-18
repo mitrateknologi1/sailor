@@ -11,6 +11,26 @@ class RandaKabilasa extends Model
     use HasFactory;
     use TraitUuid;
     protected $table = 'randa_kabilasa';
+    protected $fillable = [
+        "anggota_keluarga_id",
+        "bidan_id",
+        "is_mencegah_malnutrisi",
+        "is_mencegah_pernikahan_dini",
+        "is_meningkatkan_life_skill",
+        "kategori_hb",
+        "kategori_lingkar_lengan_atas",
+        "kategori_imt",
+        "kategori_mencegah_malnutrisi",
+        "kategori_meningkatkan_life_skill",
+        "kategori_mencegah_pernikahan_dini",
+        "is_valid_mencegah_malnutrisi",
+        "is_valid_mencegah_pernikahan_dini",
+        "is_valid_meningkatkan_life_skill",
+        "tanggal_validasi",
+        "alasan_ditolak_mencegah_malnutrisi",
+        "alasan_ditolak_mencegah_pernikahan_dini",
+        "alasan_ditolak_meningkatkan_life_skill",
+    ];
 
     public function anggotaKeluarga()
     {

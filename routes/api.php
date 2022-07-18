@@ -21,7 +21,10 @@ use App\Http\Controllers\api\const\ApiStatusPerkawinanController;
 use App\Http\Controllers\api\main\ApiAncController;
 use App\Http\Controllers\api\main\ApiDeteksiDiniController;
 use App\Http\Controllers\api\main\ApiIbuMelahirkanStuntingController;
+use App\Http\Controllers\api\main\ApiPerkembanganAnakController;
 use App\Http\Controllers\api\main\ApiPerkiraanMelahirkanController;
+use App\Http\Controllers\api\main\ApiPertumbuhanAnakController;
+use App\Http\Controllers\api\main\ApiRandaKabilasaController;
 use App\Http\Controllers\api\main\ApiStuntingAnakController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -150,4 +153,22 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/anc', [ApiAncController::class, 'store']);
     Route::put('/anc/{id}', [ApiAncController::class, 'update']);
     Route::delete('/anc/{id}', [ApiAncController::class, 'destroy']);
+
+    Route::get('/pertumbuhan_anak', [ApiPertumbuhanAnakController::class, 'index']);
+    Route::get('/pertumbuhan_anak/{id}', [ApiPertumbuhanAnakController::class, 'show']);
+    Route::post('/pertumbuhan_anak', [ApiPertumbuhanAnakController::class, 'store']);
+    Route::put('/pertumbuhan_anak/{id}', [ApiPertumbuhanAnakController::class, 'update']);
+    Route::delete('/pertumbuhan_anak/{id}', [ApiPertumbuhanAnakController::class, 'destroy']);
+
+    Route::get('/perkembangan_anak', [ApiPerkembanganAnakController::class, 'index']);
+    Route::get('/perkembangan_anak/{id}', [ApiPerkembanganAnakController::class, 'show']);
+    Route::post('/perkembangan_anak', [ApiPerkembanganAnakController::class, 'store']);
+    Route::put('/perkembangan_anak/{id}', [ApiPerkembanganAnakController::class, 'update']);
+    Route::delete('/perkembangan_anak/{id}', [ApiPerkembanganAnakController::class, 'destroy']);
+
+    Route::get('/randa_kabilasa', [ApiRandaKabilasaController::class, 'index']);
+    Route::get('/randa_kabilasa/{id}', [ApiRandaKabilasaController::class, 'show']);
+    Route::post('/randa_kabilasa', [ApiRandaKabilasaController::class, 'store']);
+    Route::put('/randa_kabilasa/{id}', [ApiRandaKabilasaController::class, 'update']);
+    Route::delete('/randa_kabilasa/{id}', [ApiRandaKabilasaController::class, 'destroy']);
 });
