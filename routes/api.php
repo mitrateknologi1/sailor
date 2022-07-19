@@ -24,6 +24,7 @@ use App\Http\Controllers\api\main\ApiIbuMelahirkanStuntingController;
 use App\Http\Controllers\api\main\ApiJawabanMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiJawabanMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiMencegahMalnutrisiController;
+use App\Http\Controllers\api\main\ApiMencegahPernikahanDiniController;
 use App\Http\Controllers\api\main\ApiPerkembanganAnakController;
 use App\Http\Controllers\api\main\ApiPerkiraanMelahirkanController;
 use App\Http\Controllers\api\main\ApiPertumbuhanAnakController;
@@ -198,4 +199,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/jawaban_meningkatkan_life_skill', [ApiJawabanMeningkatkanLifeSkillController::class, 'destroy']);
 
     Route::get('/soal_meningkatkan_life_skill', [ApiSoalMeningkatkanLifeSkillController::class, 'index']);
+
+    Route::get('/mencegah_pernikahan_dini', [ApiMencegahPernikahanDiniController::class, 'index']);
+    Route::get('/mencegah_pernikahan_dini/{id}', [ApiMencegahPernikahanDiniController::class, 'show']);
+    Route::post('/mencegah_pernikahan_dini', [ApiMencegahPernikahanDiniController::class, 'store']);
+    Route::put('/mencegah_pernikahan_dini/{id}', [ApiMencegahPernikahanDiniController::class, 'update']);
+    Route::delete('/mencegah_pernikahan_dini/{id}', [ApiMencegahPernikahanDiniController::class, 'destroy']);
 });

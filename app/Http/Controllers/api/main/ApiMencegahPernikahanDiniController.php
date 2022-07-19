@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
-use App\Models\MencegahMalnutrisi;
+use App\Models\MencegahPernikahanDini;
 use Illuminate\Http\Request;
 
-class ApiMencegahMalnutrisiController extends Controller
+class ApiMencegahPernikahanDiniController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,17 +16,18 @@ class ApiMencegahMalnutrisiController extends Controller
     public function index(Request $request)
     {
         $relation = $request->relation;
-        $randaKabilasaId = $request->randa_kabilas_id;
-        $mencegahMalnutrisi = new MencegahMalnutrisi;
+        $randaKabilasaId = $request->randa_kabilasa_id;
+        $mencegahPernikahanDini = new MencegahPernikahanDini;
 
         if ($relation) {
-            $mencegahMalnutrisi = MencegahMalnutrisi::with('randaKabilasa');
+            $mencegahPernikahanDini = MencegahPernikahanDini::with('randaKabilasa');
         }
         if ($randaKabilasaId) {
-            return $mencegahMalnutrisi->where('randa_kabilasa_id', $randaKabilasaId)->get();
+            error_log($randaKabilasaId);
+            return $mencegahPernikahanDini->where('randa_kabilasa_id', $randaKabilasaId)->get();
         }
 
-        return $mencegahMalnutrisi->get();
+        return $mencegahPernikahanDini->get();
     }
 
     /**
@@ -39,12 +40,12 @@ class ApiMencegahMalnutrisiController extends Controller
     {
         $request->validate([
             "randa_kabilasa_id" => "required|exists:randa_kabilasa,id",
-            "lingkar_lengan_atas" => "required",
-            "tinggi_badan" => "required",
-            "berat_badan" => "required",
+            "jawaban_1" => "required",
+            "jawaban_2" => "required",
+            "jawaban_3" => "required",
         ]);
 
-        return MencegahMalnutrisi::create($request->all());
+        return MencegahPernikahanDini::create($request->all());
     }
 
     /**
@@ -58,9 +59,9 @@ class ApiMencegahMalnutrisiController extends Controller
         $relation = $request->relation;
 
         if ($relation) {
-            return MencegahMalnutrisi::with('randaKabilasa')->where('id', $id)->first();
+            return MencegahPernikahanDini::with('randaKabilasa')->where('id', $id)->first();
         }
-        return MencegahMalnutrisi::where('id', $id)->first();
+        return MencegahPernikahanDini::where('id', $id)->first();
     }
 
     /**
@@ -74,20 +75,20 @@ class ApiMencegahMalnutrisiController extends Controller
     {
         $request->validate([
             "randa_kabilasa_id" => "nullable|exists:randa_kabilasa,id",
-            "lingkar_lengan_atas" => "nullable",
-            "tinggi_badan" => "nullable",
-            "berat_badan" => "nullable",
+            "jawaban_1" => "nullable",
+            "jawaban_2" => "nullable",
+            "jawaban_3" => "nullable",
         ]);
 
-        $mencegahMalnutrisi = MencegahMalnutrisi::find($id);
+        $mencegahPernikahanDini = MencegahPernikahanDini::find($id);
 
-        if ($mencegahMalnutrisi) {
-            $mencegahMalnutrisi->update($request->all());
-            return $mencegahMalnutrisi;
+        if ($mencegahPernikahanDini) {
+            $mencegahPernikahanDini->update($request->all());
+            return $mencegahPernikahanDini;
         }
 
         return response([
-            'message' => "Mencegah Malnutrisi with id $id doesn't exist"
+            'message' => "Mencegah Pernikahan Dini with id $id doesn't exist"
         ], 400);
     }
 
@@ -99,14 +100,14 @@ class ApiMencegahMalnutrisiController extends Controller
      */
     public function destroy($id)
     {
-        $mencegahMalnutrisi = MencegahMalnutrisi::find($id);
+        $mencegahPernikahanDini = MencegahPernikahanDini::find($id);
 
-        if (!$mencegahMalnutrisi) {
+        if (!$mencegahPernikahanDini) {
             return response([
-                'message' => "Mencegah Malnutrisi with id $id doesn't exist"
+                'message' => "Mencegah Pernikahan Dini with id $id doesn't exist"
             ], 400);
         }
 
-        return $mencegahMalnutrisi->delete();
+        return $mencegahPernikahanDini->delete();
     }
 }
