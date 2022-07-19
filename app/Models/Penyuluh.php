@@ -21,6 +21,24 @@ class Penyuluh extends Model
     use SoftDeletes;
     protected $table = 'penyuluh';
     protected $guarded = ['id'];
+    protected $fillable = [
+        "user_id",
+        "nik",
+        "nama_lengkap",
+        "jenis_kelamin",
+        "tempat_lahir",
+        "tanggal_lahir",
+        "agama_id",
+        "tujuh_angka_terakhir_str",
+        "nomor_hp",
+        "email",
+        "alamat",
+        "desa_kelurahan_id",
+        "kecamatan_id",
+        "kabupaten_kota_id",
+        "provinsi_id",
+        "foto_profil",
+    ];
 
     public function user()
     {
@@ -58,12 +76,11 @@ class Penyuluh extends Model
     }
 
 
-    public function scopeListLokasiTugas($query){
+    public function scopeListLokasiTugas($query)
+    {
         // get nama desa kelurahan to pluck
         $lokasiTugas = $query->lokasiTugas;
 
         return $lokasiTugas;
-
     }
-
 }

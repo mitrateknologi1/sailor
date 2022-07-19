@@ -49,7 +49,26 @@ class ApiLokasiTugasController extends Controller
                 "*.provinsi_id" => "required|exists:provinsi,id",
             ]);
 
-            return LokasiTugas::insert($request->all());
+            $lastRecord = LokasiTugas::orderBy('id', 'desc')->first();
+            $currentId = $lastRecord->id + 1;
+            $field = [];
+
+            foreach ($reqBody as $key => $value) {
+                array_push($field, [
+                    'id' => $currentId++,
+                    'jenis_profil' => $value->jenis_profil,
+                    'profil_id' => $value->profil_id,
+                    'desa_kelurahan_id' => $value->desa_kelurahan_id,
+                    'kecamatan_id' => $value->kecamatan_id,
+                    'kabupaten_kota_id' => $value->kabupaten_kota_id,
+                    'provinsi_id' => $value->provinsi_id,
+                    'created_at' => now(),
+                    'provinsi_id' => now()
+                ]);
+            }
+
+            LokasiTugas::insert($field);
+            return $field;
         } else {
             $request->validate([
                 "jenis_profil" => "required|in:bidan,penyuluh",
