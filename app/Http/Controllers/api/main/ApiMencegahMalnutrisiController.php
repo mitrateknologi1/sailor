@@ -16,14 +16,17 @@ class ApiMencegahMalnutrisiController extends Controller
     public function index(Request $request)
     {
         $relation = $request->relation;
-        $pageSize = $request->page_size ?? 20;
+        $randaKabilasaId = $request->randa_kabilas_id;
         $mencegahMalnutrisi = new MencegahMalnutrisi;
 
         if ($relation) {
             $mencegahMalnutrisi = MencegahMalnutrisi::with('randaKabilasa');
         }
+        if ($randaKabilasaId) {
+            $mencegahMalnutrisi =  MencegahMalnutrisi::where('randa_kabilasa_id', $randaKabilasaId);
+        }
 
-        return $mencegahMalnutrisi->paginate($pageSize);
+        return $mencegahMalnutrisi->get();
     }
 
     /**

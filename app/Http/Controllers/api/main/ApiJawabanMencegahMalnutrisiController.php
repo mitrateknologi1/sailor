@@ -76,7 +76,7 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
      */
     public function show($id)
     {
-        return JawabanMencegahMalnutrisi::where('id', $id)->first();
+        return JawabanMencegahMalnutrisi::find($id);
     }
 
     /**
@@ -90,7 +90,7 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
     {
         $request->validate([
             "mencegah_malnutrisi_id" => 'required|exists:mencegah_malnutrisi,id',
-            "soal_id" => 'required|exists:soal,id',
+            "soal_id" => 'required|exists:soal_mencegah_malnutrisi,id',
             "jawaban" => 'required',
         ]);
 
@@ -123,7 +123,7 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
                 return $jawabanMencegahMalnutrisi->delete();
             }
             return response([
-                'message' => "Deteksi Dini with id $id doesn't exist"
+                'message' => "Jawaban Mencegah Malnutrisi with id $id doesn't exist"
             ], 400);
         } else if ($mencegahMalnutrisiId) {
             $jawabanMencegahMalnutrisi = JawabanMencegahMalnutrisi::where('mencegah_malnutrisi_id', $mencegahMalnutrisiId)->first();
@@ -132,7 +132,7 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
                 return JawabanMencegahMalnutrisi::where('mencegah_malnutrisi_id', $mencegahMalnutrisiId)->delete();
             }
             return response([
-                'message' => "Deteksi Dini with mencegah_malnutrisi_id $mencegahMalnutrisiId doesn't exist"
+                'message' => "Jawaban Mencegah Malnutrisi with mencegah_malnutrisi_id $mencegahMalnutrisiId doesn't exist"
             ], 400);
         }
     }

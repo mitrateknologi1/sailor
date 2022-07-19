@@ -22,11 +22,14 @@ use App\Http\Controllers\api\main\ApiAncController;
 use App\Http\Controllers\api\main\ApiDeteksiDiniController;
 use App\Http\Controllers\api\main\ApiIbuMelahirkanStuntingController;
 use App\Http\Controllers\api\main\ApiJawabanMencegahMalnutrisiController;
+use App\Http\Controllers\api\main\ApiJawabanMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiPerkembanganAnakController;
 use App\Http\Controllers\api\main\ApiPerkiraanMelahirkanController;
 use App\Http\Controllers\api\main\ApiPertumbuhanAnakController;
 use App\Http\Controllers\api\main\ApiRandaKabilasaController;
+use App\Http\Controllers\api\main\ApiSoalMencegahMalnutrisiController;
+use App\Http\Controllers\api\main\ApiSoalMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiStuntingAnakController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -185,4 +188,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/jawaban_mencegah_malnutrisi', [ApiJawabanMencegahMalnutrisiController::class, 'store']);
     Route::put('/jawaban_mencegah_malnutrisi/{id}', [ApiJawabanMencegahMalnutrisiController::class, 'update']);
     Route::delete('/jawaban_mencegah_malnutrisi', [ApiJawabanMencegahMalnutrisiController::class, 'destroy']);
+
+    Route::get('/soal_mencegah_malnutrisi', [ApiSoalMencegahMalnutrisiController::class, 'index']);
+
+    Route::get('/jawaban_meningkatkan_life_skill', [ApiJawabanMeningkatkanLifeSkillController::class, 'index']);
+    Route::get('/jawaban_meningkatkan_life_skill/{id}', [ApiJawabanMeningkatkanLifeSkillController::class, 'show']);
+    Route::post('/jawaban_meningkatkan_life_skill', [ApiJawabanMeningkatkanLifeSkillController::class, 'store']);
+    Route::put('/jawaban_meningkatkan_life_skill/{id}', [ApiJawabanMeningkatkanLifeSkillController::class, 'update']);
+    Route::delete('/jawaban_meningkatkan_life_skill', [ApiJawabanMeningkatkanLifeSkillController::class, 'destroy']);
+
+    Route::get('/soal_meningkatkan_life_skill', [ApiSoalMeningkatkanLifeSkillController::class, 'index']);
 });
