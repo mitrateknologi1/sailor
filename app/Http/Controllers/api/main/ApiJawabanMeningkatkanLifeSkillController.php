@@ -126,7 +126,8 @@ class ApiJawabanMeningkatkanLifeSkillController extends Controller
             return response([
                 'message' => "Jawaban Meningkatkan Life Skill with id $id doesn't exist"
             ], 400);
-        } else if ($randaKabilasaId) {
+        }
+        if ($randaKabilasaId) {
             $jawabanMeningkatkanLifeSkill = JawabanMeningkatkanLifeSkill::where('randa_kabilasa_id', $randaKabilasaId)->first();
 
             if ($jawabanMeningkatkanLifeSkill) {

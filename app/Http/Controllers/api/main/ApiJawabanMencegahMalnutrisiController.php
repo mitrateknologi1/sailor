@@ -125,7 +125,8 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
             return response([
                 'message' => "Jawaban Mencegah Malnutrisi with id $id doesn't exist"
             ], 400);
-        } else if ($mencegahMalnutrisiId) {
+        }
+        if ($mencegahMalnutrisiId) {
             $jawabanMencegahMalnutrisi = JawabanMencegahMalnutrisi::where('mencegah_malnutrisi_id', $mencegahMalnutrisiId)->first();
 
             if ($jawabanMencegahMalnutrisi) {
