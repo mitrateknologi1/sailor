@@ -20,10 +20,15 @@ class ApiAnggotaKeluargaController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
+        $search = $request->search;
         $anggotaKeluarga = new AnggotaKeluarga;
 
         if ($relation) {
             $anggotaKeluarga = AnggotaKeluarga::with('kartuKeluarga', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan');
+        }
+
+        if ($search) {
+            return $anggotaKeluarga->search($search)->orderBy('updated_at', 'desc')->paginate($pageSize);
         }
 
         return $anggotaKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
@@ -38,7 +43,7 @@ class ApiAnggotaKeluargaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "bidan_id" => 'exists:bidan,id',
+            "bidan_id" => 'nullable|exists:bidan,id',
             "kartu_keluarga_id" => 'required|exists:kartu_keluarga,id',
             "user_id" => 'exists:users,id',
             "nama_lengkap" => 'required|string',

@@ -15,12 +15,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Scout\Searchable;
 
 class KartuKeluarga extends Model
 {
     use HasFactory;
     use TraitUuid;
     use SoftDeletes;
+    use Searchable;
     protected $table = 'kartu_keluarga';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -111,5 +113,18 @@ class KartuKeluarga extends Model
     public function scopeValid($query)
     {
         $query->where('is_valid', 1);
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            "bidan_id" => $this->bidan_id,
+            "nomor_kk" => $this->nomor_kk,
+            "nama_kepala_keluarga" => $this->nama_kepala_keluarga,
+            "desa_kelurahan_id" => $this->desa_kelurahan_id,
+            "kecamatan_id" => $this->kecamatan_id,
+            "kabupaten_kota_id" => $this->kabupaten_kota_id,
+            "provinsi_id" => $this->provinsi_id,
+        ];
     }
 }

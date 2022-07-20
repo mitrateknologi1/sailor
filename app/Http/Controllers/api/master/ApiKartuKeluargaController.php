@@ -22,10 +22,15 @@ class ApiKartuKeluargaController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
+        $search = $request->search;
         $kartuKeluarga = new KartuKeluarga;
 
         if ($relation) {
             $kartuKeluarga = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'bidan');
+        }
+
+        if ($search) {
+            return  $kartuKeluarga->search($search)->orderBy('updated_at', 'desc')->paginate($pageSize);
         }
 
         return  $kartuKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
