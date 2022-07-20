@@ -23,7 +23,7 @@ class ApiDeteksiDiniController extends Controller
             $perikiraanMelahirkan = DeteksiDini::with('bidan', 'anggotaKeluarga');
         }
 
-        return $perikiraanMelahirkan->paginate($pageSize);
+        return $perikiraanMelahirkan->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

@@ -22,7 +22,7 @@ class ApiPemberitahuanController extends Controller
             $pemberitahuan = Pemberitahuan::with('users', 'anggotaKeluarga');
         }
 
-        return $pemberitahuan->get();
+        return $pemberitahuan->orderBy('updated_at', 'desc')->get();
     }
 
     /**

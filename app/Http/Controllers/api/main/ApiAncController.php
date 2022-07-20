@@ -23,7 +23,7 @@ class ApiAncController extends Controller
             $anc = Anc::with('bidan', 'anggotaKeluarga');
         }
 
-        return $anc->paginate($pageSize);
+        return $anc->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

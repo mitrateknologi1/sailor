@@ -20,10 +20,10 @@ class ApiJawabanMeningkatkanLifeSkillController extends Controller
         $jawabanMeningkatkanLifeSkill = new JawabanMeningkatkanLifeSkill();
 
         if ($randaKabilasaId) {
-            return $jawabanMeningkatkanLifeSkill->where("randa_kabilasa_id", $randaKabilasaId)->get();
+            return $jawabanMeningkatkanLifeSkill->where("randa_kabilasa_id", $randaKabilasaId)->orderBy('updated_at', 'desc')->get();
         }
 
-        return $jawabanMeningkatkanLifeSkill->get();
+        return $jawabanMeningkatkanLifeSkill->orderBy('updated_at', 'desc')->get();
     }
 
     /**

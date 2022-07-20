@@ -28,7 +28,7 @@ class ApiWilayahDomisiliController extends Controller
             return $wilayahDomisili->where("anggota_keluarga_id", $anggotaKeluargaId)->first();
         }
 
-        return $wilayahDomisili->get();
+        return $wilayahDomisili->orderBy('updated_at', 'desc')->get();
     }
 
     /**

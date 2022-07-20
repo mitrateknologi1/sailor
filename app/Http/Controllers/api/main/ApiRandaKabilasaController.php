@@ -24,7 +24,7 @@ class ApiRandaKabilasaController extends Controller
             $randaKabilasa = RandaKabilasa::with('bidan', 'anggotaKeluarga', 'mencegahMalnutrisi', 'mencegahPernikahanDini');
         }
 
-        return $randaKabilasa->paginate($pageSize);
+        return $randaKabilasa->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

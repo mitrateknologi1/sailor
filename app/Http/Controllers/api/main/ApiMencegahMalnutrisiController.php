@@ -23,10 +23,10 @@ class ApiMencegahMalnutrisiController extends Controller
             $mencegahMalnutrisi = MencegahMalnutrisi::with('randaKabilasa');
         }
         if ($randaKabilasaId) {
-            return $mencegahMalnutrisi->where('randa_kabilasa_id', $randaKabilasaId)->get();
+            return $mencegahMalnutrisi->where('randa_kabilasa_id', $randaKabilasaId)->orderBy('updated_at', 'desc')->get();
         }
 
-        return $mencegahMalnutrisi->get();
+        return $mencegahMalnutrisi->orderBy('updated_at', 'desc')->get();
     }
 
     /**

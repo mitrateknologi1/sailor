@@ -24,10 +24,11 @@ class ApiLokasiTugasController extends Controller
             return LokasiTugas::with('desaKelurahan')
                 ->where('jenis_profil', $jenisProfil)
                 ->groupBy('desa_kelurahan_id')
+                ->orderBy('updated_at', 'desc')
                 ->paginate($pageSize);
         }
 
-        return LokasiTugas::paginate($pageSize);
+        return LokasiTugas::orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**
@@ -63,7 +64,7 @@ class ApiLokasiTugasController extends Controller
                     'kabupaten_kota_id' => $value->kabupaten_kota_id,
                     'provinsi_id' => $value->provinsi_id,
                     'created_at' => now(),
-                    'provinsi_id' => now()
+                    'updated_at' => now()
                 ]);
             }
 

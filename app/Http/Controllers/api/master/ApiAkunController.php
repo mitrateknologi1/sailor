@@ -19,11 +19,12 @@ class ApiAkunController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
+        $user = new User;
 
         if ($relation) {
-            return User::with('keluarga')->where('role', 'keluarga')->paginate($pageSize);
+            $user = User::with('keluarga');
         }
-        return User::where('role', 'keluarga')->paginate($pageSize);
+        return User::where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

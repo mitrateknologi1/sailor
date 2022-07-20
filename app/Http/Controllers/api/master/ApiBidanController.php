@@ -34,7 +34,7 @@ class ApiBidanController extends Controller
             });
         }
 
-        return $bidan->paginate($pageSize);
+        return $bidan->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

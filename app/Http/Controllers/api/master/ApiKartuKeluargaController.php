@@ -28,7 +28,7 @@ class ApiKartuKeluargaController extends Controller
             $kartuKeluarga = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'bidan');
         }
 
-        return  $kartuKeluarga->paginate($pageSize);
+        return  $kartuKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

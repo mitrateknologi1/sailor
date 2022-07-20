@@ -26,7 +26,7 @@ class ApiAnggotaKeluargaController extends Controller
             $anggotaKeluarga = AnggotaKeluarga::with('kartuKeluarga', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan');
         }
 
-        return $anggotaKeluarga->paginate($pageSize);
+        return $anggotaKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**
