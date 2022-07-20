@@ -20,6 +20,13 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TraitUuid;
 
     protected $guarded = ['id'];
+    protected $fillable = [
+        "nomor_hp",
+        "nik",
+        "is_remaja",
+        "status",
+        "password",
+    ];
 
     public function profil()
     {

@@ -24,7 +24,7 @@ class ApiAkunController extends Controller
         if ($relation) {
             $user = User::with('keluarga');
         }
-        return User::where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
+        return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**
