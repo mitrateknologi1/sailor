@@ -18,6 +18,14 @@ class LokasiTugas extends Model
     // use SoftDeletes;
     protected $guarded = ['id'];
     protected $table = 'lokasi_tugas';
+    protected $fillable = [
+        "jenis_profil",
+        "profil_id",
+        "desa_kelurahan_id",
+        "kecamatan_id",
+        "kabupaten_kota_id",
+        "provinsi_id"
+    ];
 
     // public function profil()
     // {
@@ -47,8 +55,7 @@ class LokasiTugas extends Model
     public function scopeOfLokasiTugas($query, $id)
     {
         return $query->where('profil_id', $id)
-        ->where('jenis_profil', Auth::user()->role)
-        ->get()->pluck('desa_kelurahan_id');
+            ->where('jenis_profil', Auth::user()->role)
+            ->get()->pluck('desa_kelurahan_id');
     }
-    
 }

@@ -21,6 +21,24 @@ class Bidan extends Model
     use SoftDeletes;
     protected $table = 'bidan';
     protected $guarded = ['id'];
+    protected $fillable = [
+        "user_id",
+        "nik",
+        "nama_lengkap",
+        "jenis_kelamin",
+        "tempat_lahir",
+        "tanggal_lahir",
+        "agama_id",
+        "tujuh_angka_terakhir_str",
+        "nomor_hp",
+        "email",
+        "alamat",
+        "desa_kelurahan_id",
+        "kecamatan_id",
+        "kabupaten_kota_id",
+        "provinsi_id",
+        "foto_profil",
+    ];
 
     public function user()
     {
@@ -71,6 +89,4 @@ class Bidan extends Model
             $query->where('status', 1);
         });
     }
-
-
 }

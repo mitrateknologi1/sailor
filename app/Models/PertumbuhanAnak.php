@@ -12,16 +12,27 @@ class PertumbuhanAnak extends Model
     use TraitUuid;
     protected $table = 'pertumbuhan_anak';
     protected $guarded = ['id'];
+    protected $fillable = [
+        "anggota_keluarga_id",
+        "bidan_id",
+        "berat_badan",
+        "zscore",
+        "hasil",
+        "is_valid",
+        "tanggal_validasi",
+        "alasan_ditolak",
+    ];
 
-    public function anggotaKeluarga(){
+    public function anggotaKeluarga()
+    {
         return $this->belongsTo(AnggotaKeluarga::class)
-        ->withTrashed();
+            ->withTrashed();
     }
 
-    public function bidan(){
+    public function bidan()
+    {
         return $this->belongsTo(Bidan::class)
-        ->withTrashed()
-        ;
+            ->withTrashed();
     }
 
     public function sesuaiLokasiTugas($lokasiTugas)

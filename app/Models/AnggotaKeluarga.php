@@ -20,6 +20,33 @@ class AnggotaKeluarga extends Model
     protected $table = 'anggota_keluarga';
     protected $guarded = ['id'];
     protected $appends = ['umur'];
+    protected $fillable = [
+        "bidan_id",
+        "kartu_keluarga_id",
+        "user_id",
+        "nama_lengkap",
+        "nik",
+        "jenis_kelamin",
+        "tempat_lahir",
+        "tanggal_lahir",
+        "agama_id",
+        "pendidikan_id",
+        "jenis_pekerjaan_id",
+        "golongan_darah_id",
+        "status_perkawinan_id",
+        "tanggal_perkawinan",
+        "status_hubungan_dalam_keluarga_id",
+        "kewarganegaraan",
+        "no_paspor",
+        "no_kitap",
+        "nama_ayah",
+        "nama_ibu",
+        "foto_profil",
+        "is_valid",
+        "tanggal_validasi",
+        "alasan_ditolak",
+        "umur",
+    ];
 
     public function kartuKeluarga()
     {
