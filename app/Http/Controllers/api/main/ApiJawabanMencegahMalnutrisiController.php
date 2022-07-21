@@ -20,10 +20,10 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
         $jawabanMencegahMalnutrisi = new JawabanMencegahMalnutrisi;
 
         if ($mencegahMalnutrisiId) {
-            return $jawabanMencegahMalnutrisi->where("mencegah_malnutrisi_id", $mencegahMalnutrisiId)->get();
+            return $jawabanMencegahMalnutrisi->where("mencegah_malnutrisi_id", $mencegahMalnutrisiId)->orderBy('updated_at', 'desc')->get();
         }
 
-        return $jawabanMencegahMalnutrisi->get();
+        return $jawabanMencegahMalnutrisi->orderBy('updated_at', 'desc')->get();
     }
 
     /**
@@ -125,7 +125,8 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
             return response([
                 'message' => "Jawaban Mencegah Malnutrisi with id $id doesn't exist"
             ], 400);
-        } else if ($mencegahMalnutrisiId) {
+        }
+        if ($mencegahMalnutrisiId) {
             $jawabanMencegahMalnutrisi = JawabanMencegahMalnutrisi::where('mencegah_malnutrisi_id', $mencegahMalnutrisiId)->first();
 
             if ($jawabanMencegahMalnutrisi) {

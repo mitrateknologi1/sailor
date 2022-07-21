@@ -23,7 +23,7 @@ class ApiPerkembanganAnakController extends Controller
             $perkembanganAnak = PerkembanganAnak::with('bidan', 'anggotaKeluarga');
         }
 
-        return $perkembanganAnak->paginate($pageSize);
+        return $perkembanganAnak->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

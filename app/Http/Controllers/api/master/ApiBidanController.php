@@ -18,11 +18,16 @@ class ApiBidanController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
+        $search = $request->search;
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
         $bidan = new Bidan;
 
         if ($relation) {
             $bidan = Bidan::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
+        }
+
+        if ($search) {
+            return $bidan->search($search)->orderBy("updated_at", "desc")->paginate($pageSize);
         }
 
         if ($lokasiTugasKelurahanId) {
@@ -34,7 +39,7 @@ class ApiBidanController extends Controller
             });
         }
 
-        return $bidan->paginate($pageSize);
+        return $bidan->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

@@ -18,11 +18,16 @@ class ApiPenyuluhController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
+        $search = $request->search;
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
         $penyuluh = new Penyuluh;
 
         if ($relation) {
             $penyuluh = Penyuluh::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama',);
+        }
+
+        if ($search) {
+            return $penyuluh->search($search)->orderBy("updated_at", "desc")->paginate($pageSize);
         }
 
         if ($lokasiTugasKelurahanId) {
@@ -34,7 +39,7 @@ class ApiPenyuluhController extends Controller
             });
         }
 
-        return $penyuluh->paginate($pageSize);
+        return $penyuluh->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

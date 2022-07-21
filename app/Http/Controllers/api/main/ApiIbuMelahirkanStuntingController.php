@@ -23,7 +23,7 @@ class ApiIbuMelahirkanStuntingController extends Controller
             $ibuMelahirkanStunting = DeteksiIbuMelahirkanStunting::with('bidan', 'anggotaKeluarga');
         }
 
-        return $ibuMelahirkanStunting->paginate($pageSize);
+        return $ibuMelahirkanStunting->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

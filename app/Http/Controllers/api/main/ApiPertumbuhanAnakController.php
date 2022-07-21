@@ -23,7 +23,7 @@ class ApiPertumbuhanAnakController extends Controller
             $pertumbuhanAnak = PertumbuhanAnak::with('bidan', 'anggotaKeluarga');
         }
 
-        return $pertumbuhanAnak->paginate($pageSize);
+        return $pertumbuhanAnak->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

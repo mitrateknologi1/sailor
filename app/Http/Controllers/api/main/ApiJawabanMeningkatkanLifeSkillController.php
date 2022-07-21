@@ -20,10 +20,10 @@ class ApiJawabanMeningkatkanLifeSkillController extends Controller
         $jawabanMeningkatkanLifeSkill = new JawabanMeningkatkanLifeSkill();
 
         if ($randaKabilasaId) {
-            return $jawabanMeningkatkanLifeSkill->where("randa_kabilasa_id", $randaKabilasaId)->get();
+            return $jawabanMeningkatkanLifeSkill->where("randa_kabilasa_id", $randaKabilasaId)->orderBy('updated_at', 'desc')->get();
         }
 
-        return $jawabanMeningkatkanLifeSkill->get();
+        return $jawabanMeningkatkanLifeSkill->orderBy('updated_at', 'desc')->get();
     }
 
     /**
@@ -126,7 +126,8 @@ class ApiJawabanMeningkatkanLifeSkillController extends Controller
             return response([
                 'message' => "Jawaban Meningkatkan Life Skill with id $id doesn't exist"
             ], 400);
-        } else if ($randaKabilasaId) {
+        }
+        if ($randaKabilasaId) {
             $jawabanMeningkatkanLifeSkill = JawabanMeningkatkanLifeSkill::where('randa_kabilasa_id', $randaKabilasaId)->first();
 
             if ($jawabanMeningkatkanLifeSkill) {

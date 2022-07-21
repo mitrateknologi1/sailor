@@ -23,7 +23,7 @@ class ApiStuntingAnakController extends Controller
             $stuntingAnak = StuntingAnak::with('bidan', 'anggotaKeluarga');
         }
 
-        return $stuntingAnak->paginate($pageSize);
+        return $stuntingAnak->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

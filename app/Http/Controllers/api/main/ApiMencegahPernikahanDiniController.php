@@ -24,10 +24,10 @@ class ApiMencegahPernikahanDiniController extends Controller
         }
         if ($randaKabilasaId) {
             error_log($randaKabilasaId);
-            return $mencegahPernikahanDini->where('randa_kabilasa_id', $randaKabilasaId)->get();
+            return $mencegahPernikahanDini->where('randa_kabilasa_id', $randaKabilasaId)->orderBy('updated_at', 'desc')->get();
         }
 
-        return $mencegahPernikahanDini->get();
+        return $mencegahPernikahanDini->orderBy('updated_at', 'desc')->get();
     }
 
     /**
