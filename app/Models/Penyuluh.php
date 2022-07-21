@@ -12,13 +12,14 @@ use App\Models\KabupatenKota;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Laravel\Scout\Searchable;
 
 class Penyuluh extends Model
 {
     use HasFactory;
     use TraitUuid;
     use SoftDeletes;
+    use Searchable;
     protected $table = 'penyuluh';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -82,5 +83,18 @@ class Penyuluh extends Model
         $lokasiTugas = $query->lokasiTugas;
 
         return $lokasiTugas;
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            "user_id" => $this->user_id,
+            "nik" => $this->nik,
+            "nama_lengkap" => $this->nama_lengkap,
+            "desa_kelurahan_id" => $this->desa_kelurahan_id,
+            "kecamatan_id" => $this->kecamatan_id,
+            "kabupaten_kota_id" => $this->kabupaten_kota_id,
+            "provinsi_id" => $this->provinsi_id,
+        ];
     }
 }
