@@ -11,15 +11,43 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 
 class AnggotaKeluarga extends Model
 {
     use HasFactory;
     use TraitUuid;
     use SoftDeletes;
+    use Searchable;
     protected $table = 'anggota_keluarga';
     protected $guarded = ['id'];
     protected $appends = ['umur'];
+    protected $fillable = [
+        "bidan_id",
+        "kartu_keluarga_id",
+        "user_id",
+        "nama_lengkap",
+        "nik",
+        "jenis_kelamin",
+        "tempat_lahir",
+        "tanggal_lahir",
+        "agama_id",
+        "pendidikan_id",
+        "jenis_pekerjaan_id",
+        "golongan_darah_id",
+        "status_perkawinan_id",
+        "tanggal_perkawinan",
+        "status_hubungan_dalam_keluarga_id",
+        "kewarganegaraan",
+        "no_paspor",
+        "no_kitap",
+        "nama_ayah",
+        "nama_ibu",
+        "foto_profil",
+        "is_valid",
+        "tanggal_validasi",
+        "alasan_ditolak",
+    ];
 
     public function kartuKeluarga()
     {
@@ -119,5 +147,18 @@ class AnggotaKeluarga extends Model
     public function getUmurAttribute()
     {
         return Carbon::parse($this->attributes['tanggal_lahir'])->age;
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            "bidan_id" => $this->bidan_id,
+            "kartu_keluarga_id" => $this->kartu_keluarga_id,
+            "user_id" => $this->user_id,
+            "nama_lengkap" => $this->nama_lengkap,
+            "nik" => $this->nik,
+            "nama_ayah" => $this->nama_ayah,
+            "nama_ibu" => $this->nama_ibu,
+        ];
     }
 }

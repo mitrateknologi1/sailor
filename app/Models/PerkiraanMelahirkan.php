@@ -11,6 +11,15 @@ class PerkiraanMelahirkan extends Model
     use HasFactory;
     use TraitUuid;
     protected $table = 'perkiraan_melahirkan';
+    protected $fillable = [
+        'anggota_keluarga_id',
+        'bidan_id',
+        'tanggal_haid_terakhir',
+        'tanggal_perkiraan_lahir',
+        'is_valid',
+        'tanggal_validasi',
+        'alasan_ditolak',
+    ];
 
     public function anggotaKeluarga()
     {

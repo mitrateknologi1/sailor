@@ -11,4 +11,9 @@ class JawabanMeningkatkanLifeSkill extends Model
     use HasFactory;
     use TraitUuid;
     protected $table = 'jawaban_meningkatkan_life_skill';
+    protected $fillable = [
+        "randa_kabilasa_id",
+        "soal_id",
+        "jawaban",
+    ];
 }
