@@ -14,12 +14,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TraitUuid;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, TraitUuid, Searchable;
 
     protected $guarded = ['id'];
+    protected $fillable = [
+        "nomor_hp",
+        "nik",
+        "is_remaja",
+        "status",
+        "password",
+    ];
 
     public function profil()
     {
@@ -125,4 +133,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            "nomor_hp" => $this->nomor_hp,
+            "nik" => $this->nik,
+        ];
+    }
 }

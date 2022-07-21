@@ -11,6 +11,16 @@ class StuntingAnak extends Model
     use HasFactory;
     use TraitUuid;
     protected $table = 'stunting_anak';
+    protected $fillable = [
+        'anggota_keluarga_id',
+        'bidan_id',
+        'tinggi_badan',
+        'zscore',
+        'kategori',
+        'is_valid',
+        'tanggal_validasi',
+        'alasan_ditolak',
+    ];
 
     public function anggotaKeluarga()
     {

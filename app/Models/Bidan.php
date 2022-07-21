@@ -13,14 +13,34 @@ use App\Models\KabupatenKota;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 
 class Bidan extends Model
 {
     use HasFactory;
     use TraitUuid;
     use SoftDeletes;
+    use Searchable;
     protected $table = 'bidan';
     protected $guarded = ['id'];
+    protected $fillable = [
+        "user_id",
+        "nik",
+        "nama_lengkap",
+        "jenis_kelamin",
+        "tempat_lahir",
+        "tanggal_lahir",
+        "agama_id",
+        "tujuh_angka_terakhir_str",
+        "nomor_hp",
+        "email",
+        "alamat",
+        "desa_kelurahan_id",
+        "kecamatan_id",
+        "kabupaten_kota_id",
+        "provinsi_id",
+        "foto_profil",
+    ];
 
     public function user()
     {
@@ -72,5 +92,16 @@ class Bidan extends Model
         });
     }
 
-
+    public function toSearchableArray()
+    {
+        return [
+            "user_id" => $this->user_id,
+            "nik" => $this->nik,
+            "nama_lengkap" => $this->nama_lengkap,
+            "desa_kelurahan_id" => $this->desa_kelurahan_id,
+            "kecamatan_id" => $this->kecamatan_id,
+            "kabupaten_kota_id" => $this->kabupaten_kota_id,
+            "provinsi_id" => $this->provinsi_id,
+        ];
+    }
 }
