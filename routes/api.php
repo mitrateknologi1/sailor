@@ -21,6 +21,8 @@ use App\Http\Controllers\api\const\ApiStatusPerkawinanController;
 use App\Http\Controllers\api\main\ApiAncController;
 use App\Http\Controllers\api\main\ApiDeteksiDiniController;
 use App\Http\Controllers\api\main\ApiIbuMelahirkanStuntingController;
+use App\Http\Controllers\api\main\ApiJawabanDeteksiDiniController;
+use App\Http\Controllers\api\main\ApiJawabanIbuMelahirkanStuntingController;
 use App\Http\Controllers\api\main\ApiJawabanMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiJawabanMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiMencegahMalnutrisiController;
@@ -30,6 +32,8 @@ use App\Http\Controllers\api\main\ApiPerkembanganAnakController;
 use App\Http\Controllers\api\main\ApiPerkiraanMelahirkanController;
 use App\Http\Controllers\api\main\ApiPertumbuhanAnakController;
 use App\Http\Controllers\api\main\ApiRandaKabilasaController;
+use App\Http\Controllers\api\main\ApiSoalDeteksiDiniContoller;
+use App\Http\Controllers\api\main\ApiSoalIbuMelahirkanStuntingController;
 use App\Http\Controllers\api\main\ApiSoalMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiSoalMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiStuntingAnakController;
@@ -143,6 +147,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'update']);
     Route::delete('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'destroy']);
 
+    Route::get('/soal_ibu_melahirkan_stunting', [ApiSoalIbuMelahirkanStuntingController::class, 'index']);
+
+    Route::get('/jawaban_ibu_melahirkan_stunting', [ApiJawabanIbuMelahirkanStuntingController::class, 'index']);
+    Route::get('/jawaban_ibu_melahirkan_stunting/{id}', [ApiJawabanIbuMelahirkanStuntingController::class, 'show']);
+    Route::post('/jawaban_ibu_melahirkan_stunting', [ApiJawabanIbuMelahirkanStuntingController::class, 'store']);
+    Route::put('/jawaban_ibu_melahirkan_stunting/{id}', [ApiJawabanIbuMelahirkanStuntingController::class, 'update']);
+    Route::delete('/jawaban_ibu_melahirkan_stunting/{id}', [ApiJawabanIbuMelahirkanStuntingController::class, 'destroy']);
+
     Route::get('/perkiraan_melahirkan', [ApiPerkiraanMelahirkanController::class, 'index']);
     Route::get('/perkiraan_melahirkan/{id}', [ApiPerkiraanMelahirkanController::class, 'show']);
     Route::post('/perkiraan_melahirkan', [ApiPerkiraanMelahirkanController::class, 'store']);
@@ -154,6 +166,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/deteksi_dini', [ApiDeteksiDiniController::class, 'store']);
     Route::put('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'update']);
     Route::delete('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'destroy']);
+
+    Route::get('/soal_deteksi_dini', [ApiSoalDeteksiDiniContoller::class, 'index']);
+
+    Route::get('/jawaban_deteksi_dini', [ApiJawabanDeteksiDiniController::class, 'index']);
+    Route::get('/jawaban_deteksi_dini/{id}', [ApiJawabanDeteksiDiniController::class, 'show']);
+    Route::post('/jawaban_deteksi_dini', [ApiJawabanDeteksiDiniController::class, 'store']);
+    Route::put('/jawaban_deteksi_dini/{id}', [ApiJawabanDeteksiDiniController::class, 'update']);
+    Route::delete('/jawaban_deteksi_dini/{id}', [ApiJawabanDeteksiDiniController::class, 'destroy']);
 
     Route::get('/anc', [ApiAncController::class, 'index']);
     Route::get('/anc/{id}', [ApiAncController::class, 'show']);
