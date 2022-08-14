@@ -347,21 +347,27 @@ class MencegahMalnutrisiController extends Controller
                 $kartuKeluarga = KartuKeluarga::valid()
                     ->whereHas('anggotaKeluarga', function ($query) {
                         $query->where('status_hubungan_dalam_keluarga_id', 4);
-                    })
-                    ->whereHas('user', function ($query) {
-                        $query->where('is_remaja', 1);
+
+                        $query->whereHas('user', function ($query) {
+                            $query->where('is_remaja', 1);
+                        });
                     })
                     ->latest()->get();
             } else if (Auth::user()->role == 'bidan') {
                 $kartuKeluarga = KartuKeluarga::with('anggotaKeluarga')->valid()
-                    ->whereHas('user', function ($query) {
-                        $query->where('is_remaja', 1);
-                    })
                     ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+
+                        $query->whereHas('user', function ($query) {
+                            $query->where('is_remaja', 1);
+                        });
                     })
                     ->orWhereHas('anggotaKeluarga', function ($query) use ($mencegahMalnutrisi) {
                         $query->where('id', $mencegahMalnutrisi->randaKabilasa->anggota_keluarga_id);
+
+                        $query->whereHas('user', function ($query) {
+                            $query->where('is_remaja', 1);
+                        });
                     })
                     ->latest()->get();
             } else if (Auth::user()->role == 'keluarga') {
