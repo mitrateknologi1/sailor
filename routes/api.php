@@ -85,6 +85,8 @@ Route::get('/kabupaten_kota/{id}', [ApiKabupatenKotaController::class, 'show']);
 Route::get('/provinsi', [ApiProvinsiController::class, 'index']);
 Route::get('/provinsi/{id}', [ApiProvinsiController::class, 'show']);
 
+Route::post('/kartu_keluarga/upload', [ApiKartuKeluargaController::class, 'upload']);
+
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
@@ -98,7 +100,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/kartu_keluarga', [ApiKartuKeluargaController::class, 'index']);
     Route::get('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'show']);
     Route::post('/kartu_keluarga', [ApiKartuKeluargaController::class, 'store']);
-    Route::post('/kartu_keluarga/upload/{id}', [ApiKartuKeluargaController::class, 'upload']);
+    // Route::post('/kartu_keluarga/upload/{id}', [ApiKartuKeluargaController::class, 'upload']);
     Route::put('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'update']);
     Route::delete('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'destroy']);
 

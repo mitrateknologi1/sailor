@@ -86,10 +86,10 @@ class ApiKartuKeluargaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function upload(Request $request, $id)
+    public function upload(Request $request)
     {
         $request->validate([
-            "nomor_kk" => "required|unique:kartu_keluarga,nomor_kk,$id",
+            "nomor_kk" => "required|unique:kartu_keluarga,nomor_kk|digits:16",
             "file_kartu_keluarga" => 'required|mimes:jpeg,jpg,png,pdf|max:3072',
         ]);
 
