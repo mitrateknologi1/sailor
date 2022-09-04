@@ -86,6 +86,7 @@ Route::get('/provinsi', [ApiProvinsiController::class, 'index']);
 Route::get('/provinsi/{id}', [ApiProvinsiController::class, 'show']);
 
 Route::post('/kartu_keluarga/upload', [ApiKartuKeluargaController::class, 'upload']);
+Route::post('/wilayah_domisili/upload', [ApiWilayahDomisiliController::class, 'upload']);
 
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -114,7 +115,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'index']);
     Route::get('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'show']);
     Route::post('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'store']);
-    Route::post('/wilayah_domisili/upload/{id}', [ApiWilayahDomisiliController::class, 'update']);
+    // Route::post('/wilayah_domisili/upload/{id}', [ApiWilayahDomisiliController::class, 'upload']);
     Route::put('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'update']);
     Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy']);
 
