@@ -152,4 +152,24 @@ class ApiLokasiTugasController extends Controller
             'message' => 'failed to delete data.'
         ], 500);
     }
+
+    public function cekDomisiliBidan(Request $request){
+        $kelurahanId = $request->kelurahan_id;
+        if($kelurahanId){
+            $kelurahanLokasiTugasBidan = LokasiTugas::pluck('desa_kelurahan_id')->toArray();
+            if (in_array($kelurahanId, $kelurahanLokasiTugasBidan)) {
+                return response([
+                    'message' => 'OK'
+                ], 200);
+            } else {
+                return response([
+                    'message' => 'not found.'
+                ], 404);
+            }
+        }else{
+            return response([
+                'message' => 'please provide kelurahan_id!'
+            ], 400);
+        }
+    }
 }

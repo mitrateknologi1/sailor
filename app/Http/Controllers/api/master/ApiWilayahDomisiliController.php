@@ -76,7 +76,7 @@ class ApiWilayahDomisiliController extends Controller
     {
         $request->validate([
             "nik" => "required|unique:anggota_keluarga,nik",
-            "file_domisili" => 'required|mimes:jpeg,jpg,png|max:3072',
+            "file_domisili" => 'required|mimes:jpeg,jpg,png,pdf|max:3072',
         ]);
 
         $fileName = $request->nik . '.' . $request->file('file_domisili')->extension();

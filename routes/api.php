@@ -87,6 +87,9 @@ Route::get('/provinsi/{id}', [ApiProvinsiController::class, 'show']);
 
 Route::post('/kartu_keluarga/upload', [ApiKartuKeluargaController::class, 'upload']);
 Route::post('/wilayah_domisili/upload', [ApiWilayahDomisiliController::class, 'upload']);
+Route::post('/anggota_keluarga/upload', [ApiAnggotaKeluargaController::class, 'upload']);
+//get bidan by kelurahan (open only for registration keluarga to check is bidan available at kelurahan x)
+Route::get('/lokasi_tugas/cek_domisili', [ApiLokasiTugasController::class, 'cekDomisiliBidan']);
 
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -108,7 +111,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'index']);
     Route::get('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'show']);
     Route::post('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'store']);
-    Route::post('/anggota_keluarga/upload/{id}', [ApiAnggotaKeluargaController::class, 'upload']);
+    // Route::post('/anggota_keluarga/upload/{id}', [ApiAnggotaKeluargaController::class, 'upload']);
     Route::put('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'update']);
     Route::delete('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'destroy']);
 
