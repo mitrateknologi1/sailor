@@ -45,7 +45,7 @@ class ApiAnggotaKeluargaController extends Controller
         $request->validate([
             "bidan_id" => 'nullable|exists:bidan,id',
             "kartu_keluarga_id" => 'required|exists:kartu_keluarga,id',
-            "user_id" => 'exists:users,id',
+            "user_id" => 'nullable|exists:users,id',
             "nama_lengkap" => 'required|string',
             "nik" => 'required|unique:anggota_keluarga,nik',
             "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
