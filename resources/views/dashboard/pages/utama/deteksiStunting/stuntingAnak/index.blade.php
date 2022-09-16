@@ -92,6 +92,7 @@
                                                 'No',
                                                 'Tanggal Dibuat',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Anak',
                                                 'Tinggi Badan',
                                                 'Kategori',
@@ -213,8 +214,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
                         </div>
@@ -544,6 +544,11 @@
                     className: 'text-center',
                 },
                 {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
+                    className: 'text-center',
+                },
+                {
                     data: 'nama_anak',
                     name: 'nama_anak',
                     className: 'text-center',
@@ -583,7 +588,7 @@
 
             ],
             columnDefs: [{
-                    targets: 4,
+                    targets: 5,
                     visible: false,
                 },
 

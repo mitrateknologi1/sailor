@@ -84,7 +84,18 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Kategori', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Status',
+                                                'Nomor Kartu Keluarga',
+                                                'Nama Ibu',
+                                                'Kategori',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -210,6 +221,11 @@
                 {
                     data: 'status',
                     name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {
