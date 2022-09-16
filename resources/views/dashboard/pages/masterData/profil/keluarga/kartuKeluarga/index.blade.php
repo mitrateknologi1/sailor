@@ -98,7 +98,26 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-keluarga',
-                                            'th' => ['No', 'Dibuat Tanggal', 'Status Kartu Keluarga', 'Nomor Kartu Keluarga', 'Nama Kepala Keluarga', 'Anggota', 'Alamat', 'RT', 'RW', 'Kode Pos', 'Desa/Kelurahan', 'Kecamatan', 'Kabupaten/Kota', 'Provinsi', 'Desa/Kelurahan Domisili', 'Bidan', 'Status Anggota Keluarga', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Dibuat Tanggal',
+                                                'Status Kartu Keluarga',
+                                                'Nomor Kartu Keluarga',
+                                                'Nama Kepala Keluarga',
+                                                'Anggota',
+                                                'Alamat',
+                                                'RT',
+                                                'RW',
+                                                'Kode Pos',
+                                                'Desa/Kelurahan',
+                                                'Kecamatan',
+                                                'Kabupaten/Kota',
+                                                'Provinsi',
+                                                'Desa/Kelurahan Domisili',
+                                                'Bidan',
+                                                'Status Anggota Keluarga',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -185,7 +204,8 @@
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-location-dot"></i> Kabupaten/Kota</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-kabupaten-kota">
+                                            <span class="badge bg-info float-end text-uppercase"
+                                                id="modal-kabupaten-kota">
                                                 - </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
@@ -214,7 +234,8 @@
                                     <ul class="list-unstyled mb-0">
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-person fa-lg"></i> Nama Lengkap</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-nama-lengkap"> -
+                                            <span class="badge bg-info float-end text-uppercase" id="modal-nama-lengkap">
+                                                -
                                             </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
@@ -223,12 +244,14 @@
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-venus-mars"></i> Jenis Kelamin</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin"> -
+                                            <span class="badge bg-info float-end text-uppercase" id="modal-jenis-kelamin">
+                                                -
                                             </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-map-location-dot"></i> Tempat Lahir</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-tempat-lahir"> -
+                                            <span class="badge bg-info float-end text-uppercase" id="modal-tempat-lahir">
+                                                -
                                             </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
@@ -254,7 +277,8 @@
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-droplet"></i> Golongan Darah</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-golongan-darah">
+                                            <span class="badge bg-info float-end text-uppercase"
+                                                id="modal-golongan-darah">
                                                 - </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
@@ -274,7 +298,8 @@
                                         </li>
                                         <li class="justify-content-between mb-2" id="li-nomor-paspor">
                                             <label><i class="fa-solid fa-passport"></i> Nomor Paspor</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-nomor-paspor"> -
+                                            <span class="badge bg-info float-end text-uppercase" id="modal-nomor-paspor">
+                                                -
                                             </span>
                                         </li>
                                         <li class="justify-content-between mb-2" id="li-nomor-kitap">
@@ -343,7 +368,8 @@
                                             </li>
                                             <li class="justify-content-between mb-2">
                                                 <label><i class="fa-solid fa-stethoscope"></i> Oleh Bidan</label>
-                                                <span class="badge bg-info float-end text-uppercase" id="modal-oleh-bidan">
+                                                <span class="badge bg-info float-end text-uppercase"
+                                                    id="modal-oleh-bidan">
                                                     - </span>
                                             </li>
                                         </div>
@@ -387,8 +413,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
 
@@ -677,7 +702,7 @@
                 },
             ],
             columnDefs: [{
-                    targets: [1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                    targets: [1, 5, 6, 7, 8, 9, 10, 11, 12, 13],
                     visible: false,
                 },
                 {

@@ -81,6 +81,12 @@ class DeteksiDiniController extends Controller
                                 $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
                                     $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
                                 });
+
+                                $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                                    $query->whereHas('kartuKeluarga', function ($query2) use ($request) {
+                                        $query2->where('nomor_kk', 'like', '%' . $request->search . '%');
+                                    });
+                                });
                             }
                         });
                     })
@@ -120,6 +126,9 @@ class DeteksiDiniController extends Controller
                         } else {
                             return '<span class="badge badge-success bg-success">Tervalidasi</span>';
                         }
+                    })
+                    ->addColumn('nomor_kk', function ($row) {
+                        return $row->anggotaKeluarga->kartuKeluarga->nomor_kk;
                     })
                     ->addColumn('nama_ibu', function ($row) {
                         return $row->anggotaKeluarga->nama_lengkap ?? '-';

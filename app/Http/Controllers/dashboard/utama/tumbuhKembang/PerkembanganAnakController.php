@@ -71,6 +71,12 @@ class PerkembanganAnakController extends Controller
                         $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
                             $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
                         });
+
+                        $query->orWhereHas('anggotaKeluarga', function ($query) use ($request) {
+                            $query->whereHas('kartuKeluarga', function ($query2) use ($request) {
+                                $query2->where('nomor_kk', 'like', '%' . $request->search . '%');
+                            });
+                        });
                     }
                 });
 
@@ -105,6 +111,10 @@ class PerkembanganAnakController extends Controller
                         $interval = date_diff($datetime1, $datetime2);
                         $usia =  $interval->format('%y Tahun %m Bulan %d Hari');
                         return $usia;
+                    })
+
+                    ->addColumn('nomor_kk', function ($row) {
+                        return $row->anggotaKeluarga->kartuKeluarga->nomor_kk;
                     })
 
                     ->addColumn('nama_anak', function ($row) {
