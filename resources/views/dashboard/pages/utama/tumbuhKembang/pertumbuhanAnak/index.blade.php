@@ -90,11 +90,11 @@
                                                 'No',
                                                 'Dibuat Tanggal',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Anak',
                                                 'Nama Ayah',
                                                 'Nama Ibu',
-                                                'Jenis
-                                                                                                                                                    Kelamin',
+                                                'Jenis',
                                                 'Tanggal Lahir',
                                                 'Usia',
                                                 'BB (Kg)',
@@ -230,8 +230,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
                         </div>
@@ -321,6 +320,11 @@
                     className: 'text-center',
                 },
                 {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
+                    className: 'text-center',
+                },
+                {
                     data: 'nama_anak',
                     name: 'nama_anak'
                 },
@@ -380,13 +384,13 @@
 
             ],
             columnDefs: [{
-                    targets: [1, 7],
+                    targets: [1, 8],
                     render: function(data) {
                         return moment(data).format('LL');
                     }
                 },
                 {
-                    targets: [4, 5, 6, 7, 8, 9],
+                    targets: [5, 6, 7, 8, 9, 10],
                     visible: false,
                 },
             ],

@@ -220,32 +220,33 @@
                                                 'No',
                                                 'Dibuat Tanggal',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Ibu',
                                                 'Pemeriksaan Ke',
                                                 'Tanggal Haid
-                                                                                                                                                    Terakhir',
+                                                                                                                                                                                                                            Terakhir',
                                                 'Kehamilan Ke',
                                                 'Usia Kehamilan',
                                                 'Tanggal Perkiraan Lahir',
                                                 'Tinggi/Berat
-                                                                                                                                                    Badan',
+                                                                                                                                                                                                                            Badan',
                                                 'Tekanan Darah',
                                                 'Lengan Atas',
                                                 'Tinggi Fundus',
                                                 'Hemoglobin Darah',
                                                 'Denyut
-                                                                                                                                                    Jantung',
+                                                                                                                                                                                                                            Jantung',
                                                 'Kategori Badan',
                                                 'Kategori Tekanan Darah',
                                                 'Kategori Lengan Atas',
                                                 'Kategori
-                                                                                                                                                    Denyut Jantung',
+                                                                                                                                                                                                                            Denyut Jantung',
                                                 'Kategori
-                                                                                                                                                    Hemoglobin Darah',
+                                                                                                                                                                                                                            Hemoglobin Darah',
                                                 'Vaksin Tetanus Sebelum Hamil',
                                                 'Vaksin Tetanus Sesudah Hamil',
                                                 'Posisi
-                                                                                                                                                    Janin',
+                                                                                                                                                                                                                            Janin',
                                                 'Minum 90 Tablet Tambah Darah',
                                                 'Konseling',
                                                 'Desa / Kelurahan',
@@ -311,7 +312,8 @@
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Perkiraan Lahir :</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-perkiraan-lahir">
+                                    <span class="badge bg-info float-end text-uppercase"
+                                        id="modal-tanggal-perkiraan-lahir">
                                         -
                                     </span>
                                 </li>
@@ -454,8 +456,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
                         </div>
@@ -895,6 +896,11 @@
                 {
                     data: 'status',
                     name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {

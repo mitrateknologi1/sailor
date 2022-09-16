@@ -213,7 +213,26 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => ['No', 'Tanggal Dibuat', 'Nama Remaja', 'Status Validasi Asesmen Mencegah Malnutrisi', 'Status Validasi Asesmen Mencegah Pernikahan Dini', 'Status Validasi Asesmen Meningkatkan Life Skill', 'Status Asesmen', 'Kategori HB', 'Kategori Lingkar Lengan Atas', 'Kategori Indeks Masa Tubuh', 'Asesmen Mencegah Malnutrisi', 'Asesmen Meningkatkan Life Skill', 'Asesmen Mencegah Pernikahan Dini', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Nomor Kartu Keluarga',
+                                                'Nama Remaja',
+                                                'Status Validasi Asesmen Mencegah Malnutrisi',
+                                                'Status Validasi Asesmen Mencegah Pernikahan Dini',
+                                                'Status Validasi Asesmen Meningkatkan Life Skill',
+                                                'Status Asesmen',
+                                                'Kategori HB',
+                                                'Kategori Lingkar Lengan Atas',
+                                                'Kategori Indeks Masa Tubuh',
+                                                'Asesmen Mencegah Malnutrisi',
+                                                'Asesmen Meningkatkan Life Skill',
+                                                'Asesmen Mencegah Pernikahan Dini',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -242,8 +261,8 @@
                             <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light"><i
                                     class="fas fa-baby-carriage"></i></div>
                             <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan"
-                                    style="margin-left: 5px"> - </div>
+                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan" style="margin-left: 5px"> -
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -448,6 +467,11 @@
                 {
                     data: 'tanggal_dibuat',
                     name: 'tanggal_dibuat',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {

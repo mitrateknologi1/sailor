@@ -73,7 +73,20 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Tanggal Haid Terakhir', 'Tanggal Perkiraan Lahir', 'Usia Kehamilan', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Status',
+                                                'Nomor Kartu Keluarga',
+                                                'Nama Ibu',
+                                                'Tanggal Haid Terakhir',
+                                                'Tanggal Perkiraan Lahir',
+                                                'Usia Kehamilan',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -102,8 +115,8 @@
                             <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light"><i
                                     class="fas fa-baby-carriage"></i></div>
                             <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan"
-                                    style="margin-left: 5px"> - </div>
+                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan" style="margin-left: 5px"> -
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,8 +186,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
                         </div>
@@ -468,6 +480,11 @@
                 {
                     data: 'status',
                     name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {

@@ -134,6 +134,7 @@ class KartuKeluargaController extends Controller
                     });
 
                     $query->orWhere('nama_kepala_keluarga', 'like', '%' . $request->search . '%');
+                    $query->orWhere('nomor_kk', 'like', '%' . $request->search . '%');
                 }
             });
 
