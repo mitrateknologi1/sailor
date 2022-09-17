@@ -23,4 +23,9 @@ class DesaKelurahan extends Model
     {
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
+
+    public function wilayahDomisili()
+    {
+        return $this->hasMany(WilayahDomisili::class, 'desa_kelurahan_id');
+    }
 }

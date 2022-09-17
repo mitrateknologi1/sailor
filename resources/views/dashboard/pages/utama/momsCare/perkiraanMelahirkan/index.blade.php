@@ -62,10 +62,14 @@
                                                 @endcomponent
                                             </div>
                                         </div>
+                                        @component('dashboard.components.filter.wilayah',
+                                            [
+                                                'fitur' => 'perkiraanMelahirkan',
+                                            ])
+                                        @endcomponent
                                     </div>
                                 </div>
                             @endif
-
                         </div>
                         <div class="row">
                             <div class="col">
@@ -73,7 +77,19 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Tanggal Haid Terakhir', 'Tanggal Perkiraan Lahir', 'Usia Kehamilan', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Status',
+                                                'Nama Ibu',
+                                                'Tanggal Haid Terakhir',
+                                                'Tanggal Perkiraan Lahir',
+                                                'Usia Kehamilan',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -102,8 +118,8 @@
                             <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light"><i
                                     class="fas fa-baby-carriage"></i></div>
                             <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan"
-                                    style="margin-left: 5px"> - </div>
+                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan" style="margin-left: 5px"> -
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,8 +189,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
                         </div>
@@ -212,6 +227,8 @@
         $('#menu-moms-care').addClass('collapse show')
         $('#ms-link-perkiraan-melahirkan').addClass('active')
     </script>
+
+
 
     <script>
         $(document).on('click', '#btn-delete', function() {
@@ -451,6 +468,10 @@
                 data: function(d) {
                     d.statusValidasi = $('#status-validasi').val();
                     d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

@@ -77,6 +77,11 @@
                                             @endcomponent
                                         </div>
                                     </div>
+                                    @component('dashboard.components.filter.wilayah',
+                                        [
+                                            'fitur' => 'deteksiDini',
+                                        ])
+                                    @endcomponent
                                 </div>
                             </div>
                         </div>
@@ -86,7 +91,18 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => ['No', 'Tanggal Dibuat', 'Status', 'Nama Ibu', 'Skor', 'Kategori', 'Desa/Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Status',
+                                                'Nama Ibu',
+                                                'Skor',
+                                                'Kategori',
+                                                'Desa/Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -195,6 +211,10 @@
                     d.statusValidasi = $('#status-validasi').val();
                     d.kategori = $('#kategori').val();
                     d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

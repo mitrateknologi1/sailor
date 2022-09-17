@@ -63,6 +63,11 @@
                                                 @endcomponent
                                             </div>
                                         </div>
+                                        @component('dashboard.components.filter.wilayah',
+                                            [
+                                                'fitur' => 'perkembanganAnak',
+                                            ])
+                                        @endcomponent
                                     </div>
                                 </div>
                             @endif
@@ -81,7 +86,7 @@
                                                 'Nama Ayah',
                                                 'Nama Ibu',
                                                 'Jenis
-                                                                                                                Kelamin',
+                                                                                                                                                                                                                            Kelamin',
                                                 'Tanggal Lahir',
                                                 'Usia',
                                                 'Motorik Kasar',
@@ -203,8 +208,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
                         </div>
@@ -274,6 +278,10 @@
                 data: function(d) {
                     d.statusValidasi = $('#status-filter').val();
                     d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

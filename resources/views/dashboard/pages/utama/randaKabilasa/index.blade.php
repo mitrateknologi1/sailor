@@ -204,6 +204,11 @@
                                             @endcomponent
                                         </div>
                                     </div>
+                                    @component('dashboard.components.filter.wilayah',
+                                        [
+                                            'fitur' => 'randaKabilasa',
+                                        ])
+                                    @endcomponent
                                 </div>
                             </div>
                         </div>
@@ -213,7 +218,25 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-data',
-                                            'th' => ['No', 'Tanggal Dibuat', 'Nama Remaja', 'Status Validasi Asesmen Mencegah Malnutrisi', 'Status Validasi Asesmen Mencegah Pernikahan Dini', 'Status Validasi Asesmen Meningkatkan Life Skill', 'Status Asesmen', 'Kategori HB', 'Kategori Lingkar Lengan Atas', 'Kategori Indeks Masa Tubuh', 'Asesmen Mencegah Malnutrisi', 'Asesmen Meningkatkan Life Skill', 'Asesmen Mencegah Pernikahan Dini', 'Desa / Kelurahan', 'Bidan', 'Tanggal Validasi', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Tanggal Dibuat',
+                                                'Nama Remaja',
+                                                'Status Validasi Asesmen Mencegah Malnutrisi',
+                                                'Status Validasi Asesmen Mencegah Pernikahan Dini',
+                                                'Status Validasi Asesmen Meningkatkan Life Skill',
+                                                'Status Asesmen',
+                                                'Kategori HB',
+                                                'Kategori Lingkar Lengan Atas',
+                                                'Kategori Indeks Masa Tubuh',
+                                                'Asesmen Mencegah Malnutrisi',
+                                                'Asesmen Meningkatkan Life Skill',
+                                                'Asesmen Mencegah Pernikahan Dini',
+                                                'Desa / Kelurahan',
+                                                'Bidan',
+                                                'Tanggal Validasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -242,8 +265,8 @@
                             <div class="avatar rounded no-thumbnail kategori-bg bg-primary text-light"><i
                                     class="fas fa-baby-carriage"></i></div>
                             <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan"
-                                    style="margin-left: 5px"> - </div>
+                                <div class="h6 mb-0" id="modal-tanggal-perkiraan-melahirkan" style="margin-left: 5px"> -
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -436,6 +459,11 @@
                     d.asesmen_meningkatkan_life_skill = $('#asesmen_meningkatkan_life_skill').val();
                     d.asesmen_mencegah_pernikahan_dini = $('#asesmen_mencegah_pernikahan_dini').val();
                     d.search = $('input[type="search"]').val();
+                    d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

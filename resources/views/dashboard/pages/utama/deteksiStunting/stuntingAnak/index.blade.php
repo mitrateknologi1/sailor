@@ -79,6 +79,11 @@
                                             @endcomponent
                                         </div>
                                     </div>
+                                    @component('dashboard.components.filter.wilayah',
+                                        [
+                                            'fitur' => 'stuntingAnak',
+                                        ])
+                                    @endcomponent
                                 </div>
                             </div>
                         </div>
@@ -156,7 +161,8 @@
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="bi bi-calendar2-event-fill"></i> Tanggal Lahir</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tanggal-lahir"> -
+                                    </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-cake-candles"></i> Usia</label>
@@ -164,7 +170,8 @@
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fas fa-ruler-vertical"></i> Tinggi Badan</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-tinggi-badan"> - </span>
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-tinggi-badan"> -
+                                    </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="fa-solid fa-map-location-dot"></i> Desa/Kelurahan</label>
@@ -173,7 +180,8 @@
                                 </li>
                                 <li class="justify-content-between mb-2">
                                     <label><i class="bi bi-calendar2-event-fill"></i> Tanggal diperiksa/validasi</label>
-                                    <span class="badge bg-info float-end text-uppercase" id="modal-diperiksa-divalidasi"> -
+                                    <span class="badge bg-info float-end text-uppercase" id="modal-diperiksa-divalidasi">
+                                        -
                                     </span>
                                 </li>
                                 <li class="justify-content-between">
@@ -213,8 +221,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
                         </div>
@@ -524,6 +531,10 @@
                     d.statusValidasi = $('#status-validasi').val();
                     d.kategori = $('#kategori').val();
                     d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

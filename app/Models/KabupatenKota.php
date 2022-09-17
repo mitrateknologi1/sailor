@@ -22,4 +22,14 @@ class KabupatenKota extends Model
     {
         return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }
+
+    public function kartuKeluarga()
+    {
+        return $this->hasMany(KartuKeluarga::class, 'kabupaten_kota_id');
+    }
+
+    public function wilayahDomisili()
+    {
+        return $this->hasMany(WilayahDomisili::class, 'kabupaten_kota_id');
+    }
 }

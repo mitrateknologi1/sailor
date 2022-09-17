@@ -95,6 +95,26 @@ class PertumbuhanAnakController extends Controller
                     }
                 });
 
+                $data->whereHas('anggotaKeluarga', function ($query) use ($request) {
+                    $query->whereHas('wilayahDomisili', function ($query) use ($request) {
+                        if ($request->provinsi && $request->provinsi != "semua") {
+                            $query->where('provinsi_id', $request->provinsi);
+                        }
+
+                        if ($request->kabupaten && $request->kabupaten != "semua") {
+                            $query->where('kabupaten_kota_id', $request->kabupaten);
+                        }
+
+                        if ($request->kecamatan && $request->kecamatan != "semua") {
+                            $query->where('kecamatan_id', $request->kecamatan);
+                        }
+
+                        if ($request->desa && $request->desa != "semua") {
+                            $query->where('desa_kelurahan_id', $request->desa);
+                        }
+                    });
+                });
+
                 $data->orderBy('created_at', 'DESC');
 
                 return DataTables::of($data)
