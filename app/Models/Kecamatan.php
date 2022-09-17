@@ -28,4 +28,14 @@ class Kecamatan extends Model
     {
         return json_decode($this->polygon);
     }
+
+    public function kartuKeluarga()
+    {
+        return $this->hasMany(KartuKeluarga::class, 'kabupaten_kota_id');
+    }
+
+    public function wilayahDomisili()
+    {
+        return $this->hasMany(WilayahDomisili::class, 'kecamatan_id');
+    }
 }
