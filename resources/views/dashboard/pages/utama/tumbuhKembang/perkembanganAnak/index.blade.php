@@ -82,11 +82,11 @@
                                                 'No',
                                                 'Tanggal Dibuat',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Anak',
                                                 'Nama Ayah',
                                                 'Nama Ibu',
-                                                'Jenis
-                                                                                                                                                                                                                            Kelamin',
+                                                'Jenis Kelamin',
                                                 'Tanggal Lahir',
                                                 'Usia',
                                                 'Motorik Kasar',
@@ -302,6 +302,11 @@
                     className: 'text-center',
                 },
                 {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
+                    className: 'text-center',
+                },
+                {
                     data: 'nama_anak',
                     name: 'nama_anak'
                 },
@@ -361,17 +366,17 @@
 
             ],
             columnDefs: [{
-                    targets: [4, 5, 6, 7, 8],
+                    targets: [5, 6, 7, 8, 9],
                     visible: false,
                 },
                 {
-                    targets: [1, 7],
+                    targets: [1, 8],
                     render: function(data) {
                         return moment(data).format('LL');
                     }
                 },
                 {
-                    targets: [9, 10],
+                    targets: [10, 11],
                     render: function(data, type, full, meta) {
                         return "<div style='white-space: normal;width: 180px;'>" + data + "</div>";
                     },

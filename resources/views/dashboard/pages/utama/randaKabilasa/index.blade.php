@@ -221,6 +221,7 @@
                                             'th' => [
                                                 'No',
                                                 'Tanggal Dibuat',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Remaja',
                                                 'Status Validasi Asesmen Mencegah Malnutrisi',
                                                 'Status Validasi Asesmen Mencegah Pernikahan Dini',
@@ -476,6 +477,11 @@
                 {
                     data: 'tanggal_dibuat',
                     name: 'tanggal_dibuat',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {

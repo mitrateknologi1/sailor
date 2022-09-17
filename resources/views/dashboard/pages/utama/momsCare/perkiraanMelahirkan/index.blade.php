@@ -81,6 +81,7 @@
                                                 'No',
                                                 'Tanggal Dibuat',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Ibu',
                                                 'Tanggal Haid Terakhir',
                                                 'Tanggal Perkiraan Lahir',
@@ -489,6 +490,11 @@
                 {
                     data: 'status',
                     name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {

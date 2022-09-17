@@ -95,6 +95,7 @@
                                                 'No',
                                                 'Tanggal Dibuat',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Ibu',
                                                 'Skor',
                                                 'Kategori',
@@ -232,6 +233,11 @@
                 {
                     data: 'status',
                     name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {

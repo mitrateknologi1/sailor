@@ -225,32 +225,27 @@
                                                 'No',
                                                 'Dibuat Tanggal',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Ibu',
                                                 'Pemeriksaan Ke',
-                                                'Tanggal Haid
-                                                                                                                                                                                                                                                                Terakhir',
+                                                'Tanggal Haid Terakhir',
                                                 'Kehamilan Ke',
                                                 'Usia Kehamilan',
                                                 'Tanggal Perkiraan Lahir',
-                                                'Tinggi/Berat
-                                                                                                                                                                                                                                                                Badan',
+                                                'Tinggi / Berat Badan',
                                                 'Tekanan Darah',
                                                 'Lengan Atas',
                                                 'Tinggi Fundus',
                                                 'Hemoglobin Darah',
-                                                'Denyut
-                                                                                                                                                                                                                                                                Jantung',
+                                                'Denyut Jantung',
                                                 'Kategori Badan',
                                                 'Kategori Tekanan Darah',
                                                 'Kategori Lengan Atas',
-                                                'Kategori
-                                                                                                                                                                                                                                                                Denyut Jantung',
-                                                'Kategori
-                                                                                                                                                                                                                                                                Hemoglobin Darah',
+                                                'Kategori Denyut Jantung',
+                                                'Kategori Hemoglobin Darah',
                                                 'Vaksin Tetanus Sebelum Hamil',
                                                 'Vaksin Tetanus Sesudah Hamil',
-                                                'Posisi
-                                                                                                                                                                                                                                                                Janin',
+                                                'Posisi Janin',
                                                 'Minum 90 Tablet Tambah Darah',
                                                 'Konseling',
                                                 'Desa / Kelurahan',
@@ -904,6 +899,11 @@
                 {
                     data: 'status',
                     name: 'status',
+                    className: 'text-center',
+                },
+                {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
                     className: 'text-center',
                 },
                 {

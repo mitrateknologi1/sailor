@@ -95,11 +95,11 @@
                                                 'No',
                                                 'Dibuat Tanggal',
                                                 'Status',
+                                                'Nomor Kartu Keluarga',
                                                 'Nama Anak',
                                                 'Nama Ayah',
                                                 'Nama Ibu',
-                                                'Jenis
-                                                                                                                                                                                                                            Kelamin',
+                                                'Jenis',
                                                 'Tanggal Lahir',
                                                 'Usia',
                                                 'BB (Kg)',
@@ -329,6 +329,11 @@
                     className: 'text-center',
                 },
                 {
+                    data: 'nomor_kk',
+                    name: 'nomor_kk',
+                    className: 'text-center',
+                },
+                {
                     data: 'nama_anak',
                     name: 'nama_anak'
                 },
@@ -388,13 +393,13 @@
 
             ],
             columnDefs: [{
-                    targets: [1, 7],
+                    targets: [1, 8],
                     render: function(data) {
                         return moment(data).format('LL');
                     }
                 },
                 {
-                    targets: [4, 5, 6, 7, 8, 9],
+                    targets: [5, 6, 7, 8, 9, 10],
                     visible: false,
                 },
             ],
