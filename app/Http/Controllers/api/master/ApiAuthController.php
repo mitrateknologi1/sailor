@@ -52,6 +52,12 @@ class ApiAuthController extends Controller
             ], 401);
         }
 
+        if ($user->role == "admin") {
+            return response([
+                "message" => 'Not Authorized!',
+            ], 403);
+        }
+
         if ($user->status == 1) {
             $token = $user->createToken('myapptoken')->plainTextToken;
 
@@ -62,7 +68,7 @@ class ApiAuthController extends Controller
         } else {
             return response([
                 'message' => 'Account disabled.'
-            ], 401);
+            ], 405);
         }
     }
 
