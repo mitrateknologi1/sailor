@@ -79,7 +79,7 @@ class DesaKelurahanController extends Controller
             [
                 'nama' => ['required', Rule::unique('desa_kelurahan')->withoutTrashed()],
                 'polygon' => 'required',
-                'warna_polygon' => ['required', Rule::unique('desa_kelurahan')->withoutTrashed()],
+                'warna_polygon' => 'required'
             ],
             [
                 'nama.required' => 'Nama Desa/Kelurahan tidak boleh kosong',
@@ -142,7 +142,7 @@ class DesaKelurahanController extends Controller
             [
                 'nama' => ['required', Rule::unique('desa_kelurahan')->where('kecamatan_id', $request->kecamatan)->ignore($request->desaKelurahan)->withoutTrashed()],
                 'polygon' => 'required',
-                'warna_polygon' => ['required', Rule::unique('desa_kelurahan')->ignore($request->desaKelurahan)->withoutTrashed()],
+                'warna_polygon' => 'required'
             ],
             [
                 'nama.required' => 'Nama Desa/Kelurahan tidak boleh kosong',
@@ -185,7 +185,13 @@ class DesaKelurahanController extends Controller
         if ($request->id) {
             $desaKelurahan = DesaKelurahan::find($request->id);
         } else {
-            $desaKelurahan = DesaKelurahan::whereNotNull('polygon')->where('kecamatan_id', $request->kecamatan)->where(function ($query) use ($request) {
+            // $desaKelurahan = DesaKelurahan::whereNotNull('polygon')->where('kecamatan_id', $request->kecamatan)->where(function ($query) use ($request) {
+            //     if ($request->desaKelurahanId) {
+            //         $query->where('id', '==', $request->desaKelurahanId);
+            //     }
+            // })->orderBy('id', 'desc')->get();
+
+            $desaKelurahan = DesaKelurahan::whereNotNull('polygon')->where(function ($query) use ($request) {
                 if ($request->desaKelurahanId) {
                     $query->where('id', '==', $request->desaKelurahanId);
                 }
