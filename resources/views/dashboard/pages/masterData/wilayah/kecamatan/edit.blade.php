@@ -19,12 +19,13 @@
 @endsection
 
 @section('content')
-    @component('dashboard.components.forms.masterData.wilayah', [
-        'idForm' => 'form-edit',
-        'title' => 'Edit Kecamatan',
-        'data' => $kecamatan,
-        'method' => 'PUT',
-        'url' => url('/map/kecamatan'),
+    @component('dashboard.components.forms.masterData.wilayah',
+        [
+            'idForm' => 'form-edit',
+            'title' => 'Edit Kecamatan',
+            'data' => $kecamatan,
+            'method' => 'PUT',
+            'url' => url('/map/kecamatan'),
         ])
     @endcomponent
 @endsection
@@ -50,7 +51,7 @@
                             function() {
                                 $(location).attr('href',
                                     "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id) }}"
-                                    );
+                                );
                             }, 2000
                         );
                     } else {

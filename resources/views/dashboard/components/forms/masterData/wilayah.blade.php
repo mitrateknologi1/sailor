@@ -4,16 +4,15 @@
                 height: 600px;
                 margin-top: 0px;
             }
-
         </style>
     @endpush
 
     <form method="POST" id="{{ $idForm ?? '' }}">
         @csrf
         @if ($method == 'PUT')
-            @method("PUT")
+            @method('PUT')
         @else
-            @method("POST")
+            @method('POST')
         @endif
 
         <div class="row g-1">
@@ -38,15 +37,15 @@
                                     <div class="card-body">
                                         <form class="row g-3">
                                             <div class="col-12">
-                                                <label for="TextInput"
-                                                    class="form-label">{{ $title }}</label>
+                                                <label for="TextInput" class="form-label">{{ $title }}</label>
                                                 <input type="text" class="form-control" name="nama" id="nama"
                                                     value="{{ $data->nama ?? '' }}">
                                                 <span class="badge bg-danger mt-2 d-none nama-error"></span>
                                             </div>
                                             <div class="col-12 mt-2">
                                                 <label for="textareaInput" class="form-label">Warna</label>
-                                                <input type="color" id="warna" class="form-control form-control-color"
+                                                <input type="color" id="warna"
+                                                    class="form-control form-control-color"
                                                     value="{{ $data->warna_polygon ?? '' }}" title="Choose your color"
                                                     name="warna_polygon">
                                                 <span class="badge bg-danger mt-2 d-none warna_polygon-error"></span>
@@ -142,6 +141,39 @@
                     $('#nama').val('{{ $data->nama }}');
                 });
 
+                $(document).ready(function() {
+                    $.ajax({
+                        url: "{{ $url }}",
+                        type: "GET",
+                        data: {
+                            kabupatenKota: "{{ $data->kabupatenKota->id ?? '' }}",
+                            kecamatan: "{{ $data->kecamatan->id ?? '' }}"
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status == 'success') {
+                                for (var i = 0; i < response.data.length; i++) {
+                                    if (response.data[i].id != '{{ $data->id }}') {
+                                        L.polygon(response.data[i].koordinatPolygon, {
+                                                color: 'white',
+                                                fillColor: response.data[i].warna_polygon,
+                                                weight: 1,
+                                                opacity: 1,
+                                                fillOpacity: 1
+                                            })
+                                            .bindTooltip(response.data[i].nama, {
+                                                permanent: true,
+                                                direction: "center",
+                                                className: 'labelPolygon'
+                                            })
+                                            .addTo(map);
+                                    }
+                                }
+                            }
+                        },
+                    })
+                })
+
                 if ("{{ $data->polygon }}") {
                     $.ajax({
                         url: "{{ $url }}",
@@ -152,10 +184,16 @@
                         success: function(response) {
                             if (response.status == 'success') {
                                 L.polygon(response.data.koordinatPolygon, {
-                                        color: response.data.warna_polygon,
+                                        color: 'white',
+                                        fillColor: response.data.warna_polygon,
                                         weight: 1,
                                         opacity: 1,
-                                        fillOpacity: 0.5
+                                        fillOpacity: 1
+                                    })
+                                    .bindTooltip(response.data.nama, {
+                                        permanent: true,
+                                        direction: "center",
+                                        className: 'labelPolygon'
                                     })
                                     .addTo(drawnItems);
                             }

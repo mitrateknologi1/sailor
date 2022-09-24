@@ -10,7 +10,6 @@
             height: 400px;
             margin-top: 0px;
         }
-
     </style>
 @endpush
 
@@ -34,12 +33,18 @@
                     <div
                         class="card-header bg-light-secondary d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Wilayah Desa/Kelurahan</h5>
-                        @component('dashboard.components.buttons.add', [
-                            'id' => 'btn-tambah',
-                            'class' => '',
-                            'url' => url('masterData/desaKelurahan' . '/' . $kecamatan->id . '/create'),
-                            ])
-                        @endcomponent
+                        <div class="float-end">
+                            <a class="btn btn-secondary"
+                                href="{{ url('masterData/kecamatan' . '/' . $kecamatan->kabupaten_kota_id) }}"><i
+                                    class="bi bi-arrow-left-circle"></i> Kembali</a>
+                            @component('dashboard.components.buttons.add',
+                                [
+                                    'id' => 'btn-tambah',
+                                    'class' => '',
+                                    'url' => url('masterData/desaKelurahan' . '/' . $kecamatan->id . '/create'),
+                                ])
+                            @endcomponent
+                        </div>
                     </div>
                     <div class="card-body pt-2">
                         <div class="row px-3 mt-2">
@@ -48,9 +53,10 @@
                         <div class="row">
                             <div class="col">
                                 <div class="card fieldset border border-secondary">
-                                    @component('dashboard.components.dataTables.index', [
-                                        'id' => 'table-data',
-                                        'th' => ['No', 'Nama', 'Polygon', 'Warna Polygon', 'Aksi'],
+                                    @component('dashboard.components.dataTables.index',
+                                        [
+                                            'id' => 'table-data',
+                                            'th' => ['No', 'Nama', 'Polygon', 'Warna Polygon', 'Aksi'],
                                         ])
                                     @endcomponent
                                 </div>
@@ -85,13 +91,18 @@
                     if (response.status == 'success') {
                         for (var i = 0; i < response.data.length; i++) {
                             L.polygon(response.data[i].koordinatPolygon, {
-                                    color: response.data[i].warna_polygon,
+                                    color: 'white',
+                                    fillColor: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
-                                .addTo(map)
-                                .bindPopup(response.data[i].nama);
+                                .bindTooltip(response.data[i].nama, {
+                                    permanent: true,
+                                    direction: "center",
+                                    className: 'labelPolygon'
+                                })
+                                .addTo(map);
                         }
                     }
                 },

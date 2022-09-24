@@ -10,7 +10,6 @@
             height: 400px;
             margin-top: 0px;
         }
-
     </style>
 @endpush
 
@@ -39,7 +38,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link tab-map" data-bs-toggle="tab" href="#" role="tab" value="anc">
+                                <a class="nav-link tab-map" data-bs-toggle="tab" href="#" role="tab"
+                                    value="anc">
                                     <span class="d-none d-sm-inline">ANC</span>
                                 </a>
                             </li>
@@ -457,7 +457,7 @@
             }
 
             map = L.map("map").setView(centerMap, mapZoom);
-            // map.addControl(new L.Control.Fullscreen());
+            map.addControl(new L.Control.Fullscreen());
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
@@ -518,14 +518,16 @@
                     if (response.length > 0) {
                         for (var i = 0; i < response.length; i++) {
                             L.polygon(response[i].koordinatPolygon, {
-                                    color: response[i].warnaPolygon,
+                                    color: 'white',
+                                    fillColor: response[i].warnaPolygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response[i].nama, {
                                     permanent: true,
-                                    direction: "center"
+                                    direction: "center",
+                                    className: 'labelPolygon'
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center title'>" + response[i].nama +
@@ -563,14 +565,16 @@
                     if (response.length > 0) {
                         for (var i = 0; i < response.length; i++) {
                             L.polygon(response[i].koordinatPolygon, {
-                                    color: response[i].warnaPolygon,
+                                    color: 'white',
+                                    fillColor: response[i].warnaPolygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response[i].nama, {
                                     permanent: true,
-                                    direction: "center"
+                                    direction: "center",
+                                    className: 'labelPolygon'
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center title'>" + response[i].nama +

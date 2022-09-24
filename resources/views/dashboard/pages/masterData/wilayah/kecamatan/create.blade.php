@@ -19,10 +19,11 @@
 @endsection
 
 @section('content')
-    @component('dashboard.components.forms.masterData.wilayah', [
-        'idForm' => 'form-tambah',
-        'title' => 'Tambah Kecamatan',
-        'method' => 'POST',
+    @component('dashboard.components.forms.masterData.wilayah',
+        [
+            'idForm' => 'form-tambah',
+            'title' => 'Tambah Kecamatan',
+            'method' => 'POST',
         ])
     @endcomponent
 @endsection
@@ -48,7 +49,7 @@
                             function() {
                                 $(location).attr('href',
                                     "{{ url('masterData/kecamatan' . '/' . $kabupatenKota->id) }}"
-                                    );
+                                );
                             }, 2000
                         );
                     } else {
@@ -69,22 +70,27 @@
 
         $(document).ready(function() {
             $.ajax({
-                url: "{{ url('masterData/map/kecamatan') }}",
+                url: "{{ url('map/kecamatan') }}",
                 type: "GET",
                 data: {
                     kabupatenKota: "{{ $kabupatenKota->id }}"
                 },
                 success: function(response) {
+                    console.log(response);
                     if (response.status == 'success') {
                         for (var i = 0; i < response.data.length; i++) {
                             L.polygon(response.data[i].koordinatPolygon, {
                                     color: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .addTo(map)
-                                .bindPopup(response.data[i].nama);
+                                .bindTooltip(response.data[i].nama, {
+                                    permanent: true,
+                                    direction: "center",
+                                    className: 'labelPolygon'
+                                });
                         }
                     }
                 },

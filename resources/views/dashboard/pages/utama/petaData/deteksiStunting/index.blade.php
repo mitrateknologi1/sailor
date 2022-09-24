@@ -10,7 +10,6 @@
             height: 400px;
             margin-top: 0px;
         }
-
     </style>
 @endpush
 
@@ -152,7 +151,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="pendek_wanita">-</div>
@@ -169,7 +169,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="normal_pria">-</div>
@@ -177,7 +178,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="normal_wanita">-</div>
@@ -194,7 +196,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="tinggi_pria">-</div>
@@ -202,7 +205,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="tinggi_wanita">-</div>
@@ -239,7 +243,7 @@
             }
 
             map = L.map("map").setView(centerMap, mapZoom);
-            // map.addControl(new L.Control.Fullscreen());
+            map.addControl(new L.Control.Fullscreen());
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
@@ -300,14 +304,16 @@
                     if (response.length > 0) {
                         for (var i = 0; i < response.length; i++) {
                             L.polygon(response[i].koordinatPolygon, {
-                                    color: response[i].warnaPolygon,
+                                    color: 'white',
+                                    fillColor: response[i].warnaPolygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response[i].nama, {
                                     permanent: true,
-                                    direction: "center"
+                                    direction: "center",
+                                    className: 'labelPolygon'
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center title'>" + response[i].nama +
@@ -348,14 +354,16 @@
                     if (response.length > 0) {
                         for (var i = 0; i < response.length; i++) {
                             L.polygon(response[i].koordinatPolygon, {
-                                    color: response[i].warnaPolygon,
+                                    color: 'white',
+                                    fillColor: response[i].warnaPolygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response[i].nama, {
                                     permanent: true,
-                                    direction: "center"
+                                    direction: "center",
+                                    className: 'labelPolygon'
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center title'>" + response[i].nama +
