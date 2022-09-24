@@ -20,10 +20,11 @@
 @endsection
 
 @section('content')
-    @component('dashboard.components.forms.masterData.wilayah', [
-        'idForm' => 'form-tambah',
-        'title' => 'Tambah Kecamatan',
-        'method' => 'POST',
+    @component('dashboard.components.forms.masterData.wilayah',
+        [
+            'idForm' => 'form-tambah',
+            'title' => 'Tambah Kecamatan',
+            'method' => 'POST',
         ])
     @endcomponent
 @endsection
@@ -79,13 +80,18 @@
                     if (response.status == 'success') {
                         for (var i = 0; i < response.data.length; i++) {
                             L.polygon(response.data[i].koordinatPolygon, {
-                                    color: response.data[i].warna_polygon,
+                                    color: 'white',
+                                    fillColor: response.data[i].warna_polygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
+                                })
+                                .bindTooltip(response.data[i].nama, {
+                                    permanent: true,
+                                    direction: "center",
+                                    className: 'labelPolygon'
                                 })
                                 .addTo(map)
-                                .bindPopup(response.data[i].nama);
                         }
                     }
                 },

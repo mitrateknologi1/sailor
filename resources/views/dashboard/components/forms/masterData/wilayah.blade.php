@@ -145,16 +145,26 @@
                     $.ajax({
                         url: "{{ $url }}",
                         type: "GET",
+                        data: {
+                            kabupatenKota: "{{ $data->kabupatenKota->id ?? '' }}",
+                            kecamatan: "{{ $data->kecamatan->id ?? '' }}"
+                        },
                         success: function(response) {
                             console.log(response);
                             if (response.status == 'success') {
                                 for (var i = 0; i < response.data.length; i++) {
                                     if (response.data[i].id != '{{ $data->id }}') {
                                         L.polygon(response.data[i].koordinatPolygon, {
-                                                color: response.data[i].warna_polygon,
+                                                color: 'white',
+                                                fillColor: response.data[i].warna_polygon,
                                                 weight: 1,
                                                 opacity: 1,
-                                                fillOpacity: 0.5
+                                                fillOpacity: 1
+                                            })
+                                            .bindTooltip(response.data[i].nama, {
+                                                permanent: true,
+                                                direction: "center",
+                                                className: 'labelPolygon'
                                             })
                                             .addTo(map);
                                     }
@@ -174,10 +184,16 @@
                         success: function(response) {
                             if (response.status == 'success') {
                                 L.polygon(response.data.koordinatPolygon, {
-                                        color: response.data.warna_polygon,
+                                        color: 'white',
+                                        fillColor: response.data.warna_polygon,
                                         weight: 1,
                                         opacity: 1,
-                                        fillOpacity: 0.5
+                                        fillOpacity: 1
+                                    })
+                                    .bindTooltip(response.data.nama, {
+                                        permanent: true,
+                                        direction: "center",
+                                        className: 'labelPolygon'
                                     })
                                     .addTo(drawnItems);
                             }

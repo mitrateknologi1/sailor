@@ -185,13 +185,7 @@ class DesaKelurahanController extends Controller
         if ($request->id) {
             $desaKelurahan = DesaKelurahan::find($request->id);
         } else {
-            // $desaKelurahan = DesaKelurahan::whereNotNull('polygon')->where('kecamatan_id', $request->kecamatan)->where(function ($query) use ($request) {
-            //     if ($request->desaKelurahanId) {
-            //         $query->where('id', '==', $request->desaKelurahanId);
-            //     }
-            // })->orderBy('id', 'desc')->get();
-
-            $desaKelurahan = DesaKelurahan::whereNotNull('polygon')->where(function ($query) use ($request) {
+            $desaKelurahan = DesaKelurahan::whereNotNull('polygon')->where('kecamatan_id', $request->kecamatan)->where(function ($query) use ($request) {
                 if ($request->desaKelurahanId) {
                     $query->where('id', '==', $request->desaKelurahanId);
                 }
