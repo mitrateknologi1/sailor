@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
 use App\Models\KartuKeluarga;
 use App\Models\Pemberitahuan;
+use App\Models\LokasiTugas;
+use App\Models\WilayahDomisili;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class ApiKartuKeluargaController extends Controller
 {
@@ -33,7 +36,30 @@ class ApiKartuKeluargaController extends Controller
             return  $kartuKeluarga->search($search)->orderBy('updated_at', 'desc')->paginate($pageSize);
         }
 
-        return  $kartuKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return  $kartuKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+        $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan');
+        if (Auth::user()->role != 'admin') {
+            $data->where(function (Builder $query) use ($lokasiTugas) {
+                $query->whereIn('is_valid', [1, 2]);
+                $query->orWhere(function (Builder $query) use ($lokasiTugas) {
+                    $query->where('is_valid', 0);
+                    $query->whereHas('kepalaKeluarga', function (Builder $query) use ($lokasiTugas) {
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                    });
+                });
+            });
+        }
+        if (Auth::user()->role == 'bidan') {
+            // doing something amazing!
+        }
+        $response = [];
+        $result = $data->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->get();
+        foreach ($result as $temp ) {
+            array_push($response, $temp);
+            $temp->kelurahan_domisili = $temp->kepalaKeluarga->wilayahDomisili->desaKelurahan->id;
+        }
+        return $response;
     }
 
     /**

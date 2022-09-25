@@ -23,6 +23,20 @@ class ApiAnggotaKeluargaController extends Controller
         $search = $request->search;
         $anggotaKeluarga = new AnggotaKeluarga;
 
+        if(Auth::user()->role == "keluarga"){
+            $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga')
+            ->where('kartu_keluarga_id', Auth::user()->profil->kartu_keluarga_id)
+            ->orderBy('status_hubungan_dalam_keluarga_id', 'ASC')
+            ->get();
+
+            return response([
+                'message' => "OK",
+                'data' => $data
+            ], 201);
+        }else if(Auth::user()->role == "bidan"){
+            //
+        }
+
         if ($relation) {
             $anggotaKeluarga = AnggotaKeluarga::with('kartuKeluarga', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan');
         }
