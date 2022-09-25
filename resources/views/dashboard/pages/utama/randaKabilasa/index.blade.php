@@ -204,6 +204,11 @@
                                             @endcomponent
                                         </div>
                                     </div>
+                                    @component('dashboard.components.filter.wilayah',
+                                        [
+                                            'fitur' => 'randaKabilasa',
+                                        ])
+                                    @endcomponent
                                 </div>
                             </div>
                         </div>
@@ -455,6 +460,11 @@
                     d.asesmen_meningkatkan_life_skill = $('#asesmen_meningkatkan_life_skill').val();
                     d.asesmen_mencegah_pernikahan_dini = $('#asesmen_mencegah_pernikahan_dini').val();
                     d.search = $('input[type="search"]').val();
+                    d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

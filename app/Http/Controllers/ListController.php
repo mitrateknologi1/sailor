@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
 use App\Models\Bidan;
+use App\Models\DesaKelurahan;
+use App\Models\KabupatenKota;
+use App\Models\Kecamatan;
+use App\Models\Provinsi;
+use App\Models\StuntingAnak;
 use App\Models\WilayahDomisili;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -326,9 +331,122 @@ class ListController extends Controller
         ]);
     }
 
-
-
-    public function test()
+    public function listProvinsiFitur(Request $request)
     {
+        $tabel = $request->fitur;
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+
+        $provinsi = Provinsi::whereHas('wilayahDomisili', function ($query) use ($lokasiTugas, $tabel) {
+            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas, $tabel) {
+                $query->whereHas($tabel, function ($query) use ($lokasiTugas) {
+                    $query->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->where('is_valid', 1);
+                        }
+                    });
+                });
+            });
+        })->get();
+
+        return response()->json($provinsi);
+    }
+
+    public function listKabupatenFitur(Request $request)
+    {
+        $provinsi = $request->provinsi;
+        $tabel = $request->fitur;
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+
+        $kabupaten = KabupatenKota::whereHas('wilayahDomisili', function ($query) use ($lokasiTugas, $tabel) {
+            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas, $tabel) {
+                $query->whereHas($tabel, function ($query) use ($lokasiTugas) {
+                    $query->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->where('is_valid', 1);
+                        }
+                    });
+                });
+            });
+        })->where('provinsi_id', $provinsi)->get();
+
+        return response()->json($kabupaten);
+    }
+
+    public function listKecamatanFitur(Request $request)
+    {
+        $kabupaten = $request->kabupaten;
+        $tabel = $request->fitur;
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+
+        $kecamatan = Kecamatan::whereHas('wilayahDomisili', function ($query) use ($lokasiTugas, $tabel) {
+            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas, $tabel) {
+                $query->whereHas($tabel, function ($query) use ($lokasiTugas) {
+                    $query->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->where('is_valid', 1);
+                        }
+                    });
+                });
+            });
+        })->where('kabupaten_kota_id', $kabupaten)->get();
+
+        return response()->json($kecamatan);
+    }
+
+    public function listDesaFitur(Request $request)
+    {
+        $kecamatan = $request->kecamatan;
+        $tabel = $request->fitur;
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+
+        $desa = DesaKelurahan::whereHas('wilayahDomisili', function ($query) use ($lokasiTugas, $tabel) {
+            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas, $tabel) {
+                $query->whereHas($tabel, function ($query) use ($lokasiTugas) {
+                    $query->where(function ($query) use ($lokasiTugas) {
+                        if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                            $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                                $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            });
+                        }
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
+
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->where('is_valid', 1);
+                        }
+                    });
+                });
+            });
+        })->where('kecamatan_id', $kecamatan)->get();
+
+        return response()->json($desa);
     }
 }

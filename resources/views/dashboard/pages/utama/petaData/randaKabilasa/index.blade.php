@@ -10,7 +10,6 @@
             height: 400px;
             margin-top: 0px;
         }
-
     </style>
 @endpush
 
@@ -169,7 +168,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="lila_kurang_gizi_pria">-</div>
@@ -177,7 +177,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="lila_kurang_gizi_wanita">-</div>
@@ -198,7 +199,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="imt_sangat_kurus_pria">-</div>
@@ -206,7 +208,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="imt_sangat_kurus_wanita">-</div>
@@ -223,7 +226,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="imt_kurus_pria">-</div>
@@ -231,7 +235,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="imt_kurus_wanita">-</div>
@@ -248,7 +253,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="imt_normal_pria">-</div>
@@ -256,7 +262,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="imt_normal_wanita">-</div>
@@ -273,7 +280,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="imt_gemuk_pria">-</div>
@@ -281,7 +289,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="imt_gemuk_wanita">-</div>
@@ -298,7 +307,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="imt_sangat_gemuk_pria">-</div>
@@ -306,7 +316,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="imt_sangat_gemuk_wanita">-</div>
@@ -327,7 +338,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="mencegah_malnutrisi_pria">-</div>
@@ -335,7 +347,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="mencegah_malnutrisi_wanita">-</div>
@@ -352,7 +365,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="tidak_mencegah_malnutrisi_pria">-</div>
@@ -360,7 +374,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="tidak_mencegah_malnutrisi_wanita">-</div>
@@ -381,7 +396,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="meningkatkan_skill_pria">-</div>
@@ -389,7 +405,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="meningkatkan_skill_wanita">-</div>
@@ -406,7 +423,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="tidak_meningkatkan_skill_pria">-</div>
@@ -414,7 +432,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="tidak_meningkatkan_skill_wanita">-</div>
@@ -435,7 +454,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="mencegah_pernikahan_dini_pria">-</div>
@@ -443,7 +463,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="mencegah_pernikahan_dini_wanita">-</div>
@@ -460,7 +481,8 @@
                                     <div class="card-body">
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar2.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Laki-Laki</small>
                                                 <div class="h6 mb-0" id="tidak_mencegah_pernikahan_dini_pria">-
@@ -469,7 +491,8 @@
                                         </div>
                                         <div class="d-flex align-items-center mb-3">
                                             <img class="avatar rounded"
-                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg" alt="">
+                                                src="{{ asset('assets/dashboard/') }}/images/xs/avatar4.jpg"
+                                                alt="">
                                             <div class="flex-fill ms-3">
                                                 <small>Perempuan</small>
                                                 <div class="h6 mb-0" id="tidak_mencegah_pernikahan_dini_wanita">-
@@ -506,7 +529,7 @@
             }
 
             map = L.map("map").setView(centerMap, mapZoom);
-            // map.addControl(new L.Control.Fullscreen());
+            map.addControl(new L.Control.Fullscreen());
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
@@ -549,14 +572,16 @@
                     if (response.length > 0) {
                         for (var i = 0; i < response.length; i++) {
                             L.polygon(response[i].koordinatPolygon, {
-                                    color: response[i].warnaPolygon,
+                                    color: 'white',
+                                    fillColor: response[i].warnaPolygon,
                                     weight: 1,
                                     opacity: 1,
-                                    fillOpacity: 0.5
+                                    fillOpacity: 1
                                 })
                                 .bindTooltip(response[i].nama, {
                                     permanent: true,
-                                    direction: "center"
+                                    direction: "center",
+                                    className: 'labelPolygon'
                                 })
                                 .bindPopup(
                                     "<p class='fw-bold my-0 text-center title'>" + response[i].nama +

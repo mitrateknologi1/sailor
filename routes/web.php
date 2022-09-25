@@ -244,6 +244,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('pemberitahuan', PemberitahuanController::class);
     Route::post('pemberitahuan/destroy-all', [PemberitahuanController::class, 'destroyAll'])->name('destroyAllPemberitahuan');
+
+    Route::get('/provinsi-fitur', [ListController::class, 'listProvinsiFitur']);
+    Route::get('/kabupaten-fitur', [ListController::class, 'listKabupatenFitur']);
+    Route::get('/kecamatan-fitur', [ListController::class, 'listKecamatanFitur']);
+    Route::get('/desa-fitur', [ListController::class, 'listDesaFitur']);
 });
 
 // Wilayah

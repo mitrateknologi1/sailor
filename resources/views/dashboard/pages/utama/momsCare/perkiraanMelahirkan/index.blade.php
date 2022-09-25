@@ -62,10 +62,14 @@
                                                 @endcomponent
                                             </div>
                                         </div>
+                                        @component('dashboard.components.filter.wilayah',
+                                            [
+                                                'fitur' => 'perkiraanMelahirkan',
+                                            ])
+                                        @endcomponent
                                     </div>
                                 </div>
                             @endif
-
                         </div>
                         <div class="row">
                             <div class="col">
@@ -224,6 +228,8 @@
         $('#menu-moms-care').addClass('collapse show')
         $('#ms-link-perkiraan-melahirkan').addClass('active')
     </script>
+
+
 
     <script>
         $(document).on('click', '#btn-delete', function() {
@@ -463,6 +469,10 @@
                 data: function(d) {
                     d.statusValidasi = $('#status-validasi').val();
                     d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

@@ -195,6 +195,13 @@
             height: 25px !important;
         }
 
+        .labelPolygon {
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: none;
+            z-index: 999;
+            font-weight: bold;
+        }
     </style>
     @stack('style')
 
@@ -258,32 +265,28 @@
                             <label class="m-1 theme-switch" for="theme-switch">
                                 <input type="checkbox" id="theme-switch" />
                                 <span class="card p-2">
-                                    <img class="img-fluid"
-                                        src="{{ asset('assets/dashboard') }}/images/dark-version.svg"
+                                    <img class="img-fluid" src="{{ asset('assets/dashboard') }}/images/dark-version.svg"
                                         alt="Dark Mode" />
                                 </span>
                             </label>
                             <label class="m-1 theme-dark" for="theme-dark">
                                 <input type="checkbox" id="theme-dark" />
                                 <span class="card p-2">
-                                    <img class="img-fluid"
-                                        src="{{ asset('assets/dashboard') }}/images/dark-theme.svg"
+                                    <img class="img-fluid" src="{{ asset('assets/dashboard') }}/images/dark-theme.svg"
                                         alt="Theme Dark Mode" />
                                 </span>
                             </label>
                             <label class="m-1 theme-high-contrast" for="theme-high-contrast">
                                 <input type="checkbox" id="theme-high-contrast" />
                                 <span class="card p-2">
-                                    <img class="img-fluid"
-                                        src="{{ asset('assets/dashboard') }}/images/high-version.svg"
+                                    <img class="img-fluid" src="{{ asset('assets/dashboard') }}/images/high-version.svg"
                                         alt="High Contrast" />
                                 </span>
                             </label>
                             <label class="m-1 theme-rtl" for="theme-rtl">
                                 <input type="checkbox" id="theme-rtl" />
                                 <span class="card p-2">
-                                    <img class="img-fluid"
-                                        src="{{ asset('assets/dashboard') }}/images/rtl-version.svg"
+                                    <img class="img-fluid" src="{{ asset('assets/dashboard') }}/images/rtl-version.svg"
                                         alt="RTL Mode!" />
                                 </span>
                             </label>

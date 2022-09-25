@@ -63,6 +63,11 @@
                                                 @endcomponent
                                             </div>
                                         </div>
+                                        @component('dashboard.components.filter.wilayah',
+                                            [
+                                                'fitur' => 'perkembanganAnak',
+                                            ])
+                                        @endcomponent
                                     </div>
                                 </div>
                             @endif
@@ -273,6 +278,10 @@
                 data: function(d) {
                     d.statusValidasi = $('#status-filter').val();
                     d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{

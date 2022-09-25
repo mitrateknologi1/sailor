@@ -17,4 +17,14 @@ class Provinsi extends Model
     {
         return $this->hasMany(KabupatenKota::class, 'provinsi_id');
     }
+
+    public function kartuKeluarga()
+    {
+        return $this->hasMany(KartuKeluarga::class, 'provinsi_id');
+    }
+
+    public function wilayahDomisili()
+    {
+        return $this->hasMany(WilayahDomisili::class, 'provinsi_id');
+    }
 }

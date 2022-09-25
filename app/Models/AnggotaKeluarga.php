@@ -64,6 +64,41 @@ class AnggotaKeluarga extends Model
         return $this->hasMany(PertumbuhanAnak::class);
     }
 
+    public function perkembanganAnak()
+    {
+        return $this->hasMany(PerkembanganAnak::class);
+    }
+
+    public function randaKabilasa()
+    {
+        return $this->hasMany(RandaKabilasa::class);
+    }
+
+    public function stuntingAnak()
+    {
+        return $this->hasMany(StuntingAnak::class);
+    }
+
+    public function ibuMelahirkanStunting()
+    {
+        return $this->hasMany(DeteksiIbuMelahirkanStunting::class);
+    }
+
+    public function perkiraanMelahirkan()
+    {
+        return $this->hasMany(PerkiraanMelahirkan::class);
+    }
+
+    public function deteksiDini()
+    {
+        return $this->hasMany(DeteksiDini::class);
+    }
+
+    public function anc()
+    {
+        return $this->hasMany(Anc::class);
+    }
+
     public function wilayahDomisili()
     {
         return $this->hasOne(WilayahDomisili::class)

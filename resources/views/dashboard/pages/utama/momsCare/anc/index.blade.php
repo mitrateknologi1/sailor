@@ -207,6 +207,11 @@
                                             @endcomponent
                                         </div>
                                     </div>
+                                    @component('dashboard.components.filter.wilayah',
+                                        [
+                                            'fitur' => 'anc',
+                                        ])
+                                    @endcomponent
                                 </div>
                             </div>
                         </div>
@@ -223,30 +228,24 @@
                                                 'Nomor Kartu Keluarga',
                                                 'Nama Ibu',
                                                 'Pemeriksaan Ke',
-                                                'Tanggal Haid
-                                                                                                                                                                                                                            Terakhir',
+                                                'Tanggal Haid Terakhir',
                                                 'Kehamilan Ke',
                                                 'Usia Kehamilan',
                                                 'Tanggal Perkiraan Lahir',
-                                                'Tinggi/Berat
-                                                                                                                                                                                                                            Badan',
+                                                'Tinggi / Berat Badan',
                                                 'Tekanan Darah',
                                                 'Lengan Atas',
                                                 'Tinggi Fundus',
                                                 'Hemoglobin Darah',
-                                                'Denyut
-                                                                                                                                                                                                                            Jantung',
+                                                'Denyut Jantung',
                                                 'Kategori Badan',
                                                 'Kategori Tekanan Darah',
                                                 'Kategori Lengan Atas',
-                                                'Kategori
-                                                                                                                                                                                                                            Denyut Jantung',
-                                                'Kategori
-                                                                                                                                                                                                                            Hemoglobin Darah',
+                                                'Kategori Denyut Jantung',
+                                                'Kategori Hemoglobin Darah',
                                                 'Vaksin Tetanus Sebelum Hamil',
                                                 'Vaksin Tetanus Sesudah Hamil',
-                                                'Posisi
-                                                                                                                                                                                                                            Janin',
+                                                'Posisi Janin',
                                                 'Minum 90 Tablet Tambah Darah',
                                                 'Konseling',
                                                 'Desa / Kelurahan',
@@ -879,6 +878,10 @@
                     d.kategori_minum_tablet = $('#kategori_minum_tablet').val();
                     d.kategori_konseling = $('#kategori_konseling').val();
                     d.search = $('input[type="search"]').val();
+                    d.provinsi = $('#provinsi_filter').val();
+                    d.kabupaten = $('#kabupaten_filter').val();
+                    d.kecamatan = $('#kecamatan_filter').val();
+                    d.desa = $('#desa_filter').val();
                 }
             },
             columns: [{
