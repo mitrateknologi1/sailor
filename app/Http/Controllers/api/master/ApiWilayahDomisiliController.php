@@ -72,11 +72,11 @@ class ApiWilayahDomisiliController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function upload(Request $request, $id)
+    public function upload(Request $request)
     {
         $request->validate([
-            "nik" => "required|unique:anggota_keluarga,nik,$id",
-            "file_domisili" => 'required|mimes:jpeg,jpg,png|max:3072',
+            "nik" => "required|unique:anggota_keluarga,nik",
+            "file_domisili" => 'required|mimes:jpeg,jpg,png,pdf|max:3072',
         ]);
 
         $fileName = $request->nik . '.' . $request->file('file_domisili')->extension();

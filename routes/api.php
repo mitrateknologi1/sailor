@@ -55,6 +55,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [ApiAuthController::class, 'login']);
 Route::post('/register', [ApiAuthController::class, 'register']);
 
+Route::post('/akun', [ApiAkunController::class, 'store']);
+
 Route::get('/agama', [ApiAgamaController::class, 'index']);
 Route::get('/agama/{id}', [ApiAgamaController::class, 'show']);
 
@@ -85,34 +87,43 @@ Route::get('/kabupaten_kota/{id}', [ApiKabupatenKotaController::class, 'show']);
 Route::get('/provinsi', [ApiProvinsiController::class, 'index']);
 Route::get('/provinsi/{id}', [ApiProvinsiController::class, 'show']);
 
+Route::post('/kartu_keluarga/upload', [ApiKartuKeluargaController::class, 'upload']);
+Route::post('/kartu_keluarga', [ApiKartuKeluargaController::class, 'store']);
+Route::post('/wilayah_domisili/upload', [ApiWilayahDomisiliController::class, 'upload']);
+Route::post('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'store']);
+Route::post('/anggota_keluarga/upload', [ApiAnggotaKeluargaController::class, 'upload']);
+Route::post('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'store']);
+//get bidan by kelurahan (open only for registration keluarga to check is bidan available at kelurahan x)
+Route::get('/lokasi_tugas/cek_domisili', [ApiLokasiTugasController::class, 'cekDomisiliBidan']);
+
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
 
     Route::get('/akun', [ApiAkunController::class, 'index'])->middleware('notKeluarga');
     Route::get('/akun/{id}', [ApiAkunController::class, 'show'])->middleware('notKeluarga');
-    Route::post('/akun', [ApiAkunController::class, 'store'])->middleware('notKeluarga');
+    // Route::post('/akun', [ApiAkunController::class, 'store'])->middleware('notKeluarga');
     Route::put('/akun/{id}', [ApiAkunController::class, 'update'])->middleware('notKeluarga');
     Route::delete('/akun/{id}', [ApiAkunController::class, 'destroy'])->middleware('notKeluarga');
 
     Route::get('/kartu_keluarga', [ApiKartuKeluargaController::class, 'index']);
     Route::get('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'show']);
-    Route::post('/kartu_keluarga', [ApiKartuKeluargaController::class, 'store']);
-    Route::post('/kartu_keluarga/upload/{id}', [ApiKartuKeluargaController::class, 'upload']);
+    // Route::post('/kartu_keluarga', [ApiKartuKeluargaController::class, 'store']);
+    // Route::post('/kartu_keluarga/upload/{id}', [ApiKartuKeluargaController::class, 'upload']);
     Route::put('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'update']);
     Route::delete('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'destroy']);
 
     Route::get('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'index']);
     Route::get('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'show']);
-    Route::post('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'store']);
-    Route::post('/anggota_keluarga/upload/{id}', [ApiAnggotaKeluargaController::class, 'upload']);
+    // Route::post('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'store']);
+    // Route::post('/anggota_keluarga/upload/{id}', [ApiAnggotaKeluargaController::class, 'upload']);
     Route::put('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'update']);
     Route::delete('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'destroy']);
 
     Route::get('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'index']);
     Route::get('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'show']);
-    Route::post('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'store']);
-    Route::post('/wilayah_domisili/upload/{id}', [ApiWilayahDomisiliController::class, 'update']);
+    // Route::post('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'store']);
+    // Route::post('/wilayah_domisili/upload/{id}', [ApiWilayahDomisiliController::class, 'upload']);
     Route::put('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'update']);
     Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy']);
 

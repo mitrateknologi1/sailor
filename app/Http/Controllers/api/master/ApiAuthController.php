@@ -9,6 +9,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Bidan;
+use App\Models\Penyuluh;
 
 class ApiAuthController extends Controller
 {
@@ -52,17 +54,34 @@ class ApiAuthController extends Controller
             ], 401);
         }
 
+        if ($user->role == "admin") {
+            return response([
+                "message" => 'Not Authorized!',
+            ], 403);
+        }
+
         if ($user->status == 1) {
             $token = $user->createToken('myapptoken')->plainTextToken;
+            if($user->role == "bidan"){
+                $domisili = Bidan::where('user_id', $user->id)->first();
+            }else if($user->role == "penyuluh"){
+                $domisili = Penyuluh::where('user_id', $user->id)->first();
+            }else{
+                return response([
+                    "user" => $user,
+                    "token" => $token,
+                ], 201);
+            }
 
             return response([
                 "user" => $user,
+                "authDomisili" => $domisili,
                 "token" => $token,
             ], 201);
         } else {
             return response([
                 'message' => 'Account disabled.'
-            ], 401);
+            ], 405);
         }
     }
 

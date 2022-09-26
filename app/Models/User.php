@@ -27,6 +27,7 @@ class User extends Authenticatable
         "is_remaja",
         "status",
         "password",
+        "role"
     ];
 
     public function profil()
