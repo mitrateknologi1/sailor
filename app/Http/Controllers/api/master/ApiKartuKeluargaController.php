@@ -58,6 +58,17 @@ class ApiKartuKeluargaController extends Controller
         foreach ($result as $temp ) {
             array_push($response, $temp);
             $temp->kelurahan_domisili = $temp->kepalaKeluarga->wilayahDomisili->desaKelurahan->id;
+            $temp->kecamatan_domisili = $temp->kepalaKeluarga->wilayahDomisili->kecamatan->id;
+            $temp->kabupaten_kota_domisili = $temp->kepalaKeluarga->wilayahDomisili->kabupatenKota->id;
+            $temp->provinsi_domisili = $temp->kepalaKeluarga->wilayahDomisili->provinsi->id;
+
+            $temp->agama = $temp->kepalaKeluarga->agama;
+            $temp->pendidikan = $temp->kepalaKeluarga->pendidikan;
+            $temp->pekerjaan = $temp->kepalaKeluarga->pekerjaan;
+            $temp->golongan_darah = $temp->kepalaKeluarga->golonganDarah;
+            $temp->status_perkawinan = $temp->kepalaKeluarga->statusPerkawinan;
+
+            $temp->user = $temp->kepalaKeluarga->user;
         }
         return $response;
     }
