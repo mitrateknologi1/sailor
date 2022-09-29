@@ -9,10 +9,13 @@ use App\Models\Pemberitahuan;
 use App\Models\LokasiTugas;
 use App\Models\WilayahDomisili;
 use App\Models\User;
+use App\Models\Bidan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 
 class ApiKartuKeluargaController extends Controller
 {
@@ -242,5 +245,84 @@ class ApiKartuKeluargaController extends Controller
         $anggotaKeluarga->delete();
 
         return $kartuKeluarga->delete();
+    }
+
+    /**
+     * validate kartu keluarga.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function validasi(Request $request)
+    {
+        $id = $request->id;
+        if($id == null){
+            return response([
+                'message' => "provide kartu keluarga id",
+            ], 403);
+        }
+
+        if ($request->konfirmasi == 1) {
+            $alasan_req = '';
+            $alasan = null;
+        } else {
+            $alasan_req = 'required';
+            $alasan = $request->alasan;
+        }
+
+        $bidan_id_req = '';
+        $bidan_id = Auth::user()->profil->id;
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'bidan_id' => $bidan_id_req,
+                'konfirmasi' => 'required',
+                'alasan' => $alasan_req,
+            ],
+            [
+                'bidan_id.required' => 'Bidan harus diisi',
+                'konfirmasi.required' => 'Konfirmasi harus diisi',
+                'alasan.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+
+        $updateKartuKeluarga = KartuKeluarga::where('id', $id)->update(['is_valid' => $request->konfirmasi, 'bidan_id' => $bidan_id, 'tanggal_validasi' => Carbon::now(), 'alasan_ditolak' => $alasan]);
+
+        $kepalaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $id)->where('status_hubungan_dalam_keluarga_id', 1);
+
+        $updateKepalaKeluarga = $kepalaKeluarga->update(['is_valid' => $request->konfirmasi, 'bidan_id' => $bidan_id,  'tanggal_validasi' => Carbon::now(), 'alasan_ditolak' => $alasan]);
+
+        $namaBidan = Bidan::where('id', $bidan_id)->first();
+
+        if ($request->konfirmasi == 1) {
+            $updateAkun = User::where('id', $kepalaKeluarga->first()->user_id)->update(['status' => 1]);
+            $pemberitahuan = Pemberitahuan::create([
+                'user_id' => $kepalaKeluarga->first()->user_id,
+                'anggota_keluarga_id' => $kepalaKeluarga->first()->id,
+                'judul' => 'Selamat, kartu keluarga anda telah divalidasi.',
+                'isi' => 'Kartu Keluarga anda telah divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '. Silahkan menambahkan data anggota keluarga (Istri dan Anak) anda pada menu Anggota Keluarga.',
+                'tentang' => 'kartu_keluarga',
+                'is_valid' => 1,
+            ]);
+        } else {
+            $updateAkun = User::where('id', $kepalaKeluarga->first()->user_id)->update(['status' => 0]);
+        }
+
+        if ($updateKartuKeluarga && $updateKepalaKeluarga && $updateAkun) {
+            $pemberitahuan;
+            return response([
+                'message' => "Kartu Keluarga validate status updated",
+            ], 201);
+        } else {
+            return response([
+                'message' => "Failed to update Kartu Keluarga status",
+            ], 400);
+        }
     }
 }

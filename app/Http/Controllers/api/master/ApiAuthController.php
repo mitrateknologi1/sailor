@@ -22,7 +22,7 @@ class ApiAuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        User::create([
+        return User::create([
             'nik' => $fields['nik'],
             'nomor_hp' => $fields['nomor_hp'],
             'password' => bcrypt($fields['password']),

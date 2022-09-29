@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::post('/kartu_keluarga/upload/{id}', [ApiKartuKeluargaController::class, 'upload']);
     Route::put('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'update']);
     Route::delete('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'destroy']);
+    Route::post('/kartu_keluarga/validasi', [ApiKartuKeluargaController::class, 'validasi'])->middleware('notKeluarga');
 
     Route::get('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'index']);
     Route::get('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'show']);
