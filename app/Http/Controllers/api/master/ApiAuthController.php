@@ -48,41 +48,56 @@ class ApiAuthController extends Controller
 
         $user = User::where('nomor_hp', $credentials['nomor_hp'])->where('role', $credentials['role'])->first();
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return response([
-                'message' => 'Bad credentials.'
-            ], 401);
-        }
-
-        if ($user->role == "admin") {
-            return response([
-                "message" => 'Not Authorized!',
-            ], 403);
-        }
-
-        if ($user->status == 1) {
-            $token = $user->createToken('myapptoken')->plainTextToken;
-            if($user->role == "bidan"){
-                $domisili = Bidan::where('user_id', $user->id)->first();
-            }else if($user->role == "penyuluh"){
-                $domisili = Penyuluh::where('user_id', $user->id)->first();
-            }else{
+        if (Auth::attempt($credentials)) {
+            if(Auth::user()->role == "admin"){
                 return response([
-                    "user" => $user,
-                    "token" => $token,
-                ], 201);
+                    "message" => 'Not Authorized for this service!',
+                ], 403);
             }
 
-            return response([
-                "user" => $user,
-                "authDomisili" => $domisili,
-                "token" => $token,
-            ], 201);
-        } else {
-            return response([
-                'message' => 'Account disabled.'
-            ], 405);
+            if (Auth::user()->role == 'keluarga') {
+                if (Auth::user()->profil->kartuKeluarga->is_valid == 0) {
+                    return response([
+                        "message" => 'Account pending and waiting for validate',
+                    ], 405);
+                }
+                if (Auth::user()->profil->kartuKeluarga->is_valid == 2) {
+                    $id = Auth::user()->profil->kartuKeluarga->id;
+                    return response([
+                        "message" => 'Account rejected!',
+                    ], 406);
+                }
+            }
+
+            if (Auth::user()->status == 1) {
+                $token = $user->createToken('myapptoken')->plainTextToken;
+                if($user->role == "bidan"){
+                    $domisili = Bidan::where('user_id', $user->id)->first();
+                }else if($user->role == "penyuluh"){
+                    $domisili = Penyuluh::where('user_id', $user->id)->first();
+                }else{
+                    return response([
+                        "user" => $user,
+                        "token" => $token,
+                    ], 201);
+                }
+
+                return response([
+                    "user" => $user,
+                    "authDomisili" => $domisili,
+                    "token" => $token,
+                ], 201);
+            } else {
+                return response([
+                    'message' => 'Account disabled.'
+                ], 500);
+            }
         }
+
+        return response([
+            'message' => 'Bad credentials.',
+            'data' => $request->all(),
+        ], 401);
     }
 
     public function logout(Request $request)
@@ -91,5 +106,16 @@ class ApiAuthController extends Controller
         return response([
             'message' => 'Logged out.'
         ]);
+    }
+
+    public function profile(){
+        if (!Auth::user()->profil) {
+            return response([
+                "message" => 'profile not found!',
+            ], 404);
+        }
+        return response([
+            "message" => 'OK',
+        ], 200);
     }
 }

@@ -99,6 +99,7 @@ Route::get('/lokasi_tugas/cek_domisili', [ApiLokasiTugasController::class, 'cekD
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
+    Route::get('/profile', [ApiAuthController::class, 'profile']);
 
     Route::get('/akun', [ApiAkunController::class, 'index'])->middleware('notKeluarga');
     Route::get('/akun/{id}', [ApiAkunController::class, 'show'])->middleware('notKeluarga');
