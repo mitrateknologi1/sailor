@@ -72,6 +72,7 @@ class ApiKartuKeluargaController extends Controller
             $temp->status_perkawinan = $temp->kepalaKeluarga->statusPerkawinan;
 
             $temp->user = $temp->kepalaKeluarga->user;
+            $temp->bidan = $temp->kepalaKeluarga->bidan;
         }
         return $response;
     }
