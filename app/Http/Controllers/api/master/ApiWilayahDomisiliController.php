@@ -74,8 +74,15 @@ class ApiWilayahDomisiliController extends Controller
      */
     public function upload(Request $request)
     {
+        $isUpdate = $request->is_update;
+        if($isUpdate){
+            $nik = $request->nik;
+            $nikValidation = "required|unique:anggota_keluarga,nik,".$nik .",nik";
+        }else{
+            $nikValidation = "required|unique:anggota_keluarga,nik";
+        }
         $request->validate([
-            "nik" => "required|unique:anggota_keluarga,nik",
+            "nik" => $nikValidation,
             "file_domisili" => 'required|mimes:jpeg,jpg,png,pdf|max:3072',
         ]);
 

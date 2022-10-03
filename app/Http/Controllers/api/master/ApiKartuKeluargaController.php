@@ -110,13 +110,21 @@ class ApiKartuKeluargaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        $relation = $request->relation;
-        if ($relation) {
-            return KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'bidan')->where('id', $id)->first();
-        }
-        return KartuKeluarga::where('id', $id)->first();
+        $kartuKeluarga = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'bidan')->where('id', $id)->first();
+        $kartuKeluarga->kepala_keluarga = $kartuKeluarga->kepalaKeluarga;
+        $kartuKeluarga->kepala_keluarga->wilayah_domisili = $kartuKeluarga->kepalaKeluarga->wilayahDomisili;
+        $kartuKeluarga->kepala_keluarga->wilayah_domisili->provinsi = $kartuKeluarga->kepalaKeluarga->wilayahDomisili->provinsi;
+        $kartuKeluarga->kepala_keluarga->wilayah_domisili->kabupaten_kota = $kartuKeluarga->kepalaKeluarga->wilayahDomisili->kabupatenKota;
+        $kartuKeluarga->kepala_keluarga->wilayah_domisili->kecamatan = $kartuKeluarga->kepalaKeluarga->wilayahDomisili->kecamatan;
+        $kartuKeluarga->kepala_keluarga->wilayah_domisili->desa_kelurahan = $kartuKeluarga->kepalaKeluarga->wilayahDomisili->desaKelurahan;
+        $kartuKeluarga->kepala_keluarga->agama = $kartuKeluarga->kepalaKeluarga->agama;
+        $kartuKeluarga->kepala_keluarga->pekerjaan = $kartuKeluarga->kepalaKeluarga->pekerjaan;
+        $kartuKeluarga->kepala_keluarga->pendidikan = $kartuKeluarga->kepalaKeluarga->pendidikan;
+        $kartuKeluarga->kepala_keluarga->golongan_darah = $kartuKeluarga->kepalaKeluarga->golonganDarah;
+        $kartuKeluarga->kepala_keluarga->status_perkawinan = $kartuKeluarga->kepalaKeluarga->statusPerkawinan;
+        return $kartuKeluarga;
     }
 
     /**
@@ -128,8 +136,14 @@ class ApiKartuKeluargaController extends Controller
      */
     public function upload(Request $request)
     {
+        $isUpdate = $request->is_update;
+        if($isUpdate){
+            $nomorKkValidation = "required|unique:kartu_keluarga,nomor_kk,". $request->nomor_kk . ",nomor_kk|digits:16";
+        }else{
+            $nomorKkValidation = "required|unique:kartu_keluarga,nomor_kk|digits:16";
+        }
         $request->validate([
-            "nomor_kk" => "required|unique:kartu_keluarga,nomor_kk|digits:16",
+            "nomor_kk" => $nomorKkValidation,
             "file_kartu_keluarga" => 'required|mimes:jpeg,jpg,png,pdf|max:3072',
         ]);
 
@@ -160,20 +174,21 @@ class ApiKartuKeluargaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "bidan_id" => 'nullable|string|exists:bidan,id',
-            "nomor_kk" => "nullable|unique:kartu_keluarga,nomor_kk,$id",
-            "alamat" => 'nullable|string',
+            "bidan_id" => 'required|string|exists:bidan,id',
+            "nomor_kk" => "required|unique:kartu_keluarga,nomor_kk,$id",
+            "nama_kepala_keluarga" => 'required|string',
+            "alamat" => 'required|string',
             "rt" => 'nullable',
             "rw" => 'nullable',
-            "kode_pos" => 'nullable',
-            "desa_kelurahan_id" => "nullable|exists:desa_kelurahan,id",
-            "kecamatan_id" => "nullable|exists:kecamatan,id",
-            "kabupaten_kota_id" => "nullable|exists:kabupaten_kota,id",
-            "provinsi_id" => "nullable|exists:provinsi,id",
-            "is_valid" => 'nullable|in:0,1',
-            "tanggal_validasi" => 'nullable|nullable|string',
+            "kode_pos" => 'required',
+            "desa_kelurahan_id" => "required|exists:desa_kelurahan,id",
+            "kecamatan_id" => "required|exists:kecamatan,id",
+            "kabupaten_kota_id" => "required|exists:kabupaten_kota,id",
+            "provinsi_id" => "required|exists:provinsi,id",
             "file_kk" => 'nullable|string',
-            "file_kk" => 'nullable|string',
+            "is_valid" => 'required|in:0,1',
+            "tanggal_validasi" => 'nullable|string',
+            "alasan_ditolak" => 'nullable|string',
         ]);
 
         $kartuKeluarga = KartuKeluarga::find($id);
@@ -288,7 +303,9 @@ class ApiKartuKeluargaController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()]);
+            return response([
+                'message' => $validator->errors(),
+            ], 422);
         }
 
 

@@ -65,6 +65,7 @@ class ApiAuthController extends Controller
                     $id = Auth::user()->profil->kartuKeluarga->id;
                     return response([
                         "message" => 'Account rejected!',
+                        "id_kartu_keluarga" => $id,
                     ], 406);
                 }
             }

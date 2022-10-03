@@ -105,8 +105,14 @@ class ApiAnggotaKeluargaController extends Controller
      */
     public function upload(Request $request)
     {
+        $isUpdate = $request->is_update;
+        if($isUpdate){
+            $nikValidation = "required|unique:anggota_keluarga,nik,". $request->nik . ",nik";
+        }else{
+            $nikValidation = "required|unique:anggota_keluarga,nik";
+        }
         $request->validate([
-            "nik" => "required|unique:anggota_keluarga,nik",
+            "nik" => $nikValidation,
             "file_foto_profil" => 'required|mimes:jpeg,jpg,png|max:3072',
         ]);
 
@@ -136,25 +142,30 @@ class ApiAnggotaKeluargaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "bidan_id" => 'exists:bidan,id',
-            "kartu_keluarga_id" => 'exists:kartu_keluarga,id',
-            "user_id" => 'exists:users,id',
-            "nama_lengkap" => 'string',
-            "nik" => "unique:anggota_keluarga,nik,$id",
-            "jenis_kelamin" => 'in:PEREMPUAN,LAKI-LAKI',
-            "tempat_lahir" => 'string',
-            "tanggal_lahir" => 'string',
-            "agama_id" => 'exists:agama,id',
-            "pendidikan_id" => 'exists:pendidikan,id',
-            "jenis_pekerjaan_id" => 'exists:pekerjaan,id',
-            "golongan_darah_id" => 'exists:golongan_darah,id',
-            "status_perkawinan_id" => 'exists:status_perkawinan,id',
-            "status_hubungan_dalam_keluarga_id" => 'exists:status_hubungan,id',
-            "kewarganegaraan" => 'string',
-            "nama_ayah" => 'string',
-            "nama_ibu" => 'string',
-            "is_valid" => 'numeric|in:0,1',
+            "bidan_id" => 'required|exists:bidan,id',
+            "kartu_keluarga_id" => 'required|exists:kartu_keluarga,id',
+            "user_id" => 'required|exists:users,id',
+            "nama_lengkap" => 'required|string',
+            "nik" => "required|unique:anggota_keluarga,nik,$id",
+            "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
+            "tempat_lahir" => 'required|string',
+            "tanggal_lahir" => 'required|string',
+            "agama_id" => 'required|exists:agama,id',
+            "pendidikan_id" => 'required|exists:pendidikan,id',
+            "jenis_pekerjaan_id" => 'required|exists:pekerjaan,id',
+            "golongan_darah_id" => 'required|exists:golongan_darah,id',
+            "status_perkawinan_id" => 'required|exists:status_perkawinan,id',
+            "tanggal_perkawinan" => 'nullable|string',
+            "status_hubungan_dalam_keluarga_id" => 'required|exists:status_hubungan,id',
+            "kewarganegaraan" => 'required|string',
+            "no_paspor" => 'required|string',
+            "no_kitap" => 'required|string',
+            "nama_ayah" => 'required|string',
+            "nama_ibu" => 'required|string',
             "foto_profil" => 'nullable|string',
+            "is_valid" => 'numeric|in:0,1',
+            "tanggal_validasi" => 'nullable|string',
+            "alasan_ditolak" => 'nullable|string',
         ]);
 
         $anggotaKeluarga = AnggotaKeluarga::find($id);
