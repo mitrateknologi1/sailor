@@ -217,7 +217,7 @@ class ApiKartuKeluargaController extends Controller
         if (!$kartuKeluarga) {
             return response([
                 'message' => "Kartu Keluarga with id $id doesn't exist"
-            ], 400);
+            ], 404);
         }
 
 
