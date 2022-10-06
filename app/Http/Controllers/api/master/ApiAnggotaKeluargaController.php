@@ -5,9 +5,11 @@ namespace App\Http\Controllers\api\master;
 use App\Http\Controllers\Controller;
 use App\Models\AnggotaKeluarga;
 use App\Models\Pemberitahuan;
+use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class ApiAnggotaKeluargaController extends Controller
 {
@@ -18,6 +20,7 @@ class ApiAnggotaKeluargaController extends Controller
      */
     public function index(Request $request)
     {
+        $kartuKeluargaId = $request->kartu_keluarga_id;
         $pageSize = $request->page_size ?? 20;
         $relation = $request->relation;
         $search = $request->search;
@@ -32,9 +35,43 @@ class ApiAnggotaKeluargaController extends Controller
             return response([
                 'message' => "OK",
                 'data' => $data
-            ], 201);
+            ], 200);
         }else if(Auth::user()->role == "bidan"){
-            //
+            if($kartuKeluargaId){
+                $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili')
+                ->where('kartu_keluarga_id', $kartuKeluargaId);
+                $data->where(function (Builder $query) use ($lokasiTugas) {
+                    $query->whereIn('is_valid', [1, 2]);
+                    $query->orWhere(function (Builder $query) use ($lokasiTugas) {
+                        $query->where('is_valid', 0);
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                    });
+                });
+                $response = [];
+                $result = $data->get();
+                foreach ($result as $r) {
+                    array_push($response, $r);
+                    $r->wilayahDomisili->provinsi = $r->wilayahDomisili->provinsi;
+                    $r->wilayahDomisili->kabupaten_kota = $r->wilayahDomisili->kabupatenKota;
+                    $r->wilayahDomisili->kecamatan = $r->wilayahDomisili->kecamatan;
+                    $r->wilayahDomisili->desa_kelurahan = $r->wilayahDomisili->desakelurahan;
+
+                    $r->agama = $r->agama;
+                    $r->pendidikan = $r->pendidikan;
+                    $r->pekerjaan = $r->pekerjaan;
+                    $r->golongan_darah = $r->golonganDarah;
+                    $r->status_perkawinan = $r->statusPerkawinan;
+                    $r->status_hubungan_dalam_keluarga = $r->statusHubunganDalamKeluarga;
+                    $r->user = $r->user;
+                    $r->kartu_keluarga = $r->kartuKeluarga;
+                    $r->kartu_keluarga->provinsi = $r->kartuKeluarga->provinsi;
+                    $r->kartu_keluarga->kabupaten_kota = $r->kartuKeluarga->kabupatenKota;
+                    $r->kartu_keluarga->kecamatan = $r->kartuKeluarga->kecamatan;
+                    $r->kartu_keluarga->desa_kelurahan = $r->kartuKeluarga->desaKelurahan;
+                }
+                return $response;
+            }
         }
 
         if ($relation) {
@@ -141,10 +178,16 @@ class ApiAnggotaKeluargaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $statusHubungan = $request->status_hubungan_dalam_keluarga_id;
+        if($statusHubungan == 1){
+            $userIdRule = 'required|exists:users,id';
+        }else{
+            $userIdRule = 'nullable|string';
+        }
         $request->validate([
             "bidan_id" => 'required|exists:bidan,id',
             "kartu_keluarga_id" => 'required|exists:kartu_keluarga,id',
-            "user_id" => 'required|exists:users,id',
+            "user_id" => $userIdRule,
             "nama_lengkap" => 'required|string',
             "nik" => "required|unique:anggota_keluarga,nik,$id",
             "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
@@ -193,7 +236,7 @@ class ApiAnggotaKeluargaController extends Controller
         if (!$anggotaKeluarga) {
             return response([
                 'message' => "Anggota Keluarga with id $id doesn't exist"
-            ], 400);
+            ], 404);
         }
 
         if (Storage::exists('upload/foto_profil/keluarga/' . $anggotaKeluarga->foto_profil)) {
