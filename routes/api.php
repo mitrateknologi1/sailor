@@ -126,6 +126,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::post('/anggota_keluarga/upload/{id}', [ApiAnggotaKeluargaController::class, 'upload']);
     // Route::put('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'update']);
     Route::delete('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'destroy']);
+    Route::post('/anggota_keluarga/validasi', [ApiAnggotaKeluargaController::class, 'validasi'])->middleware('notKeluarga');
 
     Route::get('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'index']);
     Route::get('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'show']);

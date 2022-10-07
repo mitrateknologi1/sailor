@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
+use App\Models\Bidan;
 
 class ApiAnggotaKeluargaController extends Controller
 {
@@ -261,5 +264,94 @@ class ApiAnggotaKeluargaController extends Controller
             $anggotaKeluarga->user->delete();
         }
         return $anggotaKeluarga->delete();
+    }
+
+    /**
+     * validate anggota keluarga.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function validasi(Request $request)
+    {
+        $id = $request->id;
+        if(!$id){
+            return response([
+                'message' => "provide id!"
+            ], 400);
+        }
+
+        if ($request->konfirmasi == 1) {
+            $alasan_req = '';
+            $alasan = null;
+        } else {
+            $alasan_req = 'required';
+            $alasan = $request->alasan;
+        }
+
+        if (Auth::user()->role == 'admin') {
+            $bidan_id_req = 'required';
+            $bidan_id = $request->bidan_id;
+        } else {
+            $bidan_id_req = '';
+            $bidan_id = Auth::user()->profil->id;
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'bidan_id' => $bidan_id_req,
+                'konfirmasi' => 'required',
+                'alasan' => $alasan_req,
+            ],
+            [
+                'bidan_id.required' => 'Bidan harus diisi',
+                'konfirmasi.required' => 'Konfirmasi harus diisi',
+                'alasan.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        $anggotaKeluarga = AnggotaKeluarga::find($id);
+        if(!$anggotaKeluarga){
+            return response([
+                'message' => "anggota keluarga with id $id not found!"
+            ], 404);
+        }
+
+        $updateAnggotaKeluarga = $anggotaKeluarga
+            ->update(['is_valid' => $request->konfirmasi, 'bidan_id' => $bidan_id, 'tanggal_validasi' => Carbon::now(), 'alasan_ditolak' => $alasan]);
+
+        $namaBidan = Bidan::where('id', $bidan_id)->first();
+        if ($request->konfirmasi == 1) {
+            $pemberitahuan = Pemberitahuan::create([
+                'user_id' => $anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
+                'anggota_keluarga_id' => $anggotaKeluarga->id,
+                'judul' => 'Selamat, data ' . strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan) . ' anda telah divalidasi.',
+                'isi' => 'Data ' . ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda (' . ucwords(strtolower($anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.',
+                'tentang' => 'anggota_keluarga',
+            ]);
+        } else {
+            $pemberitahuan = Pemberitahuan::create([
+                'user_id' => $anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
+                'anggota_keluarga_id' => $anggotaKeluarga->id,
+                'judul' => 'Maaf, data ' . strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan) . ' anda (' . ucwords(strtolower($anggotaKeluarga->nama_lengkap)) . ') ditolak.',
+                'isi' => 'Silahkan perbarui data untuk melihat alasan data ditolak dan mengirim ulang data. Terima Kasih.',
+                'tentang' => 'anggota_keluarga',
+            ]);
+        }
+
+        if ($updateAnggotaKeluarga) {
+            return response([
+                'message' => "data updated"
+            ], 201);
+        } else {
+            return response([
+                'message' => "failed to update data"
+            ], 500);
+        }
     }
 }
