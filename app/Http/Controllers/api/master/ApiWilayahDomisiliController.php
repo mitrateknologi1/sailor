@@ -19,6 +19,7 @@ class ApiWilayahDomisiliController extends Controller
         $relation = $request->relation;
         $anggotaKeluargaId = $request->anggota_keluarga_id;
         $wilayahDomisili = new WilayahDomisili;
+        $filter = $request->is_filter;
 
         if ($relation) {
             $wilayahDomisili = WilayahDomisili::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'anggotaKeluarga');
@@ -28,7 +29,11 @@ class ApiWilayahDomisiliController extends Controller
             return $wilayahDomisili->where("anggota_keluarga_id", $anggotaKeluargaId)->first();
         }
 
-        return $wilayahDomisili->orderBy('updated_at', 'desc')->get();
+        if($filter){
+            return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->groupBy('desa_kelurahan_id')->orderBy('updated_at', 'desc')->get();
+        }
+        return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->orderBy('updated_at', 'desc')->get();
+        // return $wilayahDomisili->orderBy('updated_at', 'desc')->get();
     }
 
     /**
