@@ -232,8 +232,9 @@ class ApiAnggotaKeluargaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $forceDelete = $request->force_delete;
         $anggotaKeluarga = AnggotaKeluarga::find($id);
 
         if (!$anggotaKeluarga) {
@@ -256,14 +257,26 @@ class ApiAnggotaKeluargaController extends Controller
         $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggotaKeluarga->id);
 
         if ($pemberitahuan) {
-            $pemberitahuan->delete();
+            if($forceDelete){
+                $pemberitahuan->forceDelete();
+            }else{
+                $pemberitahuan->delete();
+            }
         }
 
 
         if ($anggotaKeluarga->user) {
-            $anggotaKeluarga->user->delete();
+            if($forceDelete){
+                $anggotaKeluarga->user->forceDelete();
+            }else{
+                $anggotaKeluarga->user->delete();
+            }
         }
-        return $anggotaKeluarga->delete();
+        if($forceDelete){
+            return $anggotaKeluarga->forceDelete();
+        }else{
+            return $anggotaKeluarga->delete();
+        }
     }
 
     /**
