@@ -22,6 +22,7 @@ class ApiPenyuluhController extends Controller
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
         $penyuluh = new Penyuluh;
 
+        $penyuluh = Penyuluh::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama',);
         if ($relation) {
             $penyuluh = Penyuluh::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama',);
         }
@@ -39,7 +40,16 @@ class ApiPenyuluhController extends Controller
             });
         }
 
-        return $penyuluh->orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return $penyuluh->orderBy('updated_at', 'desc')->paginate($pageSize);
+        $data = $penyuluh->orderBy('updated_at', 'desc')->get();
+        $response = [];
+        foreach ($data as $d) {
+            array_push($response, $d);
+            if(count($d->lokasiTugas) > 0){
+                $d->lokasiTugas[0]->desa_kelurahan = $d->lokasiTugas[0]->desaKelurahan;
+            }
+        }
+        return $response;
     }
 
     /**

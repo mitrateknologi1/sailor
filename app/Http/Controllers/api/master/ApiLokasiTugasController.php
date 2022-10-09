@@ -21,14 +21,20 @@ class ApiLokasiTugasController extends Controller
         $jenisProfil = $request->jenis_profil;
 
         if ($jenisProfil) {
+            // return LokasiTugas::with('desaKelurahan')
+            //     ->where('jenis_profil', $jenisProfil)
+            //     ->groupBy('desa_kelurahan_id')
+            //     ->orderBy('updated_at', 'desc')
+            //     ->paginate($pageSize);
             return LokasiTugas::with('desaKelurahan')
                 ->where('jenis_profil', $jenisProfil)
                 ->groupBy('desa_kelurahan_id')
                 ->orderBy('updated_at', 'desc')
-                ->paginate($pageSize);
+                ->get();
         }
 
-        return LokasiTugas::orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return LokasiTugas::orderBy('updated_at', 'desc')->paginate($pageSize);
+        return LokasiTugas::orderBy('updated_at', 'desc')->get();
     }
 
     /**
