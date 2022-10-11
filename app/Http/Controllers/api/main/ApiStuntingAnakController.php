@@ -5,6 +5,8 @@ namespace App\Http\Controllers\api\main;
 use App\Http\Controllers\Controller;
 use App\Models\StuntingAnak;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\LokasiTugas;
 
 class ApiStuntingAnakController extends Controller
 {
@@ -22,8 +24,34 @@ class ApiStuntingAnakController extends Controller
         if ($relation) {
             $stuntingAnak = StuntingAnak::with('bidan', 'anggotaKeluarga');
         }
+        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+        $stuntingAnak = StuntingAnak::with('bidan', 'anggotaKeluarga')->where(function ($query) use ($lokasiTugas) {
+            if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                    $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                });
+            }
+            if (Auth::user()->role == 'bidan') { // bidan
+                $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+            }
 
-        return $stuntingAnak->orderBy('updated_at', 'desc')->paginate($pageSize);
+            if (Auth::user()->role == 'penyuluh') { // penyuluh
+                $query->where('is_valid', 1);
+            }
+        });
+
+        $data = $stuntingAnak->orderBy('updated_at', 'desc')->get();
+        foreach ($data as $d) {
+            $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
+            
+            $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
+            $d->anggotaKeluarga->wilayahDomisili->kabupatenKota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
+            $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
+            $d->anggotaKeluarga->wilayahDomisili->desaKelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
+        }
+        return $data;
+
+        // return $stuntingAnak->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

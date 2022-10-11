@@ -22,6 +22,7 @@ class ApiAkunController extends Controller
         $search = $request->search;
         $user = new User;
 
+        $user = User::with('keluarga');
         if ($relation) {
             $user = User::with('keluarga');
         }
@@ -30,7 +31,8 @@ class ApiAkunController extends Controller
             return $user->search($search)->where('role', 'keluarga')->orderBy("updated_at", "desc")->paginate($pageSize);
         }
 
-        return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
+        return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->get();
     }
 
     /**
@@ -108,7 +110,7 @@ class ApiAkunController extends Controller
 
         return response([
             'message' => "User with id $id doesn't exist"
-        ], 400);
+        ], 404);
     }
 
     /**
