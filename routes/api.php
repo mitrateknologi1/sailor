@@ -157,6 +157,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/stunting_anak', [ApiStuntingAnakController::class, 'index']);
     Route::get('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'show']);
     Route::post('/stunting_anak', [ApiStuntingAnakController::class, 'store']);
+    Route::post('/stunting_anak/validasi', [ApiStuntingAnakController::class, 'validasi']);
     Route::put('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'update']);
     Route::delete('/stunting_anak/{id}', [ApiStuntingAnakController::class, 'destroy']);
 
