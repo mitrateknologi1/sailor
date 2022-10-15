@@ -12,6 +12,8 @@ use App\Models\AnggotaKeluarga;
 use App\Models\JawabanDeteksiIbuMelahirkanStunting;
 use App\Models\SoalIbuMelahirkanStunting;
 use Carbon\Carbon;
+use App\Models\Bidan;
+use App\Models\Pemberitahuan;
 
 class ApiIbuMelahirkanStuntingController extends Controller
 {
@@ -173,6 +175,75 @@ class ApiIbuMelahirkanStuntingController extends Controller
         $ibuMelahirkanStunting->delete();
         return response([
             'message' => "Data deleted!"
+        ], 200);
+    }
+
+    public function validasi(Request $request)
+    {
+        $id = $request->id;
+        if($id == null){
+            return response([
+                'message' => "provide id!",
+            ], 400);
+        }
+
+        if ($request->konfirmasi == 1) {
+            $alasan_req = '';
+            $alasan = null;
+        } else {
+            $alasan_req = 'required';
+            $alasan = $request->alasan_ditolak;
+        }
+
+        $bidan_id = Auth::user()->profil->id;
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'konfirmasi' => 'required',
+                'alasan_ditolak' => $alasan_req,
+            ],
+            [
+                'konfirmasi.required' => 'Konfirmasi harus diisi',
+                'alasan_ditolak.required' => 'Alasan harus diisi',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response([
+                'message' => $validator->errors(),
+            ], 400);
+        }
+
+        $deteksiIbuStunting = DeteksiIbuMelahirkanStunting::find($id);
+        if(!$deteksiIbuStunting){
+            return response([
+                'message' => "Data Deteksi Ibu Stunting with id $id not found!",
+            ], 404);
+        }
+
+        $deteksiIbuStunting->update(['is_valid' => $request->konfirmasi, 'bidan_id' => $bidan_id, 'tanggal_validasi' => Carbon::now(), 'alasan_ditolak' => $alasan]);
+
+        $namaBidan = Bidan::where('id', $bidan_id)->first();
+
+        $pemberitahuan = new Pemberitahuan();
+        $pemberitahuan->user_id = $deteksiIbuStunting->anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id;
+        $pemberitahuan->fitur_id = $deteksiIbuStunting->id;
+        $pemberitahuan->anggota_keluarga_id = $deteksiIbuStunting->anggota_keluarga_id;
+        $pemberitahuan->tentang = 'deteksi_ibu_melahirkan_stunting';
+
+        if ($request->konfirmasi == 1) {
+            $pemberitahuan->judul = 'Selamat, data deteksi ibu melahirkan stunting anda telah divalidasi.';
+            $pemberitahuan->isi = 'Data deteksi ibu melahirkan stunting anda (' . ucwords(strtolower($deteksiIbuStunting->anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.';
+        } else {
+            $pemberitahuan->judul = 'Maaf, data deteksi ibu melahirkan stunting anda' . ' (' . ucwords(strtolower($deteksiIbuStunting->anggotaKeluarga->nama_lengkap)) . ') ditolak.';
+            $pemberitahuan->isi = 'Silahkan perbarui data untuk melihat alasan data deteksi ibu melahirkan stunting ditolak dan mengirim ulang data. Terima Kasih.';
+        }
+
+        $pemberitahuan->save();
+
+        return response([
+            'message' => "Data Ibu Stunting validated!",
         ], 200);
     }
 }

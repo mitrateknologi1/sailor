@@ -164,6 +164,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/ibu_melahirkan_stunting', [ApiIbuMelahirkanStuntingController::class, 'index']);
     Route::get('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'show']);
     Route::post('/ibu_melahirkan_stunting', [ApiIbuMelahirkanStuntingController::class, 'store']);
+    Route::post('/ibu_melahirkan_stunting/validasi', [ApiIbuMelahirkanStuntingController::class, 'validasi']);
     Route::put('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'update']);
     Route::delete('/ibu_melahirkan_stunting/{id}', [ApiIbuMelahirkanStuntingController::class, 'destroy']);
 
