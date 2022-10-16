@@ -179,6 +179,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/perkiraan_melahirkan', [ApiPerkiraanMelahirkanController::class, 'index']);
     Route::get('/perkiraan_melahirkan/{id}', [ApiPerkiraanMelahirkanController::class, 'show']);
     Route::post('/perkiraan_melahirkan', [ApiPerkiraanMelahirkanController::class, 'store']);
+    Route::post('/perkiraan_melahirkan/validasi', [ApiPerkiraanMelahirkanController::class, 'validasi']);
     Route::put('/perkiraan_melahirkan/{id}', [ApiPerkiraanMelahirkanController::class, 'update']);
     Route::delete('/perkiraan_melahirkan/{id}', [ApiPerkiraanMelahirkanController::class, 'destroy']);
 
