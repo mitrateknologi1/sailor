@@ -186,6 +186,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/deteksi_dini', [ApiDeteksiDiniController::class, 'index']);
     Route::get('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'show']);
     Route::post('/deteksi_dini', [ApiDeteksiDiniController::class, 'store']);
+    Route::post('/deteksi_dini/validasi', [ApiDeteksiDiniController::class, 'validasi']);
     Route::put('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'update']);
     Route::delete('/deteksi_dini/{id}', [ApiDeteksiDiniController::class, 'destroy']);
 
