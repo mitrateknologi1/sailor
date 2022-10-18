@@ -37,6 +37,7 @@ use App\Http\Controllers\api\main\ApiSoalIbuMelahirkanStuntingController;
 use App\Http\Controllers\api\main\ApiSoalMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiSoalMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiStuntingAnakController;
+use App\Http\Controllers\api\main\ApiPemeriksaanAncController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -201,8 +202,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/anc', [ApiAncController::class, 'index']);
     Route::get('/anc/{id}', [ApiAncController::class, 'show']);
     Route::post('/anc', [ApiAncController::class, 'store']);
+    Route::post('/anc/validasi', [ApiAncController::class, 'validasi']);
     Route::put('/anc/{id}', [ApiAncController::class, 'update']);
     Route::delete('/anc/{id}', [ApiAncController::class, 'destroy']);
+
+    Route::post('/pemeriksaan_anc', [ApiPemeriksaanAncController::class, 'store']);
+    Route::put('/pemeriksaan_anc/{id}', [ApiPemeriksaanAncController::class, 'update']);
 
     Route::get('/pertumbuhan_anak', [ApiPertumbuhanAnakController::class, 'index']);
     Route::get('/pertumbuhan_anak/{id}', [ApiPertumbuhanAnakController::class, 'show']);
