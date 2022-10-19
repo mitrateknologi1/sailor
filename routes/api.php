@@ -219,6 +219,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/perkembangan_anak', [ApiPerkembanganAnakController::class, 'index']);
     Route::get('/perkembangan_anak/{id}', [ApiPerkembanganAnakController::class, 'show']);
     Route::post('/perkembangan_anak', [ApiPerkembanganAnakController::class, 'store']);
+    Route::post('/perkembangan_anak/validasi', [ApiPerkembanganAnakController::class, 'validasi']);
     Route::put('/perkembangan_anak/{id}', [ApiPerkembanganAnakController::class, 'update']);
     Route::delete('/perkembangan_anak/{id}', [ApiPerkembanganAnakController::class, 'destroy']);
 

@@ -141,6 +141,7 @@ class ApiPertumbuhanAnakController extends Controller
             "zscore" => $request->zscore,
             "hasil" => $request->hasil,
             "is_valid" => $role == "bidan" ? 1 : 0,
+            "tanggal_validasi" => $role == "bidan" ? Carbon::now() : null,
         ];
 
         if ($pertumbuhanAnak) {
