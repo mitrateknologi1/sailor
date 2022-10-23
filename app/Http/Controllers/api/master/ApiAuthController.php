@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\master;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\AnggotaKeluarga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -77,8 +78,10 @@ class ApiAuthController extends Controller
                 }else if($user->role == "penyuluh"){
                     $domisili = Penyuluh::where('user_id', $user->id)->first();
                 }else{
+                    $domisili = AnggotaKeluarga::where('user_id', $user->id)->first();
                     return response([
                         "user" => $user,
+                        "authDomisili" => $domisili,
                         "token" => $token,
                     ], 201);
                 }
