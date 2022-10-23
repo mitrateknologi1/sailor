@@ -27,6 +27,7 @@ use App\Http\Controllers\api\main\ApiJawabanMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiJawabanMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiMencegahMalnutrisiController;
 use App\Http\Controllers\api\main\ApiMencegahPernikahanDiniController;
+use App\Http\Controllers\api\main\ApiMeningkatkanLifeSkillController;
 use App\Http\Controllers\api\main\ApiPemberitahuanController;
 use App\Http\Controllers\api\main\ApiPerkembanganAnakController;
 use App\Http\Controllers\api\main\ApiPerkiraanMelahirkanController;
@@ -232,6 +233,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/mencegah_malnutrisi', [ApiMencegahMalnutrisiController::class, 'index']);
     Route::get('/mencegah_malnutrisi/{id}', [ApiMencegahMalnutrisiController::class, 'show']);
     Route::post('/mencegah_malnutrisi', [ApiMencegahMalnutrisiController::class, 'store']);
+    Route::post('/mencegah_malnutrisi/validasi', [ApiMencegahMalnutrisiController::class, 'validasi']);
     Route::put('/mencegah_malnutrisi/{id}', [ApiMencegahMalnutrisiController::class, 'update']);
     Route::delete('/mencegah_malnutrisi/{id}', [ApiMencegahMalnutrisiController::class, 'destroy']);
 
@@ -243,6 +245,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/soal_mencegah_malnutrisi', [ApiSoalMencegahMalnutrisiController::class, 'index']);
 
+    Route::post('/meningkatkan_life_skill', [ApiMeningkatkanLifeSkillController::class, 'store']);
+    Route::post('/meningkatkan_life_skill/validasi', [ApiMeningkatkanLifeSkillController::class, 'validasi']);
+    Route::put('/meningkatkan_life_skill/{id}', [ApiMeningkatkanLifeSkillController::class, 'update']);
+    Route::delete('/meningkatkan_life_skill/{id}', [ApiMeningkatkanLifeSkillController::class, 'destroy']);
+    
     Route::get('/jawaban_meningkatkan_life_skill', [ApiJawabanMeningkatkanLifeSkillController::class, 'index']);
     Route::get('/jawaban_meningkatkan_life_skill/{id}', [ApiJawabanMeningkatkanLifeSkillController::class, 'show']);
     Route::post('/jawaban_meningkatkan_life_skill', [ApiJawabanMeningkatkanLifeSkillController::class, 'store']);
@@ -254,6 +261,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/mencegah_pernikahan_dini', [ApiMencegahPernikahanDiniController::class, 'index']);
     Route::get('/mencegah_pernikahan_dini/{id}', [ApiMencegahPernikahanDiniController::class, 'show']);
     Route::post('/mencegah_pernikahan_dini', [ApiMencegahPernikahanDiniController::class, 'store']);
+    Route::post('/mencegah_pernikahan_dini/validasi', [ApiMencegahPernikahanDiniController::class, 'validasi']);
     Route::put('/mencegah_pernikahan_dini/{id}', [ApiMencegahPernikahanDiniController::class, 'update']);
     Route::delete('/mencegah_pernikahan_dini/{id}', [ApiMencegahPernikahanDiniController::class, 'destroy']);
 
