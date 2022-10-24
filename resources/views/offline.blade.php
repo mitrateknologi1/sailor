@@ -46,7 +46,7 @@
                            <img src="{{ asset('assets/offline/auth-500.svg') }}" class="w240 mb-4" alt="" />
                            <h1 class="display-1">offline</h1>
                            <h5>Internet Kamu Terputus</h5>
-                           <span class="text-muted">Kamu dan server SI GERCEP STUNTING lagi tidak terhibung nih. coba
+                           <span class="text-muted">Kamu dan server SI GERCEP STUNTING lagi tidak terhubung nih. Coba
                               periksa data atau wifi kamu!!</span>
                         </div>
                         <div class="col-12 text-center">
