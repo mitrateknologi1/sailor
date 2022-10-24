@@ -60,6 +60,10 @@ use App\Models\PerkiraanMelahirkan;
 |
 */
 
+Route::get('offline', function () {
+    return view('offline');
+});
+
 
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landingPage');
