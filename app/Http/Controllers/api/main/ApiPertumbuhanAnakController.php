@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
+use App\Models\AnggotaKeluarga;
 use App\Models\PertumbuhanAnak;
 use Illuminate\Http\Request;
 use App\Models\Pemberitahuan;
@@ -22,42 +23,58 @@ class ApiPertumbuhanAnakController extends Controller
      */
     public function index(Request $request)
     {
-        $relation = $request->relation;
-        $pageSize = $request->page_size ?? 20;
-        $pertumbuhanAnak = new PertumbuhanAnak;
+        // $relation = $request->relation;
+        // $pageSize = $request->page_size ?? 20;
+        // $pertumbuhanAnak = new PertumbuhanAnak;
 
-        if ($relation) {
-            $pertumbuhanAnak = PertumbuhanAnak::with('bidan', 'anggotaKeluarga');
-        }
+        // if ($relation) {
+        //     $pertumbuhanAnak = PertumbuhanAnak::with('bidan', 'anggotaKeluarga');
+        // }
+        if (in_array(Auth::user()->role, ['bidan', 'penyuluh'])) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            $data = PertumbuhanAnak::with('anggotaKeluarga', 'bidan')
+                ->where(function (Builder $query) use ($lokasiTugas) {
+                    if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                        $query->whereHas('anggotaKeluarga', function (Builder $query) use ($lokasiTugas) {
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                        });
 
-        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-        $data = PertumbuhanAnak::with('anggotaKeluarga', 'bidan')
-            ->where(function (Builder $query) use ($lokasiTugas) {
-                if (Auth::user()->role != 'admin') { // bidan/penyuluh
-                    $query->whereHas('anggotaKeluarga', function (Builder $query) use ($lokasiTugas) {
-                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
-                    });
+                        if (Auth::user()->role == 'bidan') { // bidan
+                            $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        }
 
-                    if (Auth::user()->role == 'bidan') { // bidan
-                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                        if (Auth::user()->role == 'penyuluh') { // penyuluh
+                            $query->valid();
+                        }
                     }
-
-                    if (Auth::user()->role == 'penyuluh') { // penyuluh
-                        $query->valid();
-                    }
-                }
-            })->orderBy('created_at', 'DESC')->get();
-        
-        $response = [];
-        foreach ($data as $d) {
-            array_push($response, $d);
-            $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-            $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-            $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-            $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-            $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
+                })->orderBy('created_at', 'DESC')->get();
+            
+            $response = [];
+            foreach ($data as $d) {
+                array_push($response, $d);
+                $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
+                $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
+                $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
+                $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
+                $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
+            }
+            return $response;
+        }else{
+            $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
+            $pertumbuhanAnak = PertumbuhanAnak::with('anggotaKeluarga', 'bidan')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+                $query->where('kartu_keluarga_id', $kartuKeluarga);
+            })->latest()->get();
+            $response = [];
+            foreach ($pertumbuhanAnak as $d) {
+                array_push($response, $d);
+                $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
+                $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
+                $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
+                $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
+                $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
+            }
+            return $response;
         }
-        return $response;
 
         // return $pertumbuhanAnak->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
@@ -71,10 +88,9 @@ class ApiPertumbuhanAnakController extends Controller
     public function store(Request $request)
     {
         $role = Auth::user()->role;
-        $bidanRule = $role == "bidan" ? 'nullable|exists:bidan,id' : 'required|exists:bidan,id';
         $request->validate([
             'anggota_keluarga_id' => 'required|exists:anggota_keluarga,id',
-            'bidan_id' => $bidanRule,
+            'bidan_id' => "nullable|exists:bidan,id",
             "berat_badan" => 'required',
             "zscore" => 'required',
             "hasil" => 'required',
@@ -83,9 +99,17 @@ class ApiPertumbuhanAnakController extends Controller
             "alasan_ditolak" => 'nullable',
         ]);
 
+        $unValidatedData = PertumbuhanAnak::where('anggota_keluarga_id', $request->anggota_keluarga_id)->where('is_valid', '!=', 1);
+        $anak = AnggotaKeluarga::find($request->anggota_keluarga_id);
+
+        if($unValidatedData->count() > 0){
+            return response(["Terdapat Data Pertumbuhan Anak atas nama $anak->nama_lengkap yang belum divalidasi!"
+            ], 407);
+        }
+
         $data = [
             'anggota_keluarga_id' => $request->anggota_keluarga_id,
-            'bidan_id' => $role == "bidan" ? Auth::user()->profil->id : $request->bidan_id,
+            'bidan_id' => $role == "bidan" ? Auth::user()->profil->id : null,
             "berat_badan" => $request->berat_badan,
             "zscore" => $request->zscore,
             "hasil" => $request->hasil,
