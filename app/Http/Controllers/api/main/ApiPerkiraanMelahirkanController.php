@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
+use App\Models\AnggotaKeluarga;
 use App\Models\PerkiraanMelahirkan;
 use Illuminate\Http\Request;
 use App\Models\LokasiTugas;
@@ -27,7 +28,7 @@ class ApiPerkiraanMelahirkanController extends Controller
 
         if(Auth::user()->role== "keluarga"){
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
-            return PerkiraanMelahirkan::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+            return PerkiraanMelahirkan::with('anggotaKeluarga', 'bidan')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
             })->latest()->get();
         }
@@ -60,10 +61,10 @@ class ApiPerkiraanMelahirkanController extends Controller
         }
         return $response;
 
-        $perikiraanMelahirkan = PerkiraanMelahirkan::with('bidan', 'anggotaKeluarga');
-        if ($relation) {
-            $perikiraanMelahirkan = PerkiraanMelahirkan::with('bidan', 'anggotaKeluarga');
-        }
+        // $perikiraanMelahirkan = PerkiraanMelahirkan::with('bidan', 'anggotaKeluarga');
+        // if ($relation) {
+        //     $perikiraanMelahirkan = PerkiraanMelahirkan::with('bidan', 'anggotaKeluarga');
+        // }
         // return $perikiraanMelahirkan->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
@@ -76,11 +77,9 @@ class ApiPerkiraanMelahirkanController extends Controller
     public function store(Request $request)
     {
         $role = Auth::user()->role;
-        $bidanRule = $role == "bidan" ? 'nullable|exists:bidan,id' : 'required|exists:bidan,id';
-
         $request->validate([
             'anggota_keluarga_id' => 'required|exists:anggota_keluarga,id',
-            'bidan_id' => $bidanRule,
+            'bidan_id' => 'nullable|exists:bidan,id',
             'tanggal_haid_terakhir' => 'required',
             'tanggal_perkiraan_lahir' => 'required',
             'is_valid' => 'nullable|in:0,1',
@@ -88,9 +87,17 @@ class ApiPerkiraanMelahirkanController extends Controller
             'alasan_ditolak' => 'nullable',
         ]);
 
+        $unValidatedData = PerkiraanMelahirkan::where('anggota_keluarga_id', $request->anggota_keluarga_id)->where('is_valid', '!=', 1);
+        $ibu = AnggotaKeluarga::find($request->anggota_keluarga_id);
+
+        if($unValidatedData->count() > 0){
+            return response(["Terdapat Data Perkiraan Melahirkan atas nama $ibu->nama_lengkap yang belum divalidasi!"
+            ], 407);
+        }
+
         $data = [
             'anggota_keluarga_id' => $request->anggota_keluarga_id,
-            'bidan_id' => $role == "bidan" ? Auth::user()->profil->id : $request->bidan_id,
+            'bidan_id' => $role == "bidan" ? Auth::user()->profil->id : null,
             'tanggal_haid_terakhir' => $request->tanggal_haid_terakhir,
             'tanggal_perkiraan_lahir' => $request->tanggal_perkiraan_lahir,
             'is_valid' => $role == "bidan" ? 1 : 0,
