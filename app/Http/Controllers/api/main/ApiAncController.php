@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
 use App\Models\Anc;
+use App\Models\AnggotaKeluarga;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -22,41 +23,57 @@ class ApiAncController extends Controller
      */
     public function index(Request $request)
     {
-        $relation = $request->relation;
-        $pageSize = $request->page_size ?? 20;
-        $anc = new Anc;
+        // $relation = $request->relation;
+        // $pageSize = $request->page_size ?? 20;
+        // $anc = new Anc;
 
-        if ($relation) {
-            $anc = Anc::with('bidan', 'anggotaKeluarga');
-        }
+        // if ($relation) {
+        //     $anc = Anc::with('bidan', 'anggotaKeluarga');
+        // }
+        if (in_array(Auth::user()->role, ['bidan', 'penyuluh'])) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            $data = Anc::with('anggotaKeluarga', 'bidan', 'pemeriksaanAnc')->orderBy('created_at', 'DESC')
+                ->where(function ($query) use ($lokasiTugas) {
+                    if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                        $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                        });
+                    }
+                    if (Auth::user()->role == 'bidan') { // bidan
+                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                    }
 
-        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-        $data = Anc::with('anggotaKeluarga', 'bidan', 'pemeriksaanAnc')->orderBy('created_at', 'DESC')
-            ->where(function ($query) use ($lokasiTugas) {
-                if (Auth::user()->role != 'admin') { // bidan/penyuluh
-                    $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
-                    });
+                    if (Auth::user()->role == 'penyuluh') { // penyuluh
+                        $query->where('is_valid', 1);
+                    }
+                })->get();
+
+                $response = [];
+                foreach ($data as $d) {
+                    array_push($response, $d);
+                    $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
+                    $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
+                    $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
+                    $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
+                    $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
                 }
-                if (Auth::user()->role == 'bidan') { // bidan
-                    $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
-            })->get();
-
+                return $response;
+        }else{
+            $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
+            $anc = Anc::with('anggotaKeluarga', 'bidan', 'pemeriksaanAnc')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+                $query->where('kartu_keluarga_id', $kartuKeluarga);
+            })->latest()->get();
             $response = [];
-            foreach ($data as $d) {
-                array_push($response, $d);
-                $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-            }
-            return $response;
+                foreach ($anc as $d) {
+                    array_push($response, $d);
+                    $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
+                    $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
+                    $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
+                    $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
+                    $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
+                }
+                return $response;
+        }
 
         // return $anc->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
@@ -87,6 +104,15 @@ class ApiAncController extends Controller
             "tanggal_validasi" => "nullable",
             "alasan_ditolak" => "nullable",
         ]);
+
+        $unValidatedData = Anc::where('anggota_keluarga_id', $request->anggota_keluarga_id)->where('is_valid', '!=', 1);
+        $ibu = AnggotaKeluarga::find($request->anggota_keluarga_id);
+
+        if($unValidatedData->count() > 0){
+            return response()->json([
+                'Terdapat Data Antenatal Care atas nama ' . $ibu->nama_lengkap . ', yang belum divalidasi.',
+            ], 407);
+        }
 
         return Anc::create($request->all());
     }
