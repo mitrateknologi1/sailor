@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
+use App\Models\AnggotaKeluarga;
 use App\Models\DeteksiDini;
 use App\Models\JawabanDeteksiDini;
 use App\Models\LokasiTugas;
@@ -21,44 +22,59 @@ class ApiDeteksiDiniController extends Controller
      */
     public function index(Request $request)
     {
-        $relation = $request->relation;
-        $pageSize = $request->page_size ?? 20;
-        $perikiraanMelahirkan = new DeteksiDini;
+        // $relation = $request->relation;
+        // $pageSize = $request->page_size ?? 20;
+        // $perikiraanMelahirkan = new DeteksiDini;
 
-        if ($relation) {
-            $perikiraanMelahirkan = DeteksiDini::with('bidan', 'anggotaKeluarga');
-        }
+        // if ($relation) {
+        //     $perikiraanMelahirkan = DeteksiDini::with('bidan', 'anggotaKeluarga');
+        // }
+        if (in_array(Auth::user()->role, ['bidan', 'penyuluh'])) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
+            $data = DeteksiDini::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+                ->where(function ($query) use ($lokasiTugas) {
+                    if (Auth::user()->role != 'admin') {
+                        $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas);
+                        });
+                    }
+                    if (Auth::user()->role == 'bidan') {
+                        $query->orWhere('bidan_id', Auth::user()->profil->id);
+                    }
 
-        $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-        $data = DeteksiDini::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
-            ->where(function ($query) use ($lokasiTugas) {
-                if (Auth::user()->role != 'admin') {
-                    $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
-                    });
+                    if (Auth::user()->role == 'penyuluh') { // penyuluh
+                        $query->where('is_valid', 1);
+                    }
+                })->get();
+
+                $response = [];
+                foreach ($data as $d) {
+                    array_push($response, $d);
+                    $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
+                    $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
+                    $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
+                    $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
+                    $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
                 }
-                if (Auth::user()->role == 'bidan') {
-                    $query->orWhere('bidan_id', Auth::user()->profil->id);
+                return $response;
+            }else{
+                $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
+                $deteksiDini = DeteksiDini::with('anggotaKeluarga', 'bidan')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+                    $query->where('kartu_keluarga_id', $kartuKeluarga);
+                })->latest()->get();
+                $response = [];
+                foreach ($deteksiDini as $d) {
+                    array_push($response, $d);
+                    $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
+                    $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
+                    $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
+                    $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
+                    $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
-            })->get();
-
-            $response = [];
-            foreach ($data as $d) {
-                array_push($response, $d);
-                $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
+                return $response;
             }
-            return $response;
-
-        // return $perikiraanMelahirkan->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
+    // return $perikiraanMelahirkan->orderBy('updated_at', 'desc')->paginate($pageSize);
 
     /**
      * Store a newly created resource in storage.
@@ -68,10 +84,9 @@ class ApiDeteksiDiniController extends Controller
      */
     public function store(Request $request)
     {
-        $bidanIdRule = Auth::user()->role == "bidan" ? "nullable|exists:bidan,id" : "required|exists:bidan,id";
         $request->validate([
             "anggota_keluarga_id" => "required|exists:anggota_keluarga,id",
-            "bidan_id" => $bidanIdRule,
+            "bidan_id" => "nullable|exists:bidan,id",
             "skor" => "required",
             "kategori" => "required",
             "is_valid" => "nullable|in:0,1",
@@ -79,9 +94,18 @@ class ApiDeteksiDiniController extends Controller
             "alasan_ditolak" => "nullable"
         ]);
 
+        $unValidatedData = DeteksiDini::where('anggota_keluarga_id', $request->anggota_keluarga_id)->where('is_valid', '!=', 1);
+        $ibu = AnggotaKeluarga::find($request->anggota_keluarga_id);
+
+        if ($unValidatedData->count() > 0) {
+            return response()->json([
+                'Terdapat Data Deteksi dini atas nama ' . $ibu->nama_lengkap . ', yang belum divalidasi.',
+            ], 407);
+        }
+
         $data = [
             'anggota_keluarga_id' => $request->anggota_keluarga_id,
-            'bidan_id' => Auth::user()->role == "bidan" ? Auth::user()->profil->id : $request->bidan_id,
+            'bidan_id' => Auth::user()->role == "bidan" ? Auth::user()->profil->id : null,
             'skor' => $request->skor,
             'kategori' => $request->kategori,
             'is_valid' => Auth::user()->role == "bidan" ? 1 : 0,
