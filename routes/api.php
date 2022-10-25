@@ -108,7 +108,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::get('/profile', [ApiAuthController::class, 'profile']);
 
-    Route::get('/akun', [ApiAkunController::class, 'index'])->middleware('notKeluarga');
+    // Route::get('/akun', [ApiAkunController::class, 'index'])->middleware('notKeluarga');
+    Route::get('/akun', [ApiAkunController::class, 'index']);
     Route::get('/akun/{id}', [ApiAkunController::class, 'show'])->middleware('notKeluarga');
     // Route::post('/akun', [ApiAkunController::class, 'store'])->middleware('notKeluarga');
     Route::put('/akun/{id}', [ApiAkunController::class, 'update'])->middleware('notKeluarga');

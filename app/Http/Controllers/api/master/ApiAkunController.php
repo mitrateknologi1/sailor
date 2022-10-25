@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api\master;
 
 use App\Http\Controllers\Controller;
+use App\Models\AnggotaKeluarga;
 use App\Models\Pemberitahuan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ApiAkunController extends Controller
@@ -21,6 +23,10 @@ class ApiAkunController extends Controller
         $relation = $request->relation;
         $search = $request->search;
         $user = new User;
+
+        if(Auth::user()->is_remaja == 1){
+            return AnggotaKeluarga::where('id', Auth::user()->profil->id)->get();
+        }
 
         $user = User::with('keluarga');
         if ($relation) {
