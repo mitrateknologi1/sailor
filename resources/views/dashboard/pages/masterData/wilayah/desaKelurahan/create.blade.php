@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Tambah Kecamatan
+    Tambah Desa
 @endsection
 
 @push('style')
@@ -23,7 +23,7 @@
     @component('dashboard.components.forms.masterData.wilayah',
         [
             'idForm' => 'form-tambah',
-            'title' => 'Tambah Kecamatan',
+            'title' => 'Tambah Desa',
             'method' => 'POST',
         ])
     @endcomponent

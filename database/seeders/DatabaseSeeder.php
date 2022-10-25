@@ -75,5 +75,15 @@ class DatabaseSeeder extends Seeder
         $this->call(JawabanMeningkatkanLifeSkillTableSeeder::class);
         $this->call(MencegahPernikahanDiniTableSeeder::class);
         $this->call(PerkiraanMelahirkanTableSeeder::class);
+
+        // Auto Generate
+        // $this->call(ProductionBidanSeeder::class);
+        // $this->call(ProductionPenyuluhSeeder::class);
+
+        // Production
+        // $this->call(ProductionLokasiTugasTableSeeder::class);
+        // $this->call(ProductionPenyuluhTableSeeder::class);
+        // $this->call(ProductionUsersTableSeeder::class);
+        // $this->call(ProductionBidanTableSeeder::class);
     }
 }

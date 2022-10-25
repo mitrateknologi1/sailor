@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 
 @section('title')
-    Edit Kecamatan
+    Edit Desa
 @endsection
 
 @push('style')

@@ -78,8 +78,8 @@ class DesaKelurahanController extends Controller
             $request->all(),
             [
                 'nama' => ['required', Rule::unique('desa_kelurahan')->withoutTrashed()],
-                'polygon' => 'required',
-                'warna_polygon' => 'required'
+                // 'polygon' => 'required',
+                // 'warna_polygon' => 'required'
             ],
             [
                 'nama.required' => 'Nama Desa/Kelurahan tidak boleh kosong',
@@ -141,8 +141,8 @@ class DesaKelurahanController extends Controller
             $request->all(),
             [
                 'nama' => ['required', Rule::unique('desa_kelurahan')->where('kecamatan_id', $request->kecamatan)->ignore($request->desaKelurahan)->withoutTrashed()],
-                'polygon' => 'required',
-                'warna_polygon' => 'required'
+                // 'polygon' => 'required',
+                // 'warna_polygon' => 'required'
             ],
             [
                 'nama.required' => 'Nama Desa/Kelurahan tidak boleh kosong',
