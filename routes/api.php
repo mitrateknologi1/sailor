@@ -13,6 +13,7 @@ use App\Http\Controllers\api\const\ApiDesaKelurahanController;
 use App\Http\Controllers\api\const\ApiGolonganDarahController;
 use App\Http\Controllers\api\const\ApiKabupatenKotaController;
 use App\Http\Controllers\api\const\ApiKecamatanController;
+use App\Http\Controllers\api\const\ApiDashboardController;
 use App\Http\Controllers\api\const\ApiPekerjaanController;
 use App\Http\Controllers\api\const\ApiPendidikanController;
 use App\Http\Controllers\api\const\ApiProvinsiController;
@@ -107,6 +108,7 @@ Route::put('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'update']
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::get('/profile', [ApiAuthController::class, 'profile']);
+    Route::get('/dashboard', [ApiDashboardController::class, 'index']);
 
     // Route::get('/akun', [ApiAkunController::class, 'index'])->middleware('notKeluarga');
     Route::get('/akun', [ApiAkunController::class, 'index']);
