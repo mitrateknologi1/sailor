@@ -24,7 +24,7 @@ class ProductionBidanSeeder extends Seeder
         $no_hp = 811111111111;
         $index = 1;
 
-        $daftarKecamatan = Kecamatan::where('kabupaten_kota_id', 7210)->get();
+        $daftarKecamatan = Kecamatan::where('kabupaten_kota_id', 7205)->get();
         foreach ($daftarKecamatan as $kecamatan) {
             foreach ($kecamatan->desaKelurahan as $desa) {
                 $user = new User();

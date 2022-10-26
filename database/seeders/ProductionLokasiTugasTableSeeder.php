@@ -14,2066 +14,46 @@ class ProductionLokasiTugasTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('lokasi_tugas')->delete();
-        
-        \DB::table('lokasi_tugas')->insert(array (
-            0 => 
-            array (
-                'id' => 1,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '16b0ceab-6763-411c-b5b3-e9f6cf248a54',
-                'desa_kelurahan_id' => 7210010001,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            1 => 
-            array (
-                'id' => 2,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '12efe7a1-9f99-4262-a10f-ea966961c8db',
-                'desa_kelurahan_id' => 7210010002,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            2 => 
-            array (
-                'id' => 3,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '699a5478-8b31-42fc-a42f-502eee13250c',
-                'desa_kelurahan_id' => 7210010003,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            3 => 
-            array (
-                'id' => 4,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '4ada49db-fd15-47a4-b01b-3a81e8a0ba69',
-                'desa_kelurahan_id' => 7210010004,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            4 => 
-            array (
-                'id' => 5,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5191e592-d56e-41d1-bd14-a6bbcc11b641',
-                'desa_kelurahan_id' => 7210010005,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            5 => 
-            array (
-                'id' => 6,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f0ea4e6c-1e0a-47ee-9857-2b8ef00c0299',
-                'desa_kelurahan_id' => 7210010006,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            6 => 
-            array (
-                'id' => 7,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '3c4b6a98-c9fa-49a0-8a4e-2857a572ac88',
-                'desa_kelurahan_id' => 7210010007,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            7 => 
-            array (
-                'id' => 8,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '38f62ca3-a2a6-4808-8412-27caad9586ee',
-                'desa_kelurahan_id' => 7210010008,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            8 => 
-            array (
-                'id' => 9,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '436f0041-693a-4820-9128-3e6f9377b6a0',
-                'desa_kelurahan_id' => 7210010009,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            9 => 
-            array (
-                'id' => 10,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '68e23013-cbee-426a-ba89-ea65896a173a',
-                'desa_kelurahan_id' => 7210010010,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            10 => 
-            array (
-                'id' => 11,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd8ea333e-9eb7-4a21-bcb1-1d1eb0a9755e',
-                'desa_kelurahan_id' => 7210010011,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            11 => 
-            array (
-                'id' => 12,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '7ab05b48-292a-4709-9331-4ba5962ddc77',
-                'desa_kelurahan_id' => 7210010012,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            12 => 
-            array (
-                'id' => 13,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'ff930660-0cd9-46cf-88e5-e9092cf6c272',
-                'desa_kelurahan_id' => 7210010013,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            13 => 
-            array (
-                'id' => 14,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0a3f7673-95ff-4cd8-ac39-ba683dd91e27',
-                'desa_kelurahan_id' => 7210010014,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            14 => 
-            array (
-                'id' => 15,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5f3ab20d-4620-4b5d-9855-c5e2580a5b40',
-                'desa_kelurahan_id' => 7210010015,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            15 => 
-            array (
-                'id' => 16,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'eefc92f7-7d43-410c-85fd-b3575a4f8023',
-                'desa_kelurahan_id' => 7210010016,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            16 => 
-            array (
-                'id' => 17,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '4b1f92ac-a7e5-4d6f-8648-42edcf93032f',
-                'desa_kelurahan_id' => 7210010017,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            17 => 
-            array (
-                'id' => 18,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '521ebbb4-e2fe-41c2-9da7-f5146a779a83',
-                'desa_kelurahan_id' => 7210010018,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            18 => 
-            array (
-                'id' => 19,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd47160f4-5a03-4397-abb5-6f676e15621c',
-                'desa_kelurahan_id' => 7210010019,
-                'kecamatan_id' => 7210010,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            19 => 
-            array (
-                'id' => 20,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'e2d4de3d-6de4-4838-a5f4-9a87670dcf94',
-                'desa_kelurahan_id' => 7210020001,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            20 => 
-            array (
-                'id' => 21,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b2d22e49-85b4-4001-9f25-760d1f9c78ba',
-                'desa_kelurahan_id' => 7210020002,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            21 => 
-            array (
-                'id' => 22,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5bd7d046-6760-4c8d-81ba-865dcbbe9497',
-                'desa_kelurahan_id' => 7210020003,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            22 => 
-            array (
-                'id' => 23,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '6034d99c-ba6b-4135-9631-68bfb32126b7',
-                'desa_kelurahan_id' => 7210020004,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            23 => 
-            array (
-                'id' => 24,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'fb558878-f353-4721-bec3-7856932815a6',
-                'desa_kelurahan_id' => 7210020005,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            24 => 
-            array (
-                'id' => 25,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '40448e15-4f8e-4aac-8853-cdae54ad4852',
-                'desa_kelurahan_id' => 7210020006,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            25 => 
-            array (
-                'id' => 26,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '84e077b3-d22e-401d-8e55-65d9a301f85e',
-                'desa_kelurahan_id' => 7210020007,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            26 => 
-            array (
-                'id' => 27,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '75d26689-1337-4798-95b2-2c4be2b7721c',
-                'desa_kelurahan_id' => 7210020008,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            27 => 
-            array (
-                'id' => 28,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'a8f9c072-f0be-4ce9-82d5-4c79a66568ce',
-                'desa_kelurahan_id' => 7210020009,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            28 => 
-            array (
-                'id' => 29,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0e66c207-090a-44a4-97d4-dec87a0ebf24',
-                'desa_kelurahan_id' => 7210020010,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            29 => 
-            array (
-                'id' => 30,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0cc5f19c-af1c-49d3-8a43-75cca289a087',
-                'desa_kelurahan_id' => 7210020011,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            30 => 
-            array (
-                'id' => 31,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '31bda8bf-7706-43d6-9399-4c73bd62f828',
-                'desa_kelurahan_id' => 7210020012,
-                'kecamatan_id' => 7210020,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            31 => 
-            array (
-                'id' => 32,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9e77c516-1421-413d-95fb-98e88484282b',
-                'desa_kelurahan_id' => 7210030001,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            32 => 
-            array (
-                'id' => 33,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '344bd9fa-834e-453a-878a-ba09efbf50dd',
-                'desa_kelurahan_id' => 7210030002,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            33 => 
-            array (
-                'id' => 34,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'fb2c7a79-f4d6-4604-b533-fa08977b01d3',
-                'desa_kelurahan_id' => 7210030003,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            34 => 
-            array (
-                'id' => 35,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '85af2286-84cf-4d51-b1d4-fc45f639e81c',
-                'desa_kelurahan_id' => 7210030004,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            35 => 
-            array (
-                'id' => 36,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9fca4ecf-9ea9-4036-acde-8f23dc48013c',
-                'desa_kelurahan_id' => 7210030005,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            36 => 
-            array (
-                'id' => 37,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c2465810-0fd9-4ed9-9f96-044a622a7ba3',
-                'desa_kelurahan_id' => 7210030006,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            37 => 
-            array (
-                'id' => 38,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '25fc6cf9-25c1-4a22-8fd7-7f13733caf2a',
-                'desa_kelurahan_id' => 7210030007,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            38 => 
-            array (
-                'id' => 39,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c32cd88c-ae00-4353-8b4c-fb8b2c82a375',
-                'desa_kelurahan_id' => 7210030008,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:11',
-                'updated_at' => '2022-10-25 12:48:11',
-            ),
-            39 => 
-            array (
-                'id' => 40,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '11501733-2ec8-4bdc-ab95-831caa81bd73',
-                'desa_kelurahan_id' => 7210030009,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            40 => 
-            array (
-                'id' => 41,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '2e684ba4-ed40-40ff-ae16-c25e5d3b032e',
-                'desa_kelurahan_id' => 7210030010,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            41 => 
-            array (
-                'id' => 42,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '83cda76a-7538-459f-974e-38c431056b18',
-                'desa_kelurahan_id' => 7210030011,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            42 => 
-            array (
-                'id' => 43,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5ea74df6-3079-47f6-96d4-81e653446e8a',
-                'desa_kelurahan_id' => 7210030013,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            43 => 
-            array (
-                'id' => 44,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b345afa8-79c7-4769-b5df-ca78fa1fba46',
-                'desa_kelurahan_id' => 7210030014,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            44 => 
-            array (
-                'id' => 45,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '7114fe2f-75d4-46e6-9447-711e35e765a4',
-                'desa_kelurahan_id' => 7210030015,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            45 => 
-            array (
-                'id' => 46,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'ee18dcb2-3cf4-419f-880c-3a695c44d7d0',
-                'desa_kelurahan_id' => 7210030016,
-                'kecamatan_id' => 7210030,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            46 => 
-            array (
-                'id' => 47,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0211ee2d-9e48-4130-b0c1-b1cdf746aafe',
-                'desa_kelurahan_id' => 7210040001,
-                'kecamatan_id' => 7210040,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            47 => 
-            array (
-                'id' => 48,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9744e8c0-7425-4b67-9548-2af8696f5f95',
-                'desa_kelurahan_id' => 7210040002,
-                'kecamatan_id' => 7210040,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            48 => 
-            array (
-                'id' => 49,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '8b5d0a90-65f1-4da3-bf2d-4e12f4f806cd',
-                'desa_kelurahan_id' => 7210040003,
-                'kecamatan_id' => 7210040,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            49 => 
-            array (
-                'id' => 50,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '74f928f5-66ab-4ff4-a7eb-56a5b2edd09e',
-                'desa_kelurahan_id' => 7210040004,
-                'kecamatan_id' => 7210040,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            50 => 
-            array (
-                'id' => 51,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '737615cb-f05a-4ad0-a883-b9c894efb0c2',
-                'desa_kelurahan_id' => 7210040005,
-                'kecamatan_id' => 7210040,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            51 => 
-            array (
-                'id' => 52,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '4ca8e71c-5612-4f3c-a8ed-cc012dbe34ce',
-                'desa_kelurahan_id' => 7210050001,
-                'kecamatan_id' => 7210050,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            52 => 
-            array (
-                'id' => 53,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b7d4403e-f529-4dc1-866d-4ed3bfc5cc28',
-                'desa_kelurahan_id' => 7210050002,
-                'kecamatan_id' => 7210050,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            53 => 
-            array (
-                'id' => 54,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '61eb44a4-2feb-45d9-831e-f43d895c289f',
-                'desa_kelurahan_id' => 7210050003,
-                'kecamatan_id' => 7210050,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            54 => 
-            array (
-                'id' => 55,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '6d91dfdc-b5d5-44b4-a4af-741f0213759d',
-                'desa_kelurahan_id' => 7210050004,
-                'kecamatan_id' => 7210050,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            55 => 
-            array (
-                'id' => 56,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '8b7657fa-fb18-493a-8169-237dc6b3aa20',
-                'desa_kelurahan_id' => 7210050005,
-                'kecamatan_id' => 7210050,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            56 => 
-            array (
-                'id' => 57,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '54356ff3-2d85-43f4-aada-ea7b0662be2c',
-                'desa_kelurahan_id' => 7210060001,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            57 => 
-            array (
-                'id' => 58,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd006ad25-0632-4a68-9de4-49324ea4e275',
-                'desa_kelurahan_id' => 7210060002,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            58 => 
-            array (
-                'id' => 59,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c3b74e3e-c9db-4ba5-b612-710cce5974a4',
-                'desa_kelurahan_id' => 7210060003,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            59 => 
-            array (
-                'id' => 60,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '07650e24-0911-4332-8781-68623b317496',
-                'desa_kelurahan_id' => 7210060004,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            60 => 
-            array (
-                'id' => 61,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '3e6006d9-9d9b-4379-a8d2-5b7644498ef6',
-                'desa_kelurahan_id' => 7210060005,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            61 => 
-            array (
-                'id' => 62,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '48ea6422-bea0-41a1-bfdf-cf07519b5805',
-                'desa_kelurahan_id' => 7210060006,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            62 => 
-            array (
-                'id' => 63,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '7f79591a-0873-4885-8608-02838c5c1c77',
-                'desa_kelurahan_id' => 7210060007,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            63 => 
-            array (
-                'id' => 64,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '709dd87c-28e8-4ac4-8ef4-f2491fc8f52f',
-                'desa_kelurahan_id' => 7210060008,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            64 => 
-            array (
-                'id' => 65,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '4bffbe2b-84f5-4d7b-a4f9-9aea1bc76b16',
-                'desa_kelurahan_id' => 7210060009,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            65 => 
-            array (
-                'id' => 66,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0bf3ddf5-0461-4f52-9fb6-4a87d2fceac3',
-                'desa_kelurahan_id' => 7210060010,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            66 => 
-            array (
-                'id' => 67,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'dc3f1afb-2763-42ba-bdb8-8187f7638c0c',
-                'desa_kelurahan_id' => 7210060011,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            67 => 
-            array (
-                'id' => 68,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b8e5dd53-69b5-4efc-8184-60217e1eb4e4',
-                'desa_kelurahan_id' => 7210060012,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            68 => 
-            array (
-                'id' => 69,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f526c920-118b-43d0-92e6-efaef8f12efb',
-                'desa_kelurahan_id' => 7210060013,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            69 => 
-            array (
-                'id' => 70,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '1a6211ac-739e-4bfe-9df5-f8eb808edff7',
-                'desa_kelurahan_id' => 7210060014,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            70 => 
-            array (
-                'id' => 71,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f34610a3-617a-491f-a46e-737a117e3125',
-                'desa_kelurahan_id' => 7210060015,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            71 => 
-            array (
-                'id' => 72,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '952caa6b-ed25-4b71-a160-a0b18b896f69',
-                'desa_kelurahan_id' => 7210060016,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            72 => 
-            array (
-                'id' => 73,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '7e4ef967-867a-4282-b127-98201088faf3',
-                'desa_kelurahan_id' => 7210060017,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            73 => 
-            array (
-                'id' => 74,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f6c27695-4934-47c5-b02c-02293324c3fc',
-                'desa_kelurahan_id' => 7210060018,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            74 => 
-            array (
-                'id' => 75,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'ac82e2dd-5a40-40e9-ad73-2ed24c7ff189',
-                'desa_kelurahan_id' => 7210060019,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            75 => 
-            array (
-                'id' => 76,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'bb04ac5b-77ea-44e5-a8f4-b55edf99f640',
-                'desa_kelurahan_id' => 7210060020,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            76 => 
-            array (
-                'id' => 77,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f072775b-4675-44c8-80f6-a019431d4b68',
-                'desa_kelurahan_id' => 7210060021,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            77 => 
-            array (
-                'id' => 78,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'e42d468a-344d-421e-83ee-5569cd1700e0',
-                'desa_kelurahan_id' => 7210060022,
-                'kecamatan_id' => 7210060,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            78 => 
-            array (
-                'id' => 79,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9369c573-5e48-4c52-86d8-cc6e1c3d7724',
-                'desa_kelurahan_id' => 7210070001,
-                'kecamatan_id' => 7210070,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            79 => 
-            array (
-                'id' => 80,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '37af08b1-ee85-403f-a4bf-0cb7268fec69',
-                'desa_kelurahan_id' => 7210070002,
-                'kecamatan_id' => 7210070,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            80 => 
-            array (
-                'id' => 81,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'fb36f595-6532-4860-bc3e-85008791ed50',
-                'desa_kelurahan_id' => 7210070003,
-                'kecamatan_id' => 7210070,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            81 => 
-            array (
-                'id' => 82,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'bd165e63-611b-4ca8-a276-42f4978ba699',
-                'desa_kelurahan_id' => 7210070004,
-                'kecamatan_id' => 7210070,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            82 => 
-            array (
-                'id' => 83,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0993c185-b2a8-4c91-811d-ce3f2082aced',
-                'desa_kelurahan_id' => 7210070005,
-                'kecamatan_id' => 7210070,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            83 => 
-            array (
-                'id' => 84,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'a40ab684-abf4-4ba9-bb94-80491ab60e8f',
-                'desa_kelurahan_id' => 7210070006,
-                'kecamatan_id' => 7210070,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            84 => 
-            array (
-                'id' => 85,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '770ba08e-e597-4b13-9c08-feecf344ab2b',
-                'desa_kelurahan_id' => 7210070007,
-                'kecamatan_id' => 7210070,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            85 => 
-            array (
-                'id' => 86,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd1206b5b-2037-47ea-8d75-e65612da7268',
-                'desa_kelurahan_id' => 7210080001,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            86 => 
-            array (
-                'id' => 87,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd488e039-b640-45a4-b5ce-28a55de46280',
-                'desa_kelurahan_id' => 7210080002,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            87 => 
-            array (
-                'id' => 88,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b6f397f1-45a8-402f-a042-7e5b20a8d61a',
-                'desa_kelurahan_id' => 7210080004,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            88 => 
-            array (
-                'id' => 89,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f02aa060-f866-4f8a-9dee-c3d6fe562af9',
-                'desa_kelurahan_id' => 7210080005,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            89 => 
-            array (
-                'id' => 90,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9332050e-496c-4b39-b410-09cba36cd80f',
-                'desa_kelurahan_id' => 7210080007,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            90 => 
-            array (
-                'id' => 91,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5c235a19-8cb9-42ca-a98e-3ed25fe50ca7',
-                'desa_kelurahan_id' => 7210080008,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            91 => 
-            array (
-                'id' => 92,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0b191bdb-95bb-4dbf-9929-1ac542844e1d',
-                'desa_kelurahan_id' => 7210080009,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            92 => 
-            array (
-                'id' => 93,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f398f721-f8bf-4967-aa53-890f17109cec',
-                'desa_kelurahan_id' => 7210080010,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            93 => 
-            array (
-                'id' => 94,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9dc3b4a2-77b7-4b44-a28e-b71430279fcc',
-                'desa_kelurahan_id' => 7210080011,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            94 => 
-            array (
-                'id' => 95,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '95c38814-db67-4d1a-9db9-33f83a151e3b',
-                'desa_kelurahan_id' => 7210080012,
-                'kecamatan_id' => 7210080,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            95 => 
-            array (
-                'id' => 96,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '829789a0-44c9-4a86-959c-51afd002d31b',
-                'desa_kelurahan_id' => 7210090001,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            96 => 
-            array (
-                'id' => 97,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9de0e78a-4271-40c1-a6f5-58b6f48b1d6c',
-                'desa_kelurahan_id' => 7210090002,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            97 => 
-            array (
-                'id' => 98,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0798aa41-1dc7-49b3-a156-37aa1e35724a',
-                'desa_kelurahan_id' => 7210090003,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            98 => 
-            array (
-                'id' => 99,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '49d8b712-de2c-4c86-b103-72ea583ee7f9',
-                'desa_kelurahan_id' => 7210090004,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            99 => 
-            array (
-                'id' => 100,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b9be6069-1e22-4603-a8eb-f272de1e86a9',
-                'desa_kelurahan_id' => 7210090005,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            100 => 
-            array (
-                'id' => 101,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '24cd585a-aa00-4ad2-a3ca-c7c9b31e5fe1',
-                'desa_kelurahan_id' => 7210090006,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            101 => 
-            array (
-                'id' => 102,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c81f1994-61e4-4c59-a320-65fdd2efc4d2',
-                'desa_kelurahan_id' => 7210090007,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            102 => 
-            array (
-                'id' => 103,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '168ff144-d938-4776-bf42-c63aa250059d',
-                'desa_kelurahan_id' => 7210090009,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            103 => 
-            array (
-                'id' => 104,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '79ccb57d-c0bd-4e1a-abb2-a4e2e2566a0c',
-                'desa_kelurahan_id' => 7210090010,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            104 => 
-            array (
-                'id' => 105,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'a929bc33-15f8-46bd-a57e-566eeedbf858',
-                'desa_kelurahan_id' => 7210090012,
-                'kecamatan_id' => 7210090,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            105 => 
-            array (
-                'id' => 106,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '273fdef4-d013-4006-bc2f-8a8c441d7282',
-                'desa_kelurahan_id' => 7210100001,
-                'kecamatan_id' => 7210100,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            106 => 
-            array (
-                'id' => 107,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '2ce1715f-a1fa-4eec-ab48-2115a1761558',
-                'desa_kelurahan_id' => 7210100002,
-                'kecamatan_id' => 7210100,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            107 => 
-            array (
-                'id' => 108,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '4461e76c-d816-4060-b6dc-d0fd102d9aea',
-                'desa_kelurahan_id' => 7210100003,
-                'kecamatan_id' => 7210100,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            108 => 
-            array (
-                'id' => 109,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '8897949f-4eb4-456b-be45-8caaebb7a17c',
-                'desa_kelurahan_id' => 7210100004,
-                'kecamatan_id' => 7210100,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            109 => 
-            array (
-                'id' => 110,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f8642896-fdf9-44dc-9496-6f2396294195',
-                'desa_kelurahan_id' => 7210100005,
-                'kecamatan_id' => 7210100,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            110 => 
-            array (
-                'id' => 111,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0ecb1ed2-23a7-448a-975b-192412b0f972',
-                'desa_kelurahan_id' => 7210110001,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            111 => 
-            array (
-                'id' => 112,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '17a8f179-0887-417a-a1a0-1eb34d4dc951',
-                'desa_kelurahan_id' => 7210110002,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            112 => 
-            array (
-                'id' => 113,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'fd8f11d5-f17a-49d3-898f-f886f2ad00ac',
-                'desa_kelurahan_id' => 7210110003,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            113 => 
-            array (
-                'id' => 114,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '697fc373-290d-4e90-9449-59df9a77254b',
-                'desa_kelurahan_id' => 7210110004,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            114 => 
-            array (
-                'id' => 115,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5df1ff76-f33d-48cd-8ae9-394993225145',
-                'desa_kelurahan_id' => 7210110005,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            115 => 
-            array (
-                'id' => 116,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0a0290e3-a060-4dad-aec3-0f4493a9f1e4',
-                'desa_kelurahan_id' => 7210110006,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            116 => 
-            array (
-                'id' => 117,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '6bcc3fe3-d854-49b0-982d-49e4f5e0b420',
-                'desa_kelurahan_id' => 7210110007,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            117 => 
-            array (
-                'id' => 118,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '73ff8948-80a8-4a13-9003-e05c91b02ed6',
-                'desa_kelurahan_id' => 7210110008,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            118 => 
-            array (
-                'id' => 119,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f0a27f77-71aa-413a-a735-f1288584d258',
-                'desa_kelurahan_id' => 7210110009,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            119 => 
-            array (
-                'id' => 120,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9dda5f57-a5fa-46b6-9147-c834886d4525',
-                'desa_kelurahan_id' => 7210110010,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            120 => 
-            array (
-                'id' => 121,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'bf4ded4e-1f75-4b93-a7cb-87ae3e01b7da',
-                'desa_kelurahan_id' => 7210110011,
-                'kecamatan_id' => 7210110,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            121 => 
-            array (
-                'id' => 122,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '2e9175d0-6c60-4036-8680-ee96abeb5a29',
-                'desa_kelurahan_id' => 7210120001,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            122 => 
-            array (
-                'id' => 123,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '93f9c9a5-5b2f-4be5-9f7f-f3c127b038b1',
-                'desa_kelurahan_id' => 7210120002,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            123 => 
-            array (
-                'id' => 124,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '62bc0afe-13da-4d59-8c9e-42690662f697',
-                'desa_kelurahan_id' => 7210120003,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            124 => 
-            array (
-                'id' => 125,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '73d6b70d-562e-44e2-a328-d21b0c561677',
+
+        \DB::table('lokasi_tugas')->insert(array(
+            0 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120002',
                 'desa_kelurahan_id' => 7210120004,
                 'kecamatan_id' => 7210120,
                 'kabupaten_kota_id' => 7210,
                 'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => NULL,
             ),
-            125 => 
-            array (
-                'id' => 126,
+            1 =>
+            array(
                 'jenis_profil' => 'bidan',
-                'profil_id' => '19bcbd3a-3fc7-4f90-ad56-c6e8df0edbba',
-                'desa_kelurahan_id' => 7210120005,
-                'kecamatan_id' => 7210120,
+                'profil_id' => '9b6120ac-c4a1-11ec-9d64-0242ac120003',
+                'desa_kelurahan_id' => 7210110011,
+                'kecamatan_id' => 7210110,
                 'kabupaten_kota_id' => 7210,
                 'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => NULL,
             ),
-            126 => 
-            array (
-                'id' => 127,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd32a3662-bb23-4108-8109-4ae0efb3aa4f',
-                'desa_kelurahan_id' => 7210120006,
-                'kecamatan_id' => 7210120,
+            2 =>
+            array(
+                'jenis_profil' => 'penyuluh',
+                'profil_id' => '13c1ca42-c4a7-11ec-9d64-0242ac120002',
+                'desa_kelurahan_id' => 7210110011,
+                'kecamatan_id' => 7210110,
                 'kabupaten_kota_id' => 7210,
                 'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => NULL,
             ),
-            127 => 
-            array (
-                'id' => 128,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '0a560a16-dcfd-45ea-8921-55f6ac904bfe',
-                'desa_kelurahan_id' => 7210120007,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            128 => 
-            array (
-                'id' => 129,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5203afbc-c147-498e-9756-d88ddc5697e7',
-                'desa_kelurahan_id' => 7210120008,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            129 => 
-            array (
-                'id' => 130,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'a56fddde-a8d7-402f-ad18-88f7393ef932',
-                'desa_kelurahan_id' => 7210120009,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            130 => 
-            array (
-                'id' => 131,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9c17db46-98ca-4284-a277-5ebf17ccebae',
-                'desa_kelurahan_id' => 7210120010,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            131 => 
-            array (
-                'id' => 132,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c6bb17c3-af3a-4195-8764-12aaaf29e154',
-                'desa_kelurahan_id' => 7210120011,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            132 => 
-            array (
-                'id' => 133,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c2137961-59a4-45b6-a7a2-4b0cfb1ef30a',
-                'desa_kelurahan_id' => 7210120012,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            133 => 
-            array (
-                'id' => 134,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '326dad9f-cc00-4820-8f97-94156e06bb8d',
-                'desa_kelurahan_id' => 7210120013,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            134 => 
-            array (
-                'id' => 135,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '36de2c5a-e4e1-4620-8457-abeba0e82371',
-                'desa_kelurahan_id' => 7210120014,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            135 => 
-            array (
-                'id' => 136,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '69d8c4b9-1233-4711-8c5b-c1350b3ddb6b',
-                'desa_kelurahan_id' => 7210120015,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            136 => 
-            array (
-                'id' => 137,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '51aa4554-39b7-45f5-90fe-13452997bc0f',
-                'desa_kelurahan_id' => 7210120016,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            137 => 
-            array (
-                'id' => 138,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '5b30beeb-2ba5-4d8c-a780-462fdf5eee56',
-                'desa_kelurahan_id' => 7210120017,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            138 => 
-            array (
-                'id' => 139,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'acac0065-c5d6-446f-afe2-bc11d59ef25b',
-                'desa_kelurahan_id' => 7210120018,
-                'kecamatan_id' => 7210120,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            139 => 
-            array (
-                'id' => 140,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '208e0389-48b7-4ab5-8187-44dff2b7e7e7',
-                'desa_kelurahan_id' => 7210130001,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            140 => 
-            array (
-                'id' => 141,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '510edbfd-31a5-4d2f-945e-7268210fd591',
-                'desa_kelurahan_id' => 7210130002,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            141 => 
-            array (
-                'id' => 142,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '38ca7882-142f-484c-9a23-a5cc7b2d8b1d',
-                'desa_kelurahan_id' => 7210130003,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            142 => 
-            array (
-                'id' => 143,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b80a6bff-9754-4bba-95f5-5906ad6e3d21',
-                'desa_kelurahan_id' => 7210130004,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            143 => 
-            array (
-                'id' => 144,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd183e0ea-739f-480e-899d-98002b6538b7',
-                'desa_kelurahan_id' => 7210130005,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            144 => 
-            array (
-                'id' => 145,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '2cd17f43-730e-4038-b19a-63b0e99ff653',
-                'desa_kelurahan_id' => 7210130006,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            145 => 
-            array (
-                'id' => 146,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f73461e9-c220-4c83-b984-1f436e0b0a66',
-                'desa_kelurahan_id' => 7210130008,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            146 => 
-            array (
-                'id' => 147,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f54ba045-8521-4b07-9fdd-a7d82b784aff',
-                'desa_kelurahan_id' => 7210130009,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            147 => 
-            array (
-                'id' => 148,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '72761de2-2f1b-49aa-8c0e-f924d68fc08b',
-                'desa_kelurahan_id' => 7210130010,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            148 => 
-            array (
-                'id' => 149,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '3f990f56-4ec2-4a28-b1a2-36a566f425b9',
-                'desa_kelurahan_id' => 7210130011,
-                'kecamatan_id' => 7210130,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            149 => 
-            array (
-                'id' => 150,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9918e1af-3ce9-49a8-8dd9-6ea7dbcec92b',
-                'desa_kelurahan_id' => 7210140001,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            150 => 
-            array (
-                'id' => 151,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c64f79f0-c6ea-4824-b28b-753cee2dac0c',
-                'desa_kelurahan_id' => 7210140002,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            151 => 
-            array (
-                'id' => 152,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '6707aebd-fac0-41fb-84c7-996e7d3f071b',
-                'desa_kelurahan_id' => 7210140003,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            152 => 
-            array (
-                'id' => 153,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'edac6060-c274-46b2-98bd-d23e6741bd2d',
-                'desa_kelurahan_id' => 7210140004,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            153 => 
-            array (
-                'id' => 154,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '4b498d17-3f27-4d95-90bf-bce7576fbb2f',
-                'desa_kelurahan_id' => 7210140005,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            154 => 
-            array (
-                'id' => 155,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'c366b3b1-f0a8-4c47-b5e5-ce9ff2576064',
-                'desa_kelurahan_id' => 7210140006,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            155 => 
-            array (
-                'id' => 156,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '8d3d66a0-b516-4e8a-813f-38e711cb34a8',
-                'desa_kelurahan_id' => 7210140007,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            156 => 
-            array (
-                'id' => 157,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '93f29dd5-60e7-4f38-bfa9-ba2d39638760',
-                'desa_kelurahan_id' => 7210140008,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            157 => 
-            array (
-                'id' => 158,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '9d425e11-cb48-4587-b40d-4b3b76f2c429',
-                'desa_kelurahan_id' => 7210140009,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            158 => 
-            array (
-                'id' => 159,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b01c5182-f1d5-47ba-a1d0-7515d49366f3',
-                'desa_kelurahan_id' => 7210140010,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            159 => 
-            array (
-                'id' => 160,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b2578093-34ad-43f2-8394-59ba77ee1b18',
-                'desa_kelurahan_id' => 7210140011,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            160 => 
-            array (
-                'id' => 161,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'e63e36af-50b6-42c7-921f-55fe6be725fd',
-                'desa_kelurahan_id' => 7210140012,
-                'kecamatan_id' => 7210140,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            161 => 
-            array (
-                'id' => 162,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'b58cdae3-66d4-4235-9c04-0942d569593f',
-                'desa_kelurahan_id' => 7210150001,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            162 => 
-            array (
-                'id' => 163,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'bb8dec68-be70-4b54-98f8-5ebf7acccdcd',
-                'desa_kelurahan_id' => 7210150002,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            163 => 
-            array (
-                'id' => 164,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '91bd09f5-af4a-4e52-abba-32281f97cd4c',
-                'desa_kelurahan_id' => 7210150003,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            164 => 
-            array (
-                'id' => 165,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '7e0406dc-c50e-4195-800f-88e1f786d966',
-                'desa_kelurahan_id' => 7210150004,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            165 => 
-            array (
-                'id' => 166,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '6206c81f-5ca1-4984-8a67-103735e5be43',
-                'desa_kelurahan_id' => 7210150005,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            166 => 
-            array (
-                'id' => 167,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'f6770623-c946-4d45-a16a-e8f1476a415e',
-                'desa_kelurahan_id' => 7210150006,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            167 => 
-            array (
-                'id' => 168,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '96cc639c-3c72-406b-a6a7-263aa467059d',
-                'desa_kelurahan_id' => 7210150007,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            168 => 
-            array (
-                'id' => 169,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '63daf73e-5dc7-4653-87fb-0cd7f634f776',
-                'desa_kelurahan_id' => 7210150008,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            169 => 
-            array (
-                'id' => 170,
-                'jenis_profil' => 'bidan',
-                'profil_id' => 'd8d3e1a7-b58f-4ba2-81cf-d7afce80e545',
-                'desa_kelurahan_id' => 7210150009,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            170 => 
-            array (
-                'id' => 171,
-                'jenis_profil' => 'bidan',
-                'profil_id' => '78e862e1-8937-4476-9f31-2373dd7f1549',
-                'desa_kelurahan_id' => 7210150010,
-                'kecamatan_id' => 7210150,
-                'kabupaten_kota_id' => 7210,
-                'provinsi_id' => 72,
-                'created_at' => '2022-10-25 12:48:12',
-                'updated_at' => '2022-10-25 12:48:12',
-            ),
-            171 => 
-            array (
-                'id' => 172,
+            3 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'be202f7d-aa9d-4593-874a-eb38c6a53659',
                 'desa_kelurahan_id' => 7205080022,
@@ -2083,9 +63,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:08:27',
                 'updated_at' => '2022-10-25 14:08:27',
             ),
-            172 => 
-            array (
-                'id' => 173,
+            4 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'be202f7d-aa9d-4593-874a-eb38c6a53659',
                 'desa_kelurahan_id' => 7205080025,
@@ -2095,9 +74,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:08:27',
                 'updated_at' => '2022-10-25 14:08:27',
             ),
-            173 => 
-            array (
-                'id' => 174,
+            5 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'be202f7d-aa9d-4593-874a-eb38c6a53659',
                 'desa_kelurahan_id' => 7205080024,
@@ -2107,9 +85,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:08:27',
                 'updated_at' => '2022-10-25 14:08:27',
             ),
-            174 => 
-            array (
-                'id' => 175,
+            6 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'be202f7d-aa9d-4593-874a-eb38c6a53659',
                 'desa_kelurahan_id' => 7205080026,
@@ -2119,9 +96,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:08:27',
                 'updated_at' => '2022-10-25 14:08:27',
             ),
-            175 => 
-            array (
-                'id' => 176,
+            7 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '01ddd2c1-bdfc-4389-9450-a76200f1ebba',
                 'desa_kelurahan_id' => 7205080020,
@@ -2131,9 +107,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:10:04',
                 'updated_at' => '2022-10-25 14:10:04',
             ),
-            176 => 
-            array (
-                'id' => 177,
+            8 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '01ddd2c1-bdfc-4389-9450-a76200f1ebba',
                 'desa_kelurahan_id' => 7205080023,
@@ -2143,9 +118,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:10:04',
                 'updated_at' => '2022-10-25 14:10:04',
             ),
-            177 => 
-            array (
-                'id' => 178,
+            9 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '01ddd2c1-bdfc-4389-9450-a76200f1ebba',
                 'desa_kelurahan_id' => 7205080014,
@@ -2155,9 +129,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:10:04',
                 'updated_at' => '2022-10-25 14:10:04',
             ),
-            178 => 
-            array (
-                'id' => 179,
+            10 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7873119a-d7ff-4734-9136-b2952d7afed0',
                 'desa_kelurahan_id' => 7205080013,
@@ -2167,9 +140,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:11:06',
                 'updated_at' => '2022-10-25 14:11:06',
             ),
-            179 => 
-            array (
-                'id' => 180,
+            11 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7873119a-d7ff-4734-9136-b2952d7afed0',
                 'desa_kelurahan_id' => 7205080029,
@@ -2179,9 +151,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:11:06',
                 'updated_at' => '2022-10-25 14:11:06',
             ),
-            180 => 
-            array (
-                'id' => 181,
+            12 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7873119a-d7ff-4734-9136-b2952d7afed0',
                 'desa_kelurahan_id' => 7205080031,
@@ -2191,9 +162,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:11:06',
                 'updated_at' => '2022-10-25 14:11:06',
             ),
-            181 => 
-            array (
-                'id' => 182,
+            13 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '429ab196-d740-4d5f-92fd-1901a4ec49aa',
                 'desa_kelurahan_id' => 7205080030,
@@ -2203,9 +173,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:12:02',
                 'updated_at' => '2022-10-25 14:12:02',
             ),
-            182 => 
-            array (
-                'id' => 183,
+            14 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '429ab196-d740-4d5f-92fd-1901a4ec49aa',
                 'desa_kelurahan_id' => 7205082006,
@@ -2215,9 +184,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:12:02',
                 'updated_at' => '2022-10-25 14:12:02',
             ),
-            183 => 
-            array (
-                'id' => 184,
+            15 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '429ab196-d740-4d5f-92fd-1901a4ec49aa',
                 'desa_kelurahan_id' => 7205081008,
@@ -2227,9 +195,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:12:02',
                 'updated_at' => '2022-10-25 14:12:02',
             ),
-            184 => 
-            array (
-                'id' => 185,
+            16 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '25d7f1f5-31a4-487c-99a5-b81a041555d2',
                 'desa_kelurahan_id' => 7205081016,
@@ -2239,9 +206,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:13:18',
                 'updated_at' => '2022-10-25 14:13:18',
             ),
-            185 => 
-            array (
-                'id' => 186,
+            17 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '25d7f1f5-31a4-487c-99a5-b81a041555d2',
                 'desa_kelurahan_id' => 7205081017,
@@ -2251,9 +217,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:13:18',
                 'updated_at' => '2022-10-25 14:13:18',
             ),
-            186 => 
-            array (
-                'id' => 187,
+            18 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '25d7f1f5-31a4-487c-99a5-b81a041555d2',
                 'desa_kelurahan_id' => 7205081013,
@@ -2263,9 +228,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:13:18',
                 'updated_at' => '2022-10-25 14:13:18',
             ),
-            187 => 
-            array (
-                'id' => 188,
+            19 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'e6d007f7-29aa-4aa7-84ec-79ed31e8aecc',
                 'desa_kelurahan_id' => 7205081011,
@@ -2275,9 +239,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:14:27',
                 'updated_at' => '2022-10-25 14:14:27',
             ),
-            188 => 
-            array (
-                'id' => 189,
+            20 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'e6d007f7-29aa-4aa7-84ec-79ed31e8aecc',
                 'desa_kelurahan_id' => 7205041010,
@@ -2287,9 +250,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:14:27',
                 'updated_at' => '2022-10-25 14:14:27',
             ),
-            189 => 
-            array (
-                'id' => 190,
+            21 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'e6d007f7-29aa-4aa7-84ec-79ed31e8aecc',
                 'desa_kelurahan_id' => 7205041014,
@@ -2299,9 +261,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:14:27',
                 'updated_at' => '2022-10-25 14:14:27',
             ),
-            190 => 
-            array (
-                'id' => 191,
+            22 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '173d4662-8760-4997-a649-2801d694e204',
                 'desa_kelurahan_id' => 7205130012,
@@ -2311,9 +272,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:15:27',
                 'updated_at' => '2022-10-25 14:15:27',
             ),
-            191 => 
-            array (
-                'id' => 192,
+            23 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '173d4662-8760-4997-a649-2801d694e204',
                 'desa_kelurahan_id' => 7205130018,
@@ -2323,9 +283,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:15:27',
                 'updated_at' => '2022-10-25 14:15:27',
             ),
-            192 => 
-            array (
-                'id' => 193,
+            24 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '173d4662-8760-4997-a649-2801d694e204',
                 'desa_kelurahan_id' => 7205130011,
@@ -2335,9 +294,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:15:27',
                 'updated_at' => '2022-10-25 14:15:27',
             ),
-            193 => 
-            array (
-                'id' => 194,
+            25 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'c0b05ac9-f12b-460d-8bda-86922b4e78d9',
                 'desa_kelurahan_id' => 7205130020,
@@ -2347,9 +305,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:17:10',
                 'updated_at' => '2022-10-25 14:17:10',
             ),
-            194 => 
-            array (
-                'id' => 195,
+            26 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'c0b05ac9-f12b-460d-8bda-86922b4e78d9',
                 'desa_kelurahan_id' => 7205130015,
@@ -2359,9 +316,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:17:10',
                 'updated_at' => '2022-10-25 14:17:10',
             ),
-            195 => 
-            array (
-                'id' => 196,
+            27 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'c0b05ac9-f12b-460d-8bda-86922b4e78d9',
                 'desa_kelurahan_id' => 7205130013,
@@ -2371,9 +327,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:17:10',
                 'updated_at' => '2022-10-25 14:17:10',
             ),
-            196 => 
-            array (
-                'id' => 197,
+            28 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'c0b05ac9-f12b-460d-8bda-86922b4e78d9',
                 'desa_kelurahan_id' => 7205130019,
@@ -2383,9 +338,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:17:10',
                 'updated_at' => '2022-10-25 14:17:10',
             ),
-            197 => 
-            array (
-                'id' => 198,
+            29 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'fe73212c-4852-4525-96e6-cdbe3410d7cc',
                 'desa_kelurahan_id' => 7205130008,
@@ -2395,9 +349,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:19:07',
                 'updated_at' => '2022-10-25 14:19:07',
             ),
-            198 => 
-            array (
-                'id' => 199,
+            30 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'fe73212c-4852-4525-96e6-cdbe3410d7cc',
                 'desa_kelurahan_id' => 7205130001,
@@ -2407,9 +360,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:19:07',
                 'updated_at' => '2022-10-25 14:19:07',
             ),
-            199 => 
-            array (
-                'id' => 200,
+            31 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'fe73212c-4852-4525-96e6-cdbe3410d7cc',
                 'desa_kelurahan_id' => 7205130009,
@@ -2419,9 +371,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:19:07',
                 'updated_at' => '2022-10-25 14:19:07',
             ),
-            200 => 
-            array (
-                'id' => 201,
+            32 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'af663b0a-60a9-4be4-a7a0-572e8a1c0e61',
                 'desa_kelurahan_id' => 7205130016,
@@ -2431,9 +382,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:19:50',
                 'updated_at' => '2022-10-25 14:19:50',
             ),
-            201 => 
-            array (
-                'id' => 202,
+            33 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'af663b0a-60a9-4be4-a7a0-572e8a1c0e61',
                 'desa_kelurahan_id' => 7205130010,
@@ -2443,9 +393,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:19:50',
                 'updated_at' => '2022-10-25 14:19:50',
             ),
-            202 => 
-            array (
-                'id' => 203,
+            34 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'af663b0a-60a9-4be4-a7a0-572e8a1c0e61',
                 'desa_kelurahan_id' => 7205130017,
@@ -2455,9 +404,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:19:50',
                 'updated_at' => '2022-10-25 14:19:50',
             ),
-            203 => 
-            array (
-                'id' => 204,
+            35 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '6d9374a0-fa71-41c6-ab6d-fcbe8b725531',
                 'desa_kelurahan_id' => 7205131003,
@@ -2467,9 +415,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:20:46',
                 'updated_at' => '2022-10-25 14:20:46',
             ),
-            204 => 
-            array (
-                'id' => 205,
+            36 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '6d9374a0-fa71-41c6-ab6d-fcbe8b725531',
                 'desa_kelurahan_id' => 7205131002,
@@ -2479,9 +426,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:20:46',
                 'updated_at' => '2022-10-25 14:20:46',
             ),
-            205 => 
-            array (
-                'id' => 206,
+            37 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '6d9374a0-fa71-41c6-ab6d-fcbe8b725531',
                 'desa_kelurahan_id' => 7205131001,
@@ -2491,9 +437,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:20:46',
                 'updated_at' => '2022-10-25 14:20:46',
             ),
-            206 => 
-            array (
-                'id' => 207,
+            38 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'bc643925-db76-4657-af17-88121eec3b3c',
                 'desa_kelurahan_id' => 7205140002,
@@ -2503,9 +448,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:21:38',
                 'updated_at' => '2022-10-25 14:21:38',
             ),
-            207 => 
-            array (
-                'id' => 208,
+            39 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'bc643925-db76-4657-af17-88121eec3b3c',
                 'desa_kelurahan_id' => 7205140006,
@@ -2515,9 +459,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:21:38',
                 'updated_at' => '2022-10-25 14:21:38',
             ),
-            208 => 
-            array (
-                'id' => 209,
+            40 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'bc643925-db76-4657-af17-88121eec3b3c',
                 'desa_kelurahan_id' => 7205140012,
@@ -2527,9 +470,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:21:38',
                 'updated_at' => '2022-10-25 14:21:38',
             ),
-            209 => 
-            array (
-                'id' => 210,
+            41 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7d66f36f-164b-42b0-96db-d57cdeb3edba',
                 'desa_kelurahan_id' => 7205140011,
@@ -2539,9 +481,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:22:59',
                 'updated_at' => '2022-10-25 14:22:59',
             ),
-            210 => 
-            array (
-                'id' => 211,
+            42 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7d66f36f-164b-42b0-96db-d57cdeb3edba',
                 'desa_kelurahan_id' => 7205140014,
@@ -2551,9 +492,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:22:59',
                 'updated_at' => '2022-10-25 14:22:59',
             ),
-            211 => 
-            array (
-                'id' => 212,
+            43 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7d66f36f-164b-42b0-96db-d57cdeb3edba',
                 'desa_kelurahan_id' => 7205140010,
@@ -2563,9 +503,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:22:59',
                 'updated_at' => '2022-10-25 14:22:59',
             ),
-            212 => 
-            array (
-                'id' => 213,
+            44 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '8d3d567f-2bfe-40ff-9e8e-2cad29a122fc',
                 'desa_kelurahan_id' => 7205140009,
@@ -2575,9 +514,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:25:06',
                 'updated_at' => '2022-10-25 14:25:06',
             ),
-            213 => 
-            array (
-                'id' => 214,
+            45 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '8d3d567f-2bfe-40ff-9e8e-2cad29a122fc',
                 'desa_kelurahan_id' => 7205140007,
@@ -2587,9 +525,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:25:06',
                 'updated_at' => '2022-10-25 14:25:06',
             ),
-            214 => 
-            array (
-                'id' => 215,
+            46 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '8d3d567f-2bfe-40ff-9e8e-2cad29a122fc',
                 'desa_kelurahan_id' => 7205140008,
@@ -2599,9 +536,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:25:06',
                 'updated_at' => '2022-10-25 14:25:06',
             ),
-            215 => 
-            array (
-                'id' => 216,
+            47 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '8d3d567f-2bfe-40ff-9e8e-2cad29a122fc',
                 'desa_kelurahan_id' => 7205140005,
@@ -2611,9 +547,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:25:06',
                 'updated_at' => '2022-10-25 14:25:06',
             ),
-            216 => 
-            array (
-                'id' => 217,
+            48 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'd898661a-f66f-4dd8-9a6b-b9cceaa7931a',
                 'desa_kelurahan_id' => 7205140001,
@@ -2623,9 +558,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:26:06',
                 'updated_at' => '2022-10-25 14:26:06',
             ),
-            217 => 
-            array (
-                'id' => 218,
+            49 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'd898661a-f66f-4dd8-9a6b-b9cceaa7931a',
                 'desa_kelurahan_id' => 7205140004,
@@ -2635,9 +569,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:26:06',
                 'updated_at' => '2022-10-25 14:26:06',
             ),
-            218 => 
-            array (
-                'id' => 219,
+            50 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'd898661a-f66f-4dd8-9a6b-b9cceaa7931a',
                 'desa_kelurahan_id' => 7205140003,
@@ -2647,9 +580,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:26:06',
                 'updated_at' => '2022-10-25 14:26:06',
             ),
-            219 => 
-            array (
-                'id' => 220,
+            51 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7520d430-b711-408b-bb3c-a495f7bb7474',
                 'desa_kelurahan_id' => 7205120001,
@@ -2659,9 +591,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:32:31',
                 'updated_at' => '2022-10-25 14:32:31',
             ),
-            220 => 
-            array (
-                'id' => 221,
+            52 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7520d430-b711-408b-bb3c-a495f7bb7474',
                 'desa_kelurahan_id' => 7205120014,
@@ -2671,9 +602,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:32:32',
                 'updated_at' => '2022-10-25 14:32:32',
             ),
-            221 => 
-            array (
-                'id' => 222,
+            53 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '7520d430-b711-408b-bb3c-a495f7bb7474',
                 'desa_kelurahan_id' => 7205120002,
@@ -2683,9 +613,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:32:32',
                 'updated_at' => '2022-10-25 14:32:32',
             ),
-            222 => 
-            array (
-                'id' => 223,
+            54 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '50d8b84e-1265-48e9-b0a0-b3c38e7b5d67',
                 'desa_kelurahan_id' => 7205120004,
@@ -2695,9 +624,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:36:10',
                 'updated_at' => '2022-10-25 14:36:10',
             ),
-            223 => 
-            array (
-                'id' => 224,
+            55 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '50d8b84e-1265-48e9-b0a0-b3c38e7b5d67',
                 'desa_kelurahan_id' => 7205120003,
@@ -2707,9 +635,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:36:10',
                 'updated_at' => '2022-10-25 14:36:10',
             ),
-            224 => 
-            array (
-                'id' => 225,
+            56 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '50d8b84e-1265-48e9-b0a0-b3c38e7b5d67',
                 'desa_kelurahan_id' => 7205120006,
@@ -2719,9 +646,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:36:10',
                 'updated_at' => '2022-10-25 14:36:10',
             ),
-            225 => 
-            array (
-                'id' => 226,
+            57 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '4fd50918-5d10-4f35-a78c-d4fd29bf7fce',
                 'desa_kelurahan_id' => 7205120007,
@@ -2731,9 +657,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:40:46',
                 'updated_at' => '2022-10-25 14:40:46',
             ),
-            226 => 
-            array (
-                'id' => 227,
+            58 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '4fd50918-5d10-4f35-a78c-d4fd29bf7fce',
                 'desa_kelurahan_id' => 9471040010,
@@ -2743,9 +668,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:40:46',
                 'updated_at' => '2022-10-25 14:40:46',
             ),
-            227 => 
-            array (
-                'id' => 228,
+            59 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '4fd50918-5d10-4f35-a78c-d4fd29bf7fce',
                 'desa_kelurahan_id' => 7205100006,
@@ -2755,9 +679,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:40:46',
                 'updated_at' => '2022-10-25 14:40:46',
             ),
-            228 => 
-            array (
-                'id' => 229,
+            60 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'c6212c70-5f76-4c98-b1e4-593b9faf370c',
                 'desa_kelurahan_id' => 7205120008,
@@ -2767,9 +690,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:41:46',
                 'updated_at' => '2022-10-25 14:41:46',
             ),
-            229 => 
-            array (
-                'id' => 230,
+            61 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'c6212c70-5f76-4c98-b1e4-593b9faf370c',
                 'desa_kelurahan_id' => 7205091005,
@@ -2779,9 +701,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:41:46',
                 'updated_at' => '2022-10-25 14:41:46',
             ),
-            230 => 
-            array (
-                'id' => 231,
+            62 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => 'c6212c70-5f76-4c98-b1e4-593b9faf370c',
                 'desa_kelurahan_id' => 7205091006,
@@ -2791,9 +712,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:41:46',
                 'updated_at' => '2022-10-25 14:41:46',
             ),
-            231 => 
-            array (
-                'id' => 232,
+            63 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '64e7298a-b441-412c-8d0c-fb8cba9c5ccf',
                 'desa_kelurahan_id' => 7205120009,
@@ -2803,9 +723,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:43:31',
                 'updated_at' => '2022-10-25 14:43:31',
             ),
-            232 => 
-            array (
-                'id' => 233,
+            64 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '64e7298a-b441-412c-8d0c-fb8cba9c5ccf',
                 'desa_kelurahan_id' => 7205102004,
@@ -2815,9 +734,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:43:31',
                 'updated_at' => '2022-10-25 14:43:31',
             ),
-            233 => 
-            array (
-                'id' => 234,
+            65 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '64e7298a-b441-412c-8d0c-fb8cba9c5ccf',
                 'desa_kelurahan_id' => 7205101005,
@@ -2827,9 +745,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:43:31',
                 'updated_at' => '2022-10-25 14:43:31',
             ),
-            234 => 
-            array (
-                'id' => 235,
+            66 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '01f70bff-4f02-46be-99f7-ebddc41e1839',
                 'desa_kelurahan_id' => 7205120010,
@@ -2839,9 +756,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:44:27',
                 'updated_at' => '2022-10-25 14:44:27',
             ),
-            235 => 
-            array (
-                'id' => 236,
+            67 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '01f70bff-4f02-46be-99f7-ebddc41e1839',
                 'desa_kelurahan_id' => 7205120005,
@@ -2851,9 +767,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:44:27',
                 'updated_at' => '2022-10-25 14:44:27',
             ),
-            236 => 
-            array (
-                'id' => 237,
+            68 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '01f70bff-4f02-46be-99f7-ebddc41e1839',
                 'desa_kelurahan_id' => 7205090010,
@@ -2863,9 +778,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:44:27',
                 'updated_at' => '2022-10-25 14:44:27',
             ),
-            237 => 
-            array (
-                'id' => 238,
+            69 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '01f70bff-4f02-46be-99f7-ebddc41e1839',
                 'desa_kelurahan_id' => 7205091010,
@@ -2875,9 +789,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:44:27',
                 'updated_at' => '2022-10-25 14:44:27',
             ),
-            238 => 
-            array (
-                'id' => 239,
+            70 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '09792271-3b4f-42d5-8538-def81edcf4ef',
                 'desa_kelurahan_id' => 9471040011,
@@ -2887,9 +800,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:46:09',
                 'updated_at' => '2022-10-25 14:46:09',
             ),
-            239 => 
-            array (
-                'id' => 240,
+            71 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '09792271-3b4f-42d5-8538-def81edcf4ef',
                 'desa_kelurahan_id' => 7205120012,
@@ -2899,9 +811,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:46:09',
                 'updated_at' => '2022-10-25 14:46:09',
             ),
-            240 => 
-            array (
-                'id' => 241,
+            72 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '09792271-3b4f-42d5-8538-def81edcf4ef',
                 'desa_kelurahan_id' => 7205090012,
@@ -2911,9 +822,8 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:46:09',
                 'updated_at' => '2022-10-25 14:46:09',
             ),
-            241 => 
-            array (
-                'id' => 242,
+            73 =>
+            array(
                 'jenis_profil' => 'penyuluh',
                 'profil_id' => '09792271-3b4f-42d5-8538-def81edcf4ef',
                 'desa_kelurahan_id' => 7205090008,
@@ -2923,8 +833,1821 @@ class ProductionLokasiTugasTableSeeder extends Seeder
                 'created_at' => '2022-10-25 14:46:09',
                 'updated_at' => '2022-10-25 14:46:09',
             ),
+            74 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '030ccb46-ce8f-4e1f-8fa3-17c513729c36',
+                'desa_kelurahan_id' => 7205041001,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            75 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '0cfe9d5a-e038-4f18-8dc3-d90f705397cb',
+                'desa_kelurahan_id' => 7205041002,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            76 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b225277d-aebb-46ff-9c27-83a2b2f006d7',
+                'desa_kelurahan_id' => 7205041003,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            77 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '964615c4-5fbe-437d-b0d8-76c4c9aee6b2',
+                'desa_kelurahan_id' => 7205041004,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            78 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ce485050-a920-4787-aec8-48dbc2e860aa',
+                'desa_kelurahan_id' => 7205041005,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            79 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7ded0644-7c5d-4441-93c6-10d54237449a',
+                'desa_kelurahan_id' => 7205041006,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            80 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'afa2acc4-7223-4240-bd83-5d21259e2ff3',
+                'desa_kelurahan_id' => 7205041007,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            81 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '77b35823-2d11-4673-b6b6-bfb9f617dd79',
+                'desa_kelurahan_id' => 7205041008,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:20',
+                'updated_at' => '2022-10-26 15:18:20',
+            ),
+            82 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ef4bdcd0-9955-4df1-b5d0-3bf34c93899d',
+                'desa_kelurahan_id' => 7205041009,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            83 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '06fc4d09-8c21-49d3-b126-a2afea56e30f',
+                'desa_kelurahan_id' => 7205041010,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            84 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4e189c66-b9f3-4a73-abcb-8035d8b95906',
+                'desa_kelurahan_id' => 7205041011,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            85 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '571a6a13-8fa0-4e00-9fa0-5ba3b0e99110',
+                'desa_kelurahan_id' => 7205041012,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            86 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b959c42f-1a2b-471e-9aa9-b93a80b3874c',
+                'desa_kelurahan_id' => 7205041013,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            87 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4701e8c2-ac7c-4c04-b2b9-ccee8b4928fc',
+                'desa_kelurahan_id' => 7205041014,
+                'kecamatan_id' => 7205041,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            88 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '5d365496-4d08-4874-851a-85d4b2c45125',
+                'desa_kelurahan_id' => 7205051001,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            89 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '46d9591f-2456-466a-97dc-a84571cacd66',
+                'desa_kelurahan_id' => 7205051002,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            90 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b30031b8-efb3-4682-afde-f743bf791603',
+                'desa_kelurahan_id' => 7205051003,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            91 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '25ec0d8e-63ab-40d6-86a9-5f2cefa8c43c',
+                'desa_kelurahan_id' => 7205051004,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            92 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '83cf652b-2bbd-4542-a19d-38b7fdb8c890',
+                'desa_kelurahan_id' => 7205051005,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            93 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '103ff979-ccc3-4a44-86d1-e48d8170f5df',
+                'desa_kelurahan_id' => 7205051006,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            94 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '6b1ae6a1-31c5-41e8-9d68-7413a45a781f',
+                'desa_kelurahan_id' => 7205051007,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            95 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '80790554-017a-4bac-95e6-55ea4a22eb8a',
+                'desa_kelurahan_id' => 7205051008,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            96 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd46abd2c-e302-4f85-b33e-21d4e0f8c889',
+                'desa_kelurahan_id' => 7205051009,
+                'kecamatan_id' => 7205051,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            97 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '5e37251d-cef9-40d2-ae30-43547d41f3ea',
+                'desa_kelurahan_id' => 7205080013,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            98 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '076026b2-ff3b-44ec-b19d-bf982b41fdcc',
+                'desa_kelurahan_id' => 7205080014,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            99 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b8201a3b-3c9d-4489-9bdb-ee02ecb2a471',
+                'desa_kelurahan_id' => 7205080020,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            100 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '0d584fad-6672-4443-b17e-6771ac5c280f',
+                'desa_kelurahan_id' => 7205080021,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            101 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '73d1572d-3cfa-4dfe-8ab6-ebf1adad09e8',
+                'desa_kelurahan_id' => 7205080022,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            102 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '6b17d228-1875-4dd6-8f07-12d7059a2f19',
+                'desa_kelurahan_id' => 7205080023,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            103 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f8a0116f-8ac3-4737-ace2-0124565f9c31',
+                'desa_kelurahan_id' => 7205080024,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            104 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7cd6061a-6d53-4bef-856c-eb5c67800f34',
+                'desa_kelurahan_id' => 7205080025,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            105 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'a3c14760-b89e-45d2-9825-4955acb964aa',
+                'desa_kelurahan_id' => 7205080026,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            106 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4ac6042c-b2a6-471b-801e-ef2a4f55fca0',
+                'desa_kelurahan_id' => 7205080027,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            107 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'c0a47805-8154-442c-b4e9-99b78bceaf2f',
+                'desa_kelurahan_id' => 7205080028,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            108 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f77f2310-fcd9-410b-86db-f70cd0ad4053',
+                'desa_kelurahan_id' => 7205080029,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            109 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4b4500fb-8853-47f5-9f2f-4636fddd294c',
+                'desa_kelurahan_id' => 7205080030,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            110 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2328e059-f39e-4112-b4fc-38e2acd7b183',
+                'desa_kelurahan_id' => 7205080031,
+                'kecamatan_id' => 7205080,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            111 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '77643626-6b2b-429d-a5fa-8954c84ddfdf',
+                'desa_kelurahan_id' => 7205081002,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            112 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '119cf238-dc20-461d-95b8-959a7878d303',
+                'desa_kelurahan_id' => 7205081003,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            113 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '0034be7f-2d08-4b7c-9a40-5782e078977d',
+                'desa_kelurahan_id' => 7205081004,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            114 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2f63c1b5-35dd-4378-a9c3-ddfa45a2edd7',
+                'desa_kelurahan_id' => 7205081005,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            115 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ffc57def-2aea-45ae-b6c1-84e1d8b887b6',
+                'desa_kelurahan_id' => 7205081006,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            116 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '5f2e9779-b135-4446-a4a0-1fd99e14836d',
+                'desa_kelurahan_id' => 7205081007,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            117 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4e808667-16e0-464b-813f-bc3bf56938c1',
+                'desa_kelurahan_id' => 7205081008,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            118 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '0899c5c2-9b85-43fb-bbc4-44ddcae7f840',
+                'desa_kelurahan_id' => 7205081009,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            119 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '3469017e-6ce0-4538-a3d8-77f486bdd9b8',
+                'desa_kelurahan_id' => 7205081010,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            120 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'af527831-55ab-43a2-9079-48d6566c8f3b',
+                'desa_kelurahan_id' => 7205081011,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            121 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'acc203a3-67bb-4476-bdfc-a17568bab4a4',
+                'desa_kelurahan_id' => 7205081012,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            122 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '259d2272-a7a8-4b19-8793-3350bd66eaf2',
+                'desa_kelurahan_id' => 7205081013,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            123 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd4bb01ac-7d35-47b0-92f4-11bd3098bc1c',
+                'desa_kelurahan_id' => 7205081014,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            124 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f5e4be70-7076-4914-9021-35dd7052bf69',
+                'desa_kelurahan_id' => 7205081015,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            125 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'a9e6b790-1ec5-45a5-83c2-de51339bd8fc',
+                'desa_kelurahan_id' => 7205081016,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            126 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2b2f720d-3315-47ef-b8ff-5bf58da3e9be',
+                'desa_kelurahan_id' => 7205081017,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            127 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '096b9fa7-b230-403c-a91c-37982d37f406',
+                'desa_kelurahan_id' => 7205081018,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            128 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ef71e02d-6201-4117-a587-a2b09088d317',
+                'desa_kelurahan_id' => 7205081019,
+                'kecamatan_id' => 7205081,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            129 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'c5db94a7-547d-4078-bc54-b92de29d921d',
+                'desa_kelurahan_id' => 7205082001,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            130 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'eb7e58c4-318f-4cd0-b9f1-9b697fd0a453',
+                'desa_kelurahan_id' => 7205082002,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            131 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2981c413-5bfd-4109-980f-aca03accaf47',
+                'desa_kelurahan_id' => 7205082003,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            132 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '0df356d6-963d-432f-9564-97adec7f8199',
+                'desa_kelurahan_id' => 7205082004,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            133 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ede48298-cb41-4441-af3f-4f3676722c37',
+                'desa_kelurahan_id' => 7205082005,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            134 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '1f584fc6-b778-45da-ba01-e83d58e12c38',
+                'desa_kelurahan_id' => 7205082006,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            135 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4e955304-e905-4d68-8eb6-8244960f1efb',
+                'desa_kelurahan_id' => 7205082007,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            136 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ed0c44f0-2c87-4e92-b4d1-69d8a2d20dd8',
+                'desa_kelurahan_id' => 7205082008,
+                'kecamatan_id' => 7205082,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            137 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '46fe924b-dc2b-467c-adee-bac6a0aac0c2',
+                'desa_kelurahan_id' => 7205090007,
+                'kecamatan_id' => 7205090,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            138 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '0a227a28-d661-456e-9d6a-cc4056e14a57',
+                'desa_kelurahan_id' => 7205090008,
+                'kecamatan_id' => 7205090,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            139 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '3c6ca5c3-5f73-4648-a990-bfca2c23db16',
+                'desa_kelurahan_id' => 7205090009,
+                'kecamatan_id' => 7205090,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            140 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '59443fc2-c9fb-4884-9b42-0c88bd93cca3',
+                'desa_kelurahan_id' => 7205090010,
+                'kecamatan_id' => 7205090,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            141 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '70e96db4-1487-40a9-b604-09d6eca8c6df',
+                'desa_kelurahan_id' => 7205090011,
+                'kecamatan_id' => 7205090,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            142 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '6a17fd48-66b7-4362-9fd9-86ce9e6e6722',
+                'desa_kelurahan_id' => 7205090012,
+                'kecamatan_id' => 7205090,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            143 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'cb9ff2b9-a758-40a3-886f-01e06dbd30d1',
+                'desa_kelurahan_id' => 7205090013,
+                'kecamatan_id' => 7205090,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            144 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'dd159842-1e57-4887-8337-ca4a43f6951d',
+                'desa_kelurahan_id' => 7205091001,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            145 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '792ee9f8-ff0c-4e01-95ed-68537d765f47',
+                'desa_kelurahan_id' => 7205091002,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            146 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '5c13ec5f-34fb-454b-9539-7410b3fd0155',
+                'desa_kelurahan_id' => 7205091003,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            147 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7e327724-0d05-4567-88d6-c5ad4e55ff54',
+                'desa_kelurahan_id' => 7205091004,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            148 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7156e9b5-6bb0-4d89-af6b-4168f8e9e6ea',
+                'desa_kelurahan_id' => 7205091005,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            149 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd018ea2c-7fb9-44a4-86c4-0f7af765b45d',
+                'desa_kelurahan_id' => 7205091006,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            150 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b8161b8a-21e9-4705-b9fe-f130fb9c2f45',
+                'desa_kelurahan_id' => 7205091007,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            151 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '29bc666e-ce7b-4b61-9220-148a510703af',
+                'desa_kelurahan_id' => 7205091008,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            152 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '464d4794-2fe9-453c-91dd-099f0e6bc2b5',
+                'desa_kelurahan_id' => 7205091009,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            153 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '290cdd9c-e4f4-442b-a74a-838de46db3ad',
+                'desa_kelurahan_id' => 7205091010,
+                'kecamatan_id' => 7205091,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            154 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '8a6f6b23-4c62-45ea-8466-25fcdab6a3b5',
+                'desa_kelurahan_id' => 7205100001,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            155 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'fb4e66b6-07c0-475f-9596-e8559f7687c8',
+                'desa_kelurahan_id' => 7205100002,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            156 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '00aac4b9-f452-4a90-b5d9-9464b2788d14',
+                'desa_kelurahan_id' => 7205100003,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            157 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '1ea34194-c01b-450d-aeb8-00cc138390fb',
+                'desa_kelurahan_id' => 7205100004,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            158 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '6a4fc066-cdb6-4f20-80b9-3dcde8f02261',
+                'desa_kelurahan_id' => 7205100005,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            159 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd7ba4a02-f949-4772-bc69-f68e21bd3d7a',
+                'desa_kelurahan_id' => 7205100006,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            160 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '3c6649fe-7f10-41ef-b32b-ab8eb3ce7603',
+                'desa_kelurahan_id' => 7205100007,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            161 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'fc96bc3e-dcf7-47a1-b8be-a27e35d272c6',
+                'desa_kelurahan_id' => 7205100016,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            162 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2fa372d8-0f6c-40e2-91c2-2617a1a7fd02',
+                'desa_kelurahan_id' => 7205100017,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            163 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f587f3e1-7122-4cfe-92dd-8757a1846f35',
+                'desa_kelurahan_id' => 7205100018,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            164 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'a9cd76ff-d301-4151-98ee-06761f820b94',
+                'desa_kelurahan_id' => 7205100020,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            165 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '6563cad4-b7df-4bea-9a55-718f1cd9cdc9',
+                'desa_kelurahan_id' => 7205100021,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            166 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7c38cd8b-c6f8-4de4-9740-663005312e1e',
+                'desa_kelurahan_id' => 9471040010,
+                'kecamatan_id' => 7205100,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            167 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd56f5d70-cff6-4bb5-926b-8f569cdd93a3',
+                'desa_kelurahan_id' => 7205101001,
+                'kecamatan_id' => 7205101,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            168 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '444b6c2a-1278-4318-9c15-78fae0d5cb09',
+                'desa_kelurahan_id' => 7205101002,
+                'kecamatan_id' => 7205101,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            169 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '55edf152-4115-4dfd-9cdf-e325e6cdfb8b',
+                'desa_kelurahan_id' => 7205101003,
+                'kecamatan_id' => 7205101,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            170 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f1c918a3-82e7-4c36-98d5-3a48497e801b',
+                'desa_kelurahan_id' => 7205101004,
+                'kecamatan_id' => 7205101,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            171 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'bd8ef4fb-a1e9-45cf-ab04-352a4ce9030f',
+                'desa_kelurahan_id' => 7205101005,
+                'kecamatan_id' => 7205101,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            172 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd3e41332-abef-4d29-aa16-1ff6f4bba84d',
+                'desa_kelurahan_id' => 7205101006,
+                'kecamatan_id' => 7205101,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            173 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'cb25a86b-e1c7-4fdb-8f25-a5c3d3056bff',
+                'desa_kelurahan_id' => 7205102001,
+                'kecamatan_id' => 7205102,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            174 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '818f7ece-6606-4eff-b96f-2466267a767b',
+                'desa_kelurahan_id' => 7205102002,
+                'kecamatan_id' => 7205102,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            175 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4908f306-f36d-4e1c-8a90-b66bd8f2610b',
+                'desa_kelurahan_id' => 7205102003,
+                'kecamatan_id' => 7205102,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            176 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2ec52499-e7d4-4a93-8abe-024321e40e26',
+                'desa_kelurahan_id' => 7205102004,
+                'kecamatan_id' => 7205102,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            177 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '1b2c93e8-e904-470c-a016-50ffb1f9657d',
+                'desa_kelurahan_id' => 7205102005,
+                'kecamatan_id' => 7205102,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            178 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ef1df365-8859-4b64-9498-f5c0403ad11e',
+                'desa_kelurahan_id' => 7205102006,
+                'kecamatan_id' => 7205102,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            179 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'edc07e71-d68b-4fa6-9b8a-6a513c1fb616',
+                'desa_kelurahan_id' => 7205120001,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            180 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '6b3621a1-d62c-42b8-8db0-49d0fd17cb09',
+                'desa_kelurahan_id' => 7205120002,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            181 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '3e9f86b0-6429-49ac-a63a-33f7b00e6d11',
+                'desa_kelurahan_id' => 7205120003,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            182 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ca2da8be-9e44-4c4b-a3f4-7452aa7df2b1',
+                'desa_kelurahan_id' => 7205120004,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            183 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b920390e-6daa-465f-afd7-95adb7f7bd17',
+                'desa_kelurahan_id' => 7205120005,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            184 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '61654728-d501-406c-826e-fe04f01c26f7',
+                'desa_kelurahan_id' => 7205120006,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            185 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'c0ff116c-3d08-4ab5-a629-7ddcdb28380e',
+                'desa_kelurahan_id' => 7205120007,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            186 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2c9b040c-dd17-4684-8eb5-db63f14a7574',
+                'desa_kelurahan_id' => 7205120008,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            187 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7b7b6ffd-9266-4256-ba39-e8ace2c26e6c',
+                'desa_kelurahan_id' => 7205120009,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            188 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '22e701aa-c95a-4e2b-9952-dd7040657a13',
+                'desa_kelurahan_id' => 7205120010,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            189 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'e2bcc0dd-62f3-4ab0-a1d4-79e7fe7a18c5',
+                'desa_kelurahan_id' => 7205120012,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            190 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2b2f6b6c-2003-481c-ae84-82a3503e65a1',
+                'desa_kelurahan_id' => 7205120014,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            191 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f5743145-2b19-4d53-8e54-2e17c4e66006',
+                'desa_kelurahan_id' => 9471040011,
+                'kecamatan_id' => 7205120,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            192 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '96f5835b-bfce-4a6f-9c14-921e299c6b35',
+                'desa_kelurahan_id' => 7205130001,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            193 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'bb12e2d0-5fd0-4e48-85a9-014edc4b8a07',
+                'desa_kelurahan_id' => 7205130008,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            194 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f0de9481-fd8c-4dc4-b9e1-9f72052137cd',
+                'desa_kelurahan_id' => 7205130009,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            195 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2bbe5a82-aea3-4f97-90c5-28e43656c2d6',
+                'desa_kelurahan_id' => 7205130010,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            196 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '97d86e91-5187-42fd-bd8d-98477a2354d6',
+                'desa_kelurahan_id' => 7205130011,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            197 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'fd976236-cecb-46dd-a1a7-bb31ff9e8105',
+                'desa_kelurahan_id' => 7205130012,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            198 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7548be69-985c-489d-b411-535b3196eb48',
+                'desa_kelurahan_id' => 7205130013,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            199 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'de0ba4ad-1874-4a67-814a-b54e65a2a131',
+                'desa_kelurahan_id' => 7205130015,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            200 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b092a865-83c8-43d9-8ca9-9ea686c65789',
+                'desa_kelurahan_id' => 7205130016,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            201 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '2219c309-3771-48e8-983a-1f029952ed75',
+                'desa_kelurahan_id' => 7205130017,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            202 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ac37c032-3e2f-4835-9605-ff24973d6cbf',
+                'desa_kelurahan_id' => 7205130018,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            203 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'e5f97838-b97f-45d5-96c5-b449ae6b457e',
+                'desa_kelurahan_id' => 7205130019,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            204 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'bd5e8291-fd33-4fa1-ace2-6d67901022a4',
+                'desa_kelurahan_id' => 7205130020,
+                'kecamatan_id' => 7205130,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            205 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '14cafb27-c224-4d60-aca4-77970befaf65',
+                'desa_kelurahan_id' => 7205131001,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            206 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'c802d1b2-d5e5-4c84-ad4e-6e1daf8ca44c',
+                'desa_kelurahan_id' => 7205131002,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            207 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '435fe78f-fd1e-4a2f-9f91-730291bb29f2',
+                'desa_kelurahan_id' => 7205131003,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            208 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '73418820-9ea1-4735-8260-c7e19aa62534',
+                'desa_kelurahan_id' => 7205131004,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            209 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '867c5153-58c7-4f4e-af0e-ccaed33b553d',
+                'desa_kelurahan_id' => 7205131005,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            210 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '39bb4bda-fc9b-4968-800a-f28c003185c3',
+                'desa_kelurahan_id' => 7205131006,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            211 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b8a86a7f-2ecc-42cc-81e6-3b2b6c194e32',
+                'desa_kelurahan_id' => 7205131007,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            212 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '67debfb5-db48-4c02-81a3-e1f9d5be2fc4',
+                'desa_kelurahan_id' => 7205131008,
+                'kecamatan_id' => 7205131,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            213 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'f3e5cf56-d25d-4d19-bb20-0b7e658addb8',
+                'desa_kelurahan_id' => 7205140001,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            214 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd607abd1-2d0b-4f18-8f55-f0ce962ab19c',
+                'desa_kelurahan_id' => 7205140002,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            215 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'ae23d46b-826b-4440-9032-67e307aa8e27',
+                'desa_kelurahan_id' => 7205140003,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            216 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '1b12d789-e363-4bb8-9bda-4cc06731f112',
+                'desa_kelurahan_id' => 7205140004,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            217 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'cc615a12-e61c-4edb-8655-ae6760c3b057',
+                'desa_kelurahan_id' => 7205140005,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            218 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd32e2842-2e09-4b29-ace4-025bdfa2b268',
+                'desa_kelurahan_id' => 7205140006,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            219 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd52bc667-8935-4937-a735-5c3ef8c62af4',
+                'desa_kelurahan_id' => 7205140007,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+            ),
+            220 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '13030e66-23c1-4dd7-8017-271b84e81665',
+                'desa_kelurahan_id' => 7205140008,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            221 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '07ec3ef8-b7db-49f4-9e2a-6d9a260a812d',
+                'desa_kelurahan_id' => 7205140009,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            222 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '10ad06c0-89fa-47d4-939a-7f628f9d16bd',
+                'desa_kelurahan_id' => 7205140010,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            223 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd1028871-474e-4ba6-835b-c30c245dacca',
+                'desa_kelurahan_id' => 7205140011,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            224 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '259d3f94-08b9-4c65-bffb-32d7ad4b357d',
+                'desa_kelurahan_id' => 7205140012,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            225 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd4160a3e-aa53-4109-823e-2ed75bd9c6ff',
+                'desa_kelurahan_id' => 7205140014,
+                'kecamatan_id' => 7205140,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            226 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '0cc681ad-1140-42b8-b244-d309ab99e783',
+                'desa_kelurahan_id' => 7205160001,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            227 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '1a765145-b981-44b8-b3fc-8083ef042ce4',
+                'desa_kelurahan_id' => 7205160002,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            228 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '46217173-ed8a-4ff5-b44b-b05cc6e98377',
+                'desa_kelurahan_id' => 7205160003,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            229 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '4f9e05ee-d5cf-4304-9a7e-9e40734b9c77',
+                'desa_kelurahan_id' => 7205160004,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            230 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '9a62e3f1-7bb6-4e65-a570-03a8024e0b4b',
+                'desa_kelurahan_id' => 7205160005,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            231 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '92f73d67-67b1-4eb1-9085-6b38b180d895',
+                'desa_kelurahan_id' => 7205160006,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            232 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'd811441b-5892-4444-b2b2-07b875d7c1a7',
+                'desa_kelurahan_id' => 7205160007,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            233 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '3f2aa6dc-ba3d-41b6-9860-b2b85d57491d',
+                'desa_kelurahan_id' => 7205160008,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            234 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '35b7b29e-b4ba-455c-9861-1041acf0f646',
+                'desa_kelurahan_id' => 7205160013,
+                'kecamatan_id' => 7205160,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            235 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '7d3d3bd6-4d28-4e01-ab50-0e3403cbc9c5',
+                'desa_kelurahan_id' => 7205161001,
+                'kecamatan_id' => 7205161,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            236 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '21e0160e-25dc-4514-857d-13610b989ab0',
+                'desa_kelurahan_id' => 7205161003,
+                'kecamatan_id' => 7205161,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            237 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => '42adf892-840e-423b-9f6d-a2afc5fe54ad',
+                'desa_kelurahan_id' => 7205161004,
+                'kecamatan_id' => 7205161,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
+            238 =>
+            array(
+                'jenis_profil' => 'bidan',
+                'profil_id' => 'b6b7885e-aff5-48b5-97d8-929f503cc427',
+                'desa_kelurahan_id' => 7205161005,
+                'kecamatan_id' => 7205161,
+                'kabupaten_kota_id' => 7205,
+                'provinsi_id' => 72,
+                'created_at' => '2022-10-26 15:18:22',
+                'updated_at' => '2022-10-26 15:18:22',
+            ),
         ));
-        
-        
     }
 }
