@@ -59,6 +59,7 @@ Route::post('/login', [ApiAuthController::class, 'login']);
 Route::post('/register', [ApiAuthController::class, 'register']);
 
 Route::post('/akun', [ApiAkunController::class, 'store']);
+Route::delete('/akun/{id}', [ApiAkunController::class, 'destroy'])->middleware('auth.apikey');
 
 Route::get('/agama', [ApiAgamaController::class, 'index']);
 Route::get('/agama/{id}', [ApiAgamaController::class, 'show']);
@@ -95,14 +96,17 @@ Route::post('/kartu_keluarga', [ApiKartuKeluargaController::class, 'store']);
 Route::post('/wilayah_domisili/upload', [ApiWilayahDomisiliController::class, 'upload']);
 Route::post('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'store']);
 Route::put('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'update']);
+Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy'])->middleware('auth.apikey');
 Route::post('/anggota_keluarga/upload', [ApiAnggotaKeluargaController::class, 'upload']);
 Route::post('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'store']);
 Route::put('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'update']);
+Route::delete('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'destroy'])->middleware('auth.apikey');
 //get bidan by kelurahan (open only for registration keluarga to check is bidan available at kelurahan x)
 Route::get('/lokasi_tugas/cek_domisili', [ApiLokasiTugasController::class, 'cekDomisiliBidan']);
 
 Route::get('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'show']);
 Route::put('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'update']);
+Route::delete('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'destroy'])->middleware('auth.apikey');
 
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -115,7 +119,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/akun/{id}', [ApiAkunController::class, 'show'])->middleware('notKeluarga');
     // Route::post('/akun', [ApiAkunController::class, 'store'])->middleware('notKeluarga');
     Route::put('/akun/{id}', [ApiAkunController::class, 'update'])->middleware('notKeluarga');
-    Route::delete('/akun/{id}', [ApiAkunController::class, 'destroy'])->middleware('notKeluarga');
+    // Route::delete('/akun/{id}', [ApiAkunController::class, 'destroy'])->middleware('notKeluarga');
 
     Route::get('/kartu_keluarga', [ApiKartuKeluargaController::class, 'index']);
     // Route::get('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'show']);
@@ -130,7 +134,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::post('/anggota_keluarga', [ApiAnggotaKeluargaController::class, 'store']);
     // Route::post('/anggota_keluarga/upload/{id}', [ApiAnggotaKeluargaController::class, 'upload']);
     // Route::put('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'update']);
-    Route::delete('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'destroy']);
+    // Route::delete('/anggota_keluarga/{id}', [ApiAnggotaKeluargaController::class, 'destroy']);
     Route::post('/anggota_keluarga/validasi', [ApiAnggotaKeluargaController::class, 'validasi'])->middleware('notKeluarga');
 
     Route::get('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'index']);
@@ -138,7 +142,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::post('/wilayah_domisili', [ApiWilayahDomisiliController::class, 'store']);
     // Route::post('/wilayah_domisili/upload/{id}', [ApiWilayahDomisiliController::class, 'upload']);
     // Route::put('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'update']);
-    Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy']);
+    // Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy']);
 
     Route::get('/bidan', [ApiBidanController::class, 'index'])->middleware('notKeluarga');
     Route::get('/bidan/{id}', [ApiBidanController::class, 'show']);
