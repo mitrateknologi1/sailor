@@ -77,7 +77,7 @@ class DesaKelurahanController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama' => ['required', Rule::unique('desa_kelurahan')->withoutTrashed()],
+                'nama' => ['required'],
                 // 'polygon' => 'required',
                 // 'warna_polygon' => 'required'
             ],
