@@ -77,9 +77,9 @@ class KecamatanController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama' => ['required', Rule::unique('kecamatan')->withoutTrashed()],
-                'polygon' => 'required',
-                'warna_polygon' => ['required', Rule::unique('kecamatan')->withoutTrashed()],
+                'nama' => ['required'],
+                // 'polygon' => 'required',
+                // 'warna_polygon' => ['required', Rule::unique('kecamatan')->withoutTrashed()],
             ],
             [
                 'nama.required' => 'Nama Kecamatan tidak boleh kosong',
@@ -140,9 +140,9 @@ class KecamatanController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nama' => ['required', Rule::unique('kecamatan')->ignore($request->kecamatan)->withoutTrashed()],
-                'polygon' => 'required',
-                'warna_polygon' => ['required', Rule::unique('kecamatan')->ignore($request->kecamatan)->withoutTrashed()],
+                'nama' => 'required',
+                // 'polygon' => 'required',
+                // 'warna_polygon' => ['required', Rule::unique('kecamatan')->ignore($request->kecamatan)->withoutTrashed()],
             ],
             [
                 'nama.required' => 'Nama Kecamatan tidak boleh kosong',
