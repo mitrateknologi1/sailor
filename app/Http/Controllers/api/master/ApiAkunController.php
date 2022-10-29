@@ -95,7 +95,7 @@ class ApiAkunController extends Controller
         $fields = $request->validate([
             'nik' => "required|numeric|unique:users,nik,$id",
             'nomor_hp' => "required|string|unique:users,nomor_hp,$id",
-            'password' => 'required|string',
+            'password' => 'nullable|string',
             'is_remaja' => 'required|numeric|in:0,1',
             'status' => 'required|numeric|in:0,1',
         ]);
@@ -103,14 +103,24 @@ class ApiAkunController extends Controller
         $user = User::find($id);
 
         if ($user) {
-            $user->update([
-                'nik' => $fields['nik'],
-                'nomor_hp' => $fields['nomor_hp'],
-                'password' => bcrypt($fields['password']),
-                'role' => 'keluarga',
-                'is_remaja' =>  $fields['is_remaja'],
-                'status' =>  $fields['status'],
-            ]);
+            if($request->password != null){            
+                $user->update([
+                    'nik' => $fields['nik'],
+                    'nomor_hp' => $fields['nomor_hp'],
+                    'password' => bcrypt($fields['password']),
+                    'role' => $request->role,
+                    'is_remaja' =>  $fields['is_remaja'],
+                    'status' =>  $fields['status'],
+                ]);
+            }else{
+                $user->update([
+                    'nik' => $fields['nik'],
+                    'nomor_hp' => $fields['nomor_hp'],
+                    'role' => $request->role,
+                    'is_remaja' =>  $fields['is_remaja'],
+                    'status' =>  $fields['status'],
+                ]);
+            }
             return $user;
         }
 

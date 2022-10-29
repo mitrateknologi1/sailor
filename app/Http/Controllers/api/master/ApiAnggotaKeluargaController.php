@@ -214,7 +214,7 @@ class ApiAnggotaKeluargaController extends Controller
         if ($relation) {
             return AnggotaKeluarga::with('kartuKeluarga', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan')->where('id', $id)->first();
         }
-        return AnggotaKeluarga::where('id', $id)->first();
+        return AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusHubunganDalamKeluarga', 'statusPerkawinan','wilayahDomisili.provinsi','wilayahDomisili.kabupatenKota','wilayahDomisili.kecamatan','wilayahDomisili.desaKelurahan')->where('id', $id)->first();
     }
 
     /**
