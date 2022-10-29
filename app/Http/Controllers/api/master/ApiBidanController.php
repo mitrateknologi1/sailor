@@ -152,7 +152,7 @@ class ApiBidanController extends Controller
 
         return response([
             'message' => "Bidan with id $id doesn't exist"
-        ], 400);
+        ], 404);
     }
 
     /**

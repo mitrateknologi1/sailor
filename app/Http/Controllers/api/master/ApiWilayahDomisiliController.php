@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\master;
 
 use App\Http\Controllers\Controller;
 use App\Models\WilayahDomisili;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -126,8 +127,19 @@ class ApiWilayahDomisiliController extends Controller
         ]);
         $wilayahDomisili = WilayahDomisili::find($id);
 
+        $data = [
+            "anggota_keluarga_id" => $request->anggota_keluarga_id,
+            "alamat" => $request->alamat,
+            "desa_kelurahan_id" => $request->desa_kelurahan_id,
+            "kecamatan_id" => $request->kecamatan_id,
+            "kabupaten_kota_id" => $request->kabupaten_kota_id,
+            "provinsi_id" => $request->provinsi_id,
+            "file_ket_domisili" => $request->file_ket_domisili,
+            "updated_at" => Carbon::now(),
+        ];
+
         if ($wilayahDomisili) {
-            $wilayahDomisili->update($request->all());
+            $wilayahDomisili->update($data);
             return $wilayahDomisili;
         }
 

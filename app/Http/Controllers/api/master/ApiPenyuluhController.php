@@ -137,21 +137,13 @@ class ApiPenyuluhController extends Controller
     {
 
         $request->validate([
-            "user_id" => 'required|exists:users,id',
-            "nik" => "required|numeric|unique:penyuluh,nik,$id",
-            "nama_lengkap" => 'required|string',
-            "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
-            "tempat_lahir" => 'required|string',
-            "tanggal_lahir" => 'required|string',
-            "agama_id" => 'required|numeric',
-            "tujuh_angka_terakhir_str" => 'required|string',
-            "nomor_hp" => "required|string|unique:bidan,nomor_hp,$id",
-            "email" => "required|string",
-            "alamat" => 'required|string',
-            "desa_kelurahan_id" => "required|exists:desa_kelurahan,id",
-            "kecamatan_id" => "required|exists:kecamatan,id",
-            "kabupaten_kota_id" => "required|exists:kabupaten_kota,id",
-            "provinsi_id" => "required|exists:provinsi,id",
+            "user_id" => 'exists:users,id',
+            "nik" => "unique:penyuluh,nik,$id",
+            "nomor_hp" => "unique:penyuluh,nomor_hp,$id",
+            "desa_kelurahan_id" => "exists:desa_kelurahan,id",
+            "kecamatan_id" => "exists:kecamatan,id",
+            "kabupaten_kota_id" => "exists:kabupaten_kota,id",
+            "provinsi_id" => "exists:provinsi,id",
         ]);
 
         $penyuluh = Penyuluh::find($id);
@@ -162,7 +154,7 @@ class ApiPenyuluhController extends Controller
 
         return response([
             'message' => "Penyuluh with id $id doesn't exist"
-        ], 400);
+        ], 404);
     }
 
     /**

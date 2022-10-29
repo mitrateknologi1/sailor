@@ -123,15 +123,15 @@ class ApiAuthController extends Controller
             ], 404);
         }else{
             if(Auth::user()->role == "keluarga"){
-                $response = AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'statusHubunganDalamKeluarga', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan')
+                $response = AnggotaKeluarga::with('user', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'statusHubunganDalamKeluarga', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan')
                                             ->where('id', Auth::user()->profil->id)->first();
             }
             if(Auth::user()->role == "bidan"){
-                $response = Bidan::with('agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
+                $response = Bidan::with('user', 'agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
                                             ->where('id', Auth::user()->profil->id)->first();
             }
             if(Auth::user()->role == "penyuluh"){
-                $response = Penyuluh::with('agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
+                $response = Penyuluh::with('user', 'agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
                                             ->where('id', Auth::user()->profil->id)->first();
             }
             return response($response, 200);
