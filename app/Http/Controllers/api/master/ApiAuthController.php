@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Bidan;
+use App\Models\DesaKelurahan;
+use App\Models\KabupatenKota;
+use App\Models\Kecamatan;
 use App\Models\Penyuluh;
+use App\Models\Provinsi;
 
 class ApiAuthController extends Controller
 {
@@ -117,9 +121,21 @@ class ApiAuthController extends Controller
             return response([
                 "message" => 'profile not found!',
             ], 404);
+        }else{
+            if(Auth::user()->role == "keluarga"){
+                $response = AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'statusHubunganDalamKeluarga', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan')
+                                            ->where('id', Auth::user()->profil->id)->first();
+            }
+            if(Auth::user()->role == "bidan"){
+                $response = Bidan::with('agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
+                                            ->where('id', Auth::user()->profil->id)->first();
+            }
+            if(Auth::user()->role == "penyuluh"){
+                $response = Penyuluh::with('agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
+                                            ->where('id', Auth::user()->profil->id)->first();
+            }
+            return response($response, 200);
         }
-        return response([
-            "message" => 'OK',
-        ], 200);
+        
     }
 }
