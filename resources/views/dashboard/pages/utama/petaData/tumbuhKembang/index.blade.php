@@ -7,7 +7,7 @@
 @push('style')
     <style>
         #map {
-            height: 400px;
+            height: 700px;
             margin-top: 0px;
         }
     </style>
@@ -43,7 +43,6 @@
                         @component('dashboard.components.forms.petaData.export',
                             [
                                 'tab' => 'stunting_anak',
-                                'provinsi' => $provinsi,
                                 'action' => url('map-tumbuh-kembang/export'),
                             ])
                         @endcomponent
@@ -252,12 +251,12 @@
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
                     boolKecamatan = true;
                     boolDesa = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     pertumbuhanAnak(mapOnZoom);
                 } else if (mapOnZoom >= 12 && boolDesa == false) {
                     boolDesa = true;
                     boolKecamatan = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     pertumbuhanAnak(mapOnZoom);
                 }
 
@@ -266,15 +265,19 @@
     </script>
 
     <script>
+        var fitur = 'pertumbuhanAnak';
         $('.tab-map').on('click', function() {
+            getProvinsi();
             tab = $(this).attr('value');
-            initializeMap(mapOnZoom, centerMap);
+            // initializeMap(mapOnZoom, centerMap);
             pertumbuhanAnak(mapOnZoom);
             $("#informasi_wilayah_stunting_anak").show();
         })
     </script>
 
     <script>
+        var polygons = [];
+
         function pertumbuhanAnak(zoomMap) {
             $.ajax({
                 url: "{{ url('/petaData/pertumbuhanAnak') }}",
@@ -285,8 +288,11 @@
                 },
                 success: function(response) {
                     if (response.length > 0) {
+                        polygons.forEach(function(item) {
+                            map.removeLayer(item)
+                        });
                         for (var i = 0; i < response.length; i++) {
-                            L.polygon(response[i].koordinatPolygon, {
+                            var polygon = L.polygon(response[i].koordinatPolygon, {
                                     color: 'white',
                                     fillColor: response[i].warnaPolygon,
                                     weight: 1,
@@ -319,6 +325,7 @@
                                 // })
                                 .on('click', L.bind(getDetailPertumbuhanAnak, null, response[i].id))
                                 .addTo(map);
+                            polygons.push(polygon);
                         }
                     }
                 },

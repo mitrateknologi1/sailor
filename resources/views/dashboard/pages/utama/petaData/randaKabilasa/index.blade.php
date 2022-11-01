@@ -7,7 +7,7 @@
 @push('style')
     <style>
         #map {
-            height: 400px;
+            height: 700px;
             margin-top: 0px;
         }
     </style>
@@ -35,7 +35,6 @@
                         @component('dashboard.components.forms.petaData.export',
                             [
                                 'tab' => 'randa_kabilasa',
-                                'provinsi' => $provinsi,
                                 'action' => url('map-randa-kabilasa/export'),
                             ])
                         @endcomponent
@@ -535,6 +534,7 @@
                 attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
                 maxZoom: 18,
             }).addTo(map);
+
             map.invalidateSize();
 
             map.on("zoomend", function(e) {
@@ -546,20 +546,21 @@
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
                     boolKecamatan = true;
                     boolDesa = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     randaKabilasa(mapOnZoom);
                 } else if (mapOnZoom >= 12 && boolDesa == false) {
                     boolDesa = true;
                     boolKecamatan = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     randaKabilasa(mapOnZoom);
                 }
-
             });
         }
     </script>
 
     <script>
+        var polygons = [];
+
         function randaKabilasa(zoomMap) {
             $.ajax({
                 url: "{{ url('/petaData/randaKabilasa') }}",
@@ -570,8 +571,11 @@
                 },
                 success: function(response) {
                     if (response.length > 0) {
+                        polygons.forEach(function(item) {
+                            map.removeLayer(item)
+                        });
                         for (var i = 0; i < response.length; i++) {
-                            L.polygon(response[i].koordinatPolygon, {
+                            var polygon = L.polygon(response[i].koordinatPolygon, {
                                     color: 'white',
                                     fillColor: response[i].warnaPolygon,
                                     weight: 1,
@@ -639,6 +643,7 @@
                                 // })
                                 .on('click', L.bind(getDetailPeta, null, response[i].id))
                                 .addTo(map);
+                            polygons.push(polygon);
                         }
                     }
                 },
@@ -699,6 +704,8 @@
                 },
             })
         }
+
+        var fitur = 'randaKabilasa';
 
         function initializeFilter() {
             initializeMap(mapOnZoom, centerMap);

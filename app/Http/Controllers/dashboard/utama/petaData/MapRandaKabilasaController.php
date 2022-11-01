@@ -23,8 +23,7 @@ class MapRandaKabilasaController extends Controller
 
     public function index()
     {
-        $provinsi = Provinsi::all();
-        return view('dashboard.pages.utama.petaData.randaKabilasa.index', compact(['provinsi']));
+        return view('dashboard.pages.utama.petaData.randaKabilasa.index');
     }
 
     public function getMapDataRandaKabilasa(Request $request)
