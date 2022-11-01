@@ -23,8 +23,7 @@ class MapTumbuhKembangController extends Controller
 
     public function index()
     {
-        $provinsi = Provinsi::all();
-        return view('dashboard.pages.utama.petaData.tumbuhKembang.index', compact(['provinsi']));
+        return view('dashboard.pages.utama.petaData.tumbuhKembang.index');
     }
 
     public function getMapDataPertumbuhanAnak(Request $request)

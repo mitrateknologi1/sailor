@@ -14,10 +14,6 @@
                     'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
-                    @foreach ($provinsi as $prov)
-                        <option value="{{ $prov->id }}">
-                            {{ $prov->nama }}</option>
-                    @endforeach
                 @endslot
             @endcomponent
         </div>
@@ -55,24 +51,69 @@
     @enderror
 
     <script>
-        $("#provinsi").change(function() {
-            if ($("#provinsi").val() != '') {
-                $("#kabupaten-kota").html('');
-                $("#kabupaten-kota").append('<option value="">- Pilih Salah Satu -</option>')
-                $.get("{{ route('listKabupatenKota') }}", {
-                    idProvinsi: $("#provinsi").val()
-                }, function(result) {
-                    $.each(result, function(key, val) {
-                        $('#kabupaten-kota').append(
-                            `<option value="${val.id}">${val.nama}</option>`);
-                    })
-                });
-            }
-            initializeFilter();
-        });
+        function getProvinsi() {
+            $('#provinsi').html('');
+            $('#provinsi').append('<option value="">- Pilih Salah Satu -</option>');
+            $('#kabupaten-kota').html('')
+            $('#kabupaten-kota').append('<option value="">- Pilih Salah Satu -</option>')
+            $.ajax({
+                url: "{{ url('provinsi-fitur') }}",
+                type: 'GET',
+                data: {
+                    'fitur': fitur
+                },
+                success: function(response) {
+                    response.map((nilai) => {
+                        $('#provinsi').append('<option value="' + nilai.id + '">' + nilai
+                            .nama + '</option>');
+                    });
+                    initializeFilter();
+                }
+            })
+        }
+
+        $(document).on('change', '#provinsi', function() {
+            $('#kabupaten-kota').html('')
+            $('#kabupaten-kota').append('<option value="">- Pilih Salah Satu -</option>')
+            $.ajax({
+                url: "{{ url('kabupaten-fitur') }}",
+                type: 'GET',
+                data: {
+                    'fitur': fitur,
+                    'provinsi': $(this).val()
+                },
+                success: function(response) {
+                    response.map((nilai) => {
+                        $('#kabupaten-kota').append('<option value="' + nilai.id + '">' +
+                            nilai
+                            .nama + '</option>');
+                    });
+                    initializeFilter();
+                }
+            })
+        })
+        // $("#provinsi").change(function() {
+        //     if ($("#provinsi").val() != '') {
+        //         $("#kabupaten-kota").html('');
+        //         $("#kabupaten-kota").append('<option value="">- Pilih Salah Satu -</option>')
+        //         $.get("{{ route('listKabupatenKota') }}", {
+        //             idProvinsi: $("#provinsi").val()
+        //         }, function(result) {
+        //             $.each(result, function(key, val) {
+        //                 $('#kabupaten-kota').append(
+        //                     `<option value="${val.id}">${val.nama}</option>`);
+        //             })
+        //         });
+        //     }
+        //     initializeFilter();
+        // });
 
         $("#kabupaten-kota").change(function() {
             initializeFilter();
         })
+
+        $(document).ready(function() {
+            getProvinsi();
+        });
     </script>
 @endpush

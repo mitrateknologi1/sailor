@@ -7,7 +7,7 @@
 @push('style')
     <style>
         #map {
-            height: 400px;
+            height: 700px;
             margin-top: 0px;
         }
     </style>

@@ -7,7 +7,7 @@
 @push('style')
     <style>
         #map {
-            height: 400px;
+            height: 700px;
             margin-top: 0px;
         }
     </style>
@@ -49,7 +49,6 @@
                         @component('dashboard.components.forms.petaData.export',
                             [
                                 'tab' => 'deteksi_dini',
-                                'provinsi' => $provinsi,
                                 'action' => url('map-moms-care/export'),
                             ])
                         @endcomponent
@@ -474,12 +473,12 @@
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
                     boolKecamatan = true;
                     boolDesa = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     tab == 'deteksi_dini' ? deteksiDini(mapOnZoom) : anc(mapOnZoom);
                 } else if (mapOnZoom >= 12 && boolDesa == false) {
                     boolDesa = true;
                     boolKecamatan = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     tab == 'deteksi_dini' ? deteksiDini(mapOnZoom) : anc(mapOnZoom);
                 }
 
@@ -488,16 +487,20 @@
     </script>
 
     <script>
+        var fitur = 'deteksiDini';
         $('.tab-map').on('click', function() {
             tab = $(this).attr('value');
-            initializeMap(mapOnZoom, centerMap);
+            getProvinsi();
+            // initializeMap(mapOnZoom, centerMap);
             if (tab == 'deteksi_dini') {
                 deteksiDini(mapOnZoom);
+                fitur = 'deteksiDini';
                 $("#informasi_wilayah_deteksi_dini").show();
                 $("#informasi_wilayah_anc").hide();
                 $('#tab').val('deteksi_dini');
             } else if (tab == 'anc') {
                 anc(mapOnZoom);
+                fitur = 'anc';
                 $("#informasi_wilayah_deteksi_dini").hide();
                 $("#informasi_wilayah_anc").show();
                 $('#tab').val('anc');
@@ -506,6 +509,8 @@
     </script>
 
     <script>
+        var polygons = [];
+
         function deteksiDini(zoomMap) {
             $.ajax({
                 url: "{{ url('/petaData/deteksiDini') }}",
@@ -516,8 +521,11 @@
                 },
                 success: function(response) {
                     if (response.length > 0) {
+                        polygons.forEach(function(item) {
+                            map.removeLayer(item)
+                        });
                         for (var i = 0; i < response.length; i++) {
-                            L.polygon(response[i].koordinatPolygon, {
+                            var polygon = L.polygon(response[i].koordinatPolygon, {
                                     color: 'white',
                                     fillColor: response[i].warnaPolygon,
                                     weight: 1,
@@ -547,6 +555,7 @@
                                 // })
                                 .on('click', L.bind(getDetailDeteksiDini, null, response[i].id))
                                 .addTo(map);
+                            polygons.push(polygon);
                         }
                     }
                 },
@@ -563,8 +572,11 @@
                 },
                 success: function(response) {
                     if (response.length > 0) {
+                        polygons.forEach(function(item) {
+                            map.removeLayer(item)
+                        });
                         for (var i = 0; i < response.length; i++) {
-                            L.polygon(response[i].koordinatPolygon, {
+                            var polygon = L.polygon(response[i].koordinatPolygon, {
                                     color: 'white',
                                     fillColor: response[i].warnaPolygon,
                                     weight: 1,
@@ -625,6 +637,7 @@
                                 //     this.openPopup(e.latlng);
                                 // })
                                 .addTo(map);
+                            polygons.push(polygon);
                         }
                     }
                 },
