@@ -112,14 +112,15 @@ class AuthController extends Controller
     public function cekRemaja()
     {
         $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
-            ->where('tanggal_lahir', '<', Carbon::now()->subYears(10))
+            ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
+            ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
             ->whereDoesntHave('user')
             ->get();
 
         foreach ($remaja as $r) {
             $user = User::create([
                 'nik' => $r->nik,
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('password'),
                 'role' => 'keluarga',
                 'is_remaja' => 1,
                 'status' => 1,
@@ -143,7 +144,7 @@ class AuthController extends Controller
         $data = [
             'user' => $user,
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
         ];
         return view('dashboard.pages.masterData.profil.lengkapiProfil.index', $data);
     }
@@ -264,7 +265,7 @@ class AuthController extends Controller
             'golonganDarah' => GolonganDarah::all(),
             'statusPerkawinan' => StatusPerkawinan::all(),
             'statusHubungan' => StatusHubungan::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
             'kabupatenKota' => KabupatenKota::all(),
             'kecamatan' => Kecamatan::all(),
             'desaKelurahan' => DesaKelurahan::all(),
@@ -519,7 +520,7 @@ class AuthController extends Controller
                 'golonganDarah' => GolonganDarah::all(),
                 'statusPerkawinan' => StatusPerkawinan::all(),
                 'statusHubungan' => StatusHubungan::all(),
-                'provinsi' => Provinsi::all(),
+                'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
                 'kabupatenKota' => KabupatenKota::where('provinsi_id', $keluarga->provinsi_id)->get(),
                 'kecamatan' => Kecamatan::where('kabupaten_kota_id', $keluarga->kabupaten_kota_id)->get(),
                 'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $keluarga->kecamatan_id)->get(),

@@ -74,7 +74,9 @@
                 'name' => 'tanggal_lahir',
                 'class' => 'tanggal',
                 'placeholder' => 'dd-mm-yyyy',
-                'value' => isset($anggotaKeluarga) ? Carbon\Carbon::parse($anggotaKeluarga->tanggal_lahir)->isoFormat('DD-MM-YYYY') : '',
+                'value' => isset($anggotaKeluarga)
+                    ? Carbon\Carbon::parse($anggotaKeluarga->tanggal_lahir)->isoFormat('DD-MM-YYYY')
+                    : '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -184,7 +186,9 @@
                 'class' => 'tanggal',
                 'attribute' => 'disabled',
                 'placeholder' => 'dd-mm-yyyy',
-                'value' => isset($anggotaKeluarga) ? Carbon\Carbon::parse($anggotaKeluarga->tanggal_perkawinan)->isoFormat('DD-MM-YYYY') : null,
+                'value' => isset($anggotaKeluarga)
+                    ? Carbon\Carbon::parse($anggotaKeluarga->tanggal_perkawinan)->isoFormat('DD-MM-YYYY')
+                    : null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -236,7 +240,7 @@
                 @endcomponent
             </div>
         </div>
-        <span class="text-danger error-text jenis_kelamin-error"></span>
+        <span class="text-danger error-text kewarganegaraan-error"></span>
     </div>
     <div class="col-lg-3 col-md-3">
         @component('dashboard.components.formElements.input',
@@ -338,7 +342,7 @@
                     'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
-                    @foreach ($provinsi as $prov)
+                    @foreach ($provinsi->where('id', 72) as $prov)
                         <option value="{{ $prov->id }}"
                             {{ isset($anggotaKeluarga->wilayahDomisili) && $prov->id == $anggotaKeluarga->wilayahDomisili->provinsi_id ? 'selected' : '' }}>
                             {{ $prov->nama }}</option>

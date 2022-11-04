@@ -105,7 +105,7 @@ class AdminController extends Controller
                 ->whereDoesntHave('admin')
                 ->get(),
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
         ];
         return view('dashboard.pages.masterData.profil.admin.create', $data);
     }
@@ -235,7 +235,7 @@ class AdminController extends Controller
                 ->whereDoesntHave('admin')
                 ->get(),
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
             'kabupatenKota' => KabupatenKota::where('provinsi_id', $admin->provinsi_id)->get(),
             'kecamatan' => Kecamatan::where('kabupaten_kota_id', $admin->kabupaten_kota_id)->get(),
             'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $admin->kecamatan_id)->get(),

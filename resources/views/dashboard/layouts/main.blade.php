@@ -11,6 +11,7 @@
     <title>SI GERCEP STUNTING | @yield('title')</title>
     <link rel="shortcut icon" href="{{ asset('assets/favicon') }}/favicon.ico" type="image/x-icon" />
 
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
 
     <!-- plugin css file  -->
     <link rel="stylesheet" href="{{ asset('assets/dashboard') }}/font-awesome/css/all.min.css">
@@ -279,7 +280,8 @@
                             <label class="m-1 theme-high-contrast" for="theme-high-contrast">
                                 <input type="checkbox" id="theme-high-contrast" />
                                 <span class="card p-2">
-                                    <img class="img-fluid" src="{{ asset('assets/dashboard') }}/images/high-version.svg"
+                                    <img class="img-fluid"
+                                        src="{{ asset('assets/dashboard') }}/images/high-version.svg"
                                         alt="High Contrast" />
                                 </span>
                             </label>
@@ -357,7 +359,7 @@
                 reverse: true
             })
             $('.waktu').mask('00:00');
-            $('.angka').mask('00000000000000000000');
+            $('.angka').mask('0000000000000000');
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left'
             }, function(start, end, label) {

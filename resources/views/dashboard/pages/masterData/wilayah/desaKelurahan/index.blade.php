@@ -7,7 +7,7 @@
 @push('style')
     <style>
         #map {
-            height: 400px;
+            height: 700px;
             margin-top: 0px;
         }
     </style>
@@ -74,6 +74,7 @@
         var center = [-0.8794398, 119.8251756];
 
         var map = L.map("map").setView(center, 12);
+        map.addControl(new L.Control.Fullscreen());
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',

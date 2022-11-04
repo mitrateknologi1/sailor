@@ -26,8 +26,7 @@ class MapDeteksiStuntingController extends Controller
 
     public function index()
     {
-        $provinsi = Provinsi::all();
-        return view('dashboard.pages.utama.petaData.deteksiStunting.index', compact(['provinsi']));
+        return view('dashboard.pages.utama.petaData.deteksiStunting.index');
     }
 
     public function getMapDataStuntingAnak(Request $request)

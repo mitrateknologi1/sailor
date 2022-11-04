@@ -29,7 +29,9 @@
                         class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom-0 pt-3 pb-0">
                         <h5 class="card-title mb-0">Data Anggota Keluarga ({{ $kartuKeluarga->nama_kepala_keluarga }})
                         </h5>
-                        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'bidan')
+                        @if (Auth::user()->role == 'admin' ||
+                            $kartuKeluarga->bidan_id == Auth::user()->profil->id ||
+                            in_array($domisiliKepalaKeluarga, $lokasiTugas))
                             @component('dashboard.components.buttons.add',
                                 [
                                     'id' => 'catatan-pertumbuhan-anak',
@@ -91,7 +93,36 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-bidan',
-                                            'th' => ['No', 'Dibuat Tanggal', 'Status', 'NIK', 'Nama Lengkap', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Agama', 'Pendidikan', 'Pekerjaan', 'Golongan Darah', 'Status Perkawinan', 'Tanggal Perkawinan', 'Status Dalam Keluarga', 'Kewarganegaraan', 'Nomor Paspor', 'Nomor KITAP', 'Nama Ayah', 'Nama Ibu', 'Alamat Domisili', 'Desa/Kelurahan Domisili', 'Kecamatan Domisili', 'Kabupaten Domisili', 'Provinsi Domisili', 'Bidan', 'Tanggal Divalidasi', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'Dibuat Tanggal',
+                                                'Status',
+                                                'NIK',
+                                                'Nama Lengkap',
+                                                'Jenis Kelamin',
+                                                'Tempat Lahir',
+                                                'Tanggal Lahir',
+                                                'Agama',
+                                                'Pendidikan',
+                                                'Pekerjaan',
+                                                'Golongan Darah',
+                                                'Status Perkawinan',
+                                                'Tanggal Perkawinan',
+                                                'Status Dalam Keluarga',
+                                                'Kewarganegaraan',
+                                                'Nomor Paspor',
+                                                'Nomor KITAP',
+                                                'Nama Ayah',
+                                                'Nama Ibu',
+                                                'Alamat Domisili',
+                                                'Desa/Kelurahan Domisili',
+                                                'Kecamatan Domisili',
+                                                'Kabupaten Domisili',
+                                                'Provinsi Domisili',
+                                                'Bidan',
+                                                'Tanggal Divalidasi',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -178,12 +209,14 @@
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-briefcase"></i> Jenis Pekerjaan</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-jenis-pekerjaan">
+                                            <span class="badge bg-info float-end text-uppercase"
+                                                id="modal-jenis-pekerjaan">
                                                 - </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-droplet"></i> Golongan Darah</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-golongan-darah">
+                                            <span class="badge bg-info float-end text-uppercase"
+                                                id="modal-golongan-darah">
                                                 - </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
@@ -198,17 +231,20 @@
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-people-roof"></i> Status Dalam Keluarga</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-status-hubungan">
+                                            <span class="badge bg-info float-end text-uppercase"
+                                                id="modal-status-hubungan">
                                                 - </span>
                                         </li>
                                         <li class="justify-content-between mb-2">
                                             <label><i class="fa-solid fa-flag"></i> Kewarganegaraan</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-kewarganegaraan">
+                                            <span class="badge bg-info float-end text-uppercase"
+                                                id="modal-kewarganegaraan">
                                                 - </span>
                                         </li>
                                         <li class="justify-content-between mb-2" id="li-nomor-paspor">
                                             <label><i class="fa-solid fa-passport"></i> Nomor Paspor</label>
-                                            <span class="badge bg-info float-end text-uppercase" id="modal-nomor-paspor"> -
+                                            <span class="badge bg-info float-end text-uppercase" id="modal-nomor-paspor">
+                                                -
                                             </span>
                                         </li>
                                         <li class="justify-content-between mb-2" id="li-nomor-kitap">
@@ -319,8 +355,7 @@
                             </div>
                         @endif
                         <div class="col-12 mt-3 d-none" id="col-alasan">
-                            <label for="textareaInput" class="form-label">Alasan <sup
-                                    class="text-danger">*</sup></label>
+                            <label for="textareaInput" class="form-label">Alasan <sup class="text-danger">*</sup></label>
                             <textarea name="alasan" id="alasan" cols="30" rows="5" class="form-control alasan"></textarea>
                             <span class="text-danger error-text alasan-error"></span>
 

@@ -27,7 +27,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreAnggotaKeluargaRequest;
 use App\Http\Requests\UpdateAnggotaKeluargaRequest;
 use App\Models\LokasiTugas;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Hash;
 
 class AnggotaKeluargaController extends Controller
 {
@@ -44,15 +46,14 @@ class AnggotaKeluargaController extends Controller
 
     public function index(Request $request)
     {
+        $idKeluarga = \Request::segment(2);
         if (Auth::user()->role == 'keluarga') {
-            $idKeluarga = \Request::segment(2);
             if ($idKeluarga != Auth::user()->profil->kartu_keluarga_id) {
                 abort(404);
             }
         }
 
         if (Auth::user()->role != 'keluarga') {
-            $idKeluarga = \Request::segment(2);
             $keluarga = KartuKeluarga::findOrFail($idKeluarga);
             if ($keluarga->is_valid == 0) {
                 abort(404);
@@ -215,7 +216,9 @@ class AnggotaKeluargaController extends Controller
                     ->make(true);
             }
 
-            $kartuKeluarga = KartuKeluarga::find($request->keluarga);
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id)->toArray();
+            $kartuKeluarga = KartuKeluarga::find($idKeluarga);
+            $domisiliKepalaKeluarga = $kartuKeluarga->kepalaKeluarga->wilayahDomisili->desa_kelurahan_id;
             $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id)->get();
             $wilayahDomisili = WilayahDomisili::with('desaKelurahan')
                 ->whereIn('anggota_keluarga_id', $anggotaKeluarga
@@ -223,7 +226,9 @@ class AnggotaKeluargaController extends Controller
                 ->groupBy('desa_kelurahan_id')->get();
             $data = [
                 'kartuKeluarga' => $kartuKeluarga,
-                'wilayahDomisili' => $wilayahDomisili
+                'wilayahDomisili' => $wilayahDomisili,
+                'lokasiTugas' => $lokasiTugas,
+                'domisiliKepalaKeluarga' => $domisiliKepalaKeluarga
             ];
             return view('dashboard.pages.masterData.profil.keluarga.anggotaKeluarga.index', $data);
         } else {
@@ -261,7 +266,7 @@ class AnggotaKeluargaController extends Controller
                 'pekerjaan' => Pekerjaan::all(),
                 'golonganDarah' => GolonganDarah::all(),
                 'statusPerkawinan' => StatusPerkawinan::all(),
-                'provinsi' => Provinsi::all(),
+                'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
                 'statusHubungan' => StatusHubungan::all()->skip(1),
                 'provinsiKK' => $keluarga->provinsi_id,
                 'kabupatenKotaKK' => $keluarga->kabupaten_kota_id,
@@ -420,9 +425,31 @@ class AnggotaKeluargaController extends Controller
             $dataAnggotaKeluarga['foto_profil'] = $request->nik . '.' . $request->file('foto_profil')->extension();
         }
 
-        AnggotaKeluarga::create($dataAnggotaKeluarga);
+        $anggotaKeluargaLatest = AnggotaKeluarga::create($dataAnggotaKeluarga);
+        // $anggotaKeluargaLatest = AnggotaKeluarga::latest()->first();
 
-        $anggotaKeluargaLatest = AnggotaKeluarga::latest()->first();
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'bidan') {
+            $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
+                ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
+                ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
+                ->where('id', $anggotaKeluargaLatest->id)
+                ->whereDoesntHave('user')
+                ->first();
+
+            if ($remaja) {
+                $user = User::create([
+                    'nik' => $remaja->nik,
+                    'password' => Hash::make('password'),
+                    'role' => 'keluarga',
+                    'is_remaja' => 1,
+                    'status' => 1,
+                ]);
+
+                $remaja->user_id = $user->id;
+                $remaja->save();
+            }
+        }
+
 
         $dataWilayahDomisili = [
             'anggota_keluarga_id' => $anggotaKeluargaLatest->id,
@@ -518,7 +545,7 @@ class AnggotaKeluargaController extends Controller
                 'pekerjaan' => Pekerjaan::all(),
                 'golonganDarah' => GolonganDarah::all(),
                 'statusPerkawinan' => StatusPerkawinan::all(),
-                'provinsi' => Provinsi::all(),
+                'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
                 'kabupatenKotaDomisili' => KabupatenKota::where('provinsi_id', $anggotaKeluarga->wilayahDomisili->provinsi_id)->get(),
                 'kecamatanDomisili' => Kecamatan::where('kabupaten_kota_id', $anggotaKeluarga->wilayahDomisili->kabupaten_kota_id)->get(),
                 'desaKelurahanDomisili' => DesaKelurahan::where('kecamatan_id', $anggotaKeluarga->wilayahDomisili->kecamatan_id)->get(),
@@ -771,6 +798,26 @@ class AnggotaKeluargaController extends Controller
                 'isi' => 'Data ' . ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda (' . ucwords(strtolower($anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.',
                 'tentang' => 'anggota_keluarga',
             ]);
+
+            $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
+                ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
+                ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
+                ->where('id', $anggotaKeluarga->id)
+                ->whereDoesntHave('user')
+                ->first();
+
+            if ($remaja) {
+                $user = User::create([
+                    'nik' => $remaja->nik,
+                    'password' => Hash::make('password'),
+                    'role' => 'keluarga',
+                    'is_remaja' => 1,
+                    'status' => 1,
+                ]);
+
+                $remaja->user_id = $user->id;
+                $remaja->save();
+            }
         } else {
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,

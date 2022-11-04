@@ -150,7 +150,7 @@ class PenyuluhController extends Controller
                 ->whereDoesntHave('penyuluh')
                 ->get(),
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
         ];
         return view('dashboard.pages.masterData.profil.penyuluh.create', $data);
     }
@@ -263,7 +263,7 @@ class PenyuluhController extends Controller
         $listDesaKelurahan = $penyuluh->lokasiTugas()->get()->pluck('kecamatan_id');
         $data = [
             'penyuluh' => $penyuluh,
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
             'kabupatenKota' => KabupatenKota::whereIn('provinsi_id', $listProvinsi)->get(),
             'kecamatan' => Kecamatan::whereIn('kabupaten_kota_id', $listKecamatan)->get(),
             'desaKelurahan' => DesaKelurahan::whereIn('kecamatan_id', $listDesaKelurahan)->get(),
@@ -347,7 +347,7 @@ class PenyuluhController extends Controller
                 ->whereDoesntHave('penyuluh')
                 ->get(),
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
             'kabupatenKota' => KabupatenKota::where('provinsi_id', $penyuluh->provinsi_id)->get(),
             'kecamatan' => Kecamatan::where('kabupaten_kota_id', $penyuluh->kabupaten_kota_id)->get(),
             'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $penyuluh->kecamatan_id)->get(),

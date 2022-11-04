@@ -7,7 +7,7 @@
 @push('style')
     <style>
         #map {
-            height: 400px;
+            height: 700px;
             margin-top: 0px;
         }
     </style>
@@ -49,7 +49,7 @@
                         @component('dashboard.components.forms.petaData.export',
                             [
                                 'tab' => 'stunting_anak',
-                                'provinsi' => $provinsi,
+                                'fitur' => 'stuntingAnak',
                                 'action' => url('map-deteksi-stunting/export'),
                             ])
                         @endcomponent
@@ -225,6 +225,7 @@
 
 @push('script')
     <script>
+        var polygons = [];
         var map = null;
         var mapOnZoom = 9;
         var boolKecamatan = true;
@@ -260,12 +261,12 @@
                 if (mapOnZoom <= 11 && boolKecamatan == false) {
                     boolKecamatan = true;
                     boolDesa = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     tab == 'stunting_anak' ? stuntingAnak(mapOnZoom) : ibuMelahirkanStunting(mapOnZoom);
                 } else if (mapOnZoom >= 12 && boolDesa == false) {
                     boolDesa = true;
                     boolKecamatan = false;
-                    initializeMap(mapOnZoom, centerMap);
+                    // initializeMap(mapOnZoom, centerMap);
                     tab == 'stunting_anak' ? stuntingAnak(mapOnZoom) : ibuMelahirkanStunting(mapOnZoom);
                 }
 
@@ -274,16 +275,20 @@
     </script>
 
     <script>
+        var fitur = 'stuntingAnak';
         $('.tab-map').on('click', function() {
             tab = $(this).attr('value');
-            initializeMap(mapOnZoom, centerMap);
+            getProvinsi();
+            // initializeMap(mapOnZoom, centerMap);
             if (tab == 'stunting_anak') {
                 stuntingAnak(mapOnZoom);
+                fitur = 'stuntingAnak';
                 $('#tab').val('stunting_anak');
                 $("#informasi_wilayah_stunting_anak").show();
                 $("#informasi_wilayah_ibu_melahirkan_stunting").hide();
             } else if (tab == 'ibu_melahirkan_stunting') {
                 ibuMelahirkanStunting(mapOnZoom);
+                fitur = 'ibuMelahirkanStunting';
                 $('#tab').val('ibu_melahirkan_stunting');
                 $("#informasi_wilayah_stunting_anak").hide();
                 $("#informasi_wilayah_ibu_melahirkan_stunting").show();
@@ -302,8 +307,12 @@
                 },
                 success: function(response) {
                     if (response.length > 0) {
+                        console.log(polygons);
+                        polygons.forEach(function(item) {
+                            map.removeLayer(item)
+                        });
                         for (var i = 0; i < response.length; i++) {
-                            L.polygon(response[i].koordinatPolygon, {
+                            var polygon = L.polygon(response[i].koordinatPolygon, {
                                     color: 'white',
                                     fillColor: response[i].warnaPolygon,
                                     weight: 1,
@@ -336,6 +345,7 @@
                                 // })
                                 .on('click', L.bind(getDetailStuntingAnak, null, response[i].id))
                                 .addTo(map);
+                            polygons.push(polygon);
                         }
                     }
                 },
@@ -352,8 +362,11 @@
                 },
                 success: function(response) {
                     if (response.length > 0) {
+                        polygons.forEach(function(item) {
+                            map.removeLayer(item)
+                        });
                         for (var i = 0; i < response.length; i++) {
-                            L.polygon(response[i].koordinatPolygon, {
+                            var polygon = L.polygon(response[i].koordinatPolygon, {
                                     color: 'white',
                                     fillColor: response[i].warnaPolygon,
                                     weight: 1,
@@ -380,6 +393,7 @@
                                 // })
                                 .on('click', L.bind(getDetailIbuMelahirkanStunting, null, response[i].id))
                                 .addTo(map);
+                            polygons.push(polygon);
                         }
                     }
                 },
@@ -395,7 +409,6 @@
                     zoomMap: mapOnZoom
                 },
                 success: function(response) {
-                    console.log(response);
                     $('#informasi_wilayah').removeClass('d-none');
                     $('#nama_wilayah').html(response.wilayah.nama);
 

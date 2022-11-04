@@ -70,7 +70,6 @@
                 transform: rotate(360deg);
             }
         }
-
     </style>
 </head>
 
@@ -250,7 +249,7 @@
                         reverse: true
                     })
                     $('.waktu').mask('00:00');
-                    $('.angka').mask('00000000000000000000');
+                    $('.angka').mask('0000000000000000');
                 })
 
 

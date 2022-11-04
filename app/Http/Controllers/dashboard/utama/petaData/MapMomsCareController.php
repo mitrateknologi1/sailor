@@ -24,8 +24,7 @@ class MapMomsCareController extends Controller
 
     public function index()
     {
-        $provinsi = Provinsi::all();
-        return view('dashboard.pages.utama.petaData.momsCare.index', compact(['provinsi']));
+        return view('dashboard.pages.utama.petaData.momsCare.index');
     }
 
     public function getMapDataDeteksiDini(Request $request)
