@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
 use App\Models\Bidan;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ApiAnggotaKeluargaController extends Controller
 {
@@ -199,7 +201,29 @@ class ApiAnggotaKeluargaController extends Controller
             "foto_profil" => 'nullable|string',
         ]);
 
-        return AnggotaKeluarga::create($request->all());
+        $data = AnggotaKeluarga::create($request->all());
+        if (Auth::user()->role == 'bidan') {
+            $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
+                ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
+                ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
+                ->where('id', $data->id)
+                ->whereDoesntHave('user')
+                ->first();
+
+            if ($remaja) {
+                $user = User::create([
+                    'nik' => $remaja->nik,
+                    'password' => Hash::make('password'),
+                    'role' => 'keluarga',
+                    'is_remaja' => 1,
+                    'status' => 1,
+                ]);
+
+                $remaja->user_id = $user->id;
+                $remaja->save();
+            }
+        }
+        return $data;
     }
 
     /**
@@ -428,6 +452,26 @@ class ApiAnggotaKeluargaController extends Controller
                 'isi' => 'Data ' . ucwords(strtolower($anggotaKeluarga->statusHubunganDalamKeluarga->status_hubungan)) . ' anda (' . ucwords(strtolower($anggotaKeluarga->nama_lengkap)) . ') divalidasi oleh bidan ' . $namaBidan->nama_lengkap . '.',
                 'tentang' => 'anggota_keluarga',
             ]);
+            
+            $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
+                ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
+                ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
+                ->where('id', $anggotaKeluarga->id)
+                ->whereDoesntHave('user')
+                ->first();
+
+            if ($remaja) {
+                $user = User::create([
+                    'nik' => $remaja->nik,
+                    'password' => Hash::make('password'),
+                    'role' => 'keluarga',
+                    'is_remaja' => 1,
+                    'status' => 1,
+                ]);
+
+                $remaja->user_id = $user->id;
+                $remaja->save();
+            }
         } else {
             $pemberitahuan = Pemberitahuan::create([
                 'user_id' => $anggotaKeluarga->kartuKeluarga->kepalaKeluarga->user_id,
