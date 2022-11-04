@@ -143,7 +143,7 @@ class AuthController extends Controller
         $data = [
             'user' => $user,
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
         ];
         return view('dashboard.pages.masterData.profil.lengkapiProfil.index', $data);
     }
@@ -264,7 +264,7 @@ class AuthController extends Controller
             'golonganDarah' => GolonganDarah::all(),
             'statusPerkawinan' => StatusPerkawinan::all(),
             'statusHubungan' => StatusHubungan::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
             'kabupatenKota' => KabupatenKota::all(),
             'kecamatan' => Kecamatan::all(),
             'desaKelurahan' => DesaKelurahan::all(),
@@ -519,7 +519,7 @@ class AuthController extends Controller
                 'golonganDarah' => GolonganDarah::all(),
                 'statusPerkawinan' => StatusPerkawinan::all(),
                 'statusHubungan' => StatusHubungan::all(),
-                'provinsi' => Provinsi::all(),
+                'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
                 'kabupatenKota' => KabupatenKota::where('provinsi_id', $keluarga->provinsi_id)->get(),
                 'kecamatan' => Kecamatan::where('kabupaten_kota_id', $keluarga->kabupaten_kota_id)->get(),
                 'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $keluarga->kecamatan_id)->get(),
