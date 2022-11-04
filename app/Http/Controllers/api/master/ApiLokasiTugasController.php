@@ -7,6 +7,7 @@ use App\Models\LokasiTugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ApiLokasiTugasController extends Controller
 {
@@ -19,16 +20,27 @@ class ApiLokasiTugasController extends Controller
     {
         $pageSize = $request->page_size ?? 20;
         $jenisProfil = $request->jenis_profil;
+        $lokasiTugas = $request->lokasi_tugas;
+
+        if($lokasiTugas){
+            return LokasiTugas::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')->where('profil_id', Auth::user()->profil->id)->get();
+        }
 
         if ($jenisProfil) {
+            // return LokasiTugas::with('desaKelurahan')
+            //     ->where('jenis_profil', $jenisProfil)
+            //     ->groupBy('desa_kelurahan_id')
+            //     ->orderBy('updated_at', 'desc')
+            //     ->paginate($pageSize);
             return LokasiTugas::with('desaKelurahan')
                 ->where('jenis_profil', $jenisProfil)
                 ->groupBy('desa_kelurahan_id')
                 ->orderBy('updated_at', 'desc')
-                ->paginate($pageSize);
+                ->get();
         }
 
-        return LokasiTugas::orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return LokasiTugas::orderBy('updated_at', 'desc')->paginate($pageSize);
+        return LokasiTugas::orderBy('updated_at', 'desc')->get();
     }
 
     /**

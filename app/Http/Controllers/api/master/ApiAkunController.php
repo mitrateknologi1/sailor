@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api\master;
 
 use App\Http\Controllers\Controller;
+use App\Models\AnggotaKeluarga;
 use App\Models\Pemberitahuan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ApiAkunController extends Controller
@@ -22,6 +24,11 @@ class ApiAkunController extends Controller
         $search = $request->search;
         $user = new User;
 
+        if(Auth::user()->is_remaja == 1){
+            return AnggotaKeluarga::where('id', Auth::user()->profil->id)->get();
+        }
+
+        $user = User::with('keluarga');
         if ($relation) {
             $user = User::with('keluarga');
         }
@@ -30,7 +37,8 @@ class ApiAkunController extends Controller
             return $user->search($search)->where('role', 'keluarga')->orderBy("updated_at", "desc")->paginate($pageSize);
         }
 
-        return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
+        return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->get();
     }
 
     /**
@@ -87,7 +95,7 @@ class ApiAkunController extends Controller
         $fields = $request->validate([
             'nik' => "required|numeric|unique:users,nik,$id",
             'nomor_hp' => "required|string|unique:users,nomor_hp,$id",
-            'password' => 'required|string',
+            'password' => 'nullable|string',
             'is_remaja' => 'required|numeric|in:0,1',
             'status' => 'required|numeric|in:0,1',
         ]);
@@ -95,20 +103,30 @@ class ApiAkunController extends Controller
         $user = User::find($id);
 
         if ($user) {
-            $user->update([
-                'nik' => $fields['nik'],
-                'nomor_hp' => $fields['nomor_hp'],
-                'password' => bcrypt($fields['password']),
-                'role' => 'keluarga',
-                'is_remaja' =>  $fields['is_remaja'],
-                'status' =>  $fields['status'],
-            ]);
+            if($request->password != null){            
+                $user->update([
+                    'nik' => $fields['nik'],
+                    'nomor_hp' => $fields['nomor_hp'],
+                    'password' => bcrypt($fields['password']),
+                    'role' => $request->role,
+                    'is_remaja' =>  $fields['is_remaja'],
+                    'status' =>  $fields['status'],
+                ]);
+            }else{
+                $user->update([
+                    'nik' => $fields['nik'],
+                    'nomor_hp' => $fields['nomor_hp'],
+                    'role' => $request->role,
+                    'is_remaja' =>  $fields['is_remaja'],
+                    'status' =>  $fields['status'],
+                ]);
+            }
             return $user;
         }
 
         return response([
             'message' => "User with id $id doesn't exist"
-        ], 400);
+        ], 404);
     }
 
     /**

@@ -20,7 +20,13 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
         $jawabanMencegahMalnutrisi = new JawabanMencegahMalnutrisi;
 
         if ($mencegahMalnutrisiId) {
-            return $jawabanMencegahMalnutrisi->where("mencegah_malnutrisi_id", $mencegahMalnutrisiId)->orderBy('updated_at', 'desc')->get();
+            $data = $jawabanMencegahMalnutrisi->where("mencegah_malnutrisi_id", $mencegahMalnutrisiId)->orderBy('updated_at', 'desc')->get();
+            if(count($data) < 1 ){
+                return response([
+                    'message' => "Jawaban Mencegah Malnutrisi with malnutrisi id $mencegahMalnutrisiId doesn't exist"
+                ], 404);
+            }
+            return $data;
         }
 
         return $jawabanMencegahMalnutrisi->orderBy('updated_at', 'desc')->get();
@@ -124,17 +130,20 @@ class ApiJawabanMencegahMalnutrisiController extends Controller
             }
             return response([
                 'message' => "Jawaban Mencegah Malnutrisi with id $id doesn't exist"
-            ], 400);
+            ], 404);
         }
         if ($mencegahMalnutrisiId) {
             $jawabanMencegahMalnutrisi = JawabanMencegahMalnutrisi::where('mencegah_malnutrisi_id', $mencegahMalnutrisiId)->first();
 
-            if ($jawabanMencegahMalnutrisi) {
-                return JawabanMencegahMalnutrisi::where('mencegah_malnutrisi_id', $mencegahMalnutrisiId)->delete();
+            if (!$jawabanMencegahMalnutrisi) {
+                return response([
+                    'message' => "Jawaban Mencegah Malnutrisi with mencegah_malnutrisi_id $mencegahMalnutrisiId doesn't exist"
+                ], 404);
             }
+            JawabanMencegahMalnutrisi::where('mencegah_malnutrisi_id', $mencegahMalnutrisiId)->delete();
             return response([
-                'message' => "Jawaban Mencegah Malnutrisi with mencegah_malnutrisi_id $mencegahMalnutrisiId doesn't exist"
-            ], 400);
+                'message' => "Jawaban Mencegah Malnutrisi deleted"
+            ], 200); 
         }
     }
 }

@@ -10,6 +10,7 @@ class PemeriksaanAnc extends Model
 {
     use HasFactory;
     use TraitUuid;
+    protected $guarded = ['id'];
 
     protected $table = 'pemeriksaan_anc';
 }

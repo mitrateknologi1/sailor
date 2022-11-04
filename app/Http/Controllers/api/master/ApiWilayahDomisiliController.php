@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\master;
 
 use App\Http\Controllers\Controller;
 use App\Models\WilayahDomisili;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,6 +20,7 @@ class ApiWilayahDomisiliController extends Controller
         $relation = $request->relation;
         $anggotaKeluargaId = $request->anggota_keluarga_id;
         $wilayahDomisili = new WilayahDomisili;
+        $filter = $request->is_filter;
 
         if ($relation) {
             $wilayahDomisili = WilayahDomisili::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'anggotaKeluarga');
@@ -28,7 +30,11 @@ class ApiWilayahDomisiliController extends Controller
             return $wilayahDomisili->where("anggota_keluarga_id", $anggotaKeluargaId)->first();
         }
 
-        return $wilayahDomisili->orderBy('updated_at', 'desc')->get();
+        if($filter){
+            return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->groupBy('desa_kelurahan_id')->orderBy('updated_at', 'desc')->get();
+        }
+        return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->orderBy('updated_at', 'desc')->get();
+        // return $wilayahDomisili->orderBy('updated_at', 'desc')->get();
     }
 
     /**
@@ -74,8 +80,15 @@ class ApiWilayahDomisiliController extends Controller
      */
     public function upload(Request $request)
     {
+        $isUpdate = $request->is_update;
+        if($isUpdate){
+            $nik = $request->nik;
+            $nikValidation = "required|unique:anggota_keluarga,nik,".$nik .",nik";
+        }else{
+            $nikValidation = "required|unique:anggota_keluarga,nik";
+        }
         $request->validate([
-            "nik" => "required|unique:anggota_keluarga,nik",
+            "nik" => $nikValidation,
             "file_domisili" => 'required|mimes:jpeg,jpg,png,pdf|max:3072',
         ]);
 
@@ -114,8 +127,19 @@ class ApiWilayahDomisiliController extends Controller
         ]);
         $wilayahDomisili = WilayahDomisili::find($id);
 
+        $data = [
+            "anggota_keluarga_id" => $request->anggota_keluarga_id,
+            "alamat" => $request->alamat,
+            "desa_kelurahan_id" => $request->desa_kelurahan_id,
+            "kecamatan_id" => $request->kecamatan_id,
+            "kabupaten_kota_id" => $request->kabupaten_kota_id,
+            "provinsi_id" => $request->provinsi_id,
+            "file_ket_domisili" => $request->file_ket_domisili,
+            "updated_at" => Carbon::now(),
+        ];
+
         if ($wilayahDomisili) {
-            $wilayahDomisili->update($request->all());
+            $wilayahDomisili->update($data);
             return $wilayahDomisili;
         }
 

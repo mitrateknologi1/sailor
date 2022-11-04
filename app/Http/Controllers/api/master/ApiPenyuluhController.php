@@ -22,6 +22,7 @@ class ApiPenyuluhController extends Controller
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
         $penyuluh = new Penyuluh;
 
+        $penyuluh = Penyuluh::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama',);
         if ($relation) {
             $penyuluh = Penyuluh::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama',);
         }
@@ -39,7 +40,16 @@ class ApiPenyuluhController extends Controller
             });
         }
 
-        return $penyuluh->orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return $penyuluh->orderBy('updated_at', 'desc')->paginate($pageSize);
+        $data = $penyuluh->orderBy('updated_at', 'desc')->get();
+        $response = [];
+        foreach ($data as $d) {
+            array_push($response, $d);
+            if(count($d->lokasiTugas) > 0){
+                $d->lokasiTugas[0]->desa_kelurahan = $d->lokasiTugas[0]->desaKelurahan;
+            }
+        }
+        return $response;
     }
 
     /**
@@ -127,21 +137,13 @@ class ApiPenyuluhController extends Controller
     {
 
         $request->validate([
-            "user_id" => 'required|exists:users,id',
-            "nik" => "required|numeric|unique:penyuluh,nik,$id",
-            "nama_lengkap" => 'required|string',
-            "jenis_kelamin" => 'required|in:PEREMPUAN,LAKI-LAKI',
-            "tempat_lahir" => 'required|string',
-            "tanggal_lahir" => 'required|string',
-            "agama_id" => 'required|numeric',
-            "tujuh_angka_terakhir_str" => 'required|string',
-            "nomor_hp" => "required|string|unique:bidan,nomor_hp,$id",
-            "email" => "required|string",
-            "alamat" => 'required|string',
-            "desa_kelurahan_id" => "required|exists:desa_kelurahan,id",
-            "kecamatan_id" => "required|exists:kecamatan,id",
-            "kabupaten_kota_id" => "required|exists:kabupaten_kota,id",
-            "provinsi_id" => "required|exists:provinsi,id",
+            "user_id" => 'exists:users,id',
+            "nik" => "unique:penyuluh,nik,$id",
+            "nomor_hp" => "unique:penyuluh,nomor_hp,$id",
+            "desa_kelurahan_id" => "exists:desa_kelurahan,id",
+            "kecamatan_id" => "exists:kecamatan,id",
+            "kabupaten_kota_id" => "exists:kabupaten_kota,id",
+            "provinsi_id" => "exists:provinsi,id",
         ]);
 
         $penyuluh = Penyuluh::find($id);
@@ -152,7 +154,7 @@ class ApiPenyuluhController extends Controller
 
         return response([
             'message' => "Penyuluh with id $id doesn't exist"
-        ], 400);
+        ], 404);
     }
 
     /**

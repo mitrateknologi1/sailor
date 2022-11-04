@@ -180,6 +180,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Ejarnutowski\LaravelApiKey\Providers\ApiKeyServiceProvider::class,
+
     ],
 
     /*
