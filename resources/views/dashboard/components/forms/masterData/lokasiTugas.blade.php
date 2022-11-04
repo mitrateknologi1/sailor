@@ -18,9 +18,9 @@
                                 'wajib' => '<sup class="text-danger">*</sup>',
                             ])
                             @slot('options')
-                                @foreach ($provinsi as $prov)
-                                    <option value="{{ $prov->id }}"
-                                        {{ $prov->id == $row->provinsi_id ? 'selected' : '' }}>{{ $prov->nama }}</option>
+                                @foreach ($provinsi->where('id', 72) as $prov)
+                                    <option value="{{ $prov->id }}" {{ $prov->id == $row->provinsi_id ? 'selected' : '' }}>
+                                        {{ $prov->nama }}</option>
                                 @endforeach
                             @endslot
                         @endcomponent
@@ -58,8 +58,8 @@
                             ])
                             @slot('options')
                                 @foreach ($kecamatan as $kec)
-                                    <option value="{{ $kec->id }}"
-                                        {{ $kec->id == $row->kecamatan_id ? 'selected' : '' }}>{{ $kec->nama }}</option>
+                                    <option value="{{ $kec->id }}" {{ $kec->id == $row->kecamatan_id ? 'selected' : '' }}>
+                                        {{ $kec->nama }}</option>
                                 @endforeach
                             @endslot
                         @endcomponent

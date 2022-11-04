@@ -7,7 +7,6 @@
         #email {
             text-transform: lowercase !important;
         }
-
     </style>
 @endpush
 
@@ -27,7 +26,10 @@
                         'class' => 'select2',
                         'attribute' => '',
                         'wajib' => '<sup class="text-danger">*</sup>',
-                        'button_add' => '<a href="' . route('user.create') . '" class="badge rounded-pill bg-success text-white shadow-sm float-end"><i class="bi bi-plus-circle"></i> Buat Akun</a>',
+                        'button_add' =>
+                            '<a href="' .
+                            route('user.create') .
+                            '" class="badge rounded-pill bg-success text-white shadow-sm float-end"><i class="bi bi-plus-circle"></i> Buat Akun</a>',
                     ])
                     @slot('options')
                         @foreach ($users as $row)
@@ -174,7 +176,7 @@
                     'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
-                    @foreach ($provinsi as $prov)
+                    @foreach ($provinsi->where('id', 72) as $prov)
                         <option value="{{ $prov->id }}"
                             {{ isset($admin) && $prov->id == $admin->provinsi_id ? 'selected' : '' }}>{{ $prov->nama }}
                         </option>

@@ -46,9 +46,10 @@ services:
     phpmyadmin:
         image: 'phpmyadmin:latest'
         ports:
-            - 8888:80
+            - 8686:80
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            UPLOAD_LIMIT: 100000000
         links:
             - "mysql:db"
         depends_on:
