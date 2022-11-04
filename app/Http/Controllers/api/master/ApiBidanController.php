@@ -21,7 +21,7 @@ class ApiBidanController extends Controller
         $search = $request->search;
         $lokasiTugasKelurahanId = $request->lokasi_tugas_desa_kelurahan_id;
         $bidan = new Bidan;
-
+        $bidan = Bidan::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
         if ($relation) {
             $bidan = Bidan::with('user', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'lokasiTugas', 'agama');
         }
@@ -39,7 +39,17 @@ class ApiBidanController extends Controller
             });
         }
 
-        return $bidan->orderBy('updated_at', 'desc')->paginate($pageSize);
+        // return $bidan->orderBy('updated_at', 'desc')->paginate($pageSize);
+        $data = $bidan->orderBy('updated_at', 'desc')->get();
+        $response = [];
+        foreach ($data as $d) {
+            array_push($response, $d);
+            $d->lokasiTugas[0]->provinsi = $d->lokasiTugas[0]->provinsi;
+            $d->lokasiTugas[0]->kabupatenKota = $d->lokasiTugas[0]->kabupatenKota;
+            $d->lokasiTugas[0]->kecamatan = $d->lokasiTugas[0]->kecamatan;
+            $d->lokasiTugas[0]->desaKelurahan = $d->lokasiTugas[0]->desaKelurahan;
+        }
+        return $response;
     }
 
     /**
@@ -142,7 +152,7 @@ class ApiBidanController extends Controller
 
         return response([
             'message' => "Bidan with id $id doesn't exist"
-        ], 400);
+        ], 404);
     }
 
     /**

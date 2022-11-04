@@ -4,13 +4,18 @@ namespace App\Http\Controllers\api\master;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\AnggotaKeluarga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Bidan;
+use App\Models\DesaKelurahan;
+use App\Models\KabupatenKota;
+use App\Models\Kecamatan;
 use App\Models\Penyuluh;
+use App\Models\Provinsi;
 
 class ApiAuthController extends Controller
 {
@@ -77,8 +82,10 @@ class ApiAuthController extends Controller
                 }else if($user->role == "penyuluh"){
                     $domisili = Penyuluh::where('user_id', $user->id)->first();
                 }else{
+                    $domisili = AnggotaKeluarga::where('user_id', $user->id)->first();
                     return response([
                         "user" => $user,
+                        "authDomisili" => $domisili,
                         "token" => $token,
                     ], 201);
                 }
@@ -114,9 +121,21 @@ class ApiAuthController extends Controller
             return response([
                 "message" => 'profile not found!',
             ], 404);
+        }else{
+            if(Auth::user()->role == "keluarga"){
+                $response = AnggotaKeluarga::with('user', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'statusHubunganDalamKeluarga', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan')
+                                            ->where('id', Auth::user()->profil->id)->first();
+            }
+            if(Auth::user()->role == "bidan"){
+                $response = Bidan::with('user', 'agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
+                                            ->where('id', Auth::user()->profil->id)->first();
+            }
+            if(Auth::user()->role == "penyuluh"){
+                $response = Penyuluh::with('user', 'agama', 'provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan')
+                                            ->where('id', Auth::user()->profil->id)->first();
+            }
+            return response($response, 200);
         }
-        return response([
-            "message" => 'OK',
-        ], 200);
+        
     }
 }

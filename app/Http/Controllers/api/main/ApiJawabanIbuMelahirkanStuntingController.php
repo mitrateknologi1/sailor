@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeteksiIbuMelahirkanStunting;
 use App\Models\JawabanDeteksiIbuMelahirkanStunting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,7 +17,7 @@ class ApiJawabanIbuMelahirkanStuntingController extends Controller
      */
     public function index(Request $request)
     {
-        $ibuMelahirkanStuntingId = $request->ibu_melahirkan_stunting_id;
+        $ibuMelahirkanStuntingId = $request->deteksi_ibu_melahirkan_stunting_id;
         $jawabanDeteksiIbuMelahirkanStunting = new JawabanDeteksiIbuMelahirkanStunting();
 
         if ($ibuMelahirkanStuntingId) {
@@ -47,7 +48,7 @@ class ApiJawabanIbuMelahirkanStuntingController extends Controller
             foreach ($reqBody as $key => $value) {
                 array_push($field, [
                     'id' => Str::uuid()->toString(),
-                    'deteksi_ibu_melahirkan_stunting' => $value->deteksi_ibu_melahirkan_stunting_id,
+                    'deteksi_ibu_melahirkan_stunting_id' => $value->deteksi_ibu_melahirkan_stunting_id,
                     'soal_id' => $value->soal_id,
                     'jawaban' => $value->jawaban,
                     'created_at' => now(),
@@ -89,21 +90,24 @@ class ApiJawabanIbuMelahirkanStuntingController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "deteksi_ibu_melahirkan_stunting_id" => 'required|exists:deteksi_ibu_melahirkan_stunting,id',
-            "soal_id" => 'required|exists:soal_ibu_melahirkan_stunting,id',
-            "jawaban" => 'required',
+            "*.id" => 'required|exists:jawaban_deteksi_ibu_melahirkan_stunting,id',
+            "*.deteksi_ibu_melahirkan_stunting_id" => 'required|exists:deteksi_ibu_melahirkan_stunting,id',
+            "*.soal_id" => 'required|exists:soal_ibu_melahirkan_stunting,id',
+            "*.jawaban" => 'required',
         ]);
 
-        $jawabanDeteksiIbuMelahirkanStunting = JawabanDeteksiIbuMelahirkanStunting::find($id);
-
-        if ($jawabanDeteksiIbuMelahirkanStunting) {
-            $jawabanDeteksiIbuMelahirkanStunting->update($request->all());
-            return $jawabanDeteksiIbuMelahirkanStunting;
+        $ibuStunting = DeteksiIbuMelahirkanStunting::find($id);
+        if(!$ibuStunting){
+            return response([
+                'message' => "Jawaban Deteksi Ibu Melahirkan Stunting with Ibu Stunting id $id doesn't exist"
+            ], 404);
         }
-
+        foreach ($request->all() as $req) {
+            JawabanDeteksiIbuMelahirkanStunting::where('id', $req['id'])->update($req);
+        }
         return response([
-            'message' => "Jawaban Deteksi Ibu Melahirkan Stunting with id $id doesn't exist"
-        ], 400);
+            'message' => "Jawaban Deteksi Ibu Melahirkan stunting updated!"
+        ], 200);
     }
 
     /**

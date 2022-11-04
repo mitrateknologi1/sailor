@@ -41,7 +41,7 @@ class ApiKartuKeluargaController extends Controller
 
         // return  $kartuKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
         $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-        $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan');
+        $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'anggotaKeluarga');
         if (Auth::user()->role != 'admin') {
             $data->where(function (Builder $query) use ($lokasiTugas) {
                 $query->whereIn('is_valid', [1, 2]);
@@ -73,6 +73,10 @@ class ApiKartuKeluargaController extends Controller
 
             $temp->user = $temp->kepalaKeluarga->user;
             $temp->bidan = $temp->kepalaKeluarga->bidan;
+
+            foreach ($temp->anggotaKeluarga as $anggota) {
+                $anggota->wilayah_domisili = $anggota->wilayahDomisili;
+            }
         }
         return $response;
     }
@@ -210,8 +214,9 @@ class ApiKartuKeluargaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $forceDelete = $request->force_delete;
         $kartuKeluarga = KartuKeluarga::find($id);
 
         if (!$kartuKeluarga) {
@@ -233,11 +238,19 @@ class ApiKartuKeluargaController extends Controller
             $pemberitahuan = Pemberitahuan::where('anggota_keluarga_id', $anggota->id);
 
             if ($anggota->wilayahDomisili) {
-                $anggota->wilayahDomisili->delete();
+                if($forceDelete){
+                    $anggota->wilayahDomisili->forceDelete();
+                }else{
+                    $anggota->wilayahDomisili->delete();
+                }
             }
 
             if ($pemberitahuan) {
-                $pemberitahuan->delete();
+                if($forceDelete){
+                    $pemberitahuan->forceDelete();
+                }else{
+                    $pemberitahuan->delete();
+                }
             }
         }
         if (Storage::exists('upload/kartu_keluarga/' . $kartuKeluarga->file_kk)) {
@@ -250,17 +263,29 @@ class ApiKartuKeluargaController extends Controller
             $remaja = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id)
                 ->where('status_hubungan_dalam_keluarga_id', 4)
                 ->whereNotNull('user_id')->get();
-            foreach ($remaja as $r) {
-                $r->user->delete();
+            if($forceDelete){
+                foreach ($remaja as $r) {
+                    $r->user->forceDelete();
+                }
+                $user->forceDelete();
+            }else{
+                foreach ($remaja as $r) {
+                    $r->user->delete();
+                }
+                $user->delete();
             }
-            // $remaja->user->delete();
-            $user->delete();
         }
 
         $anggotaKeluarga = AnggotaKeluarga::where('kartu_keluarga_id', $kartuKeluarga->id);
-        $anggotaKeluarga->delete();
+        if($forceDelete){
+            $anggotaKeluarga->forceDelete();
+            return $kartuKeluarga->forceDelete();
+        }else{
+            $anggotaKeluarga->delete();
+            return $kartuKeluarga->delete();
+        }
 
-        return $kartuKeluarga->delete();
+        
     }
 
     /**

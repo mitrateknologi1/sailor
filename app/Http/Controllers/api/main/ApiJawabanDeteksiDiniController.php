@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\main;
 
 use App\Http\Controllers\Controller;
+use App\Models\DeteksiDini;
 use App\Models\JawabanDeteksiDini;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -46,7 +47,7 @@ class ApiJawabanDeteksiDiniController extends Controller
 
             foreach ($reqBody as $key => $value) {
                 array_push($field, [
-                    'id' => Str::uuid()->toString(),
+                    // 'id' => Str::uuid()->toString(),
                     'deteksi_dini_id' => $value->deteksi_dini_id,
                     'soal_id' => $value->soal_id,
                     'jawaban' => $value->jawaban,
@@ -89,21 +90,26 @@ class ApiJawabanDeteksiDiniController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "deteksi_dini_id" => 'required|exists:deteksi_dini,id',
-            "soal_id" => 'required|exists:soal_deteksi_dini,id',
-            "jawaban" => 'required',
+            "*.id" => 'required|exists:jawaban_deteksi_dini,id',
+            "*.deteksi_dini_id" => 'required|exists:deteksi_dini,id',
+            "*.soal_id" => 'required|exists:soal_deteksi_dini,id',
+            "*.jawaban" => 'required',
         ]);
 
-        $jawabanDeteksiDini = JawabanDeteksiDini::find($id);
+        $deteksiDini = DeteksiDini::find($id);
 
-        if ($jawabanDeteksiDini) {
-            $jawabanDeteksiDini->update($request->all());
-            return $jawabanDeteksiDini;
+        if(!$deteksiDini){
+            return response([
+                'message' => "Jawaban Deteksi Dini with Deteksi Dini id $id doesn't exist"
+            ], 404);
         }
 
+        foreach ($request->all() as $req) {
+            JawabanDeteksiDini::where('id', $req['id'])->update($req);
+        }
         return response([
-            'message' => "Jawaban Deteksi Dini with id $id doesn't exist"
-        ], 400);
+            'message' => "Jawaban Deteksi Dini updated!"
+        ], 200);
     }
 
     /**
