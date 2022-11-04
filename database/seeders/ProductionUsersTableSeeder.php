@@ -2791,6 +2791,34 @@ class ProductionUsersTableSeeder extends Seeder
                 'updated_at' => '2022-10-26 15:18:21',
                 'deleted_at' => NULL,
             ),
+            198 =>
+            array(
+                'id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e81', //2
+                'nomor_hp' => '081234567892',
+                'nik' => '1234567890123452',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'role' => 'bidan',
+                'is_remaja' => 0,
+                'status' => 1,
+                'remember_token' => NULL,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+                'deleted_at' => NULL,
+            ),
+            199 =>
+            array(
+                'id' => '5gf9ba91-4778-404c-aa7f-5fd327e87e82', //3
+                'nomor_hp' => '081234567893',
+                'nik' => '1234567890123453',
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'role' => 'bidan',
+                'is_remaja' => 0,
+                'status' => 1,
+                'remember_token' => NULL,
+                'created_at' => '2022-10-26 15:18:21',
+                'updated_at' => '2022-10-26 15:18:21',
+                'deleted_at' => NULL,
+            )
         ));
     }
 }

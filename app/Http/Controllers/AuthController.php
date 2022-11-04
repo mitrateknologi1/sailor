@@ -112,14 +112,15 @@ class AuthController extends Controller
     public function cekRemaja()
     {
         $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
-            ->where('tanggal_lahir', '<', Carbon::now()->subYears(10))
+            ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
+            ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
             ->whereDoesntHave('user')
             ->get();
 
         foreach ($remaja as $r) {
             $user = User::create([
                 'nik' => $r->nik,
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('password'),
                 'role' => 'keluarga',
                 'is_remaja' => 1,
                 'status' => 1,

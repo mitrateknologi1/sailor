@@ -329,7 +329,7 @@
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="fas fa-hand-paper"></i> Lengan Atas :</label>
+                                    <label><i class="fas fa-hand-paper"></i> Lengan Atas (Cm) :</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-lengan-atas">
                                         -
                                     </span>
@@ -341,13 +341,13 @@
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="fas fa-heart"></i> Hemoglobin Darah :</label>
+                                    <label><i class="fas fa-heart"></i> Hemoglobin Darah (mmHg) :</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-hemoglobin-darah">
                                         -
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="fas fa-heartbeat"></i> Denyut Jantung Janin :</label>
+                                    <label><i class="fas fa-heartbeat"></i> Denyut Jantung Janin (Dalam Menit) :</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-denyut-jantung">
                                         -
                                     </span>

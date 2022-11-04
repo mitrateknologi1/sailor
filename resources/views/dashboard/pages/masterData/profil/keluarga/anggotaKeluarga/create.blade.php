@@ -21,7 +21,6 @@
         #file-domisili {
             text-transform: lowercase !important;
         }
-
     </style>
 @endpush
 
@@ -155,6 +154,7 @@
                         processData: false,
                         contentType: false,
                         success: function(data) {
+                            console.log(data);
                             $("#overlay").fadeOut(100);
                             if ($.isEmptyObject(data.error)) {
                                 Swal.fire({
