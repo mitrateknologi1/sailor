@@ -7,7 +7,6 @@
         #email {
             text-transform: lowercase !important;
         }
-
     </style>
 @endpush
 
@@ -107,8 +106,7 @@
             ])
             @slot('options')
                 @foreach ($agama as $row)
-                    <option value="{{ $row->id }}"
-                        {{ isset($profil) && $row->id == $profil->agama_id ? 'selected' : '' }}>
+                    <option value="{{ $row->id }}" {{ isset($profil) && $row->id == $profil->agama_id ? 'selected' : '' }}>
                         {{ $row->agama }}</option>
                 @endforeach
             @endslot
@@ -252,7 +250,7 @@
                 @endcomponent
             </div>
         </div>
-        <span class="text-danger error-text jenis_kelamin-error"></span>
+        <span class="text-danger error-text kewarganegaraan-error"></span>
     </div>
     <div class="col-lg-3 col-md-3">
         @component('dashboard.components.formElements.input',
@@ -364,7 +362,7 @@
                     'wajib' => '<sup class="text-danger">*</sup>',
                 ])
                 @slot('options')
-                    @foreach ($provinsi as $prov)
+                    @foreach ($provinsi->where('id', 72) as $prov)
                         <option value="{{ $prov->id }}"
                             {{ isset($profil->wilayahDomisili) && $prov->id == $profil->wilayahDomisili->provinsi_id ? 'selected' : '' }}>
                             {{ $prov->nama }}</option>

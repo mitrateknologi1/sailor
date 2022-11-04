@@ -151,7 +151,7 @@ class BidanController extends Controller
                 ->whereDoesntHave('bidan')
                 ->get(),
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
         ];
         return view('dashboard.pages.masterData.profil.bidan.create', $data);
     }
@@ -291,7 +291,7 @@ class BidanController extends Controller
                 ->whereDoesntHave('bidan')
                 ->get(),
             'agama' => Agama::all(),
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
             'kabupatenKota' => KabupatenKota::where('provinsi_id', $bidan->provinsi_id)->get(),
             'kecamatan' => Kecamatan::where('kabupaten_kota_id', $bidan->kabupaten_kota_id)->get(),
             'desaKelurahan' => DesaKelurahan::where('kecamatan_id', $bidan->kecamatan_id)->get(),
@@ -311,7 +311,7 @@ class BidanController extends Controller
         $listDesaKelurahan = $bidan->lokasiTugas()->get()->pluck('kecamatan_id');
         $data = [
             'bidan' => $bidan,
-            'provinsi' => Provinsi::all(),
+            'provinsi' => Provinsi::orderBy('nama', 'ASC')->get(),
             'kabupatenKota' => KabupatenKota::whereIn('provinsi_id', $listProvinsi)->get(),
             'kecamatan' => Kecamatan::whereIn('kabupaten_kota_id', $listKecamatan)->get(),
             'desaKelurahan' => DesaKelurahan::whereIn('kecamatan_id', $listDesaKelurahan)->get(),

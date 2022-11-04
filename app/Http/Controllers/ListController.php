@@ -247,28 +247,28 @@ class ListController extends Controller
 
     public function listProvinsi()
     {
-        $url = DB::table('provinsi')->get();
+        $url = DB::table('provinsi')->where('id', 72)->get(); // khusus sulteng
         $json = json_decode(($url));
         return $json;
     }
 
     public function listKabupatenKota(Request $request)
     {
-        $url = DB::table('kabupaten_kota')->where('provinsi_id', $request->idProvinsi)->get();
+        $url = DB::table('kabupaten_kota')->where('provinsi_id', $request->idProvinsi)->orderBy('nama', 'ASC')->get();
         $json = json_decode(($url));
         return $json;
     }
 
     public function listKecamatan(Request $request)
     {
-        $url = DB::table('kecamatan')->where('kabupaten_kota_id', $request->idKabupatenKota)->get();
+        $url = DB::table('kecamatan')->where('kabupaten_kota_id', $request->idKabupatenKota)->orderBy('nama', 'ASC')->get();
         $json = json_decode(($url));
         return $json;
     }
 
     public function listDesaKelurahan(Request $request)
     {
-        $url = DB::table('desa_kelurahan')->where('kecamatan_id', $request->idKecamatan)->get();
+        $url = DB::table('desa_kelurahan')->where('kecamatan_id', $request->idKecamatan)->orderBy('nama', 'ASC')->get();
         $json = json_decode(($url));
         return $json;
     }
