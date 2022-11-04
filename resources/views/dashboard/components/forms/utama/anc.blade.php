@@ -132,7 +132,7 @@
         <div class="col-sm-12 col-lg-6">
             @component('dashboard.components.formElements.input',
                 [
-                    'label' => 'Lengan Atas',
+                    'label' => 'Lengan Atas (Cm)',
                     'type' => 'text',
                     'id' => 'lengan_atas',
                     'name' => 'lengan_atas',
@@ -145,7 +145,7 @@
         <div class="col-sm-12 col-lg-6">
             @component('dashboard.components.formElements.input',
                 [
-                    'label' => 'Tinggi Fundus (Dalam Cm)',
+                    'label' => 'Tinggi Fundus (Cm)',
                     'type' => 'text',
                     'id' => 'tinggi_fundus',
                     'name' => 'tinggi_fundus',
@@ -158,7 +158,7 @@
         <div class="col-sm-12 col-lg-6">
             @component('dashboard.components.formElements.input',
                 [
-                    'label' => 'Hemoglobin Darah',
+                    'label' => 'Hemoglobin Darah (mmHg)',
                     'type' => 'text',
                     'id' => 'hemoglobin_darah',
                     'name' => 'hemoglobin_darah',
@@ -344,7 +344,7 @@
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="fas fa-hand-paper"></i> Lengan Atas :</label>
+                                    <label><i class="fas fa-hand-paper"></i> Lengan Atas (Cm) :</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-lengan-atas">
                                         -
                                     </span>
@@ -356,7 +356,7 @@
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="fas fa-heart"></i> Hemoglobin Darah :</label>
+                                    <label><i class="fas fa-heart"></i> Hemoglobin Darah (mmHg) :</label>
                                     <span class="badge bg-info float-end text-uppercase" id="modal-hemoglobin-darah">
                                         -
                                     </span>
@@ -393,7 +393,8 @@
                                     </span>
                                 </li>
                                 <li class="justify-content-between mb-2">
-                                    <label><i class="fas fa-pencil-alt"></i> Denyut Jantung:</label>
+                                    <label><i class="fas fa-pencil-alt"></i> Denyut Jantung Janin (Dalam
+                                        Menit):</label>
                                     <span class="badge float-end text-uppercase kategori-bg"
                                         id="modal-kategori-denyut-jantung"> -
                                     </span>
