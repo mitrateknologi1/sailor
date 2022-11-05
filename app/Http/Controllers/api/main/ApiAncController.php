@@ -23,59 +23,31 @@ class ApiAncController extends Controller
      */
     public function index(Request $request)
     {
-        // $relation = $request->relation;
-        // $pageSize = $request->page_size ?? 20;
-        // $anc = new Anc;
-
-        // if ($relation) {
-        //     $anc = Anc::with('bidan', 'anggotaKeluarga');
-        // }
         if (in_array(Auth::user()->role, ['bidan', 'penyuluh'])) {
-            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-            $data = Anc::with('anggotaKeluarga', 'bidan', 'pemeriksaanAnc')->orderBy('created_at', 'DESC')
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+            $data = Anc::with('anggotaKeluarga.kartuKeluarga', 'anggotaKeluarga.wilayahDomisili.provinsi', 'anggotaKeluarga.wilayahDomisili.kabupatenKota', 'anggotaKeluarga.wilayahDomisili.kecamatan', 'anggotaKeluarga.wilayahDomisili.desaKelurahan', 'bidan', 'pemeriksaanAnc')->orderBy('created_at', 'DESC')
                 ->where(function ($query) use ($lokasiTugas) {
-                    if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                    if (Auth::user()->role != 'admin') {
                         $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                         });
                     }
-                    if (Auth::user()->role == 'bidan') { // bidan
-                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                    if (Auth::user()->role == 'bidan') {
+                        $query->orWhere('bidan_id', Auth::user()->profil->id);
                     }
 
-                    if (Auth::user()->role == 'penyuluh') { // penyuluh
+                    if (Auth::user()->role == 'penyuluh') {
                         $query->where('is_valid', 1);
                     }
                 })->get();
-
-                $response = [];
-                foreach ($data as $d) {
-                    array_push($response, $d);
-                    $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                    $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                    $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                    $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                    $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-                }
-                return $response;
+                return $data;
         }else{
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
-            $anc = Anc::with('anggotaKeluarga', 'bidan', 'pemeriksaanAnc')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+            $anc = Anc::with('anggotaKeluarga.kartuKeluarga', 'anggotaKeluarga.wilayahDomisili.provinsi', 'anggotaKeluarga.wilayahDomisili.kabupatenKota', 'anggotaKeluarga.wilayahDomisili.kecamatan', 'anggotaKeluarga.wilayahDomisili.desaKelurahan', 'bidan', 'pemeriksaanAnc')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
             })->latest()->get();
-            $response = [];
-                foreach ($anc as $d) {
-                    array_push($response, $d);
-                    $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                    $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                    $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                    $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                    $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-                }
-                return $response;
+            return $anc;
         }
-
-        // return $anc->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

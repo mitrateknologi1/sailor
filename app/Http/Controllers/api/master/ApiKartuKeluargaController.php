@@ -39,7 +39,6 @@ class ApiKartuKeluargaController extends Controller
             return  $kartuKeluarga->search($search)->orderBy('updated_at', 'desc')->paginate($pageSize);
         }
 
-        // return  $kartuKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
         $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
         $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'anggotaKeluarga');
         if (Auth::user()->role != 'admin') {
@@ -48,7 +47,7 @@ class ApiKartuKeluargaController extends Controller
                 $query->orWhere(function (Builder $query) use ($lokasiTugas) {
                     $query->where('is_valid', 0);
                     $query->whereHas('kepalaKeluarga', function (Builder $query) use ($lokasiTugas) {
-                        $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                        $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                     });
                 });
             });

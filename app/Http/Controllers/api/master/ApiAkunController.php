@@ -37,7 +37,6 @@ class ApiAkunController extends Controller
             return $user->search($search)->where('role', 'keluarga')->orderBy("updated_at", "desc")->paginate($pageSize);
         }
 
-        // return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->paginate($pageSize);
         return $user->where('role', 'keluarga')->orderBy('updated_at', 'desc')->get();
     }
 

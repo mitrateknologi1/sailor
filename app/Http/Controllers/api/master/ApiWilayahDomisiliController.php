@@ -34,7 +34,6 @@ class ApiWilayahDomisiliController extends Controller
             return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->groupBy('desa_kelurahan_id')->orderBy('updated_at', 'desc')->get();
         }
         return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->orderBy('updated_at', 'desc')->get();
-        // return $wilayahDomisili->orderBy('updated_at', 'desc')->get();
     }
 
     /**
