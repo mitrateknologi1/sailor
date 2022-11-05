@@ -39,7 +39,6 @@ class ApiBidanController extends Controller
             });
         }
 
-        // return $bidan->orderBy('updated_at', 'desc')->paginate($pageSize);
         $data = $bidan->orderBy('updated_at', 'desc')->get();
         $response = [];
         foreach ($data as $d) {

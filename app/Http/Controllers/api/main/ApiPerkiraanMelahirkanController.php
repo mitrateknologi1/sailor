@@ -22,10 +22,6 @@ class ApiPerkiraanMelahirkanController extends Controller
      */
     public function index(Request $request)
     {
-        $relation = $request->relation;
-        $pageSize = $request->page_size ?? 20;
-        $perikiraanMelahirkan = new PerkiraanMelahirkan;
-
         if(Auth::user()->role== "keluarga"){
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
             return PerkiraanMelahirkan::with('anggotaKeluarga', 'bidan')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
@@ -34,7 +30,7 @@ class ApiPerkiraanMelahirkanController extends Controller
         }
 
         $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-        $data = PerkiraanMelahirkan::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
+        $data = PerkiraanMelahirkan::with('anggotaKeluarga.kartuKeluarga', 'anggotaKeluarga.wilayahDomisili.provinsi', 'anggotaKeluarga.wilayahDomisili.kabupatenKota', 'anggotaKeluarga.wilayahDomisili.kecamatan', 'anggotaKeluarga.wilayahDomisili.desaKelurahan', 'bidan')->orderBy('created_at', 'DESC')
             ->where(function ($query) use ($lokasiTugas) {
                 if (Auth::user()->role != 'admin') { // bidan/penyuluh
                     $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
@@ -49,23 +45,7 @@ class ApiPerkiraanMelahirkanController extends Controller
                     $query->where('is_valid', 1);
                 }
             })->get();
-
-        $response = [];
-        foreach ($data as $d) {
-            array_push($response, $d);
-            $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-            $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-            $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-            $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-            $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-        }
-        return $response;
-
-        // $perikiraanMelahirkan = PerkiraanMelahirkan::with('bidan', 'anggotaKeluarga');
-        // if ($relation) {
-        //     $perikiraanMelahirkan = PerkiraanMelahirkan::with('bidan', 'anggotaKeluarga');
-        // }
-        // return $perikiraanMelahirkan->orderBy('updated_at', 'desc')->paginate($pageSize);
+        return $data;
     }
 
     /**

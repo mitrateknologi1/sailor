@@ -26,42 +26,17 @@ class ApiAnggotaKeluargaController extends Controller
     public function index(Request $request)
     {
         $kartuKeluargaId = $request->kartu_keluarga_id;
-        $pageSize = $request->page_size ?? 20;
-        $relation = $request->relation;
-        $search = $request->search;
-        $anggotaKeluarga = new AnggotaKeluarga;
 
         if(Auth::user()->role == "keluarga"){
-            $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan')
+            $data = AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'kartuKeluarga.provinsi', 'kartuKeluarga.kabupatenKota', 'kartuKeluarga.kecamatan', 'kartuKeluarga.desaKelurahan', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan')
             ->where('kartu_keluarga_id', Auth::user()->profil->kartu_keluarga_id)
             ->orderBy('status_hubungan_dalam_keluarga_id', 'ASC');    
             $result = $data->get();
-            $response = [];
-            foreach ($result as $r) {
-                array_push($response, $r);
-                $r->wilayahDomisili->provinsi = $r->wilayahDomisili->provinsi;
-                $r->wilayahDomisili->kabupaten_kota = $r->wilayahDomisili->kabupatenKota;
-                $r->wilayahDomisili->kecamatan = $r->wilayahDomisili->kecamatan;
-                $r->wilayahDomisili->desa_kelurahan = $r->wilayahDomisili->desakelurahan;
-
-                $r->agama = $r->agama;
-                $r->pendidikan = $r->pendidikan;
-                $r->pekerjaan = $r->pekerjaan;
-                $r->golongan_darah = $r->golonganDarah;
-                $r->status_perkawinan = $r->statusPerkawinan;
-                $r->status_hubungan_dalam_keluarga = $r->statusHubunganDalamKeluarga;
-                $r->user = $r->user;
-                $r->kartu_keluarga = $r->kartuKeluarga;
-                $r->kartu_keluarga->provinsi = $r->kartuKeluarga->provinsi;
-                $r->kartu_keluarga->kabupaten_kota = $r->kartuKeluarga->kabupatenKota;
-                $r->kartu_keluarga->kecamatan = $r->kartuKeluarga->kecamatan;
-                $r->kartu_keluarga->desa_kelurahan = $r->kartuKeluarga->desaKelurahan;
-            }
-            return $response;
+            return $result;
         }else if(Auth::user()->role == "bidan"){
             if($kartuKeluargaId){
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili')
+                $data = AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'user', 'kartuKeluarga.provinsi', 'kartuKeluarga.kabupatenKota', 'kartuKeluarga.kecamatan', 'kartuKeluarga.desaKelurahan','statusHubunganDalamKeluarga', 'bidan','wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan')
                 ->where('kartu_keluarga_id', $kartuKeluargaId);
                 $data->where(function (Builder $query) use ($lokasiTugas) {
                     $query->whereIn('is_valid', [1, 2]);
@@ -70,32 +45,11 @@ class ApiAnggotaKeluargaController extends Controller
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                     });
                 });
-                $response = [];
                 $result = $data->get();
-                foreach ($result as $r) {
-                    array_push($response, $r);
-                    $r->wilayahDomisili->provinsi = $r->wilayahDomisili->provinsi;
-                    $r->wilayahDomisili->kabupaten_kota = $r->wilayahDomisili->kabupatenKota;
-                    $r->wilayahDomisili->kecamatan = $r->wilayahDomisili->kecamatan;
-                    $r->wilayahDomisili->desa_kelurahan = $r->wilayahDomisili->desakelurahan;
-
-                    $r->agama = $r->agama;
-                    $r->pendidikan = $r->pendidikan;
-                    $r->pekerjaan = $r->pekerjaan;
-                    $r->golongan_darah = $r->golonganDarah;
-                    $r->status_perkawinan = $r->statusPerkawinan;
-                    $r->status_hubungan_dalam_keluarga = $r->statusHubunganDalamKeluarga;
-                    $r->user = $r->user;
-                    $r->kartu_keluarga = $r->kartuKeluarga;
-                    $r->kartu_keluarga->provinsi = $r->kartuKeluarga->provinsi;
-                    $r->kartu_keluarga->kabupaten_kota = $r->kartuKeluarga->kabupatenKota;
-                    $r->kartu_keluarga->kecamatan = $r->kartuKeluarga->kecamatan;
-                    $r->kartu_keluarga->desa_kelurahan = $r->kartuKeluarga->desaKelurahan;
-                }
-                return $response;
+                return $result;
             }else{
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili');
+                $data = AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'user', 'kartuKeluarga.provinsi', 'kartuKeluarga.kabupatenKota', 'kartuKeluarga.kecamatan', 'kartuKeluarga.desaKelurahan', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan');
                 $data->where(function (Builder $query) use ($lokasiTugas) {
                     $query->whereIn('is_valid', [1, 2]);
                     $query->orWhere(function (Builder $query) use ($lokasiTugas) {
@@ -103,72 +57,20 @@ class ApiAnggotaKeluargaController extends Controller
                         $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                     });
                 });
-                $response = [];
                 $result = $data->orderBy('updated_at', 'desc')->get();
-                foreach ($result as $r) {
-                    array_push($response, $r);
-                    $r->wilayahDomisili->provinsi = $r->wilayahDomisili->provinsi;
-                    $r->wilayahDomisili->kabupaten_kota = $r->wilayahDomisili->kabupatenKota;
-                    $r->wilayahDomisili->kecamatan = $r->wilayahDomisili->kecamatan;
-                    $r->wilayahDomisili->desa_kelurahan = $r->wilayahDomisili->desakelurahan;
-
-                    $r->agama = $r->agama;
-                    $r->pendidikan = $r->pendidikan;
-                    $r->pekerjaan = $r->pekerjaan;
-                    $r->golongan_darah = $r->golonganDarah;
-                    $r->status_perkawinan = $r->statusPerkawinan;
-                    $r->status_hubungan_dalam_keluarga = $r->statusHubunganDalamKeluarga;
-                    $r->user = $r->user;
-                    $r->kartu_keluarga = $r->kartuKeluarga;
-                    $r->kartu_keluarga->provinsi = $r->kartuKeluarga->provinsi;
-                    $r->kartu_keluarga->kabupaten_kota = $r->kartuKeluarga->kabupatenKota;
-                    $r->kartu_keluarga->kecamatan = $r->kartuKeluarga->kecamatan;
-                    $r->kartu_keluarga->desa_kelurahan = $r->kartuKeluarga->desaKelurahan;
-                }
-                return $response;
+                return $result;
             }
         }else{
             //penyuluh
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-                $data = AnggotaKeluarga::with('statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili')
+                $data = AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'user', 'kartuKeluarga.provinsi', 'kartuKeluarga.kabupatenKota', 'kartuKeluarga.kecamatan', 'kartuKeluarga.desaKelurahan','statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan')
                 ->where('kartu_keluarga_id', $kartuKeluargaId);
                 $data->where(function (Builder $query) use ($lokasiTugas) {
                         $query->where('is_valid', 1);
                 });
-                $response = [];
                 $result = $data->get();
-                foreach ($result as $r) {
-                    array_push($response, $r);
-                    $r->wilayahDomisili->provinsi = $r->wilayahDomisili->provinsi;
-                    $r->wilayahDomisili->kabupaten_kota = $r->wilayahDomisili->kabupatenKota;
-                    $r->wilayahDomisili->kecamatan = $r->wilayahDomisili->kecamatan;
-                    $r->wilayahDomisili->desa_kelurahan = $r->wilayahDomisili->desakelurahan;
-
-                    $r->agama = $r->agama;
-                    $r->pendidikan = $r->pendidikan;
-                    $r->pekerjaan = $r->pekerjaan;
-                    $r->golongan_darah = $r->golonganDarah;
-                    $r->status_perkawinan = $r->statusPerkawinan;
-                    $r->status_hubungan_dalam_keluarga = $r->statusHubunganDalamKeluarga;
-                    $r->user = $r->user;
-                    $r->kartu_keluarga = $r->kartuKeluarga;
-                    $r->kartu_keluarga->provinsi = $r->kartuKeluarga->provinsi;
-                    $r->kartu_keluarga->kabupaten_kota = $r->kartuKeluarga->kabupatenKota;
-                    $r->kartu_keluarga->kecamatan = $r->kartuKeluarga->kecamatan;
-                    $r->kartu_keluarga->desa_kelurahan = $r->kartuKeluarga->desaKelurahan;
-                }
-                return $response;
+                return $result;
         }
-
-        // if ($relation) {
-        //     $anggotaKeluarga = AnggotaKeluarga::with('kartuKeluarga', 'user', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili', 'agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan');
-        // }
-
-        // if ($search) {
-        //     return $anggotaKeluarga->search($search)->orderBy('updated_at', 'desc')->paginate($pageSize);
-        // }
-
-        // return $anggotaKeluarga->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**
