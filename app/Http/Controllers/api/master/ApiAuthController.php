@@ -51,7 +51,11 @@ class ApiAuthController extends Controller
             'password' => ['required']
         ]);
 
-        $user = User::where('nomor_hp', $credentials['nomor_hp'])->where('role', $credentials['role'])->first();
+        if($request->nik == null){
+            $user = User::where('nomor_hp', $credentials['nomor_hp'])->where('role', $credentials['role'])->first();
+        }else{
+            $user = User::where('nik', $credentials['nik'])->where('role', $credentials['role'])->first();
+        }
 
         if (Auth::attempt($credentials)) {
             if(Auth::user()->role == "admin"){
