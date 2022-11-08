@@ -260,3 +260,7 @@ Route::get('/provinsi', [ListController::class, 'listProvinsi'])->name('listProv
 Route::get('/kabupaten-kota', [ListController::class, 'listKabupatenKota'])->name('listKabupatenKota');
 Route::get('/kecamatan', [ListController::class, 'listKecamatan'])->name('listKecamatan');
 Route::get('/desa-kelurahan', [ListController::class, 'listDesaKelurahan'])->name('listDesaKelurahan');
+
+
+// Validation otomatis keluarga
+Route::get('/validation-keluarga', [AuthController::class, 'validationKeluarga']);

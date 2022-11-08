@@ -431,6 +431,7 @@
     <script>
         $(function() {
             $('#check-domisili').prop('checked', false)
+
             if ($('#desa-kelurahan-domisili').val() != '') {
                 if ($('#desa-kelurahan-domisili').val() == desaKelurahanKK) {
                     $('#check-domisili').prop('checked', true)
@@ -440,7 +441,6 @@
 
             if ($('{{ $anggotaKeluarga }}' != null)) {
                 $('.wajib-kata-sandi').addClass('d-none')
-
             }
         });
         // click radio button
@@ -476,13 +476,17 @@
             $('#kecamatan-domisili').attr('disabled', false)
             $('#desa-kelurahan-domisili').attr('disabled', false)
         } else {
+            // $('#check-domisili').prop('checked', true)
+            // domisiliClick()
             $('#kabupaten-kota-domisili').attr('disabled', true)
             $('#kecamatan-domisili').attr('disabled', true)
             $('#desa-kelurahan-domisili').attr('disabled', true)
 
         }
 
+
         $('#check-domisili').click(function() {
+            // domisiliClick()
             if ($(this).is(':checked')) {
                 if (alamatKK == '' || provinsiKK == '' || kabupatenKotaKK == '' || kecamatanKK == '' ||
                     desaKelurahanKK == '') {
@@ -507,6 +511,7 @@
             }
         })
 
+        // function domisiliClick() {}
 
         // $('#alamat-domisili').on('keyup', function(){
         //     if($('#alamat-domisili').val() != alamatKK){
