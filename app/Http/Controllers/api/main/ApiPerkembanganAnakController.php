@@ -23,17 +23,9 @@ class ApiPerkembanganAnakController extends Controller
      */
     public function index(Request $request)
     {
-        // $relation = $request->relation;
-        // $pageSize = $request->page_size ?? 20;
-        // $perkembanganAnak = new PerkembanganAnak;
-
-        // if ($relation) {
-        //     $perkembanganAnak = PerkembanganAnak::with('bidan', 'anggotaKeluarga');
-        // }
-
         if (in_array(Auth::user()->role, ['bidan', 'penyuluh'])) {
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-            $data = PerkembanganAnak::with('anggotaKeluarga', 'bidan')
+            $data = PerkembanganAnak::with('anggotaKeluarga.kartuKeluarga', 'anggotaKeluarga.wilayahDomisili.provinsi', 'anggotaKeluarga.wilayahDomisili.kabupatenKota', 'anggotaKeluarga.wilayahDomisili.kecamatan', 'anggotaKeluarga.wilayahDomisili.desaKelurahan', 'bidan')
                 ->where(function (Builder $query) use ($lokasiTugas) {
                     if (Auth::user()->role != 'admin') { // bidan/penyuluh
                         $query->whereHas('anggotaKeluarga', function (Builder $query) use ($lokasiTugas) {
@@ -48,38 +40,14 @@ class ApiPerkembanganAnakController extends Controller
                         $query->valid();
                     }
                 })->orderBy('created_at', 'DESC')->get();
-
-                $response = [];
-                foreach ($data as $d) {
-                    array_push($response, $d);
-                    $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                    $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                    $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                    $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                    $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-                }
-
-                return $response;
+                return $data;
         }else{
             $kartuKeluarga = Auth::user()->profil->kartu_keluarga_id;
-            $perkembanganAnak = PerkembanganAnak::with('anggotaKeluarga', 'bidan')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
+            $perkembanganAnak = PerkembanganAnak::with('anggotaKeluarga.kartuKeluarga', 'anggotaKeluarga.wilayahDomisili.provinsi', 'anggotaKeluarga.wilayahDomisili.kabupatenKota', 'anggotaKeluarga.wilayahDomisili.kecamatan', 'anggotaKeluarga.wilayahDomisili.desaKelurahan', 'bidan')->whereHas('anggotaKeluarga', function ($query) use ($kartuKeluarga) {
                 $query->where('kartu_keluarga_id', $kartuKeluarga);
             })->latest()->get();
-
-            $response = [];
-            foreach ($perkembanganAnak as $d) {
-                array_push($response, $d);
-                $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-            }
-
-            return $response;
+            return $perkembanganAnak;
         }
-
-        // return $perkembanganAnak->orderBy('updated_at', 'desc')->paginate($pageSize);
     }
 
     /**

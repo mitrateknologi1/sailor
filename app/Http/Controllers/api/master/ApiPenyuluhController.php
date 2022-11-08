@@ -40,7 +40,6 @@ class ApiPenyuluhController extends Controller
             });
         }
 
-        // return $penyuluh->orderBy('updated_at', 'desc')->paginate($pageSize);
         $data = $penyuluh->orderBy('updated_at', 'desc')->get();
         $response = [];
         foreach ($data as $d) {

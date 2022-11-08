@@ -24,63 +24,34 @@ class ApiRandaKabilasaController extends Controller
      */
     public function index(Request $request)
     {
-        // $relation = $request->relation;
-        // $pageSize = $request->page_size ?? 20;
-        // $randaKabilasa = new RandaKabilasa;
-
-        // if ($relation) {
-        //     $randaKabilasa = RandaKabilasa::with('bidan', 'anggotaKeluarga', 'mencegahMalnutrisi', 'mencegahPernikahanDini');
-        // }
-
-        // return $randaKabilasa->orderBy('updated_at', 'desc')->paginate($pageSize);
-        if (in_array(Auth::user()->role, ['bidan', 'penyuluh'])) {
-            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id); // lokasi tugas bidan/penyuluh
-            $data = RandaKabilasa::with('anggotaKeluarga', 'bidan', 'mencegahMalnutrisi', 'mencegahPernikahanDini')->orderBy('created_at', 'DESC')
+       if (in_array(Auth::user()->role, ['bidan', 'penyuluh'])) {
+            $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
+            $data = RandaKabilasa::with('anggotaKeluarga.kartuKeluarga', 'anggotaKeluarga.wilayahDomisili.provinsi', 'anggotaKeluarga.wilayahDomisili.kabupatenKota', 'anggotaKeluarga.wilayahDomisili.kecamatan', 'anggotaKeluarga.wilayahDomisili.desaKelurahan', 'bidan', 'mencegahMalnutrisi', 'mencegahPernikahanDini')->orderBy('created_at', 'DESC')
                 ->where(function ($query) use ($lokasiTugas) {
-                    if (Auth::user()->role != 'admin') { // bidan/penyuluh
+                    if (Auth::user()->role != 'admin') {
                         $query->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
-                            $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                            $query->ofDataSesuaiLokasiTugas($lokasiTugas);
                         });
                     }
-                    if (Auth::user()->role == 'bidan') { // bidan
-                        $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
+                    if (Auth::user()->role == 'bidan') {
+                        $query->orWhere('bidan_id', Auth::user()->profil->id);
                     }
 
-                    if (Auth::user()->role == 'penyuluh') { // penyuluh
+                    if (Auth::user()->role == 'penyuluh') {
                         $query->where('is_valid_mencegah_malnutrisi', 1);
                         $query->where('is_valid_mencegah_pernikahan_dini', 1);
                         $query->where('is_valid_meningkatkan_life_skill', 1);
                     }
                 })->get();
-                
-            $response = [];
-            foreach ($data as $d) {
-                array_push($response, $d);
-                $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-            }
-
-            return $response;
+            return $data;
         }else{
-            $randaKabilasa = RandaKabilasa::with('mencegahMalnutrisi', 'mencegahPernikahanDini', 'bidan')->where('anggota_keluarga_id', Auth::user()->keluarga->id)->get();
+            $randaKabilasa = RandaKabilasa::with('anggotaKeluarga.kartuKeluarga', 'anggotaKeluarga.wilayahDomisili.provinsi', 'anggotaKeluarga.wilayahDomisili.kabupatenKota', 'anggotaKeluarga.wilayahDomisili.kecamatan', 'anggotaKeluarga.wilayahDomisili.desaKelurahan', 'mencegahMalnutrisi', 'mencegahPernikahanDini', 'bidan')->where('anggota_keluarga_id', Auth::user()->keluarga->id)->get();
             if($randaKabilasa->count() < 1){
                 return response([
                     'message' => "Data Not Found!"
                 ], 404);
             }
-            $response = [];
-            foreach ($randaKabilasa as $d) {
-                array_push($response, $d);
-                $d->anggotaKeluarga->kartu_keluarga = $d->anggotaKeluarga->kartuKeluarga;
-                $d->anggotaKeluarga->wilayahDomisili->provinsi = $d->anggotaKeluarga->wilayahDomisili->provinsi;
-                $d->anggotaKeluarga->wilayahDomisili->kabupaten_kota = $d->anggotaKeluarga->wilayahDomisili->kabupatenKota;
-                $d->anggotaKeluarga->wilayahDomisili->kecamatan = $d->anggotaKeluarga->wilayahDomisili->kecamatan;
-                $d->anggotaKeluarga->wilayahDomisili->desa_kelurahan = $d->anggotaKeluarga->wilayahDomisili->desaKelurahan;
-            }
-            return $response;
+            return $randaKabilasa;
         }
     }
 
