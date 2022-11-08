@@ -83,7 +83,7 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::post('registrasi', [AuthController::class, 'insertRegistrasi'])->name('insertRegistrasi');
 
-Route::get('/cek-remaja', [AuthController::class, 'cekRemaja'])->name('cekRemaja');
+// Route::get('/cek-remaja', [AuthController::class, 'cekRemaja'])->name('cekRemaja');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/lengkapi-profil', [AuthController::class, 'lengkapiProfil'])->name('lengkapiProfil');
