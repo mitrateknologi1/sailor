@@ -75,6 +75,26 @@ class Kernel extends ConsoleKernel
                 $q->where('desa_kelurahan_id', $desa_kelurahan_domisili);
             })->inRandomOrder()->first()->id;
             $row->update(['bidan_id' => $bidan, 'is_valid' => 1, 'tanggal_validasi' => Carbon::now()]);
+
+            $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
+                ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
+                ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
+                ->where('id', $row->id)
+                ->whereDoesntHave('user')
+                ->first();
+
+            if ($remaja) {
+                $user = User::create([
+                    'nik' => $remaja->nik,
+                    'password' => Hash::make('password'),
+                    'role' => 'keluarga',
+                    'is_remaja' => 1,
+                    'status' => 1,
+                ]);
+
+                $remaja->user_id = $user->id;
+                $remaja->save();
+            }
         }
     }
 
