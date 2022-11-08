@@ -243,9 +243,40 @@ class PersonalController extends Controller
                 $profil = AnggotaKeluarga::with('wilayahDomisili', 'user')->find(Auth::user()->profil->id);
             }
 
+
+            if ($request->status_perkawinan != 1) {
+                $tanggal_perkawinan_req = 'required';
+            } else {
+                $tanggal_perkawinan_req = '';
+            }
+
+            // if ($profil->status_hubungan_dalam_keluarga_id != 1) {
+            // $status_hubungan_dalam_keluarga_req = 'required';
+            //     $status_hubungan_dalam_keluarga_val = $request->status_hubungan;
+            // } else {
+            // $status_hubungan_dalam_keluarga_req = '';
+            //     $status_hubungan_dalam_keluarga_val = 1;
+            // }
             $validator = Validator::make(
                 $request->all(),
                 [
+                    'nama_lengkap' => 'required',
+                    'nik' => 'required|unique:anggota_keluarga,nik,' . $profil->nik . ',nik,deleted_at,NULL|digits:16',
+                    'jenis_kelamin' => 'required',
+                    'tempat_lahir' => 'required',
+                    'tanggal_lahir' => 'required',
+                    'agama' => 'required',
+                    'pendidikan' => 'required',
+                    'pekerjaan' => 'required',
+                    'golongan_darah' => 'required',
+                    'status_perkawinan' => 'required',
+                    'tanggal_perkawinan' => $tanggal_perkawinan_req,
+                    // 'status_hubungan' => $status_hubungan_dalam_keluarga_req,
+                    'kewarganegaraan' => 'required',
+                    'nomor_paspor' => 'required',
+                    'nomor_kitap' => 'required',
+                    'ayah' => 'required',
+                    'ibu' => 'required',
                     'foto_profil' => 'mimes:jpeg,jpg,png|max:3072',
                     'alamat_domisili' => 'required',
                     'provinsi_domisili' => 'required',
@@ -299,7 +330,39 @@ class PersonalController extends Controller
                 $dataDomisili['file_ket_domisili'] = $profil->nik . '.' . $request->file('file_domisili')->extension();
             }
 
-            $dataProfil = [];
+            $dataProfil = [
+                'nama_lengkap' => strtoupper($request->nama_lengkap),
+                'nik' => $request->nik,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'tempat_lahir' => strtoupper($request->tempat_lahir),
+                'tanggal_lahir' => date("Y-m-d", strtotime($request->tanggal_lahir)),
+                'agama_id' => $request->agama,
+                'pendidikan_id' => $request->pendidikan,
+                'jenis_pekerjaan_id' => $request->pekerjaan,
+                'golongan_darah_id' => $request->golongan_darah,
+                'status_perkawinan_id' => $request->status_perkawinan,
+                'kewarganegaraan' => $request->kewarganegaraan,
+                'no_paspor' => $request->nomor_paspor,
+                'no_kitap' => $request->nomor_kitap,
+                'nama_ayah' => strtoupper($request->ayah),
+                'nama_ibu' => strtoupper($request->ibu),
+
+                'alamat_domisili' => $request->alamat_domisili,
+                'provinsi_domisili' => $request->provinsi_domisili,
+                'kabupaten_kota_domisili' => $request->kabupaten_kota_domisili,
+                'kecamatan_domisili' => $request->kecamatan_domisili,
+                'desa_kelurahan_domisili' => $request->desa_kelurahan_domisili,
+                'file_domisili' => $request->file_domisili,
+
+            ];
+            // $dataProfil['status_hubungan_dalam_keluarga_id'] = $status_hubungan_dalam_keluarga_val;
+
+            if ($request->status_perkawinan != 1) {
+                $dataProfil['tanggal_perkawinan'] = date("Y-m-d", strtotime($request->tanggal_perkawinan));
+            } else {
+                $dataProfil['tanggal_perkawinan'] = null;
+            }
+
             if ($request->file('foto_profil')) {
                 if (Storage::exists('upload/foto_profil/keluarga/' . $profil->foto_profil)) {
                     Storage::delete('upload/foto_profil/keluarga/' . $profil->foto_profil);
