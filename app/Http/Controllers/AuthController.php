@@ -735,28 +735,4 @@ class AuthController extends Controller
 
         return response()->json(['success' => 'Berhasil', 'mes' => 'Data Keluarga berhasil diperbarui, silahkan login secara berkala untuk mengetahui status data anda.']);
     }
-
-
-    public function validationKeluarga()
-    {
-        $kartuKeluarga = KartuKeluarga::where('is_valid', 0)->get();
-
-        foreach ($kartuKeluarga as $row) {
-            $desa_kelurahan_domisili = $row->kepalaKeluarga->wilayahDomisili->desa_kelurahan_id;
-            $bidan = Bidan::with('lokasiTugas')->whereHas('lokasiTugas', function ($q) use ($desa_kelurahan_domisili) {
-                $q->where('desa_kelurahan_id', $desa_kelurahan_domisili);
-            })->inRandomOrder()->first()->id;
-            $row->update(['bidan_id' => $bidan, 'is_valid' => 1, 'tanggal_validasi' => Carbon::now()]);
-            $row->kepalaKeluarga->update(['bidan_id' => $bidan, 'is_valid' => 1, 'tanggal_validasi' => Carbon::now()]);
-        }
-
-        $anggotaKeluarga = AnggotaKeluarga::where('is_valid', 0)->get();
-        foreach ($anggotaKeluarga as $row) {
-            $desa_kelurahan_domisili = $row->wilayahDomisili->desa_kelurahan_id;
-            $bidan = Bidan::with('lokasiTugas')->whereHas('lokasiTugas', function ($q) use ($desa_kelurahan_domisili) {
-                $q->where('desa_kelurahan_id', $desa_kelurahan_domisili);
-            })->inRandomOrder()->first()->id;
-            $row->update(['bidan_id' => $bidan, 'is_valid' => 1, 'tanggal_validasi' => Carbon::now()]);
-        }
-    }
 }

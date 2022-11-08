@@ -18,7 +18,8 @@
                 'type' => 'text',
                 'id' => 'nama-lengkap',
                 'name' => 'nama_lengkap',
-                'class' => 'ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'ubah-profil-',
                 'value' => $profil->nama_lengkap ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -31,7 +32,8 @@
                 'type' => 'text',
                 'id' => 'nik',
                 'name' => 'nik',
-                'class' => 'angka ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'angka ubah-profil-',
                 'value' => $profil->nik ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -47,7 +49,8 @@
                         'name' => 'jenis_kelamin',
                         'value' => 'LAKI-LAKI',
                         'label' => 'LAKI-LAKI',
-                        'class' => 'ubah-profil',
+                        // hilangkan "-" untuk meng-disable component
+                        'class' => 'ubah-profil-',
                         'checked' => isset($profil) && $profil->jenis_kelamin == 'LAKI-LAKI' ? 'checked' : '',
                     ])
                 @endcomponent
@@ -59,7 +62,8 @@
                         'name' => 'jenis_kelamin',
                         'value' => 'PEREMPUAN',
                         'label' => 'PEREMPUAN',
-                        'class' => 'ubah-profil',
+                        // hilangkan "-" untuk meng-disable component
+                        'class' => 'ubah-profil-',
                         'checked' => isset($profil) && $profil->jenis_kelamin == 'PEREMPUAN' ? 'checked' : '',
                     ])
                 @endcomponent
@@ -74,7 +78,8 @@
                 'type' => 'text',
                 'id' => 'tempat-lahir',
                 'name' => 'tempat_lahir',
-                'class' => 'ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'ubah-profil-',
                 'value' => $profil->tempat_lahir ?? null,
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -87,7 +92,8 @@
                 'type' => 'text',
                 'id' => 'tanggal-lahir',
                 'name' => 'tanggal_lahir',
-                'class' => 'tanggal ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'tanggal ubah-profil-',
                 'placeholder' => 'dd-mm-yyyy',
                 'value' => isset($profil) ? Carbon\Carbon::parse($profil->tanggal_lahir)->isoFormat('DD-MM-YYYY') : '',
                 'wajib' => '<sup class="text-danger">*</sup>',
@@ -100,7 +106,8 @@
                 'label' => 'Agama',
                 'name' => 'agama',
                 'id' => 'agama',
-                'class' => 'select2 agama ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'select2 agama ubah-profil-',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -118,7 +125,8 @@
                 'label' => 'Pendidikan',
                 'name' => 'pendidikan',
                 'id' => 'pendidikan',
-                'class' => 'select2 pendidikan ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'select2 pendidikan ubah-profil-',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -137,7 +145,8 @@
                 'label' => 'Jenis Pekerjaan',
                 'name' => 'pekerjaan',
                 'id' => 'pekerjaan',
-                'class' => 'select2 pekerjaan ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'select2 pekerjaan ubah-profil-',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -156,7 +165,8 @@
                 'label' => 'Golongan Darah',
                 'name' => 'golongan_darah',
                 'id' => 'golongan-darah',
-                'class' => 'select2 golongan-darah ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'select2 golongan-darah ubah-profil-',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -175,7 +185,8 @@
                 'label' => 'Status Perkawinan',
                 'name' => 'status_perkawinan',
                 'id' => 'status-perkawinan',
-                'class' => 'select2 status-perkawinan ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'select2 status-perkawinan ubah-profil-',
                 'attribute' => '',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -195,7 +206,8 @@
                 'type' => 'text',
                 'id' => 'tanggal-perkawinan',
                 'name' => 'tanggal_perkawinan',
-                'class' => 'tanggal ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'tanggal ubah-profil-',
                 'attribute' => 'disabled',
                 'placeholder' => 'dd-mm-yyyy',
                 'value' => isset($profil) ? Carbon\Carbon::parse($profil->tanggal_perkawinan)->isoFormat('DD-MM-YYYY') : null,
@@ -209,7 +221,8 @@
                 'label' => 'Status Hubungan Dalam Keluarga',
                 'name' => 'status_hubungan',
                 'id' => 'status-hubungan',
-                'class' => 'select2 status-hubungan ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'select2 status-hubungan ubah-profil-',
                 'attribute' => 'disabled',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
@@ -229,7 +242,8 @@
                 @component('dashboard.components.formElements.radio',
                     [
                         'id' => 'kewarganegaraan-wni',
-                        'class' => 'kewarganegaraan ubah-profil',
+                        // hilangkan "-" untuk meng-disable component
+                        'class' => 'kewarganegaraan ubah-profil-',
                         'name' => 'kewarganegaraan',
                         'value' => 'WNI',
                         'label' => 'Warga Negara Indonesia (WNI)',
@@ -241,7 +255,8 @@
                 @component('dashboard.components.formElements.radio',
                     [
                         'id' => 'kewarganegaraan-wna',
-                        'class' => 'kewarganegaraan ubah-profil',
+                        // hilangkan "-" untuk meng-disable component
+                        'class' => 'kewarganegaraan ubah-profil-',
                         'name' => 'kewarganegaraan',
                         'value' => 'WNA',
                         'label' => 'Warga Negara Asing (WNA)',
@@ -260,7 +275,8 @@
                 'id' => 'nomor-paspor',
                 'name' => 'nomor_paspor',
                 'value' => $profil->no_paspor ?? null,
-                'class' => 'nomor-paspor ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'nomor-paspor ubah-profil-',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -273,7 +289,8 @@
                 'id' => 'nomor-kitap',
                 'name' => 'nomor_kitap',
                 'value' => $profil->no_kitap ?? null,
-                'class' => 'nomor-kitap ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'nomor-kitap ubah-profil-',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -286,7 +303,8 @@
                 'id' => 'ayah',
                 'name' => 'ayah',
                 'value' => $profil->nama_ayah ?? null,
-                'class' => 'ayah ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'ayah ubah-profil-',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -299,7 +317,8 @@
                 'id' => 'ibu',
                 'name' => 'ibu',
                 'value' => $profil->nama_ibu ?? null,
-                'class' => 'ibu ubah-profil',
+                // hilangkan "-" untuk meng-disable component
+                'class' => 'ibu ubah-profil-',
                 'wajib' => '<sup class="text-danger">*</sup>',
             ])
         @endcomponent
@@ -471,6 +490,10 @@
         var desaKelurahanKK = '{{ $desaKelurahanKK }}';
 
         function inisialisasi() {
+            $('.angka').mask('0000000000000000');
+            $('.tanggal').mask('00-00-0000');
+
+
             $('#status-hubungan').attr('disabled', true);
 
             // if ('{{ $profil->status_hubungan_dalam_keluarga_id }}' == 1) {
@@ -502,8 +525,6 @@
                 }
             });
 
-
-
             $('#status-perkawinan').on('change', function() {
                 if ($('#status-perkawinan').val() != 1) {
                     $('#tanggal-perkawinan').prop('disabled', false);
@@ -512,6 +533,8 @@
                     $('#tanggal-perkawinan').val('');
                 }
             });
+
+            $('#status-perkawinan').trigger('change')
 
             $('#check-domisili').click(function() {
                 if ($(this).is(':checked')) {

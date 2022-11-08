@@ -66,6 +66,7 @@ class Kernel extends ConsoleKernel
             })->inRandomOrder()->first()->id;
             $row->update(['bidan_id' => $bidan, 'is_valid' => 1, 'tanggal_validasi' => Carbon::now()]);
             $row->kepalaKeluarga->update(['bidan_id' => $bidan, 'is_valid' => 1, 'tanggal_validasi' => Carbon::now()]);
+            $row->kepalaKeluarga->user->update(['status' => 1]);
         }
 
         $anggotaKeluarga = AnggotaKeluarga::where('is_valid', 0)->get();

@@ -431,6 +431,10 @@
     <script>
         $(function() {
             $('#check-domisili').prop('checked', false)
+            if ('{{ isset($anggotaKeluarga) }}') {} else {
+                $('#check-domisili').trigger('click')
+                checkDomisili()
+            }
 
             if ($('#desa-kelurahan-domisili').val() != '') {
                 if ($('#desa-kelurahan-domisili').val() == desaKelurahanKK) {
@@ -476,18 +480,14 @@
             $('#kecamatan-domisili').attr('disabled', false)
             $('#desa-kelurahan-domisili').attr('disabled', false)
         } else {
-            // $('#check-domisili').prop('checked', true)
-            // domisiliClick()
             $('#kabupaten-kota-domisili').attr('disabled', true)
             $('#kecamatan-domisili').attr('disabled', true)
             $('#desa-kelurahan-domisili').attr('disabled', true)
 
         }
 
-
-        $('#check-domisili').click(function() {
-            // domisiliClick()
-            if ($(this).is(':checked')) {
+        function checkDomisili() {
+            if ($('#check-domisili').is(':checked')) {
                 if (alamatKK == '' || provinsiKK == '' || kabupatenKotaKK == '' || kecamatanKK == '' ||
                     desaKelurahanKK == '') {
                     Swal.fire({
@@ -509,9 +509,11 @@
             } else {
                 $('#col-alamat-domisili').removeClass('d-none')
             }
-        })
+        }
 
-        // function domisiliClick() {}
+        $('#check-domisili').click(function() {
+            checkDomisili()
+        })
 
         // $('#alamat-domisili').on('keyup', function(){
         //     if($('#alamat-domisili').val() != alamatKK){
