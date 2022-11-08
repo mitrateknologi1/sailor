@@ -104,7 +104,7 @@ class ApiAnggotaKeluargaController extends Controller
         ]);
 
         $data = AnggotaKeluarga::create($request->all());
-        if (Auth::user()->role == 'bidan') {
+        if (Auth::user() && Auth::user()->role == 'bidan') {
             $remaja = AnggotaKeluarga::with('user')->where('status_hubungan_dalam_keluarga_id', 4)
                 ->where('tanggal_lahir', '<=', Carbon::now()->subYears(10))
                 ->where('tanggal_lahir', '>=', Carbon::now()->subYears(19))
