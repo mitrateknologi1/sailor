@@ -58,7 +58,7 @@ class KartuKeluargaController extends Controller
 
         if ($request->ajax()) {
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
-            $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan');
+            $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan');
             if (Auth::user()->role != 'admin') {
                 $data->where(function (Builder $query) use ($lokasiTugas) {
                     $query->whereIn('is_valid', [1, 2]);
@@ -211,7 +211,7 @@ class KartuKeluargaController extends Controller
                 ->addColumn('desa_kelurahan_domisili', function ($row) {
                     // return $row->wilayahDomisili->desaKelurahan->nama;
                     if ($row->kepalaKeluarga) {
-                        return $row->kepalaKeluarga->wilayahDomisili->desaKelurahan->nama;
+                        return $row->kepalaKeluarga->wilayahDomisili ? $row->kepalaKeluarga->wilayahDomisili->desaKelurahan->nama : '-';
                     }
                     // return $row->kepalaKeluarga->wilayahDomisili->desaKelurahan->nama;
                 })

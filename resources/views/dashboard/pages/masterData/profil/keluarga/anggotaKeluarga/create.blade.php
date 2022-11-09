@@ -101,6 +101,12 @@
 
 @push('script')
     <script>
+        // if ('{{ isset($anggotaKeluarga) }}') {} else {
+        //     $('#check-domisili').trigger('click')
+        //     checkDomisili()
+        // }
+
+
         if ("{{ Auth::user()->role }}" == "keluarga") {
             $('#m-link-anggota-keluarga').addClass('active');
         } else {
