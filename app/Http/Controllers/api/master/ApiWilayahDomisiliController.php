@@ -17,23 +17,27 @@ class ApiWilayahDomisiliController extends Controller
      */
     public function index(Request $request)
     {
-        $relation = $request->relation;
         $anggotaKeluargaId = $request->anggota_keluarga_id;
         $wilayahDomisili = new WilayahDomisili;
         $filter = $request->is_filter;
 
-        if ($relation) {
-            $wilayahDomisili = WilayahDomisili::with('provinsi', 'kabupatenKota', 'kecamatan', 'desaKelurahan', 'anggotaKeluarga');
-        }
 
         if ($anggotaKeluargaId) {
-            return $wilayahDomisili->where("anggota_keluarga_id", $anggotaKeluargaId)->first();
+            $data = $wilayahDomisili->where("anggota_keluarga_id", $anggotaKeluargaId)->first();
         }
 
         if($filter){
-            return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->groupBy('desa_kelurahan_id')->orderBy('updated_at', 'desc')->get();
+            $data = $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->groupBy('desa_kelurahan_id')->orderBy('updated_at', 'desc')->get();
+        }else{
+            $data = $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->orderBy('updated_at', 'desc')->get();
         }
-        return $wilayahDomisili->with('provinsi', 'kecamatan', 'kabupatenKota', 'desaKelurahan')->orderBy('updated_at', 'desc')->get();
+        
+        foreach ($data as $r) {
+            if($r->file_ket_domisili != null){
+                $r->file_ket_domisili = asset('storage/surat_keterangan_domisili'). "/". $r->file_ket_domisili;
+            }
+        }
+        return $data;
     }
 
     /**

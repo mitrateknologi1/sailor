@@ -77,6 +77,11 @@ class ApiKartuKeluargaController extends Controller
                 $anggota->wilayah_domisili = $anggota->wilayahDomisili;
             }
         }
+        foreach ($response as $r) {
+            if($r->file_kk != null){
+                $r->file_kk = asset('storage/kartu_keluarga'). "/". $r->file_kk;
+            }
+        }
         return $response;
     }
 

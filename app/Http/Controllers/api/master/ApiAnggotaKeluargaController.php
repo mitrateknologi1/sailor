@@ -32,7 +32,7 @@ class ApiAnggotaKeluargaController extends Controller
             ->where('kartu_keluarga_id', Auth::user()->profil->kartu_keluarga_id)
             ->orderBy('status_hubungan_dalam_keluarga_id', 'ASC');    
             $result = $data->get();
-            return $result;
+            // return $result;
         }else if(Auth::user()->role == "bidan"){
             if($kartuKeluargaId){
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
@@ -46,7 +46,7 @@ class ApiAnggotaKeluargaController extends Controller
                     });
                 });
                 $result = $data->get();
-                return $result;
+                // return $result;
             }else{
                 $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
                 $data = AnggotaKeluarga::with('agama', 'pendidikan', 'pekerjaan', 'golonganDarah', 'statusPerkawinan', 'user', 'kartuKeluarga.provinsi', 'kartuKeluarga.kabupatenKota', 'kartuKeluarga.kecamatan', 'kartuKeluarga.desaKelurahan', 'statusHubunganDalamKeluarga', 'bidan', 'wilayahDomisili.provinsi', 'wilayahDomisili.kabupatenKota', 'wilayahDomisili.kecamatan', 'wilayahDomisili.desaKelurahan');
@@ -58,7 +58,7 @@ class ApiAnggotaKeluargaController extends Controller
                     });
                 });
                 $result = $data->orderBy('updated_at', 'desc')->get();
-                return $result;
+                // return $result;
             }
         }else{
             //penyuluh
@@ -69,8 +69,14 @@ class ApiAnggotaKeluargaController extends Controller
                         $query->where('is_valid', 1);
                 });
                 $result = $data->get();
-                return $result;
+                // return $result;
         }
+        foreach ($result as $r) {
+            if($r->foto_profil != null){
+                $r->foto_profil = asset('storage/foto_profil'). "/". $r->foto_profil;
+            }
+        }
+        return $result;
     }
 
     /**
