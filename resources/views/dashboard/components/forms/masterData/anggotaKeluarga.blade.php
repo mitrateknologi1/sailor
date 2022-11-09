@@ -431,10 +431,6 @@
     <script>
         $(function() {
             $('#check-domisili').prop('checked', false)
-            if ('{{ isset($anggotaKeluarga) }}') {} else {
-                $('#check-domisili').trigger('click')
-                checkDomisili()
-            }
 
             if ($('#desa-kelurahan-domisili').val() != '') {
                 if ($('#desa-kelurahan-domisili').val() == desaKelurahanKK) {

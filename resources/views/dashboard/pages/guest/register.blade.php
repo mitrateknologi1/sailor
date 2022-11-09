@@ -250,6 +250,9 @@
                     })
                     $('.waktu').mask('00:00');
                     $('.angka').mask('0000000000000000');
+
+
+                    // $('#check-domisili').prop('checked', false)
                 })
 
 

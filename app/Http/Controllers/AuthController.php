@@ -421,8 +421,8 @@ class AuthController extends Controller
             $dataKartuKeluarga['file_kk'] = $request->nomor_kk . '.' . $request->file('file_kartu_keluarga')->extension();
         }
 
-        KartuKeluarga::create($dataKartuKeluarga);
-        $maxIdKK = KartuKeluarga::latest()->pluck('id')->first();
+        $insertKartuKeluarga = KartuKeluarga::create($dataKartuKeluarga);
+        $maxIdKK = $insertKartuKeluarga->id;
 
         $dataAkun = [
             'nomor_hp' => $request->nomor_hp,
@@ -435,8 +435,8 @@ class AuthController extends Controller
             $dataAkun['status'] = 1;
         }
 
-        User::create($dataAkun);
-        $maxIdUser = User::latest()->pluck('id')->first();
+        $insertAkun = User::create($dataAkun);
+        $maxIdUser = $insertAkun->id;
 
         $dataKepalaKeluarga = [
             'kartu_keluarga_id' => $maxIdKK,
@@ -481,8 +481,8 @@ class AuthController extends Controller
             $dataKepalaKeluarga['foto_profil'] = $request->nik . '.' . $request->file('foto_profil')->extension();
         }
 
-        AnggotaKeluarga::create($dataKepalaKeluarga);
-        $maxAnggotaKeluarga = AnggotaKeluarga::latest()->pluck('id')->first();
+        $insertAnggotaKeluarga = AnggotaKeluarga::create($dataKepalaKeluarga);
+        $maxAnggotaKeluarga = $insertAnggotaKeluarga->id;
 
 
         $dataWilayahDomisili = [
