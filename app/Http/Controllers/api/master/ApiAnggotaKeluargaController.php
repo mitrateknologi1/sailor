@@ -73,7 +73,7 @@ class ApiAnggotaKeluargaController extends Controller
         }
         foreach ($result as $r) {
             if($r->foto_profil != null){
-                $r->foto_profil = asset('storage/foto_profil'). "/". $r->foto_profil;
+                $r->foto_profil = asset('storage/foto_profil/keluarga'). "/". $r->foto_profil;
             }
         }
         return $result;
