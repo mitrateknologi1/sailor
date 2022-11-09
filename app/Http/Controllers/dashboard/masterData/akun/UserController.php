@@ -157,17 +157,17 @@ class UserController extends Controller
                     }
                 })
 
-                ->addColumn('bidan', function ($data) {
-                    if ($data->role == 'keluarga') {
-                        if ($data->keluarga->bidan) {
-                            return $data->keluarga->bidan->nama_lengkap;
-                        } else {
-                            return '<span class="badge rounded-pill bg-danger">Profil Belum Dikonfirmasi</span>';
-                        }
-                    } else {
-                        return '-';
-                    }
-                })
+                // ->addColumn('bidan', function ($data) {
+                //     if ($data->role == 'keluarga') {
+                //         if ($data->keluarga->bidan) {
+                //             return $data->keluarga->bidan->nama_lengkap;
+                //         } else {
+                //             return '<span class="badge rounded-pill bg-danger">Profil Belum Dikonfirmasi</span>';
+                //         }
+                //     } else {
+                //         return '-';
+                //     }
+                // })
 
                 ->addColumn('action', function ($row) {
                     $actionBtn = '
