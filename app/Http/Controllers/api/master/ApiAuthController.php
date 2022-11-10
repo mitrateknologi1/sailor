@@ -82,9 +82,9 @@ class ApiAuthController extends Controller
             if (Auth::user()->status == 1) {
                 $token = $user->createToken('myapptoken')->plainTextToken;
                 if($user->role == "bidan"){
-                    $domisili = Bidan::where('user_id', $user->id)->first();
+                    $domisili = Bidan::with('lokasiTugas')->where('user_id', $user->id)->first();
                 }else if($user->role == "penyuluh"){
-                    $domisili = Penyuluh::where('user_id', $user->id)->first();
+                    $domisili = Penyuluh::with('lokasiTugas')->where('user_id', $user->id)->first();
                 }else{
                     $domisili = AnggotaKeluarga::where('user_id', $user->id)->first();
                     return response([
