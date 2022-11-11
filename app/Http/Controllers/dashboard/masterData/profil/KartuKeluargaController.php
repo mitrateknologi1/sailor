@@ -60,19 +60,26 @@ class KartuKeluargaController extends Controller
             $lokasiTugas = LokasiTugas::ofLokasiTugas(Auth::user()->profil->id);
             $data = KartuKeluarga::with('provinsi', 'kabupatenKota', 'kecamatan');
             if (Auth::user()->role != 'admin') {
+                // $data->where(function (Builder $query) use ($lokasiTugas) {
+                //     $query->whereIn('is_valid', [1, 2]);
+                //     $query->orWhere(function (Builder $query) use ($lokasiTugas) {
+                //         $query->where('is_valid', 0);
+                //         $query->whereHas('kepalaKeluarga', function (Builder $query) use ($lokasiTugas) {
+                //             $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
+                //         });
+                //     });
+                // });
+
                 $data->where(function (Builder $query) use ($lokasiTugas) {
-                    $query->whereIn('is_valid', [1, 2]);
-                    $query->orWhere(function (Builder $query) use ($lokasiTugas) {
-                        $query->where('is_valid', 0);
+                    if (Auth::user()->role == 'penyuluh') {
+                        $query->where('is_valid', 1);
+                    }
+                    $query->where(function (Builder $query) use ($lokasiTugas) {
                         $query->whereHas('kepalaKeluarga', function (Builder $query) use ($lokasiTugas) {
                             $query->ofDataSesuaiLokasiTugas($lokasiTugas); // menampilkan data keluarga yang berada di lokasi tugasnya
                         });
                     });
                 });
-            }
-
-            if (Auth::user()->role == 'penyuluh') {
-                $data->where('is_valid', 1);
             }
 
             // Filter
