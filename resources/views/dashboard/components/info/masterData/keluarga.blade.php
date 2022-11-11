@@ -4,9 +4,9 @@
             <ul class="mx-3 mb-0 p-0">
                 <li>
                     @if (Auth::user()->role == 'bidan')
-                        Menampilkan keseluruhan data dari berbagai lokasi
+                        Menampilkan data berdasarkan lokasi tugas
                     @elseif (Auth::user()->role == 'penyuluh')
-                        Menampilkan keseluruhan data dari berbagai lokasi yang sudah divalidasi (Tervalidasi)
+                        Menampilkan data yang sudah divalidasi (Tervalidasi) berdasarkan lokasi tugas
                     @endif
                 </li>
                 <li>
