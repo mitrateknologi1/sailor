@@ -68,7 +68,26 @@
                                     @component('dashboard.components.dataTables.index',
                                         [
                                             'id' => 'table-bidan',
-                                            'th' => ['No', 'NIK', 'Nama Lengkap', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Agama', '7 Angka Terakhir STR', 'Nomor HP', 'Email', 'Alamat', 'Desa/Kelurahan', 'Kecamatan', 'Kabupaten/Kota', 'Provinsi', 'Dibuat Tanggal', 'Lokasi Tugas', 'Aksi'],
+                                            'th' => [
+                                                'No',
+                                                'NIK',
+                                                'Nama Lengkap',
+                                                'Jenis Kelamin',
+                                                'Tempat Lahir',
+                                                'Tanggal Lahir',
+                                                'Agama',
+                                                '7 Angka Terakhir STR',
+                                                'Nomor HP',
+                                                'Email',
+                                                'Alamat',
+                                                'Desa/Kelurahan',
+                                                'Kecamatan',
+                                                'Kabupaten/Kota',
+                                                'Provinsi',
+                                                'Dibuat Tanggal',
+                                                'Lokasi Tugas',
+                                                'Aksi',
+                                            ],
                                         ])
                                     @endcomponent
                                 </div>
@@ -225,6 +244,13 @@
                             search: 'applied' // 'none',    'applied', 'removed'
                         },
                         columns: ':visible'
+                    },
+                    customizeData: function(data) {
+                        for (var i = 0; i < data.body.length; i++) {
+                            for (var j = 0; j < data.body[i].length; j++) {
+                                data.body[i][j] = '\u200C' + data.body[i][j];
+                            }
+                        }
                     }
                 },
                 {
