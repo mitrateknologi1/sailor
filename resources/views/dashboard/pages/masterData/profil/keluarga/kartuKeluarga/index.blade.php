@@ -596,13 +596,20 @@
                             search: 'applied' // 'none',    'applied', 'removed'
                         },
                         columns: ':visible'
+                    },
+                    customizeData: function(data) {
+                        for (var i = 0; i < data.body.length; i++) {
+                            for (var j = 0; j < data.body[i].length; j++) {
+                                data.body[i][j] = '\u200C' + data.body[i][j];
+                            }
+                        }
                     }
                 },
                 {
                     extend: 'colvis',
                     className: 'btn btn-sm btn-light-success px-2 btn-export-table d-inline ml-3 font-weight',
                     text: '<i class="bi bi-eye-fill"></i> Tampil/Sembunyi Kolom',
-                }
+                },
             ],
             lengthMenu: [
                 [10, 25, 50, -1],
