@@ -36,143 +36,203 @@ class DashboardController extends Controller
 
 
 
-        $stuntingAnakValidasi = $this->_stunting_anak()['validasi'];
-        $stuntingAnakBelumValidasi = $this->_stunting_anak()['belum_validasi'];
-        $stuntingAnakDitolak = $this->_stunting_anak()['ditolak'];
         $stuntingAnakTotal = $this->_stunting_anak()['total'];
+        if (Auth::user()->role == 'penyuluh') { // penyuluh
+            $stuntingAnak = [
+                'stuntingAnakTotal'
+            ];
+        } else {
+            $stuntingAnakValidasi = $this->_stunting_anak()['validasi'];
+            $stuntingAnakBelumValidasi = $this->_stunting_anak()['belum_validasi'];
+            $stuntingAnakDitolak = $this->_stunting_anak()['ditolak'];
 
-        $stuntingAnak = [
-            'stuntingAnakValidasi',
-            'stuntingAnakBelumValidasi',
-            'stuntingAnakDitolak',
-            'stuntingAnakTotal'
-        ];
+            $stuntingAnak = [
+                'stuntingAnakValidasi',
+                'stuntingAnakBelumValidasi',
+                'stuntingAnakDitolak',
+                'stuntingAnakTotal'
+            ];
+        }
 
-        $ibuMelahirkanStuntingValidasi = $this->_ibu_melahirkan_stunting()['validasi'];
-        $ibuMelahirkanStuntingBelumValidasi = $this->_ibu_melahirkan_stunting()['belum_validasi'];
-        $ibuMelahirkanStuntingDitolak = $this->_ibu_melahirkan_stunting()['ditolak'];
         $ibuMelahirkanStuntingTotal = $this->_ibu_melahirkan_stunting()['total'];
+        if (Auth::user()->role == 'penyuluh') {
+            $ibuMelahirkanStunting = [
+                'ibuMelahirkanStuntingTotal'
+            ];
+        } else {
+            $ibuMelahirkanStuntingValidasi = $this->_ibu_melahirkan_stunting()['validasi'];
+            $ibuMelahirkanStuntingBelumValidasi = $this->_ibu_melahirkan_stunting()['belum_validasi'];
+            $ibuMelahirkanStuntingDitolak = $this->_ibu_melahirkan_stunting()['ditolak'];
 
-        $ibuMelahirkanStunting = [
-            'ibuMelahirkanStuntingValidasi',
-            'ibuMelahirkanStuntingBelumValidasi',
-            'ibuMelahirkanStuntingDitolak',
-            'ibuMelahirkanStuntingTotal'
-        ];
+            $ibuMelahirkanStunting = [
+                'ibuMelahirkanStuntingValidasi',
+                'ibuMelahirkanStuntingBelumValidasi',
+                'ibuMelahirkanStuntingDitolak',
+                'ibuMelahirkanStuntingTotal'
+            ];
+        }
 
-        $perkiraanMelahirkanValidasi = $this->_perkiraan_melahirkan()['validasi'];
-        $perkiraanMelahirkanBelumValidasi = $this->_perkiraan_melahirkan()['belum_validasi'];
-        $perkiraanMelahirkanDitolak = $this->_perkiraan_melahirkan()['ditolak'];
         $perkiraanMelahirkanTotal = $this->_perkiraan_melahirkan()['total'];
+        if (Auth::user()->role == 'penyuluh') {
+            $perkiraanMelahirkan = [
+                'perkiraanMelahirkanTotal'
+            ];
+        } else {
+            $perkiraanMelahirkanValidasi = $this->_perkiraan_melahirkan()['validasi'];
+            $perkiraanMelahirkanBelumValidasi = $this->_perkiraan_melahirkan()['belum_validasi'];
+            $perkiraanMelahirkanDitolak = $this->_perkiraan_melahirkan()['ditolak'];
 
-        $perkiraanMelahirkan = [
-            'perkiraanMelahirkanValidasi',
-            'perkiraanMelahirkanBelumValidasi',
-            'perkiraanMelahirkanDitolak',
-            'perkiraanMelahirkanTotal'
-        ];
+            $perkiraanMelahirkan = [
+                'perkiraanMelahirkanValidasi',
+                'perkiraanMelahirkanBelumValidasi',
+                'perkiraanMelahirkanDitolak',
+                'perkiraanMelahirkanTotal'
+            ];
+        }
 
-        $deteksiDiniValidasi = $this->_deteksi_dini()['validasi'];
-        $deteksiDiniBelumValidasi = $this->_deteksi_dini()['belum_validasi'];
-        $deteksiDiniDitolak = $this->_deteksi_dini()['ditolak'];
+
         $deteksiDiniTotal = $this->_deteksi_dini()['total'];
 
-        $deteksiDini = [
-            'deteksiDiniValidasi',
-            'deteksiDiniBelumValidasi',
-            'deteksiDiniDitolak',
-            'deteksiDiniTotal'
-        ];
+        if (Auth::user()->role == 'penyuluh') {
+            $deteksiDini = [
+                'deteksiDiniTotal'
+            ];
+        } else {
+            $deteksiDiniValidasi = $this->_deteksi_dini()['validasi'];
+            $deteksiDiniBelumValidasi = $this->_deteksi_dini()['belum_validasi'];
+            $deteksiDiniDitolak = $this->_deteksi_dini()['ditolak'];
 
-        $ancValidasi = $this->_anc()['validasi'];
-        $ancBelumValidasi = $this->_anc()['belum_validasi'];
-        $ancDitolak = $this->_anc()['ditolak'];
+            $deteksiDini = [
+                'deteksiDiniValidasi',
+                'deteksiDiniBelumValidasi',
+                'deteksiDiniDitolak',
+                'deteksiDiniTotal'
+            ];
+        }
+
         $ancTotal = $this->_anc()['total'];
+        if (Auth::user()->role == 'penyuluh') {
+            $anc = [
+                'ancTotal'
+            ];
+        } else {
+            $ancValidasi = $this->_anc()['validasi'];
+            $ancBelumValidasi = $this->_anc()['belum_validasi'];
+            $ancDitolak = $this->_anc()['ditolak'];
 
-        $anc = [
-            'ancValidasi',
-            'ancBelumValidasi',
-            'ancDitolak',
-            'ancTotal'
-        ];
+            $anc = [
+                'ancValidasi',
+                'ancBelumValidasi',
+                'ancDitolak',
+                'ancTotal'
+            ];
+        }
 
-        $pertumbuhanAnakValidasi = $this->_pertumbuhan_anak()['validasi'];
-        $pertumbuhanAnakBelumValidasi = $this->_pertumbuhan_anak()['belum_validasi'];
-        $pertumbuhanAnakDitolak = $this->_pertumbuhan_anak()['ditolak'];
         $pertumbuhanAnakTotal = $this->_pertumbuhan_anak()['total'];
+        if (Auth::user()->role == 'penyuluh') {
+            $pertumbuhanAnak = [
+                'pertumbuhanAnakTotal'
+            ];
+        } else {
+            $pertumbuhanAnakValidasi = $this->_pertumbuhan_anak()['validasi'];
+            $pertumbuhanAnakBelumValidasi = $this->_pertumbuhan_anak()['belum_validasi'];
+            $pertumbuhanAnakDitolak = $this->_pertumbuhan_anak()['ditolak'];
 
-        $pertumbuhanAnak = [
-            'pertumbuhanAnakValidasi',
-            'pertumbuhanAnakBelumValidasi',
-            'pertumbuhanAnakDitolak',
-            'pertumbuhanAnakTotal'
-        ];
+            $pertumbuhanAnak = [
+                'pertumbuhanAnakValidasi',
+                'pertumbuhanAnakBelumValidasi',
+                'pertumbuhanAnakDitolak',
+                'pertumbuhanAnakTotal'
+            ];
+        }
 
-        $perkembanganAnakValidasi = $this->_perkembangan_anak()['validasi'];
-        $perkembanganAnakBelumValidasi = $this->_perkembangan_anak()['belum_validasi'];
-        $perkembanganAnakDitolak = $this->_perkembangan_anak()['ditolak'];
         $perkembanganAnakTotal = $this->_perkembangan_anak()['total'];
+        if (Auth::user()->role == 'penyuluh') {
+            $perkembanganAnak = [
+                'perkembanganAnakTotal'
+            ];
+        } else {
+            $perkembanganAnakValidasi = $this->_perkembangan_anak()['validasi'];
+            $perkembanganAnakBelumValidasi = $this->_perkembangan_anak()['belum_validasi'];
+            $perkembanganAnakDitolak = $this->_perkembangan_anak()['ditolak'];
 
-        $perkembanganAnak = [
-            'perkembanganAnakValidasi',
-            'perkembanganAnakBelumValidasi',
-            'perkembanganAnakDitolak',
-            'perkembanganAnakTotal'
-        ];
+            $perkembanganAnak = [
+                'perkembanganAnakValidasi',
+                'perkembanganAnakBelumValidasi',
+                'perkembanganAnakDitolak',
+                'perkembanganAnakTotal'
+            ];
+        }
 
         $randaKabilasaTotal = $this->_randa_kabilasa()['total'];
-        $randaKabilasaMencegahMalnutrisiValidasi = $this->_randa_kabilasa()['validasi_mencegah_malnutrisi'];
-        $randaKabilasaMencegahMalnutrisiDitolak = $this->_randa_kabilasa()['ditolak_mencegah_malnutrisi'];
-        $randaKabilasaMencegahMalnutrisiBelumValidasi = $this->_randa_kabilasa()['belum_validasi_mencegah_malnutrisi'];
+        if (Auth::user()->role == 'penyuluh') {
+            $randaKabilasa = [
+                'randaKabilasaTotal',
+            ];
+        } else {
+            $randaKabilasaMencegahMalnutrisiValidasi = $this->_randa_kabilasa()['validasi_mencegah_malnutrisi'];
+            $randaKabilasaMencegahMalnutrisiDitolak = $this->_randa_kabilasa()['ditolak_mencegah_malnutrisi'];
+            $randaKabilasaMencegahMalnutrisiBelumValidasi = $this->_randa_kabilasa()['belum_validasi_mencegah_malnutrisi'];
 
-        $randaKabilasaMeningkatkanLifeSkillValidasi = $this->_randa_kabilasa()['validasi_meningkatkan_life_skill'];
-        $randaKabilasaMeningkatkanLifeSkillDitolak = $this->_randa_kabilasa()['ditolak_meningkatkan_life_skill'];
-        $randaKabilasaMeningkatkanLifeSkillBelumValidasi = $this->_randa_kabilasa()['belum_validasi_meningkatkan_life_skill'];
-        $randaKabilasaMeningkatkanLifeSkillBelumAsesmen = $this->_randa_kabilasa()['belum_asesmen_meningkatkan_life_skill'];
+            $randaKabilasaMeningkatkanLifeSkillValidasi = $this->_randa_kabilasa()['validasi_meningkatkan_life_skill'];
+            $randaKabilasaMeningkatkanLifeSkillDitolak = $this->_randa_kabilasa()['ditolak_meningkatkan_life_skill'];
+            $randaKabilasaMeningkatkanLifeSkillBelumValidasi = $this->_randa_kabilasa()['belum_validasi_meningkatkan_life_skill'];
+            $randaKabilasaMeningkatkanLifeSkillBelumAsesmen = $this->_randa_kabilasa()['belum_asesmen_meningkatkan_life_skill'];
 
-        $randaKabilasaMencegahPernikahanDiniValidasi = $this->_randa_kabilasa()['validasi_mencegah_pernikahan_dini'];
-        $randaKabilasaMencegahPernikahanDiniDitolak = $this->_randa_kabilasa()['ditolak_mencegah_pernikahan_dini'];
-        $randaKabilasaMencegahPernikahanDiniBelumValidasi = $this->_randa_kabilasa()['belum_validasi_mencegah_pernikahan_dini'];
-        $randaKabilasaMencegahPernikahanDiniBelumAsesmen = $this->_randa_kabilasa()['belum_asesmen_mencegah_pernikahan_dini'];
+            $randaKabilasaMencegahPernikahanDiniValidasi = $this->_randa_kabilasa()['validasi_mencegah_pernikahan_dini'];
+            $randaKabilasaMencegahPernikahanDiniDitolak = $this->_randa_kabilasa()['ditolak_mencegah_pernikahan_dini'];
+            $randaKabilasaMencegahPernikahanDiniBelumValidasi = $this->_randa_kabilasa()['belum_validasi_mencegah_pernikahan_dini'];
+            $randaKabilasaMencegahPernikahanDiniBelumAsesmen = $this->_randa_kabilasa()['belum_asesmen_mencegah_pernikahan_dini'];
 
-        $randaKabilasa = [
-            'randaKabilasaTotal',
-            'randaKabilasaMencegahMalnutrisiValidasi',
-            'randaKabilasaMencegahMalnutrisiDitolak',
-            'randaKabilasaMencegahMalnutrisiBelumValidasi',
-            'randaKabilasaMeningkatkanLifeSkillValidasi',
-            'randaKabilasaMeningkatkanLifeSkillDitolak',
-            'randaKabilasaMeningkatkanLifeSkillBelumValidasi',
-            'randaKabilasaMeningkatkanLifeSkillBelumAsesmen',
-            'randaKabilasaMencegahPernikahanDiniValidasi',
-            'randaKabilasaMencegahPernikahanDiniDitolak',
-            'randaKabilasaMencegahPernikahanDiniBelumValidasi',
-            'randaKabilasaMencegahPernikahanDiniBelumAsesmen'
-        ];
+            $randaKabilasa = [
+                'randaKabilasaTotal',
+                'randaKabilasaMencegahMalnutrisiValidasi',
+                'randaKabilasaMencegahMalnutrisiDitolak',
+                'randaKabilasaMencegahMalnutrisiBelumValidasi',
+                'randaKabilasaMeningkatkanLifeSkillValidasi',
+                'randaKabilasaMeningkatkanLifeSkillDitolak',
+                'randaKabilasaMeningkatkanLifeSkillBelumValidasi',
+                'randaKabilasaMeningkatkanLifeSkillBelumAsesmen',
+                'randaKabilasaMencegahPernikahanDiniValidasi',
+                'randaKabilasaMencegahPernikahanDiniDitolak',
+                'randaKabilasaMencegahPernikahanDiniBelumValidasi',
+                'randaKabilasaMencegahPernikahanDiniBelumAsesmen'
+            ];
+        }
 
-        $anggotaKeluargaValidasi = $this->_anggota_keluarga()['validasi'];
-        $anggotaKeluargaBelumValidasi = $this->_anggota_keluarga()['belum_validasi'];
-        $anggotaKeluargaDitolak = $this->_anggota_keluarga()['ditolak'];
-        $anggotaKeluargaTotal = $this->_anggota_keluarga()['total'];
 
-        $anggotaKeluarga = [
-            'anggotaKeluargaValidasi',
-            'anggotaKeluargaBelumValidasi',
-            'anggotaKeluargaDitolak',
-            'anggotaKeluargaTotal'
-        ];
+        if (Auth::user()->role == 'penyuluh') {
+            $anggotaKeluarga = [];
+        } else {
+            $anggotaKeluargaValidasi = $this->_anggota_keluarga()['validasi'];
+            $anggotaKeluargaBelumValidasi = $this->_anggota_keluarga()['belum_validasi'];
+            $anggotaKeluargaDitolak = $this->_anggota_keluarga()['ditolak'];
+            $anggotaKeluargaTotal = $this->_anggota_keluarga()['total'];
 
-        $keluargaValidasi = $this->_keluarga()['validasi'];
-        $keluargaBelumValidasi = $this->_keluarga()['belum_validasi'];
-        $keluargaDitolak = $this->_keluarga()['ditolak'];
-        $keluargaTotal = $this->_keluarga()['total'];
+            $anggotaKeluarga = [
+                'anggotaKeluargaValidasi',
+                'anggotaKeluargaBelumValidasi',
+                'anggotaKeluargaDitolak',
+                'anggotaKeluargaTotal'
+            ];
+        }
 
-        $keluarga = [
-            'keluargaValidasi',
-            'keluargaBelumValidasi',
-            'keluargaDitolak',
-            'keluargaTotal'
-        ];
+        if (Auth::user()->role == 'penyuluh') {
+            $keluarga = [];
+        } else {
+            $keluargaValidasi = $this->_keluarga()['validasi'];
+            $keluargaBelumValidasi = $this->_keluarga()['belum_validasi'];
+            $keluargaDitolak = $this->_keluarga()['ditolak'];
+            $keluargaTotal = $this->_keluarga()['total'];
+
+            $keluarga = [
+                'keluargaValidasi',
+                'keluargaBelumValidasi',
+                'keluargaDitolak',
+                'keluargaTotal'
+            ];
+        }
+
 
         return view('dashboard.pages.utama.dashboard.semua', compact([$stuntingAnak, $ibuMelahirkanStunting, $perkiraanMelahirkan, $deteksiDini, $anc, $pertumbuhanAnak, $perkembanganAnak, $randaKabilasa, $anggotaKeluarga, $keluarga]));
     }
@@ -191,12 +251,16 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->count();
+
+        if (Auth::user()->role == 'penyuluh') { // penyuluh
+            $data = [
+                'total' => $dataTotal,
+            ];
+
+            return $data;
+        }
 
         $dataValidasi = StuntingAnak::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
             ->where(function ($query) use ($lokasiTugas) {
@@ -207,10 +271,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
                 }
             })
             ->where('is_valid', 1)
@@ -227,10 +287,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 2)
             ->count();
@@ -244,10 +300,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
                 }
             })
             ->where('is_valid', 0)
@@ -284,6 +336,14 @@ class DashboardController extends Controller
             })
             ->count();
 
+        if (Auth::user()->role == 'penyuluh') { // penyuluh
+            $data = [
+                'total' => $dataTotal,
+            ];
+
+            return $data;
+        }
+
         $dataValidasi = DeteksiIbuMelahirkanStunting::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
             ->where(function ($query) use ($lokasiTugas) {
                 if (Auth::user()->role != 'admin') { // bidan/penyuluh
@@ -293,10 +353,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
                 }
             })
             ->where('is_valid', 1)
@@ -312,10 +368,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 2)
             ->count();
@@ -329,10 +381,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
                 }
             })
             ->where('is_valid', 0)
@@ -358,6 +406,14 @@ class DashboardController extends Controller
                 }
             })
             ->count();
+
+        if (Auth::user()->role == 'penyuluh') { // penyuluh
+            $data = [
+                'total' => $dataTotal,
+            ];
+
+            return $data;
+        }
 
         $dataValidasi = PerkiraanMelahirkan::with('anggotaKeluarga', 'bidan')->orderBy('created_at', 'DESC')
             ->whereHas('anggotaKeluarga', function ($query) use ($lokasiTugas) {
@@ -426,10 +482,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 1)
             ->count();
@@ -444,10 +496,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 2)
             ->count();
@@ -461,10 +509,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
                 }
             })
             ->where('is_valid', 0)
@@ -510,10 +554,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 1)
             ->count();
@@ -528,10 +568,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 2)
             ->count();
@@ -545,10 +581,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
                 }
             })
             ->where('is_valid', 0)
@@ -594,10 +626,6 @@ class DashboardController extends Controller
                     if (Auth::user()->role == 'bidan') { // bidan
                         $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                     }
-
-                    if (Auth::user()->role == 'penyuluh') { // penyuluh
-                        $query->valid();
-                    }
                 }
             })
             ->where('is_valid', 1)
@@ -613,10 +641,6 @@ class DashboardController extends Controller
                     if (Auth::user()->role == 'bidan') { // bidan
                         $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                     }
-
-                    if (Auth::user()->role == 'penyuluh') { // penyuluh
-                        $query->valid();
-                    }
                 }
             })
             ->where('is_valid', 2)
@@ -631,10 +655,6 @@ class DashboardController extends Controller
 
                     if (Auth::user()->role == 'bidan') { // bidan
                         $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                    }
-
-                    if (Auth::user()->role == 'penyuluh') { // penyuluh
-                        $query->valid();
                     }
                 }
             })
@@ -680,10 +700,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 1)
             ->count();
@@ -698,10 +714,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
-                }
             })
             ->where('is_valid', 2)
             ->count();
@@ -715,10 +727,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid', 1);
                 }
             })
             ->where('is_valid', 0)
@@ -757,6 +765,15 @@ class DashboardController extends Controller
             })
             ->count();
 
+        if (Auth::user()->role == 'penyuluh') { // penyuluh
+            $data = [
+                'total' => $dataTotal,
+            ];
+
+            return $data;
+        }
+
+
         $dataValidasiMencegahMalnutrisi = RandaKabilasa::with('anggotaKeluarga', 'bidan', 'mencegahMalnutrisi')->orderBy('created_at', 'DESC')
             ->where(function ($query) use ($lokasiTugas) {
                 if (Auth::user()->role != 'admin') { // bidan/penyuluh
@@ -766,12 +783,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
                 }
             })
             ->where('is_mencegah_malnutrisi', 1)
@@ -788,12 +799,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
-                }
             })
             ->where('is_mencegah_malnutrisi', 1)
             ->where('is_valid_mencegah_malnutrisi', 2)
@@ -808,12 +813,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
                 }
             })
             ->where('is_mencegah_malnutrisi', 1)
@@ -831,12 +830,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
-                }
             })
             ->where('is_meningkatkan_life_skill', 1)
             ->where('is_valid_meningkatkan_life_skill', 1)
@@ -851,12 +844,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
                 }
             })
             ->where('is_meningkatkan_life_skill', 1)
@@ -873,12 +860,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
-                }
             })
             ->where('is_meningkatkan_life_skill', 1)
             ->where('is_valid_meningkatkan_life_skill', 0)
@@ -894,12 +875,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
-                }
             })
             ->where('is_meningkatkan_life_skill', 0)
             ->count();
@@ -913,12 +888,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
                 }
             })
             ->where('is_mencegah_pernikahan_dini', 1)
@@ -935,12 +904,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
-                }
             })
             ->where('is_mencegah_pernikahan_dini', 1)
             ->where('is_valid_mencegah_pernikahan_dini', 2)
@@ -956,12 +919,6 @@ class DashboardController extends Controller
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
                 }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
-                }
             })
             ->where('is_mencegah_pernikahan_dini', 1)
             ->where('is_valid_mencegah_pernikahan_dini', 0)
@@ -976,12 +933,6 @@ class DashboardController extends Controller
                 }
                 if (Auth::user()->role == 'bidan') { // bidan
                     $query->orWhere('bidan_id', Auth::user()->profil->id); // menampilkan data keluarga yang dibuat olehnya
-                }
-
-                if (Auth::user()->role == 'penyuluh') { // penyuluh
-                    $query->where('is_valid_mencegah_malnutrisi', 1);
-                    $query->where('is_valid_mencegah_pernikahan_dini', 1);
-                    $query->where('is_valid_meningkatkan_life_skill', 1);
                 }
             })
             ->where('is_mencegah_pernikahan_dini', 0)
