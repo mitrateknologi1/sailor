@@ -48,20 +48,24 @@
                     <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100"
                         aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <div class="mt-2">
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $randaKabilasaTotal }}</span></div>
-                </div>
+                @if (Auth::user()->role != 'bidan')
+                    <div class="mt-2">
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $randaKabilasaTotal }}</span>
+                        </div>
+                    </div>
+                @endif
                 @if (Auth::user()->role != 'penyuluh')
                     <div class="">
-                        <a href="{{ url('randa-kabilasa') }}"><span
-                                class="badge shadow rounded-pill bg-info  mb-2">Asesmen
+                        <a href="{{ url('randa-kabilasa') }}"><span class="badge shadow rounded-pill bg-info  mb-2">Asesmen
                                 Mencegah
                                 Malnutrisi</span></a>
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $randaKabilasaMencegahMalnutrisiValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $randaKabilasaMencegahMalnutrisiDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $randaKabilasaMencegahMalnutrisiValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $randaKabilasaMencegahMalnutrisiDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $randaKabilasaMencegahMalnutrisiBelumValidasi }}</span></div>
                     </div>
@@ -79,18 +83,21 @@
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="mt-2">
-                        <a href="{{ url('randa-kabilasa') }}"><span
-                                class="badge shadow rounded-pill bg-info  mb-2">Asesmen
+                        <a href="{{ url('randa-kabilasa') }}"><span class="badge shadow rounded-pill bg-info  mb-2">Asesmen
                                 Meningkatkan Life
                                 Skill</span></a>
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $randaKabilasaMeningkatkanLifeSkillValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $randaKabilasaMeningkatkanLifeSkillDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $randaKabilasaMeningkatkanLifeSkillValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $randaKabilasaMeningkatkanLifeSkillDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $randaKabilasaMeningkatkanLifeSkillBelumValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Belum Melakukan Asesmen: <span
-                                class="fw-bold">{{ $randaKabilasaMeningkatkanLifeSkillBelumAsesmen }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Belum Melakukan Asesmen: <span
+                                    class="fw-bold">{{ $randaKabilasaMeningkatkanLifeSkillBelumAsesmen }}</span></div>
+                        @endif
                     </div>
                     @if ($randaKabilasaMeningkatkanLifeSkillBelumValidasi > 0)
                         <div class="text-center">
@@ -106,20 +113,23 @@
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="mt-2">
-                        <a href="{{ url('randa-kabilasa') }}"><span
-                                class="badge shadow rounded-pill bg-info  mb-2">Asesmen
+                        <a href="{{ url('randa-kabilasa') }}"><span class="badge shadow rounded-pill bg-info  mb-2">Asesmen
                                 Mencegah Pernikahan
                                 Dini</span></a>
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $randaKabilasaMencegahPernikahanDiniValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $randaKabilasaMencegahPernikahanDiniDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $randaKabilasaMencegahPernikahanDiniValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $randaKabilasaMencegahPernikahanDiniDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $randaKabilasaMencegahPernikahanDiniBelumValidasi }}</span>
                         </div>
-                        <div class="d-flex flex-wrap justify-content-between small">Belum Melakukan Asesmen: <span
-                                class="fw-bold">{{ $randaKabilasaMencegahPernikahanDiniBelumAsesmen }}</span>
-                        </div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Belum Melakukan Asesmen: <span
+                                    class="fw-bold">{{ $randaKabilasaMencegahPernikahanDiniBelumAsesmen }}</span>
+                            </div>
+                        @endif
                     </div>
                     @if ($randaKabilasaMencegahPernikahanDiniBelumValidasi > 0)
                         <div class="text-center">
@@ -154,15 +164,19 @@
                     <a href="{{ url('perkiraan-melahirkan') }}"><span
                             class="badge shadow rounded-pill bg-success  mb-2">Perkiraan Melahirkan</span></a>
                     @if (Auth::user()->role != 'penyuluh')
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $perkiraanMelahirkanValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $perkiraanMelahirkanDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $perkiraanMelahirkanValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $perkiraanMelahirkanDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $perkiraanMelahirkanBelumValidasi }}</span></div>
                     @endif
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $perkiraanMelahirkanTotal }}</span></div>
+                    @if (Auth::user()->role != 'bidan')
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $perkiraanMelahirkanTotal }}</span></div>
+                    @endif
                 </div>
                 @if (Auth::user()->role != 'penyuluh')
                     @if ($perkiraanMelahirkanBelumValidasi > 0)
@@ -183,15 +197,19 @@
                     <a href="{{ url('deteksi-dini') }}"><span class="badge shadow rounded-pill bg-success  mb-2">Deteksi
                             Dini</span></a>
                     @if (Auth::user()->role != 'penyuluh')
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $deteksiDiniValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $deteksiDiniDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $deteksiDiniValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $deteksiDiniDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $deteksiDiniBelumValidasi }}</span></div>
                     @endif
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $deteksiDiniTotal }}</span></div>
+                    @if (Auth::user()->role != 'bidan')
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $deteksiDiniTotal }}</span></div>
+                    @endif
                 </div>
                 @if (Auth::user()->role != 'penyuluh')
                     @if ($deteksiDiniBelumValidasi > 0)
@@ -211,15 +229,19 @@
                 <div class="mt-2">
                     <a href="{{ url('anc') }}"><span class="badge shadow rounded-pill bg-success  mb-2">ANC</span></a>
                     @if (Auth::user()->role != 'penyuluh')
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $ancValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $ancDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $ancValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $ancDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $ancBelumValidasi }}</span></div>
                     @endif
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $ancTotal }}</span></div>
+                    @if (Auth::user()->role != 'bidan')
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $ancTotal }}</span></div>
+                    @endif
                 </div>
                 @if (Auth::user()->role != 'penyuluh')
                     @if ($ancBelumValidasi > 0)
@@ -255,15 +277,19 @@
                             class="badge shadow rounded-pill bg-primary  mb-2">Stunting
                             Anak</span></a>
                     @if (Auth::user()->role != 'penyuluh')
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $stuntingAnakValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $stuntingAnakDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $stuntingAnakValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $stuntingAnakDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $stuntingAnakBelumValidasi }}</span></div>
                     @endif
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $stuntingAnakTotal }}</span></div>
+                    @if (Auth::user()->role != 'bidan')
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $stuntingAnakTotal }}</span></div>
+                    @endif
                 </div>
                 @if (Auth::user()->role != 'penyuluh')
                     @if ($stuntingAnakBelumValidasi > 0)
@@ -284,15 +310,19 @@
                     <a href="{{ url('deteksi-ibu-melahirkan-stunting') }}"><span
                             class="badge shadow rounded-pill bg-primary  mb-2">Ibu Melahirkan Stunting</span></a>
                     @if (Auth::user()->role != 'penyuluh')
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $ibuMelahirkanStuntingValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $ibuMelahirkanStuntingDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $ibuMelahirkanStuntingValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $ibuMelahirkanStuntingDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $ibuMelahirkanStuntingBelumValidasi }}</span></div>
                     @endif
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $ibuMelahirkanStuntingTotal }}</span></div>
+                    @if (Auth::user()->role != 'bidan')
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $ibuMelahirkanStuntingTotal }}</span></div>
+                    @endif
                 </div>
                 @if (Auth::user()->role != 'penyuluh')
                     @if ($ibuMelahirkanStuntingBelumValidasi > 0)
@@ -327,15 +357,19 @@
                     <a href="{{ url('pertumbuhan-anak') }}"><span
                             class="badge shadow rounded-pill bg-danger  mb-2">Pertumbuhan Anak</span></a>
                     @if (Auth::user()->role != 'penyuluh')
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $pertumbuhanAnakValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $pertumbuhanAnakDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $pertumbuhanAnakValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $pertumbuhanAnakDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $pertumbuhanAnakBelumValidasi }}</span></div>
                     @endif
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $pertumbuhanAnakTotal }}</span></div>
+                    @if (Auth::user()->role != 'bidan')
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $pertumbuhanAnakTotal }}</span></div>
+                    @endif
                 </div>
                 @if (Auth::user()->role != 'penyuluh')
                     @if ($pertumbuhanAnakBelumValidasi > 0)
@@ -356,15 +390,19 @@
                     <a href="{{ url('perkembangan-anak') }}"><span
                             class="badge shadow rounded-pill bg-danger  mb-2">Perkembangan Anak</span></a>
                     @if (Auth::user()->role != 'penyuluh')
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $perkembanganAnakValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $perkembanganAnakDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $perkembanganAnakValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $perkembanganAnakDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $perkembanganAnakBelumValidasi }}</span></div>
                     @endif
-                    <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                            class="fw-bold">{{ $perkembanganAnakTotal }}</span></div>
+                    @if (Auth::user()->role != 'bidan')
+                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                class="fw-bold">{{ $perkembanganAnakTotal }}</span></div>
+                    @endif
                 </div>
                 @if (Auth::user()->role != 'penyuluh')
                     @if ($perkembanganAnakBelumValidasi > 0)
@@ -386,8 +424,8 @@
                 <div class="alert alert-primary rounded-4">
                     <div class="card-body p-0">
                         <svg class="position-absolute top-0 end-0 mt-3 me-3 text-primary"
-                            xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor" class="bi bi-person-video"
-                            viewBox="0 0 16 16">
+                            xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor"
+                            class="bi bi-person-video" viewBox="0 0 16 16">
                             <path d="M8 9.05a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                             <path
                                 d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2Zm10.798 11c-.453-1.27-1.76-3-4.798-3-3.037 0-4.345 1.73-4.798 3H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-1.202Z" />
@@ -402,14 +440,18 @@
                     <div class="mt-2">
                         <a href="{{ url('keluarga') }}"><span
                                 class="badge shadow rounded-pill bg-primary  mb-2">Keluarga</span></a>
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $keluargaValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $keluargaDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $keluargaValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $keluargaDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $keluargaBelumValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                                class="fw-bold">{{ $keluargaTotal }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                    class="fw-bold">{{ $keluargaTotal }}</span></div>
+                        @endif
                     </div>
                     @if ($keluargaBelumValidasi > 0)
                         <div class="text-center">
@@ -427,14 +469,18 @@
                     <div class="mt-2">
                         <a href="{{ url('keluarga') }}"><span class="badge shadow rounded-pill bg-primary  mb-2">Anggota
                                 Keluarga</span></a>
-                        <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
-                                class="fw-bold">{{ $anggotaKeluargaValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
-                                class="fw-bold">{{ $anggotaKeluargaDitolak }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Divalidasi: <span
+                                    class="fw-bold">{{ $anggotaKeluargaValidasi }}</span></div>
+                            <div class="d-flex flex-wrap justify-content-between small">Ditolak: <span
+                                    class="fw-bold">{{ $anggotaKeluargaDitolak }}</span></div>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-between small">Belum Divalidasi: <span
                                 class="fw-bold">{{ $anggotaKeluargaBelumValidasi }}</span></div>
-                        <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
-                                class="fw-bold">{{ $anggotaKeluargaTotal }}</span></div>
+                        @if (Auth::user()->role != 'bidan')
+                            <div class="d-flex flex-wrap justify-content-between small">Total Data: <span
+                                    class="fw-bold">{{ $anggotaKeluargaTotal }}</span></div>
+                        @endif
                     </div>
                     @if ($anggotaKeluargaBelumValidasi > 0)
                         <div class="text-center">
