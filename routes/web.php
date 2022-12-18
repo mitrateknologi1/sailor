@@ -5,6 +5,7 @@ use App\Models\DeteksiDini;
 use App\Models\KartuKeluarga;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AutoValidasiController;
 use App\Http\Controllers\ListController;
 use App\Models\DeteksiIbuMelahirkanStunting;
 use App\Http\Controllers\dashboard\utama\momsCare\AncController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\dashboard\utama\TesMapController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PemberitahuanController;
 use App\Http\Controllers\PersonalController;
+use App\Http\Controllers\TestAutoValidasiController;
 use App\Http\Controllers\UmumController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Models\Anc;
@@ -260,3 +262,6 @@ Route::get('/provinsi', [ListController::class, 'listProvinsi'])->name('listProv
 Route::get('/kabupaten-kota', [ListController::class, 'listKabupatenKota'])->name('listKabupatenKota');
 Route::get('/kecamatan', [ListController::class, 'listKecamatan'])->name('listKecamatan');
 Route::get('/desa-kelurahan', [ListController::class, 'listDesaKelurahan'])->name('listDesaKelurahan');
+
+// Testing
+Route::get('auto-validasi', [AutoValidasiController::class, 'index']);
