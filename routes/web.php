@@ -263,5 +263,5 @@ Route::get('/kabupaten-kota', [ListController::class, 'listKabupatenKota'])->nam
 Route::get('/kecamatan', [ListController::class, 'listKecamatan'])->name('listKecamatan');
 Route::get('/desa-kelurahan', [ListController::class, 'listDesaKelurahan'])->name('listDesaKelurahan');
 
-// Testing
-Route::get('auto-validasi', [AutoValidasiController::class, 'index']);
+// Validasi
+// Route::get('auto-validasi', [AutoValidasiController::class, 'index']);
