@@ -108,6 +108,8 @@ Route::get('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'show']);
 Route::put('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'update']);
 Route::delete('/kartu_keluarga/{id}', [ApiKartuKeluargaController::class, 'destroy'])->middleware('auth.apikey');
 
+Route::get('/bidan', [ApiBidanController::class, 'index'])->middleware('auth.apikey');
+
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
@@ -144,7 +146,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::put('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'update']);
     // Route::delete('/wilayah_domisili/{id}', [ApiWilayahDomisiliController::class, 'destroy']);
 
-    Route::get('/bidan', [ApiBidanController::class, 'index'])->middleware('notKeluarga');
+    // Route::get('/bidan', [ApiBidanController::class, 'index'])->middleware('notKeluarga');
     Route::get('/bidan/{id}', [ApiBidanController::class, 'show']);
     Route::post('/bidan', [ApiBidanController::class, 'store'])->middleware('notKeluarga');
     Route::post('/bidan/upload/{id}', [ApiBidanController::class, 'upload'])->middleware('notKeluarga');
