@@ -16,38 +16,35 @@
 @endsection
 
 @section('content')
-<section>
-    <div class="row justify-content-center">
-        <div class="col-lg-12 col-md-12">
-            <div class="card p-0">
-                <div class="card-body pt-0">
-                    @component('dashboard.components.forms.masterData.lokasiTugas', [
-                        'user' => $bidan,
-                        'provinsi' => $provinsi,
-                        'kabupatenKota' => $kabupatenKota,
-                        'kecamatan' => $kecamatan,
-                        'desaKelurahan' => $desaKelurahan,
-                        'form_id' => 'form_update_lokasi_tugas',
-                        'action' => route('updateLokasiTugasBidan', $bidan->id ),
-                        'back_url' => route('bidan.index')
-                    ])
-                        
-                    @endcomponent
+    <section>
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-12">
+                <div class="card p-0">
+                    <div class="card-body pt-0">
+                        @component('dashboard.components.forms.masterData.lokasiTugas',
+                            [
+                                'user' => $bidan,
+                                'provinsi' => $provinsi,
+                                'kabupatenKota' => $kabupatenKota,
+                                'kecamatan' => $kecamatan,
+                                'desaKelurahan' => $desaKelurahan,
+                                'form_id' => 'form_update_lokasi_tugas',
+                                'action' => route('updateLokasiTugasBidan', $bidan->id),
+                                'back_url' => route('bidan.index'),
+                            ])
+                        @endcomponent
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 @endsection
 
 @push('script')
     <script>
         $('#m-link-profil').addClass('active');
         $('#menu-profil').addClass('collapse show')
-        $('#ms-link-master-data-profil-bidan').addClass('active') 
-        
-        
-       
+        $('#ms-link-master-data-profil-bidan').addClass('active')
     </script>
 @endpush
