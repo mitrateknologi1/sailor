@@ -155,7 +155,8 @@ class PertumbuhanAnakController extends Controller
                     })
 
                     ->addColumn('nomor_kk', function ($row) {
-                        return $row->anggotaKeluarga->kartuKeluarga->nomor_kk;
+                        // return $row->anggotaKeluarga->kartuKeluarga->nomor_kk;
+                        return $row->anggotaKeluarga->kartuKeluarga ? $row->anggotaKeluarga->kartuKeluarga->nomor_kk : '-';
                     })
 
                     ->addColumn('nama_anak', function ($row) {

@@ -145,7 +145,7 @@ class KartuKeluargaController extends Controller
                 }
             });
 
-            $data->orderBy('created_at', 'DESC')->orderBy('id', 'DESC');
+            $data->orderBy('created_at', 'DESC');
 
             return DataTables::of($data)
                 ->addIndexColumn()

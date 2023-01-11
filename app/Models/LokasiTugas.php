@@ -56,6 +56,6 @@ class LokasiTugas extends Model
     {
         return $query->where('profil_id', $id)
             ->where('jenis_profil', Auth::user()->role)
-            ->get()->pluck('desa_kelurahan_id');
+            ->pluck('desa_kelurahan_id')->toArray();
     }
 }
