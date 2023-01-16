@@ -16,7 +16,7 @@ class ApiPemeriksaanAncController extends Controller
      */
     public function index()
     {
-        //
+        return PemeriksaanAnc::all();
     }
 
     /**

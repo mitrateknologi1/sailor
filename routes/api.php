@@ -216,6 +216,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/anc/{id}', [ApiAncController::class, 'update']);
     Route::delete('/anc/{id}', [ApiAncController::class, 'destroy']);
 
+    Route::get('/pemeriksaan_anc', [ApiPemeriksaanAncController::class, 'index']);
     Route::post('/pemeriksaan_anc', [ApiPemeriksaanAncController::class, 'store']);
     Route::put('/pemeriksaan_anc/{id}', [ApiPemeriksaanAncController::class, 'update']);
 
