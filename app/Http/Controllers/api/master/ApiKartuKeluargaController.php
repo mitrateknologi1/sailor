@@ -52,11 +52,12 @@ class ApiKartuKeluargaController extends Controller
                 });
             });
         }
-        if (Auth::user()->role == 'bidan') {
-            // doing something amazing!
+        if (Auth::user()->role == 'keluarga') {
+            $result = $data->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->where('id', Auth::user()->profil->kartu_keluarga_id)->get();
+        }else{
+            $result = $data->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->get();
         }
         $response = [];
-        $result = $data->orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->get();
         foreach ($result as $temp ) {
             array_push($response, $temp);
             $temp->kelurahan_domisili = $temp->kepalaKeluarga->wilayahDomisili->desaKelurahan->id;
